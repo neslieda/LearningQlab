@@ -45,6 +45,11 @@
 
 ### 4.1 Durum (R-01)
 
+> **Güncel strateji (2026-10-11, D-44–D-46):** sınav belgeleri yalnızca biçim öğrenmek için incelenir; soru üretimine girdi olmaz,
+> sisteme alınmaz ve öğrencilere gösterilmez. Aşağıdaki "kaynak içerik" kontrolleri, ileride yazılı lisansla açılabilecek yollar için
+> yerinde durur; şu an bu yollar kapalıdır. İncelenen Kasım 2025 dosyalarının kapağındaki bildirim üçüncü taraf kullanımını
+> (uygulama geliştiriciler dahil) yasaklıyor ve suç olarak niteliyor; ayrıntı [DECISIONS.md](DECISIONS.md) R-01.
+
 - ibo.org sayfalarının **arama özetine** göre: IB telifli materyalinin herhangi bir generative AI aracına sorgu ya da eğitim verisi olarak
   verilmesi yazılı izin olmadan yasak; resmi ilişkisi olmayan üçüncü tarafların ticari kullanımı yazılı lisans gerektiriyor; lisans
   politikası ücretli tutoring kullanımını ve son iki sınav dönemi materyalini kapsam dışı tutuyor.

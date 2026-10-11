@@ -127,7 +127,7 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 
 ## 5. Blueprint
 
-Üretimin tek girdisi. Kaynak sorudan serbest metin taşımaz; alanlar kapalı listeler ve kısa yapılandırılmış değerlerdir.
+Üretimin tek girdisi. Müfredat düğümünden ve biçim profilinden yazılır; bir sınav sorusundan türetilmez (D-45). Alanlar kapalı listeler ve kısa yapılandırılmış değerlerdir.
 
 ```json
 {
@@ -143,12 +143,11 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
   "reasoning_steps": 3,
   "context_constraints": ["no_air_resistance", "single_object"],
   "needs_figure": true, "figure_template": "projectile_trajectory",
-  "avoid": ["same_numerical_values", "same_context"]
+  "format_profile_version": "ib_dp_physics.paper_2@1"
 }
 ```
 
-Sızıntı kontrolü (kod): Blueprint'teki metin değerleri ile kaynak soru metni arasında uzun ortak kelime dizisi aranır; eşik aşılırsa
-Blueprint reddedilir. Ayrıntı: [AI_PIPELINE.md](AI_PIPELINE.md) §4.
+Blueprint kaydı ayrıca `format_profile_version`, yazım yöntemi ve onaylayan uzmanı taşır. Ayrıntı: [AI_PIPELINE.md](AI_PIPELINE.md) §4.
 
 ## 6. Asset yönetimi
 
@@ -178,8 +177,7 @@ asset(id, storage_key, mime, bytes, width, height, sha256, alt_text,
 ## 8. Benzerlik verisi
 
 - `question_embedding(question_version_id, model, vector)`; pgvector indeksli.
-- Yeni aday, hem `generated` hem `source_original` havuzuna karşı aranır. Embedding'i üreten sağlayıcı için no-retention koşulu aranır
-  çünkü kaynak sorular da gömülür.
+- Yeni aday kendi soru havuzumuza karşı aranır. Sınav kurumu soruları gömülmez ve saklanmaz (D-44).
 - Embedding modeli değişirse tüm vektörler yeniden üretilir; `model` sütunu karışmayı önler.
 
 ## 9. Öğrenci verisi

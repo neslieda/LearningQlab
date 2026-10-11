@@ -25,6 +25,11 @@ flowchart LR
 > yapılacağı için M3, M2'den önce gelir. Ürün hattı M2'nin içerikten bağımsız parçalarını (kimlik, kurum, soru çözme arayüzü, deneme)
 > M3 ile paralel geliştirir; beta, yeterli sayıda onaylı soru olunca açılır.
 
+> **2026-10-11 değişikliği (D-49):** 130 pilot soru hazır olduğu için M1 ile M2'nin görünen kısmı tek bir **"M1-G Görünür ürün"** aşaması
+> olarak öne alındı ve M3'ten (üretim hattı) önce yapılıyor. Kapsam: soru şeması v1, veritabanı, pilot soruların içe aktarılması,
+> soru gösterim bileşeni, admin inceleme ve yerinde düzenleme, öğrenci önizlemesi. Önce yerelde çalışır; web'e açılış ayrı onayla.
+> Dokuz dilimin ayrıntısı: [M1-G planı](#m1-g--görünür-ürün).
+
 İki paralel hat (M1 sonrası):
 
 | Hat | Aşamalar |
@@ -62,6 +67,33 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 
 > Not: müfredat yapısı (beş tema, Paper 1A çoktan seçmeli, 1B veri temelli, Paper 2 kısa ve uzun cevap, SL/HL süreleri) üçüncü taraf
 > kaynaklardan derlendi; resmi ders rehberinden teyit edilecek.
+
+### M1-G — Görünür ürün
+
+M1'in tamamını ve M2'nin öğrenci önizlemesini kapsar; aşağıdaki M1 ve M2 başlıkları bu aşamada yapılmayan kısımlar için geçerlidir.
+
+| Dilim | İçerik |
+|---|---|
+| 0 | Hazırlık: belgeler, yerel PostgreSQL |
+| 1 | Soru şeması v1 (Pydantic) ve testleri |
+| 2 | Veritabanı modelleri, migration, `content` servisi (sürümler, durumlar, yayın koşulları, audit) |
+| 3 | KaTeX kayıt kontrolü |
+| 4 | 130 pilot sorunun şemaya çevrilmesi ve içe aktarma komutu |
+| 5 | API (admin ve öğrenci önizlemesi), yetki katmanı, yerel geliştirme kimliği, üretilen istemci |
+| 6 | Web iskeleti ve soru gösterim bileşeni; görsel regresyon |
+| 7 | Admin inceleme ve yerinde düzenleme |
+| 8 | Öğrenci önizlemesi |
+| 9 | Web'e açılış hazırlığı (barındırma, kimlik sağlayıcısı, uzak depo) — ayrı onay |
+
+**Kabul kriteri**
+- 130 pilot soru veritabanında; kaynak Markdown ile otomatik karşılaştırmada fark yok.
+- Bir çoktan seçmeli, bir Paper 2 ve bir veri temelli soru masaüstü ve 375 px genişlikte sınav düzeninde görünüyor.
+- Admin bir soruyu yerinde düzeltebiliyor; düzenleme yeni sürüm açıyor; hatalı LaTeX kaydedilemiyor.
+- Onaylanmamış ya da görseli eksik soru, API doğrudan çağrılsa bile yayınlanamıyor.
+- Yayınlanan soru öğrenci önizlemesinde görünüyor; öğrenci rolü admin uç noktalarına erişemiyor.
+
+**Bilinen sınırlar:** şekil ve grafik üretimi yok (bu sorular yayınlanamaz kalır); çözüm modeli veri olarak saklanır ama yorumlayıcı
+olmadığı için hesapla doğrulanmaz; hesap, deneme, analitik ve ödeme yok.
 
 ### M1 — İçerik çekirdeği
 

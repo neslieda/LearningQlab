@@ -185,8 +185,8 @@ Her adım idempotenttir: aynı girdi özetiyle yeniden çalıştırılan adım �
 1. Her `Question` bir `RightsRecord`'a bağlıdır.
 2. `generated` her soru bir `Blueprint`'e, her Blueprint bir müfredat düğümüne ve biçim profili sürümüne bağlıdır. Blueprint bir sınav sorusuna bağlanmaz (D-45).
 3. `Response` her zaman belirli bir `QuestionVersion`'a bağlanır, `Question`'a değil.
-4. Parça puanlarının toplamı sürümün toplam puanına, madde puanlarının toplamı parça puanına eşittir.
-5. Sayısal cevaplı her parçanın cevabı `SolutionModel`'deki bir adıma bağlıdır.
-6. Gövdedeki her `quantity` düğümü `SolutionModel`'deki bir parametreyle aynı değeri ve birimi taşır.
+4. Parça puanlarının toplamı sürümün toplam puanına eşittir. Bir parçanın ödüllendirilebilir madde sayısı (alternatifler ve yollar bir kez sayılarak) parça puanına eşittir; "max" olarak işaretli parçada daha fazladır.
+5. Sayısal cevaplı her parçanın cevabı `SolutionModel`'deki bir adıma bağlıdır. *(Şema v1'de zorlanmaz; yorumlayıcıyla birlikte gelir.)*
+6. `param` taşıyan her `quantity` düğümü `SolutionModel`'deki aynı adlı parametreyle aynı değeri ve birimi taşır; çözüm modeli yoksa `param` taşınamaz. Bağlanmamış büyüklükler (ör. seçenekler, ara sonuçlar) serbesttir.
 7. Her matematik düğümü kayıt anında KaTeX ile render edilebilir.
 8. Reşit olmayan kullanıcının her ücretli entitlement'ı geçerli bir `Consent` kaydına dayanır (kural tablosu gerektiriyorsa).

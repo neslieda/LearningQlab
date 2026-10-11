@@ -45,8 +45,9 @@
 
 ### 4.1 Durum (R-01)
 
-> **Güncel strateji (2026-10-11, D-44–D-46):** sınav belgeleri yalnızca biçim öğrenmek için incelenir; soru üretimine girdi olmaz,
-> sisteme alınmaz ve öğrencilere gösterilmez. Aşağıdaki "kaynak içerik" kontrolleri, ileride yazılı lisansla açılabilecek yollar için
+> **Güncel strateji (2026-10-11, D-44, D-45, D-47, D-48):** sınav belgeleri yalnızca biçim öğrenmek ve Blueprint biçimini tasarlamak
+> için incelenir; soru üretimine girdi olmaz ve öğrencilere gösterilmez. Proje sahibi belgeleri yalnızca kendi hesabının gördüğü kişisel
+> kitaplıkta, sayfa görüntüsü olarak saklayabilir (D-47). Aşağıdaki "kaynak içerik" kontrolleri, ileride yazılı lisansla açılabilecek yollar için
 > yerinde durur; şu an bu yollar kapalıdır. İncelenen Kasım 2025 dosyalarının kapağındaki bildirim üçüncü taraf kullanımını
 > (uygulama geliştiriciler dahil) yasaklıyor ve suç olarak niteliyor; ayrıntı [DECISIONS.md](DECISIONS.md) R-01.
 

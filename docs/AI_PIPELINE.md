@@ -19,7 +19,7 @@
 | 0 | Biçim profili (bir kerelik, sürümlü) | İnsan + AI yardımı | Sınav belgeleri, uzman bilgisi | Biçim profili; soru metni içermez | Uzman onayı olmadan kullanılmaz |
 | 1 | Blueprint yazımı | İnsan, ya da LLM önerir + insan onaylar | Müfredat düğümü, biçim profili | Blueprint | Uzman reddeder |
 | 2 | Blueprint kontrolü | Kod | Blueprint | Şema ve müfredat düğümü geçerli; kapsam dengesi | Düzeltmeye döner |
-| 3–5 | *(Askıda, D-46)* Orijinal soru alma, çıkarma kontrolleri, sınıflandırma | — | — | — | Yazılı lisans olmadan çalışmaz |
+| 3–5 | *(Kapalı; D-47 yalnızca sahibin kişisel kitaplığına sayfa görüntüsü olarak izin verir)* Orijinal soru alma, çıkarma kontrolleri, sınıflandırma | — | — | — | Yazılı lisans olmadan çalışmaz |
 | 6 | Üretim | LLM (orta; zor tipte üst) | Yalnızca Blueprint | Soru, parçalar, markscheme, formül zinciri, şekil tarifi | Yeniden dene |
 | 7 | Deterministic kontroller | Kod | Aday | Rapor | Gerekçeyle 6'ya dön |
 | 8 | Şekil üretimi | Kod (şablon) | Şekil tarifi, parametreler | SVG, alt metin | Aday reddi |
@@ -32,7 +32,7 @@
 Klasik ML yok: sınıflandırma kapalı listeden seçimdir ve küçük LLM ile yapılır; etiketli veri biriktiğinde ucuz bir sınıflandırıcıya
 geçiş değerlendirilebilir (ertelendi).
 
-## 3. İçerik alma (askıda, D-46)
+## 3. İçerik alma (kapalı; bkz. D-47)
 
 > Bu bölüm, bir sınav kurumundan yazılı lisans alınırsa kullanılacak tasarımı anlatır. Şu an hiçbir parçası uygulanmaz ve çalıştırılmaz.
 

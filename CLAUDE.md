@@ -37,8 +37,8 @@ S3-uyumlu storage · Next.js + TypeScript · KaTeX · Tiptap · REST + OpenAPI (
 13. Öğrenciye canlı üretilmiş, incelenmemiş içerik gösterilmez (kendi cevabına verilen puanlama geri bildirimi hariç).
 14. Sınav kurumlarının belgeleri yalnızca biçim öğrenmek için kullanılır (D-44). Soru metni, sayıları, senaryosu ya da şekli depoya,
     veritabanına, prompt'a, Blueprint'e, test verisine ya da belgelere girmez. Biçim profilleri kendi cümlelerimizle yazılır.
-15. Blueprint bir sınav sorusundan türetilmez; müfredat düğümü ve biçim profilinden yazılır (D-45). Orijinal sınav sorusu alma ve
-    gösterme yolları kapalıdır (D-46).
+15. Blueprint bir sınav sorusundan türetilmez; müfredat düğümü ve biçim profilinden yazılır (D-45). Orijinal sınav belgeleri yalnızca
+    sahibin kişisel kitaplığında, yalnızca sahibin hesabına ve sayfa görüntüsü olarak gösterilir; hiçbir AI adımına girdi olmaz (D-47).
 
 ## Çalışma biçimi
 
@@ -53,5 +53,5 @@ S3-uyumlu storage · Next.js + TypeScript · KaTeX · Tiptap · REST + OpenAPI (
 
 ## Açık riskler
 
-R-01 (sınav kurumu içeriğinin kullanımı; D-44–D-46 ile daraltıldı) ve R-02 (yaş, rıza, reşit olmayan verisi) hukuki teyit bekliyor.
+R-01 (sınav kurumu içeriğinin kullanımı; D-44, D-45, D-47, D-48 ile daraltıldı) ve R-02 (yaş, rıza, reşit olmayan verisi) hukuki teyit bekliyor.
 Ayrıntı: `docs/DECISIONS.md` §4.

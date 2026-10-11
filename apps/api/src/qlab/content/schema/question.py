@@ -1,33 +1,42 @@
 """Question document schema v1: the single source of truth for question content.
 
-Specification: docs/DATA_ARCHITECTURE.md sections 3-4. Programme-specific vocabulary (exam sections,
-command terms, syllabus node codes) is data validated elsewhere, not part of this schema.
+Specification: docs/DATA_ARCHITECTURE.md section 3.5. Vocabulary that belongs to a programme
+(exam sections, command terms, syllabus node codes) is data validated elsewhere. The structural
+limits hard-coded here (four options, part marks, the two-level split) are a known v1 limitation
+recorded in docs/DECISIONS.md D-50.
 """
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from enum import StrEnum
-from typing import Literal, Self
+from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 from qlab.content.schema.blocks import (
+    NUMBER_PATTERN,
+    UNIT_PATTERN,
     Doc,
-    Inline,
-    MathInline,
     Quantity,
+    is_blank,
     iter_figure_refs,
-    iter_inlines,
     iter_latex,
+    iter_quantities,
 )
 
 SCHEMA_VERSION: Literal["1.0"] = "1.0"
 MAX_PART_MARKS = 3
 OPTION_KEYS = ("A", "B", "C", "D")
+_ROMAN = ("i", "ii", "iii", "iv", "v", "vi", "vii", "viii")
 
 _IDENT = r"^[A-Za-z_][A-Za-z0-9_]*$"
 _SLUG = r"^[a-z0-9][a-z0-9_.-]*$"
+
+Slug = Annotated[str, StringConstraints(pattern=_SLUG)]
+Ident = Annotated[str, StringConstraints(pattern=_IDENT)]
+NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+OptionKey = Literal["A", "B", "C", "D"]
 
 
 class Model(BaseModel):
@@ -42,7 +51,7 @@ class QuestionClass(StrEnum):
 
 
 class Level(StrEnum):
-    """Papers the question may be used in."""
+    """Papers the question may be used in. Declaration order is the canonical order."""
 
     SL = "sl"
     HL = "hl"
@@ -51,6 +60,12 @@ class Level(StrEnum):
 class LevelContent(StrEnum):
     SL_CORE = "sl_core"
     AHL = "ahl"
+
+
+class Difficulty(StrEnum):
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
 
 
 class OptionKind(StrEnum):
@@ -66,7 +81,7 @@ class OptionLayout(StrEnum):
     SINGLE_VALUE = "single_value"
     TWO_COLUMN_TABLE = "two_column_table"
     FIGURE_OPTIONS = "figure_options"
-    STATEMENT_COMBINATION = "statement_combination"
+    ROMAN_STATEMENTS = "roman_statements"
 
 
 class AnswerType(StrEnum):
@@ -107,40 +122,58 @@ class StimulusUse(StrEnum):
 class Stimulus(Model):
     """A figure, graph or similar. Without an asset it is a description and blocks publishing."""
 
-    id: str = Field(pattern=_SLUG)
+    id: Slug
     kind: StimulusKind
     use: StimulusUse = StimulusUse.READ_ONLY
-    description: str = Field(min_length=1)
-    asset_id: str | None = None
-    alt_text: str | None = None
+    description: NonBlank
+    asset_id: Slug | None = None
+    alt_text: NonBlank | None = None
 
     @model_validator(mode="after")
     def _asset_needs_alt_text(self) -> Self:
-        if self.asset_id is not None and not (self.alt_text and self.alt_text.strip()):
+        if self.asset_id is not None and self.alt_text is None:
             raise ValueError("a stimulus with an asset must have alt text")
         return self
 
 
 class McqOption(Model):
-    key: Literal["A", "B", "C", "D"]
-    content: tuple[Inline, ...] = Field(min_length=1)
+    key: OptionKey
+    # One cell for ordinary options; one per column for a two-column table.
+    cells: tuple[Doc, ...] = Field(min_length=1, max_length=2)
     # For a wrong option: the misconception or typical error it is built on.
-    rationale: str | None = None
+    rationale: Doc | None = None
 
 
 class Mcq(Model):
     option_kind: OptionKind
     option_layout: OptionLayout = OptionLayout.SINGLE_VALUE
+    column_headers: tuple[Doc, ...] = ()
+    statements: tuple[Doc, ...] = ()
     options: tuple[McqOption, ...]
-    correct_key: Literal["A", "B", "C", "D"]
+    correct_key: OptionKey
+    explanation: Doc | None = None
+    assessment_objective: Literal[1, 2, 3] | None = None
+    level_content: LevelContent = LevelContent.SL_CORE
+    solution_step: Ident | None = None
 
     @model_validator(mode="after")
-    def _four_options_one_key(self) -> Self:
+    def _options_consistent(self) -> Self:
         if tuple(o.key for o in self.options) != OPTION_KEYS:
             raise ValueError("options must be exactly A, B, C, D in that order")
         for option in self.options:
-            if option.key != self.correct_key and not (option.rationale or "").strip():
+            wrong = option.key != self.correct_key
+            if wrong and (option.rationale is None or is_blank(option.rationale)):
                 raise ValueError(f"wrong option {option.key} needs a rationale")
+        columns = 2 if self.option_layout is OptionLayout.TWO_COLUMN_TABLE else 1
+        if any(len(o.cells) != columns for o in self.options):
+            raise ValueError(f"every option needs {columns} cell(s) for this layout")
+        if len(self.column_headers) != (2 if columns == 2 else 0):
+            raise ValueError("column headers are required for, and only for, a two-column table")
+        roman = self.option_layout is OptionLayout.ROMAN_STATEMENTS
+        if roman != bool(self.statements) or (roman and len(self.statements) < 2):
+            raise ValueError("roman-statement layout needs at least two statements, others none")
+        if len({o.cells for o in self.options}) != len(self.options):
+            raise ValueError("two options are identical")
         return self
 
 
@@ -151,86 +184,140 @@ class MarkPointKind(StrEnum):
 
 
 class AcceptRange(Model):
-    minimum: float
-    maximum: float
-    unit: str = ""
+    minimum: str = Field(pattern=NUMBER_PATTERN)
+    maximum: str = Field(pattern=NUMBER_PATTERN)
+    unit: str = Field(default="", pattern=UNIT_PATTERN)
 
     @model_validator(mode="after")
     def _ordered(self) -> Self:
-        if self.minimum > self.maximum:
+        if float(self.minimum) > float(self.maximum):
             raise ValueError("accept range minimum is greater than maximum")
         return self
 
 
 class MarkPoint(Model):
-    """One mark. Points sharing an alternative_group are alternatives: at most one scores."""
+    """One mark.
 
-    id: str = Field(pattern=_SLUG)
-    content: tuple[Inline, ...] = Field(min_length=1)
+    Points sharing an alternative_group are alternatives for a single mark. Points sharing a route
+    form one complete way of earning the part's marks; routes are mutually exclusive.
+    """
+
+    id: Slug
+    content: Doc
     kind: MarkPointKind = MarkPointKind.STATEMENT
-    alternative_group: str | None = Field(default=None, pattern=_SLUG)
+    alternative_group: Slug | None = None
+    route: Slug | None = None
     accept_range: AcceptRange | None = None
-    solution_step: str | None = Field(default=None, pattern=_IDENT)
-    note: str | None = None
+    solution_step: Ident | None = None
+
+
+class NoteKind(StrEnum):
+    GENERAL = "general"
+    OWTTE = "owtte"
+    ACCEPT = "accept"
+    DO_NOT_ACCEPT = "do_not_accept"
+    CAP = "cap"
+    ECF = "ecf"
+
+
+class Note(Model):
+    """A mark-scheme note for a part, optionally tied to one of its mark points."""
+
+    kind: NoteKind = NoteKind.GENERAL
+    content: Doc
+    mark_point_id: Slug | None = None
+
+
+def _point_count(points: Sequence[MarkPoint]) -> int:
+    groups = {p.alternative_group for p in points if p.alternative_group}
+    return sum(1 for p in points if not p.alternative_group) + len(groups)
+
+
+def _label_key(label: str) -> tuple[str, int]:
+    letter, _, roman = label.partition(".")
+    return letter, (_ROMAN.index(roman) + 1 if roman else 0)
 
 
 class Part(Model):
-    id: str = Field(pattern=_SLUG)
-    label: str = Field(pattern=r"^[a-h](\.(i|ii|iii|iv|v))?$")
+    id: Slug
+    label: str = Field(pattern=r"^[a-z](\.(i|ii|iii|iv|v|vi|vii|viii))?$")
+    # Text shown before the part that belongs to its parent letter or sets new context.
+    lead_in: Doc | None = None
     body: Doc
     marks: int = Field(ge=1, le=MAX_PART_MARKS)
+    # True when the mark scheme offers more points than marks ("max").
+    marks_capped: bool = False
+    show_that: bool = False
     command_term: str | None = Field(default=None, pattern=r"^[a-z][a-z_]*$")
     answer_type: AnswerType
     assessment_objective: Literal[1, 2, 3] | None = None
     level_content: LevelContent = LevelContent.SL_CORE
-    syllabus_node: str = Field(min_length=1)
-    stimulus_refs: tuple[str, ...] = ()
-    depends_on: tuple[str, ...] = ()
-    ecf_from: tuple[str, ...] = ()
+    syllabus_node: NonBlank
+    stimulus_refs: tuple[Slug, ...] = ()
+    depends_on: tuple[Slug, ...] = ()
+    ecf_from: tuple[Slug, ...] = ()
     mark_points: tuple[MarkPoint, ...] = Field(min_length=1)
+    notes: tuple[Note, ...] = ()
 
     @property
     def awardable_marks(self) -> int:
-        """Marks available from the mark points, counting each group of alternatives once."""
-        groups = {p.alternative_group for p in self.mark_points if p.alternative_group}
-        ungrouped = sum(1 for p in self.mark_points if not p.alternative_group)
-        return ungrouped + len(groups)
+        """Most marks obtainable from the mark points: shared points plus the best route."""
+        shared = [p for p in self.mark_points if p.route is None]
+        routes: dict[str, list[MarkPoint]] = {}
+        for point in self.mark_points:
+            if point.route is not None:
+                routes.setdefault(point.route, []).append(point)
+        best = max((_point_count(points) for points in routes.values()), default=0)
+        return _point_count(shared) + best
 
     @model_validator(mode="after")
-    def _mark_points_cover_marks(self) -> Self:
-        ids = [p.id for p in self.mark_points]
-        if len(ids) != len(set(ids)):
-            raise ValueError(f"part {self.label}: duplicate mark point ids")
-        # More points than marks is allowed (a "max" part); fewer is not.
-        if self.awardable_marks < self.marks:
+    def _mark_scheme_consistent(self) -> Self:
+        if is_blank(self.body):
+            raise ValueError(f"part {self.label}: empty body")
+        ids = {p.id for p in self.mark_points}
+        routes = {p.route for p in self.mark_points if p.route}
+        if len(routes) == 1:
+            raise ValueError(f"part {self.label}: a single route is not an alternative")
+        if self.marks_capped:
+            if self.awardable_marks <= self.marks:
+                raise ValueError(f"part {self.label}: capped but no more points than marks")
+        elif self.awardable_marks != self.marks:
             raise ValueError(
                 f"part {self.label}: {self.awardable_marks} awardable mark points "
                 f"for {self.marks} marks"
             )
+        for note in self.notes:
+            if note.mark_point_id is not None and note.mark_point_id not in ids:
+                raise ValueError(f"part {self.label}: note refers to an unknown mark point")
+        for refs in (self.depends_on, self.ecf_from, self.stimulus_refs):
+            if len(refs) != len(set(refs)):
+                raise ValueError(f"part {self.label}: duplicate reference")
         return self
 
 
 class Parameter(Model):
-    name: str = Field(pattern=_IDENT)
-    value: str = Field(pattern=r"^-?\d+(\.\d+)?([eE]-?\d+)?$")
-    unit: str = ""
+    name: Ident
+    value: str = Field(pattern=NUMBER_PATTERN)
+    unit: str = Field(default="", pattern=UNIT_PATTERN)
 
 
 class Constant(Model):
-    name: str = Field(pattern=_IDENT)
-    ref: str = Field(min_length=1)
+    name: Ident
+    ref: NonBlank
 
 
 class Step(Model):
-    id: str = Field(pattern=_IDENT)
-    name: str = Field(pattern=_IDENT)
-    expr: str = Field(min_length=1)
-    unit: str = ""
+    id: Ident
+    name: Ident
+    expr: NonBlank
+    unit: str = Field(default="", pattern=UNIT_PATTERN)
+    # A "show that" value given in the question, to be used downstream instead of the result.
+    stated_value: str | None = Field(default=None, pattern=NUMBER_PATTERN)
 
 
 class AnswerBinding(Model):
-    part_id: str
-    step: str
+    part_id: Slug
+    step: Ident
 
 
 class SolutionModel(Model):
@@ -240,7 +327,6 @@ class SolutionModel(Model):
     constants: tuple[Constant, ...] = ()
     steps: tuple[Step, ...] = ()
     answers: tuple[AnswerBinding, ...] = ()
-    verified: bool = False
 
     @model_validator(mode="after")
     def _names_unique_and_bound(self) -> Self:
@@ -251,6 +337,9 @@ class SolutionModel(Model):
         step_ids = [s.id for s in self.steps]
         if len(step_ids) != len(set(step_ids)):
             raise ValueError("solution model: duplicate step id")
+        bound_parts = [b.part_id for b in self.answers]
+        if len(bound_parts) != len(set(bound_parts)):
+            raise ValueError("solution model: a part has more than one answer binding")
         for binding in self.answers:
             if binding.step not in step_ids:
                 raise ValueError(f"solution model: answer bound to unknown step {binding.step}")
@@ -258,14 +347,17 @@ class SolutionModel(Model):
 
 
 class QuestionDocument(Model):
-    schema_version: Literal["1.0"] = SCHEMA_VERSION
+    schema_version: Literal["1.0"]
     question_class: QuestionClass
-    exam_section: str = Field(pattern=_SLUG)
-    levels: frozenset[Level] = Field(min_length=1)
+    exam_section: Slug
+    levels: tuple[Level, ...] = Field(min_length=1)
     language: str = Field(default="en", pattern=r"^[a-z]{2}$")
     calculator: bool = True
-    primary_syllabus_node: str = Field(min_length=1)
-    secondary_syllabus_nodes: tuple[str, ...] = ()
+    difficulty: Difficulty | None = None
+    primary_syllabus_node: NonBlank
+    secondary_syllabus_nodes: tuple[NonBlank, ...] = ()
+    # The assessed outcome in the author's own words (not syllabus text).
+    outcome: NonBlank | None = None
     stem: Doc
     stimuli: tuple[Stimulus, ...] = ()
     mcq: Mcq | None = None
@@ -278,35 +370,44 @@ class QuestionDocument(Model):
         return any(s.asset_id is None for s in self.stimuli)
 
     def docs(self) -> Iterator[Doc]:
+        """Every rich-text document in the question, in reading order."""
         yield self.stem
-        for part in self.parts:
-            yield part.body
-
-    def inline_sequences(self) -> Iterator[tuple[Inline, ...]]:
-        if self.mcq:
+        if self.mcq is not None:
+            yield from self.mcq.column_headers
+            yield from self.mcq.statements
             for option in self.mcq.options:
-                yield option.content
+                yield from option.cells
+                if option.rationale is not None:
+                    yield option.rationale
+            if self.mcq.explanation is not None:
+                yield self.mcq.explanation
         for part in self.parts:
+            if part.lead_in is not None:
+                yield part.lead_in
+            yield part.body
             for point in part.mark_points:
                 yield point.content
+            for note in part.notes:
+                yield note.content
 
     def latex_sources(self) -> Iterator[str]:
         for doc in self.docs():
             yield from iter_latex(doc)
-        for sequence in self.inline_sequences():
-            for inline in sequence:
-                if isinstance(inline, MathInline):
-                    yield inline.attrs.latex
 
     def quantities(self) -> Iterator[Quantity]:
         for doc in self.docs():
-            for inline in iter_inlines(doc):
-                if isinstance(inline, Quantity):
-                    yield inline
-        for sequence in self.inline_sequences():
-            for inline in sequence:
-                if isinstance(inline, Quantity):
-                    yield inline
+            yield from iter_quantities(doc)
+
+    @model_validator(mode="after")
+    def _header_consistent(self) -> Self:
+        if is_blank(self.stem):
+            raise ValueError("empty stem")
+        if list(self.levels) != sorted(set(self.levels), key=list(Level).index):
+            raise ValueError("levels must be unique and in canonical order (sl, hl)")
+        nodes = (self.primary_syllabus_node, *self.secondary_syllabus_nodes)
+        if len(nodes) != len(set(nodes)):
+            raise ValueError("duplicate syllabus node")
+        return self
 
     @model_validator(mode="after")
     def _class_shape(self) -> Self:
@@ -325,19 +426,36 @@ class QuestionDocument(Model):
     @model_validator(mode="after")
     def _parts_consistent(self) -> Self:
         ids = [p.id for p in self.parts]
-        labels = [p.label for p in self.parts]
-        if len(ids) != len(set(ids)) or len(labels) != len(set(labels)):
-            raise ValueError("duplicate part id or label")
+        if len(ids) != len(set(ids)):
+            raise ValueError("duplicate part id")
+        keys = [_label_key(p.label) for p in self.parts]
+        if keys != sorted(set(keys)):
+            raise ValueError("part labels must be unique and in order")
+        letters_bare = {letter for letter, index in keys if index == 0}
+        letters_split = {letter for letter, index in keys if index > 0}
+        if letters_bare & letters_split:
+            raise ValueError("a part letter is used both with and without sub-parts")
+        point_ids = [point.id for part in self.parts for point in part.mark_points]
+        if len(point_ids) != len(set(point_ids)):
+            raise ValueError("duplicate mark point id in the question")
+        nodes = {self.primary_syllabus_node, *self.secondary_syllabus_nodes}
         seen: set[str] = set()
         for part in self.parts:
+            if part.syllabus_node not in nodes:
+                raise ValueError(f"part {part.label}: syllabus node is not listed on the question")
             for ref in (*part.depends_on, *part.ecf_from):
                 if ref not in seen:
-                    raise ValueError(
-                        f"part {part.label} refers to {ref}, which is not an earlier part"
-                    )
+                    raise ValueError(f"part {part.label} refers to {ref}: not an earlier part")
             seen.add(part.id)
-        if Level.SL in self.levels and any(p.level_content is LevelContent.AHL for p in self.parts):
-            raise ValueError("a question usable at SL cannot contain an additional-HL part")
+        return self
+
+    @model_validator(mode="after")
+    def _level_content_consistent(self) -> Self:
+        contents = [p.level_content for p in self.parts]
+        if self.mcq is not None:
+            contents.append(self.mcq.level_content)
+        if Level.SL in self.levels and LevelContent.AHL in contents:
+            raise ValueError("a question usable at SL cannot contain additional-HL content")
         return self
 
     @model_validator(mode="after")
@@ -355,18 +473,23 @@ class QuestionDocument(Model):
 
     @model_validator(mode="after")
     def _solution_model_consistent(self) -> Self:
-        model = self.solution_model
-        if model is None:
-            return self
+        # A missing model is an empty one: bindings that point at it are still errors.
+        model = self.solution_model or SolutionModel()
         part_ids = {p.id for p in self.parts}
         step_ids = {s.id for s in model.steps}
         for binding in model.answers:
             if binding.part_id not in part_ids:
                 raise ValueError(f"solution model: answer bound to unknown part {binding.part_id}")
-        for part in self.parts:
-            for point in part.mark_points:
-                if point.solution_step is not None and point.solution_step not in step_ids:
-                    raise ValueError(f"mark point {point.id}: unknown solution step")
+        step_refs = [
+            (f"mark point {point.id}", point.solution_step)
+            for part in self.parts
+            for point in part.mark_points
+        ]
+        if self.mcq is not None:
+            step_refs.append(("mcq", self.mcq.solution_step))
+        for owner, step in step_refs:
+            if step is not None and step not in step_ids:
+                raise ValueError(f"{owner}: unknown solution step {step}")
         parameters = {p.name: p for p in model.parameters}
         for quantity in self.quantities():
             name = quantity.attrs.param

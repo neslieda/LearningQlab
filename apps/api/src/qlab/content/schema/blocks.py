@@ -1,22 +1,28 @@
-"""Rich-content block nodes (ProseMirror-compatible shape: type / attrs / content / text / marks).
+"""Rich-content nodes in ProseMirror JSON shape (type / attrs / content / text / marks).
 
-Specification: docs/DATA_ARCHITECTURE.md section 3.
+Specification: docs/DATA_ARCHITECTURE.md section 3.5. `type` is always required so that stored
+documents and generated client types can discriminate on it.
 """
 
 from __future__ import annotations
 
 from collections.abc import Iterator
 from enum import StrEnum
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+NUMBER_PATTERN = r"^-?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+UNSIGNED_NUMBER_PATTERN = r"^[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+# Unit expressions are checked for shape only; a unit grammar comes with the formula interpreter.
+UNIT_PATTERN = r"^([A-Za-zµΩ°%][A-Za-zµΩ°%0-9 /*^().-]*)?$"
 
 
 class Node(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
 
-class TextMark(StrEnum):
+class MarkType(StrEnum):
     BOLD = "bold"
     ITALIC = "italic"
     SUB = "sub"
@@ -26,68 +32,117 @@ class TextMark(StrEnum):
     ESSENTIAL = "essential"
 
 
-class Text(Node):
-    type: Literal["text"] = "text"
+_EXCLUSIVE_MARKS = (
+    {MarkType.SUB, MarkType.SUP},
+    {MarkType.OPTIONAL, MarkType.ESSENTIAL},
+)
+
+
+class Mark(Node):
+    type: MarkType
+
+
+class MarkedNode(Node):
+    marks: tuple[Mark, ...] = ()
+
+    @model_validator(mode="after")
+    def _marks_consistent(self) -> Self:
+        types = [m.type for m in self.marks]
+        if len(types) != len(set(types)):
+            raise ValueError("duplicate mark on a node")
+        for pair in _EXCLUSIVE_MARKS:
+            if pair <= set(types):
+                raise ValueError("mutually exclusive marks on a node")
+        return self
+
+
+class Text(MarkedNode):
+    type: Literal["text"]
     text: str = Field(min_length=1)
-    marks: tuple[TextMark, ...] = ()
 
 
 class MathAttrs(Node):
     latex: str = Field(min_length=1)
 
 
-class MathInline(Node):
-    type: Literal["math_inline"] = "math_inline"
+class MathInline(MarkedNode):
+    type: Literal["math_inline"]
     attrs: MathAttrs
 
 
 class QuantityAttrs(Node):
     # Kept as text so that significant figures survive ("20" and "20.0" differ).
-    value: str = Field(pattern=r"^-?\d+(\.\d+)?([eE]-?\d+)?$")
-    unit: str = ""
+    value: str = Field(pattern=NUMBER_PATTERN)
+    unit: str = Field(default="", pattern=UNIT_PATTERN)
     param: str | None = Field(default=None, pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
-    sig_figs: int | None = Field(default=None, ge=1, le=6)
-    uncertainty: str | None = Field(default=None, pattern=r"^\d+(\.\d+)?([eE]-?\d+)?$")
+    uncertainty: str | None = Field(default=None, pattern=UNSIGNED_NUMBER_PATTERN)
+
+    @model_validator(mode="after")
+    def _unit_trimmed(self) -> Self:
+        if self.unit != self.unit.strip():
+            raise ValueError("unit has surrounding whitespace")
+        return self
 
 
-class Quantity(Node):
-    type: Literal["quantity"] = "quantity"
+class Quantity(MarkedNode):
+    type: Literal["quantity"]
     attrs: QuantityAttrs
 
 
-Inline = Annotated[Text | MathInline | Quantity, Field(discriminator="type")]
+class HardBreak(Node):
+    type: Literal["hard_break"]
+
+
+Inline = Annotated[Text | MathInline | Quantity | HardBreak, Field(discriminator="type")]
 
 
 class Paragraph(Node):
-    type: Literal["paragraph"] = "paragraph"
+    type: Literal["paragraph"]
     content: tuple[Inline, ...] = ()
 
 
 class MathBlock(Node):
-    type: Literal["math_block"] = "math_block"
+    type: Literal["math_block"]
     attrs: MathAttrs
 
 
-class TableCellAttrs(Node):
-    header: bool = False
-    colspan: int = Field(default=1, ge=1)
-    rowspan: int = Field(default=1, ge=1)
+class CellAttrs(Node):
+    colspan: int = Field(default=1, ge=1, le=12)
+    rowspan: int = Field(default=1, ge=1, le=50)
 
 
 class TableCell(Node):
-    type: Literal["table_cell"] = "table_cell"
-    attrs: TableCellAttrs = TableCellAttrs()
-    content: tuple[Inline, ...] = ()
+    type: Literal["table_cell"]
+    attrs: CellAttrs = CellAttrs()
+    content: tuple[Paragraph, ...] = Field(min_length=1)
+
+
+class TableHeader(Node):
+    type: Literal["table_header"]
+    attrs: CellAttrs = CellAttrs()
+    content: tuple[Paragraph, ...] = Field(min_length=1)
+
+
+Cell = Annotated[TableCell | TableHeader, Field(discriminator="type")]
 
 
 class TableRow(Node):
-    type: Literal["table_row"] = "table_row"
-    content: tuple[TableCell, ...] = Field(min_length=1)
+    type: Literal["table_row"]
+    content: tuple[Cell, ...] = Field(min_length=1)
 
 
 class Table(Node):
-    type: Literal["table"] = "table"
+    type: Literal["table"]
     content: tuple[TableRow, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _rectangular(self) -> Self:
+        if any(c.attrs.rowspan > 1 for row in self.content for c in row.content):
+            return self  # row spans make per-row widths differ legitimately
+        widths = {sum(c.attrs.colspan for c in row.content) for row in self.content}
+        if len(widths) > 1:
+            raise ValueError("table rows have different widths")
+        return self
 
 
 class FigureAttrs(Node):
@@ -97,45 +152,52 @@ class FigureAttrs(Node):
 class Figure(Node):
     """Placement of a stimulus in the text; the stimulus lives in QuestionDocument.stimuli."""
 
-    type: Literal["figure"] = "figure"
+    type: Literal["figure"]
     attrs: FigureAttrs
 
 
 class ListItem(Node):
-    type: Literal["list_item"] = "list_item"
+    type: Literal["list_item"]
     content: tuple[Paragraph, ...] = Field(min_length=1)
 
 
-class ListAttrs(Node):
-    ordered: bool = False
-
-
 class BulletList(Node):
-    type: Literal["list"] = "list"
-    attrs: ListAttrs = ListAttrs()
+    type: Literal["bullet_list"]
     content: tuple[ListItem, ...] = Field(min_length=1)
 
 
-Block = Annotated[Paragraph | MathBlock | Table | Figure | BulletList, Field(discriminator="type")]
+class OrderedList(Node):
+    type: Literal["ordered_list"]
+    content: tuple[ListItem, ...] = Field(min_length=1)
+
+
+Block = Annotated[
+    Paragraph | MathBlock | Table | Figure | BulletList | OrderedList,
+    Field(discriminator="type"),
+]
 
 
 class Doc(Node):
-    type: Literal["doc"] = "doc"
-    content: tuple[Block, ...] = ()
+    type: Literal["doc"]
+    content: tuple[Block, ...] = Field(min_length=1)
 
 
-def iter_inlines(doc: Doc) -> Iterator[Text | MathInline | Quantity]:
+def _paragraphs(doc: Doc) -> Iterator[Paragraph]:
     for block in doc.content:
         if isinstance(block, Paragraph):
-            yield from block.content
+            yield block
         elif isinstance(block, Table):
             for row in block.content:
                 for cell in row.content:
                     yield from cell.content
-        elif isinstance(block, BulletList):
+        elif isinstance(block, BulletList | OrderedList):
             for item in block.content:
-                for paragraph in item.content:
-                    yield from paragraph.content
+                yield from item.content
+
+
+def iter_inlines(doc: Doc) -> Iterator[Text | MathInline | Quantity | HardBreak]:
+    for paragraph in _paragraphs(doc):
+        yield from paragraph.content
 
 
 def iter_latex(doc: Doc) -> Iterator[str]:
@@ -148,7 +210,26 @@ def iter_latex(doc: Doc) -> Iterator[str]:
             yield inline.attrs.latex
 
 
+def iter_quantities(doc: Doc) -> Iterator[Quantity]:
+    for inline in iter_inlines(doc):
+        if isinstance(inline, Quantity):
+            yield inline
+
+
 def iter_figure_refs(doc: Doc) -> Iterator[str]:
     for block in doc.content:
         if isinstance(block, Figure):
             yield block.attrs.stimulus_id
+
+
+def is_blank(doc: Doc) -> bool:
+    """True when the document has no visible content (only empty or whitespace paragraphs)."""
+    for block in doc.content:
+        if not isinstance(block, Paragraph):
+            return False
+        for inline in block.content:
+            if not isinstance(inline, Text | HardBreak) or (
+                isinstance(inline, Text) and inline.text.strip()
+            ):
+                return False
+    return True

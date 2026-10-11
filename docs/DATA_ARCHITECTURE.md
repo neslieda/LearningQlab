@@ -16,6 +16,9 @@ Ayrı vector DB, doküman DB ya da Redis MVP'de yok. Tetikleyici: [TECH_STACK.md
 
 ## 2. İlişkisel iskelet + JSONB içerik (D-19)
 
+> Aşağıdaki tablo taslağı dilim 2'de §3.5'e göre yeniden yazılacaktır (ör. her madde 1 puan, `levels` küme, `answer_spec` yok).
+> **Doğruluk kaynağı JSON belgedir;** ilişkisel satırlar ondan türetilir (D-50).
+
 Yapı satırlarda, zengin içerik JSONB'de durur. Gerekçe: cevap, puan ve analitik parçaya ve markscheme maddesine foreign key ile bağlanır.
 
 ```
@@ -93,35 +96,118 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 - MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürümü sabittir; yükseltme görsel regresyon testinden geçer.
 - Hesaplama biçimi LaTeX'ten türetilmez; ayrı olarak `solution_model` içinde durur.
 
-### 3.5 Şema v1 — uygulanan hali (2026-10-11)
+### 3.5 Şema v1 — uygulanan hali (2026-10-11, bağımsız inceleme sonrası)
 
-Kod: `apps/api/src/qlab/content/schema/`. Bu bölüm §3.1–§3.4 ile çelişirse **bu bölüm geçerlidir**; farklar
-[blueprint-format-reference.md](formats/blueprint-format-reference.md) bulgularından gelir.
+Kod: `apps/api/src/qlab/content/schema/`. Bu bölüm §2–§4'teki eski taslaklarla çelişirse **bu bölüm geçerlidir** (D-50). Bilinmeyen alan
+her düzeyde reddedilir. Tüm modeller değişmezdir. JSON'da diziler sıralıdır ve aynı içerik her zaman aynı baytlara serileşir.
 
-**`QuestionDocument` alanları:** `schema_version` · `question_class` (`mcq`, `data_based`, `short_structured`, `long_structured`) ·
-`exam_section` (programın tanımladığı değer, ör. `paper_1a`) · `levels` (kullanılabildiği kâğıtlar: `sl`, `hl`; en az bir) ·
-`language` · `calculator` · `primary_syllabus_node`, `secondary_syllabus_nodes` · `stem` · `stimuli[]` · `mcq` · `parts[]` ·
-`total_marks` · `solution_model`.
+#### Düğümler (ProseMirror JSON biçimi)
 
-| Konu | v1'deki kural |
+`type` her düğümde zorunludur. İşaretler nesne dizisidir: `"marks": [{"type": "bold"}]`.
+
+| Düğüm | Tür | İçerik / öznitelik |
+|---|---|---|
+| `doc` | kök | en az bir blok |
+| `paragraph` | blok | satır içi düğümler (boş olabilir) |
+| `math_block` | blok | `attrs.latex` (boş olamaz) |
+| `table` → `table_row` → `table_header` / `table_cell` | blok | hücre: en az bir `paragraph`; `attrs.colspan` (1–12), `attrs.rowspan` (1–50). Satır birleştirme yoksa tüm satırların genişliği eşit olmalı |
+| `figure` | blok | `attrs.stimulus_id` |
+| `bullet_list`, `ordered_list` → `list_item` | blok | madde: en az bir `paragraph` |
+| `text` | satır içi | `text` (boş olamaz), `marks` |
+| `math_inline` | satır içi | `attrs.latex`, `marks` |
+| `quantity` | satır içi | `attrs.value`, `attrs.unit`, `attrs.param`, `attrs.uncertainty`, `marks` |
+| `hard_break` | satır içi | — |
+
+- İşaret türleri: `bold`, `italic`, `sub`, `sup`, `optional` (markscheme'de « »: puan için gerekmeyen), `essential` (altı çizili: zorunlu).
+  Aynı işaret iki kez olamaz; `sub` ile `sup` ve `optional` ile `essential` birlikte olamaz. İşaretler `text`, `math_inline` ve `quantity`
+  üzerinde kullanılabilir (ör. `3.0 «s»`).
+- Sayı metni (`value`, parametre değeri, kabul aralığı): ASCII rakamlar, isteğe bağlı baştaki `-`, isteğe bağlı ondalık kısım, isteğe
+  bağlı `e`/`E` ve işaretli üs. Geçerli: `20`, `20.0`, `-5`, `1.5e-3`, `1e+3`. Geçersiz: `+5`, `.5`, `5.`, Unicode eksi ya da rakam.
+  `uncertainty` aynı biçimde ama işaretsiz. Değer metin olarak saklanır; `20` ile `20.0` farklıdır.
+- Birim metni: boş ya da harf, `µ`, `Ω`, `°`, `%` ile başlar; baş ve sonda boşluk olamaz. Bu yalnızca biçim denetimidir; birim dilbilgisi
+  yorumlayıcıyla gelir. Karşılaştırmalar birebir metin eşitliğidir (`m/s` ile `m s^-1` eşit sayılmaz).
+
+#### `QuestionDocument`
+
+| Alan | Kural |
 |---|---|
-| Düzey | Tek etiket yok. `levels` kâğıt kümesidir; her parça ayrıca `level_content` (`sl_core` / `ahl`) taşır. `sl` içeren soruda `ahl` parça olamaz |
-| Uyaranlar | Şekil, grafik vb. `stimuli[]` içinde: `id`, `kind`, `use` (`read_only`, `read_values`, `student_annotates`), `description`, `asset_id`, `alt_text`. Metindeki `figure` düğümü yalnızca `stimulus_id` taşır. `asset_id` varsa `alt_text` zorunlu. `asset_id` olmayan uyaran soruyu "görsel bekliyor" yapar ve yayını engeller |
-| Çoktan seçmeli | Seçenekler blok düğümü değil, `mcq` bloğunda: `option_kind`, `option_layout`, tam olarak A–D sırasıyla dört seçenek, `correct_key`; her yanlış seçenek için `rationale` zorunlu. `total_marks` = 1, `parts` boş |
-| Yapılandırılmış | `mcq` yok; her parçanın `marks` değeri 1–3; parça puanları toplamı `total_marks` |
-| Parça | `id`, `label` (`a`, `b.ii`), `body`, `marks`, `command_term`, `answer_type` (14 değer), `assessment_objective`, `level_content`, `syllabus_node`, `stimulus_refs`, `depends_on`, `ecf_from`, `mark_points[]`. Bağımlılıklar yalnızca önceki parçalara olabilir |
-| Markscheme maddesi | Her madde 1 puan: `id`, `content`, `kind` (`method`, `answer`, `statement`), `alternative_group` (aynı gruptakiler birbirinin alternatifi; en çok biri puan alır), `accept_range`, `solution_step`, `note`. İsteğe bağlı ve zorunlu sözcükler metin işaretidir (`optional`, `essential`). Ödüllendirilebilir madde sayısı parça puanından az olamaz; fazla olabilir ("max") |
-| Çözüm modeli | Veri olarak saklanır, **hesaplanmaz** (`verified: false`); yorumlayıcı üretim hattı aşamasında gelir. Adlar tekil; cevap bağları var olan parça ve adıma gider |
-| Büyüklük bağı | `param` taşıyan her `quantity`, çözüm modelindeki aynı adlı parametreyle değer ve birim olarak birebir aynı olmalı |
-| Bilinmeyen alan | Reddedilir (`extra = forbid`) |
+| `schema_version` | Zorunlu, `"1.0"` |
+| `question_class` | `mcq`, `data_based`, `short_structured`, `long_structured` |
+| `exam_section` | Küçük harfli kısa ad (ör. `paper_1a`); programın sözlüğüne göre doğrulama dilim 2'de |
+| `levels` | Kullanılabildiği kâğıtlar; en az bir; tekrarsız ve kanonik sırada (`sl`, `hl`) |
+| `language`, `calculator`, `difficulty` (`easy`/`medium`/`hard`), `outcome` | İsteğe bağlı üst veri; `outcome` yazarın kendi cümlesi |
+| `primary_syllabus_node`, `secondary_syllabus_nodes` | Tekrarsız |
+| `stem` | Boş olamaz |
+| `stimuli[]` | `id` tekil; `kind`; `use` (`read_only`, `read_values`, `student_annotates`); `description` (boş olamaz); `asset_id`; `alt_text`. `asset_id` varsa `alt_text` zorunlu. Herhangi bir uyaranın `asset_id` değeri yoksa `visual_pending` doğrudur |
+| `mcq` / `parts[]` | Sınıfa göre: `mcq` sınıfında `mcq` bloğu var, `parts` boş, `total_marks` = 1; diğerlerinde `mcq` yok, en az bir parça var, parça puanları toplamı `total_marks` |
+| `solution_model` | İsteğe bağlı |
 
-**v1'de bilerek olmayanlar:** `option_list` ve `answer_space` blok düğümleri (seçenekler `mcq` bloğunda; cevap alanı gösterim
-bileşeninin işi); düzey tanımlayıcılı (3/2/1/0) puanlama; soru düzeyinde zorluk alanı; Blueprint şeması.
+Belgedeki her `figure` düğümü ve her `stimulus_refs` girdisi var olan bir uyarana gitmelidir.
 
-**Henüz kodla zorlanmayanlar:** KaTeX render kontrolü (dilim 3), `exam_section`, `command_term` ve müfredat düğümünün programın
-sözlüğüne göre doğrulanması (dilim 2), dört seçeneğin aynı türde ve sıralı olması, komut sözcüğü ↔ puan ↔ cevap türü kuralları.
+#### Çoktan seçmeli bloğu (`mcq`)
+
+- `option_kind` (6 değer), `option_layout` (`single_value`, `two_column_table`, `figure_options`, `roman_statements`).
+- `options`: tam olarak A, B, C, D sırasıyla. Her seçenek `cells` (birer `doc`) taşır: iki sütunlu tabloda 2 hücre ve `column_headers`
+  2 başlık; diğer düzenlerde 1 hücre ve başlık yok. `roman_statements` düzeninde en az 2 `statements`, diğerlerinde hiç.
+- Her yanlış seçenek boş olmayan bir `rationale` (`doc`) taşır. İki seçenek aynı olamaz.
+- `correct_key`, `explanation` (çözüm, `doc`), `assessment_objective`, `level_content`, `solution_step` (cevabın çözüm modelindeki adımı).
+
+#### Parça
+
+`id` (soru içinde tekil), `label` (`a`, `b.ii`; harf a–z, alt parça i–viii), `lead_in` (parçadan önce gösterilen, üst harfe ait ya da yeni
+bağlam veren metin), `body` (boş olamaz), `marks` (1–3), `marks_capped`, `show_that`, `command_term`, `answer_type` (14 değer),
+`assessment_objective`, `level_content`, `syllabus_node` (sorunun düğümlerinden biri), `stimulus_refs`, `depends_on`, `ecf_from`,
+`mark_points[]`, `notes[]`.
+
+- Etiketler tekil ve sıralıdır; bir harf hem alt parçasız hem alt parçalı kullanılamaz (`a` ile `a.i` birlikte olmaz).
+- `depends_on` ve `ecf_from` yalnızca **önceki** parçalara gider; tekrar içermez.
+- `sl` içeren soruda `ahl` içerikli parça ya da `ahl` içerikli çoktan seçmeli olamaz.
+
+#### Markscheme
+
+- Her `MarkPoint` bir puandır: `id` (soru genelinde tekil), `content` (`doc`), `kind` (`method`, `answer`, `statement`),
+  `alternative_group`, `route`, `accept_range` (`minimum`, `maximum` sayı metni; `unit`), `solution_step`.
+- **Alternatifler (OR):** aynı `alternative_group` içindeki maddeler tek bir puanın alternatifidir.
+- **Yollar (ALTERNATIVE 1 / 2):** aynı `route` değerini taşıyan maddeler parçanın puanlarını kazanmanın eksiksiz bir yoludur; yollar
+  birbirini dışlar. Tek yol tanımlanamaz (en az iki).
+- **Ödüllendirilebilir puan** = yolu olmayan maddeler (her alternatif grubu bir kez) + en iyi yolun maddeleri (aynı sayımla).
+- `marks_capped` yanlışsa ödüllendirilebilir puan parça puanına **eşit** olmalıdır; doğruysa parça puanından **büyük** olmalıdır ("max").
+- **Birlikte gereken (AND):** tek puan için iki ifade gerekiyorsa ikisi aynı maddenin içeriğinde yazılır; ayrı bir yapı yoktur.
+- `notes[]`: parça düzeyinde not; `kind` (`general`, `owtte`, `accept`, `do_not_accept`, `cap`, `ecf`), `content` (`doc`), isteğe bağlı
+  `mark_point_id` (o parçanın bir maddesi olmalı).
+
+#### Çözüm modeli
+
+`parameters[]` (ad, değer, birim), `constants[]` (ad, `ref`), `steps[]` (`id`, `name`, `expr`, `unit`, `stated_value`), `answers[]`
+(`part_id`, `step`). Veri olarak saklanır, **hesaplanmaz**; doğrulama durumu belgede değil, sistemin durumunda tutulur.
+
+- Parametre, sabit ve adım adları birlikte tekildir; adım `id` değerleri tekildir.
+- Bir parçanın en çok bir cevap bağı vardır; bağlar var olan parça ve adıma gider.
+- Madde ve çoktan seçmeli `solution_step` değerleri var olan bir adıma gider.
+- `param` taşıyan her `quantity`, aynı adlı parametreyle değer ve birim metni olarak birebir aynıdır. **Çözüm modeli yoksa `param` ve
+  `solution_step` taşımak hatadır.**
+- `stated_value`: "show that" parçasında soruda verilen değer; sonraki adımlar hesaplanan yerine bunu kullanır.
+
+#### Bilerek olmayanlar
+
+Düzey tanımlayıcılı (3/2/1/0) puanlama · "birlikte gereken" için ayrı yapı · veri tablosu sütununa bağlı belirsizlik alanı (başlık
+metninde yazılır) · `answer_space` düğümü · Blueprint şeması · doğrulama durumu.
+
+#### Henüz kodla zorlanmayanlar
+
+KaTeX render kontrolü (dilim 3) · `exam_section`, `command_term` ve müfredat düğümlerinin programın sözlüğüne göre doğrulanması (dilim 2) ·
+sayısal cevaplı her parçanın bir cevap bağı taşıması (yorumlayıcıyla) · birim dilbilgisi · adım ifadelerindeki adların tanımlı olması ·
+dört seçeneğin aynı türde ve sıralı olması · komut sözcüğü ↔ puan ↔ cevap türü kuralları · soru sınıfına göre toplam puan sınırları.
+
+#### v1 sınırı: sınav yapısına ait sabitler
+
+Dört seçenek (A–D), çoktan seçmelinin 1 puan olması, alt parçanın en çok 3 puan olması ve `sl`/`hl` ile `sl_core`/`ahl` ayrımı şemada
+sabittir. CLAUDE.md kural 12'ye göre bunlar programın verisi olmalıdır; ikinci program eklendiğinde sınav biçimi kaydına taşınacaktır (D-50).
 
 ## 4. Çözüm modeli: bildirimsel formül zinciri (D-23)
+
+> Aşağıdaki örnek ilk tasarımdır. Uygulanan alan adları §3.5 "Çözüm modeli" başlığındadır: cevap bağı `part_id` ile yapılır;
+> `sig_figs`, `ranges` ve ayrı `schema_version` v1'de yoktur.
 
 ```json
 {

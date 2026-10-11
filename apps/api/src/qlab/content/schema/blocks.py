@@ -15,7 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 NUMBER_PATTERN = r"^-?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?$"
 UNSIGNED_NUMBER_PATTERN = r"^[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?$"
 # Unit expressions are checked for shape only; a unit grammar comes with the formula interpreter.
-UNIT_PATTERN = r"^([A-Za-zµΩ°%][A-Za-zµΩ°%0-9 /*^().-]*)?$"
+UNIT_PATTERN = r"^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$"
 
 
 class Node(BaseModel):
@@ -76,12 +76,6 @@ class QuantityAttrs(Node):
     unit: str = Field(default="", pattern=UNIT_PATTERN)
     param: str | None = Field(default=None, pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
     uncertainty: str | None = Field(default=None, pattern=UNSIGNED_NUMBER_PATTERN)
-
-    @model_validator(mode="after")
-    def _unit_trimmed(self) -> Self:
-        if self.unit != self.unit.strip():
-            raise ValueError("unit has surrounding whitespace")
-        return self
 
 
 class Quantity(MarkedNode):

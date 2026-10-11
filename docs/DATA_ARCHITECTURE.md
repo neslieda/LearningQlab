@@ -99,7 +99,8 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 ### 3.5 Şema v1 — uygulanan hali (2026-10-11, bağımsız inceleme sonrası)
 
 Kod: `apps/api/src/qlab/content/schema/`. Bu bölüm §2–§4'teki eski taslaklarla çelişirse **bu bölüm geçerlidir** (D-50). Bilinmeyen alan
-her düzeyde reddedilir. Tüm modeller değişmezdir. JSON'da diziler sıralıdır ve aynı içerik her zaman aynı baytlara serileşir.
+her düzeyde reddedilir. Tüm modeller değişmezdir. JSON'da diziler sıralıdır ve aynı belge her zaman aynı baytlara serileşir (dizilerin
+sırası, işaretlerin sırası dahil, yazıldığı gibi korunur; kanonik sıra yalnızca `levels` için zorunludur).
 
 #### Düğümler (ProseMirror JSON biçimi)
 
@@ -110,9 +111,9 @@ her düzeyde reddedilir. Tüm modeller değişmezdir. JSON'da diziler sıralıd�
 | `doc` | kök | en az bir blok |
 | `paragraph` | blok | satır içi düğümler (boş olabilir) |
 | `math_block` | blok | `attrs.latex` (boş olamaz) |
-| `table` → `table_row` → `table_header` / `table_cell` | blok | hücre: en az bir `paragraph`; `attrs.colspan` (1–12), `attrs.rowspan` (1–50). Satır birleştirme yoksa tüm satırların genişliği eşit olmalı |
+| `table` → `table_row` → `table_header` / `table_cell` | blok | hücre: yalnızca `paragraph`, en az bir; `attrs.colspan` (1–12), `attrs.rowspan` (1–50). Satır birleştirme yoksa tüm satırların genişliği eşit olmalı |
 | `figure` | blok | `attrs.stimulus_id` |
-| `bullet_list`, `ordered_list` → `list_item` | blok | madde: en az bir `paragraph` |
+| `bullet_list`, `ordered_list` → `list_item` | blok | madde: yalnızca `paragraph`, en az bir (iç içe liste yok) |
 | `text` | satır içi | `text` (boş olamaz), `marks` |
 | `math_inline` | satır içi | `attrs.latex`, `marks` |
 | `quantity` | satır içi | `attrs.value`, `attrs.unit`, `attrs.param`, `attrs.uncertainty`, `marks` |
@@ -122,9 +123,10 @@ her düzeyde reddedilir. Tüm modeller değişmezdir. JSON'da diziler sıralıd�
   Aynı işaret iki kez olamaz; `sub` ile `sup` ve `optional` ile `essential` birlikte olamaz. İşaretler `text`, `math_inline` ve `quantity`
   üzerinde kullanılabilir (ör. `3.0 «s»`).
 - Sayı metni (`value`, parametre değeri, kabul aralığı): ASCII rakamlar, isteğe bağlı baştaki `-`, isteğe bağlı ondalık kısım, isteğe
-  bağlı `e`/`E` ve işaretli üs. Geçerli: `20`, `20.0`, `-5`, `1.5e-3`, `1e+3`. Geçersiz: `+5`, `.5`, `5.`, Unicode eksi ya da rakam.
+  bağlı `e`/`E` ve üs (üssün işareti isteğe bağlı). Geçerli: `20`, `20.0`, `-5`, `1.5e-3`, `1e+3`. Geçersiz: `+5`, `.5`, `5.`, Unicode eksi ya da rakam.
   `uncertainty` aynı biçimde ama işaretsiz. Değer metin olarak saklanır; `20` ile `20.0` farklıdır.
-- Birim metni: boş ya da harf, `µ`, `Ω`, `°`, `%` ile başlar; baş ve sonda boşluk olamaz. Bu yalnızca biçim denetimidir; birim dilbilgisi
+- Birim metni: boş ya da ASCII harf, `µ` (U+00B5), `Ω`, `°`, `%` ile başlar; devamında bunlara ek olarak rakam, boşluk ve `/ * ^ ( ) . -`
+  olabilir; baş ve sonda boşluk olamaz. Kural tüm birim alanlarında aynıdır (büyüklük, parametre, adım, kabul aralığı). Bu yalnızca biçim denetimidir; birim dilbilgisi
   yorumlayıcıyla gelir. Karşılaştırmalar birebir metin eşitliğidir (`m/s` ile `m s^-1` eşit sayılmaz).
 
 #### `QuestionDocument`
@@ -160,13 +162,14 @@ bağlam veren metin), `body` (boş olamaz), `marks` (1–3), `marks_capped`, `sh
 `mark_points[]`, `notes[]`.
 
 - Etiketler tekil ve sıralıdır; bir harf hem alt parçasız hem alt parçalı kullanılamaz (`a` ile `a.i` birlikte olmaz).
-- `depends_on` ve `ecf_from` yalnızca **önceki** parçalara gider; tekrar içermez.
+- `depends_on` ve `ecf_from` yalnızca **önceki** parçalara gider; bunlar ve `stimulus_refs` tekrar içermez. Etiketlerde boşluk
+  bırakılabilir (`a`, `c`); yalnızca sıra ve tekillik zorunludur.
 - `sl` içeren soruda `ahl` içerikli parça ya da `ahl` içerikli çoktan seçmeli olamaz.
 
 #### Markscheme
 
 - Her `MarkPoint` bir puandır: `id` (soru genelinde tekil), `content` (`doc`), `kind` (`method`, `answer`, `statement`),
-  `alternative_group`, `route`, `accept_range` (`minimum`, `maximum` sayı metni; `unit`), `solution_step`.
+  `alternative_group`, `route`, `accept_range` (`minimum` ≤ `maximum`, sayı metni; `unit`), `solution_step`.
 - **Alternatifler (OR):** aynı `alternative_group` içindeki maddeler tek bir puanın alternatifidir.
 - **Yollar (ALTERNATIVE 1 / 2):** aynı `route` değerini taşıyan maddeler parçanın puanlarını kazanmanın eksiksiz bir yoludur; yollar
   birbirini dışlar. Tek yol tanımlanamaz (en az iki).
@@ -186,7 +189,7 @@ bağlam veren metin), `body` (boş olamaz), `marks` (1–3), `marks_capped`, `sh
 - Madde ve çoktan seçmeli `solution_step` değerleri var olan bir adıma gider.
 - `param` taşıyan her `quantity`, aynı adlı parametreyle değer ve birim metni olarak birebir aynıdır. **Çözüm modeli yoksa `param` ve
   `solution_step` taşımak hatadır.**
-- `stated_value`: "show that" parçasında soruda verilen değer; sonraki adımlar hesaplanan yerine bunu kullanır.
+- `stated_value` (sayı metni): "show that" parçasında soruda verilen değer; sonraki adımlar hesaplanan yerine bunu kullanır.
 
 #### Bilerek olmayanlar
 
@@ -194,6 +197,9 @@ Düzey tanımlayıcılı (3/2/1/0) puanlama · "birlikte gereken" için ayrı ya
 metninde yazılır) · `answer_space` düğümü · Blueprint şeması · doğrulama durumu.
 
 #### Henüz kodla zorlanmayanlar
+
+Boş bırakılabilen metinler (`lead_in`, madde ve not içeriği, seçenek hücresi, açıklama) · yolların eşit puanlı olması · işaretlerin
+kanonik sırası · kullanılmayan uyaran ·
 
 KaTeX render kontrolü (dilim 3) · `exam_section`, `command_term` ve müfredat düğümlerinin programın sözlüğüne göre doğrulanması (dilim 2) ·
 sayısal cevaplı her parçanın bir cevap bağı taşıması (yorumlayıcıyla) · birim dilbilgisi · adım ifadelerindeki adların tanımlı olması ·

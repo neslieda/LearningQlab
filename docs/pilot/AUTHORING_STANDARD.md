@@ -20,7 +20,8 @@ Dosya adı: `<düğüm>-<kısa-ad>-pilot-questions.md` (ör. `b3-gas-laws-pilot-
 3. Sorular: `## Soru N — Paper …` başlığı; soru metni İngilizce; ardından `**Cevap: X**` (çoktan seçmeli) ya da `### Markscheme`.
 4. Biçim uyumu tablosu.
 
-Konu başına en az: **3 Paper 1A** sorusu + **1 Paper 2 kısa sorusu** (4–9 puan). Tema başına ayrıca **1 Paper 1B** sorusu (8–12 puan).
+Konu başına en az: **3 Paper 1A** sorusu + **1 Paper 2 kısa sorusu** (SL kâğıdında kullanılacaksa 4–6 puan; yalnızca HL için 4–9 puan;
+kaynak: müfredat analizi §2.1). Tema başına ayrıca **1 Paper 1B** sorusu (8–12 puan).
 
 ## 3. Müfredat uyumu
 
@@ -33,8 +34,9 @@ Konu başına en az: **3 Paper 1A** sorusu + **1 Paper 2 kısa sorusu** (4–9 p
 ## 4. Bilimsel doğruluk
 
 - Her sayısal cevap ve her sayısal çeldirici ayrı bir hesapla (`python3`) yeniden üretilir; dosyada bunun yapıldığı belirtilir.
-- Sabitler: g = 9.8 m s⁻²; diğer sabitler standart değerleriyle (2–3 anlamlı basamak) ve soruda ya da notta belirtilerek. Hepsi
-  "veri kitapçığı değeri uzmanca teyit edilmeli" notuna tabidir.
+- Sabitler [dp-physics-2025-constants.md](../syllabus/dp-physics-2025-constants.md) tablosundan, oradaki değer ve anlamlı basamakla alınır.
+  Veri kitapçığında bulunan sabit soru metninde ayrıca verilmez; kitapçıkta **bulunmayan** her değer (sesin hızı, malzeme özellikleri,
+  nüklit kütleleri, gök cismi verileri, belirli şekillerin eylemsizlik momenti) soruda verilir.
 - Veriler fiziksel olarak gerçekçidir (gerçek malzeme özellikleri, makul büyüklükler).
 - Tek doğru cevap vardır. Gerekli varsayımlar soruda yazılır (ör. "air resistance is negligible").
 - Birimler ve anlamlı basamak tutarlıdır; cevap, verilerin anlamlı basamağıyla verilir.

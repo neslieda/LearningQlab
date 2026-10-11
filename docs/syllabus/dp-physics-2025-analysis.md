@@ -37,6 +37,33 @@ düzeyinde olmalı; yalnızca hesap sorusu üretmek kapsamı karşılamaz.
 - Tüm kâğıtlarda hesap makinesi ve veri kitapçığı kullanılır. Sonuç: formül ezberi ölçülmez; formülü seçme, yorumlama ve uygulama ölçülür.
 - Bilimin doğası temaları soruya bağlam olabilir; tanım ezberi sorulmaz.
 
+### 2.1 Soru başına tipik puan aralıkları
+
+Kaynak: örnek (specimen) kâğıtlar; yalnızca yapısal sayım (soru metni kullanılmadı). Tek bir örnek sete dayanır; gerçek oturumlarda
+değişebilir. Ayrıntılı dağılımlar: [blueprint-format-reference.md](../formats/blueprint-format-reference.md).
+
+| Bölüm | Soru türü | Soru başına puan | Alt parça sayısı | Alt parça puanı |
+|---|---|---|---|---|
+| Paper 1A | Çoktan seçmeli | 1 | — | — |
+| Paper 1B | Veri temelli (2 soru, toplam 20) | 8–12 (örnekte 12 ve 8) | 5–7 | 1–3; çoğunlukla 1 ve 2 (12 alt parçanın 5'i 1, 6'sı 2, 1'i 3 puan) |
+| Paper 2, HL | Kısa (8 soru) | 4–9, ortanca 6 | 2–4 | 1–3 |
+| Paper 2, HL | Uzun (2 soru, sonda) | 20 | 9–10 | 1–3 |
+| Paper 2, SL | Kısa (6 soru) | 4–6, ortanca 5 | 2–3 | 1–3 |
+| Paper 2, SL | Uzun (1 soru, sonda) | 20 | 10 | 1–3 |
+
+Alt parça puanlarının dağılımı (Paper 2): HL'de 45 alt parçanın 13'ü 1, 19'u 2, 13'ü 3 puan; SL'de 25 alt parçanın 7'si 1, 11'i 2, 7'si 3
+puan. İki düzeyde de ortalama 2 puan. **Hiçbir alt parça 3 puanı geçmez.** Harfli parça sayısı (a, b, c…) kısa sorularda 2–4, uzun
+sorularda 4–5'tir; alt parçalar Roma rakamlarıyla bölünür.
+
+**Üretim için sonuçlar**
+
+- SL havuzuna girecek kısa bir Paper 2 sorusu 4–6 puan olmalı; 7–9 puanlık kısa sorular yalnızca HL kâğıdında görülüyor.
+- 20 puanlık soru tek büyük parça değil, aynı bağlamda 9–10 küçük alt parçadır.
+- Veri temelli soru yaklaşık 10 puandır ve alt parçaları kısa sorulardakinden daha küçüktür (ortalama 1,7 puan).
+- **Pilot setle fark:** pilot dosyalardaki Paper 2 sorularının çoğu 9 puan ve SL olarak etiketli; bu, SL kısa soru aralığının (4–6) dışında.
+  Bu sorular ya ikiye bölünmeli ya da yalnızca HL kâğıdı için işaretlenmeli.
+- **Çelişki:** örnek SL Paper 2 toplamı 50 puan; ders rehberi 55 diyor. Hangisinin geçerli olduğu uzmanca teyit edilmeli.
+
 ## 3. Komut sözcüğü → beklenen cevap türü
 
 | Sözcük | Beklenen | Şemadaki cevap türü |
@@ -160,5 +187,7 @@ koyduğu sınırlar; soru bunların dışına çıkamaz.
 
 - Bu belge rehberin tek bir okumasına dayanıyor; her düğümün "ölçülen çekirdek" ve "kapsam dışı" sütunları fizik uzmanınca gözden
   geçirilmeli.
-- Veri kitapçığındaki sabit değerleri (ör. g) bu belgeye alınmadı; soru üretiminde kullanılacak sabit tablosu kitapçıktan girilmeli.
-- Paper 1B ve Paper 2'de soru başına tipik puan aralıkları rehberde yok; uzman bilgisinden gelmeli.
+- ~~Veri kitapçığındaki sabit değerleri bu belgeye alınmadı.~~ **Giderildi (2026-10-11):** [dp-physics-2025-constants.md](dp-physics-2025-constants.md);
+  tablonun kitapçığın güncel sürümüyle aynı olduğu teyit edilmeli.
+- ~~Soru başına tipik puan aralıkları rehberde yok.~~ **Giderildi (2026-10-11):** §2.1, örnek kâğıtlardan. Tek örnek sete dayandığı için
+  uzmanların kendi deneyimleriyle karşılaştırması gerekir.

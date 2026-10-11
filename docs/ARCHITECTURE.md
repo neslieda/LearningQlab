@@ -23,7 +23,7 @@ Sistem iki alt sistemden oluşur:
 1. **LLM üretir, kod doğrular, insan yayınlar.** Hiçbir LLM çıktısı tek başına doğruluk kanıtı sayılmaz.
 2. **Cevap koddan gelir.** Sayısal cevaplar, ara değerler ve diyagram sayıları bildirimsel formül zincirinden hesaplanır.
 3. **LLM orkestratör değildir.** Akış veritabanındaki açık durum makinesidir; her LLM adımı tek, yapılandırılmış bir çağrıdır. Agent yok.
-4. **Üretici kaynak metni görmez.** Üretim adımı yalnızca Blueprint alır.
+4. **Sınav belgeleri yalnızca biçim öğretir.** Üretim adımı yalnızca Blueprint alır; Blueprint müfredattan yazılır, bir sınav sorusundan değil (D-44, D-45).
 5. **Fail-closed haklar.** Geçerli `rights` kaydı olmayan içerik işlenmez, gösterilmez.
 6. **Tek gösterim yolu.** İncelemecinin onayladığı görüntü ile öğrencinin gördüğü görüntü aynı bileşenden çıkar.
 7. **Değişmez sürümler.** Yayınlanmış soru sürümü değişmez; düzeltme yeni sürümdür.
@@ -124,7 +124,7 @@ Tek `Question` varlığı vardır; `origin` alanı kökeni belirtir (D-22).
 
 | Köken | Kimler görür | AI üretimine girdi olur mu |
 |---|---|---|
-| `source_original` (sınav kurumunun orijinal sorusu) | Yalnızca rights kaydı olan kurumun üyeleri | Yalnızca içerik alma ve Blueprint çıkarımı adımlarına; üretim adımına asla |
+| `source_original` (sınav kurumunun orijinal sorusu) | **Askıda (D-46):** yazılı lisans olmadan sisteme alınmaz ve gösterilmez | Hayır (D-44) |
 | `generated` (AI üretimi, insan onaylı) | Entitlement'a göre herkes | — |
 | `authored` (ileride: elle yazılmış) | Entitlement'a göre | — |
 
@@ -135,15 +135,20 @@ Sınır iki noktada zorlanır:
 
 ```mermaid
 flowchart LR
-  SRC[Kaynak soru: source_original] --> BP[Blueprint çıkarımı]
-  BP --> LEAK{Kaynak metin sızıntısı? kod}
-  LEAK -->|temiz| B[(Blueprint)]
-  B --> G[Üretim]
-  SRC -. erişim yok .-x G
-  G --> Q[Üretilmiş soru + lineage: blueprint_id → source_question_id]
+  DOC[Sınav belgeleri] -->|yalnızca biçim incelemesi| FP[(Biçim profili: kendi cümlelerimizle)]
+  SYL[(Müfredat ağacı)] --> BP[Blueprint: uzman yazar ya da AI önerir, uzman onaylar]
+  FP --> BP
+  BP --> G[Üretim]
+  DOC -. soru metni girmez .-x BP
+  DOC -. soru metni girmez .-x G
+  G --> Q[Üretilmiş soru + lineage: blueprint → müfredat düğümü + biçim profili sürümü]
 ```
 
-Lineage her üretilmiş soruda tutulur; bir hak sahibi talebi gelirse etkilenen sorular tek sorguyla bulunur ve geri çekilir (R-01).
+**Biçim profili** bir sınav bölümünün korunmayan özelliklerini anlatır: soru türleri, parça ve puan düzeni, komut sözcükleri, birim ve
+gösterim kuralları, şekil türleri, markscheme düzeni ve bir sorunun bilimsel olarak eksiksiz sayılması için taşıması gereken öğeler.
+Soru metni, sayı ya da senaryo içermez. Uzmanlarca onaylanır ve sürümlüdür.
+
+`source_original` kökeni veri modelinde durur ama kapalıdır: bir sınav kurumundan yazılı lisans alınırsa rights kaydıyla açılabilir.
 
 ## 6. Temel akışlar
 
@@ -181,9 +186,8 @@ Ayrıntı: [AI_PIPELINE.md](AI_PIPELINE.md).
 
 ```mermaid
 flowchart LR
-  P[PDF] --> I[İçerik alma] --> C[Sınıflandırma] --> BP[Blueprint] --> G[Üretim]
+  SY[Müfredat düğümü + biçim profili] --> BP[Blueprint] --> G[Üretim]
   G --> V[Kod kontrolleri] --> BS[Kör çözüm] --> CR[Eleştirmen] --> N[Benzerlik] --> H[İnsan incelemesi] --> PUB[Yayın]
-  I --> HR[Örneklemeli insan kontrolü]
 ```
 
 ## 7. MVP ve sonrası

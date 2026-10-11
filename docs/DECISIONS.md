@@ -29,7 +29,7 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 |---|---|---|---|
 | D-01 | MVP dersi yalnızca Physics (ilk program IB Diploma) | S | |
 | D-02 | Tüm Physics soru tipleri kapsamda; sırayla: Paper 1A → Paper 2 sayısal/yapılandırılmış → Paper 1B → uzun açıklamalı | S / Ö | Sıra önerisi mimardan |
-| D-03 | İki içerik kökeni: orijinal kaynak sorular (yalnızca kurumun öğrencilerine) ve AI üretimi özgün sorular (insan onaylı, genel erişim) | S | |
+| D-03 | İki içerik kökeni: orijinal kaynak sorular (yalnızca kurumun öğrencilerine) ve AI üretimi özgün sorular (insan onaylı, genel erişim) | S | Orijinal soru gösterimi D-46 ile askıda |
 | D-04 | Müfredat dışı sorular silinmez, ayrı durumda saklanır | S | |
 | D-05 | Önce kapalı kullanım, sonra genel erişim; global, yalnızca İngilizce | S | |
 | D-06 | Önce responsive web, sonra native mobil | Ö | |
@@ -42,8 +42,8 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 
 | ID | Karar | Kim | Not |
 |---|---|---|---|
-| D-08 | Üretimin kaynağı mevcut sınav soruları; Blueprint'i AI çıkarır, baştan açık | S | **İtiraz:** R-01. Mimar önce clean-room (insan yazımı Blueprint), sonra "AI yolu izne bağlı" önerdi; sahibi baştan açık seçti |
-| D-15 | İçerik alma: vision model + kod kontrolleri + örneklemeli insan incelemesi; doğrulanmamış soruda sayfa kırpımı; M0 ölçümüyle kesinleşir | Ö | |
+| ~~D-08~~ | *(Yürürlükten kalktı → D-44, D-45)* Üretimin kaynağı mevcut sınav soruları; Blueprint'i AI çıkarır, baştan açık | S | **İtiraz:** R-01. Mimar önce clean-room (insan yazımı Blueprint), sonra "AI yolu izne bağlı" önerdi; sahibi baştan açık seçti |
+| D-15 | İçerik alma: vision model + kod kontrolleri + örneklemeli insan incelemesi; doğrulanmamış soruda sayfa kırpımı; M0 ölçümüyle kesinleşir | Ö | Askıda (D-46) |
 | D-17 | Cevap LLM'den değil hesaplanan çözüm modelinden gelir | Ö | |
 | D-23 | Çözüm modeli = bildirimsel formül zinciri; serbest kod çalıştırılmaz. Sığmayan tipler için izole Python sonradan ve sınırlı | Ö | D-17'nin uygulaması |
 | D-14 | Diyagramlar koddan ve parametreli şablonlardan; görsel üreten model yok | Ö | |
@@ -88,8 +88,11 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 | D-38 | M1 sonrası iki paralel hat; kapalı beta MCQ + sayısal ile açılır; hukuki danışmanlık şimdi; sabit tarih yok | S / Ö | |
 | D-39 | Kod büyük ölçüde Claude ile; tek depo; kritik alanlarda insan onayı zorunlu, diğerlerinde ajan incelemesi + CI | S / Ö | Ek kapılar: mutation testing, aşama sonu uygunluk incelemesi, dış denetim |
 | D-41 | Mimari belgeler onaylandı; M0 başladı (2026-10-11) | S | |
-| D-42 | Kaynak sınav PDF'leri geliştirme oturumunda (Claude Code) şema tasarımı ve M0 ölçümleri için okunur | S | **İtiraz:** bu kanalın veri saklama koşulu teyit edilmedi; D-31'in gerekçesiyle çelişir. Mimar sentetik örnekle başlamayı önerdi; sahibi riski üstlendi (R-01). PDF'ler ve onlardan kopyalanan sorular depoya ve test verisine girmez |
-| D-43 | Yerel git + özel GitHub deposu; kaynak materyal klasörü `.gitignore`'da | S / Ö | |
+| ~~D-42~~ | *(Yürürlükten kalktı → D-44)* Kaynak sınav PDF'leri geliştirme oturumunda (Claude Code) şema tasarımı ve M0 ölçümleri için okunur | S | **İtiraz:** bu kanalın veri saklama koşulu teyit edilmedi; D-31'in gerekçesiyle çelişir. Mimar sentetik örnekle başlamayı önerdi; sahibi riski üstlendi (R-01). PDF'ler ve onlardan kopyalanan sorular depoya ve test verisine girmez |
+| D-43 | Yerel git + özel GitHub deposu; kaynak materyal klasörü `.gitignore`'da | S / Ö | Uzak depo henüz açılmadı (sahibinin kararı) |
+| D-44 | Sınav kurumlarının belgeleri **yalnızca biçim öğrenmek için** kullanılır: bir sorunun nasıl göründüğü, yapısı ve bilimsel olarak hangi öğeleri taşıması gerektiği. Soru üretimine girdi olmazlar. Soru metni, sayıları ve senaryosu depoya, veritabanına, prompt'a, Blueprint'e ve test verisine girmez. Çıktı, kendi cümlelerimizle yazılmış **biçim profilidir** | S | D-08 ve D-42'nin yerine geçer. Sahibi kalan sorumluluğu üstlendi. **Mimar notu:** belgelerin bir AI oturumunda okunması, sınav kurumunun koşullarıyla hâlâ çelişebilir (R-01) |
+| D-45 | Blueprint bir sınav sorusundan türetilmez. Kaynağı müfredat düğümü + biçim profilidir; uzman yazar ya da AI müfredattan önerir ve uzman onaylar. Kaynak soruya lineage yoktur | Ö | D-44'ün uygulaması; **sahibinin onayını bekliyor** |
+| D-46 | Orijinal sınav sorularının sisteme alınması ve öğrencilere gösterimi **askıda**: yazılı lisans ve hukuki görüş olmadan açılmaz. Kapalı beta üretilmiş içerikle yapılır; sıra M1 → M3 → M2 olur | Ö | D-44'ten türetildi; **sahibinin onayını bekliyor** |
 
 ## 3. Ertelenen kararlar
 
@@ -112,18 +115,24 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 
 ## 4. Risk kaydı
 
-### R-01 — Kaynak sınav içeriğinin kullanımı · **En yüksek** · ⚖️
+### R-01 — Sınav kurumu içeriğinin kullanımı · **Yüksek** (D-44 ile azaldı) · ⚖️
 
-- **Ne:** kaynak soruların LLM'e verilmesi (içerik alma, sınıflandırma, Blueprint), embedding'e çevrilmesi ve kurumun öğrencilerine
-  gösterilmesi. Türetilen soruların ticari olarak yayınlanması.
-- **Bilinen:** ibo.org sayfalarının arama özetine göre IB materyalinin generative AI aracına sorgu olarak verilmesi yazılı izinsiz yasak;
-  üçüncü taraf ticari kullanımı lisans gerektiriyor; ücretli tutoring ve son iki dönem materyali lisans kapsamı dışı.
-- **Bilinmeyen:** kurumun statüsü; sayfanın birebir metni (403 döndü); diğer sınav kurumlarının koşulları.
-- **Karar:** proje sahibi riski bilerek üstlendi (D-08). Mimar itiraz etti ve iki kez daha güvenli alternatif sundu.
-- **Kapsam genişlemesi (D-42, 2026-10-11):** kaynak PDF'ler, veri saklama koşulu teyit edilmemiş geliştirme oturumunda da okunuyor.
-- **Etki:** olumsuz görüşte üretilmiş içeriğin tamamı geri çekilebilir; kapalı betanın içeriği değişir.
-- **Azaltıcılar:** rights fail-closed ve kill switch; üretici kaynak metni görmez; sızıntı kontrolü; lineage ile toplu geri çekme;
-  no-retention koşulu; hukuki danışmanlık şimdi; M6 hukuki kapısı.
+- **Birinci elden bulgu (2026-10-11):** incelenen Kasım 2025 sınav dosyalarının kapağında, üçüncü tarafların (özel öğretmenler, tutoring
+  ve çalışma hizmetleri, dijital platform işletenler, uygulama geliştiriciler dahil) kullanımını ücretli olsun olmasın yasaklayan ve bunu
+  suç olarak niteleyen bir bildirim var; seçilmiş dosya ya da alıntıların kullanımı da yasaklanıyor. O dosyalar klasörden kaldırıldı.
+- **Bilinen (arama özeti):** IB materyalinin generative AI aracına sorgu olarak verilmesi yazılı izinsiz yasak; üçüncü taraf ticari
+  kullanımı lisans gerektiriyor; ücretli tutoring ve son iki dönem materyali lisans kapsamı dışı.
+- **Bilinmeyen:** kurumun statüsü; bildirimin şirketin kurulu olduğu ülkedeki hukuki karşılığı; diğer sınav kurumlarının koşulları.
+- **Karar geçmişi:** sahibi önce sınav sorularından üretimi (D-08) ve PDF'lerin geliştirme oturumunda okunmasını (D-42) üstlendi; mimar
+  itiraz etti. Bildirim görüldükten sonra strateji değişti: **D-44** (yalnızca biçim öğrenme), **D-45** (Blueprint müfredattan),
+  **D-46** (orijinal soru gösterimi askıda).
+- **Kalan risk:**
+  1. Biçim öğrenmek için belgelerin bir AI oturumunda okunması, sınav kurumunun koşullarıyla çelişebilir. Sahibi üstlendi.
+  2. Üretici model, eğitim verisinden bildiği gerçek bir sınav sorusunu yeniden üretebilir; elimizde karşılaştıracak kaynak havuzu yok.
+  3. Sınav kurumu adının ve müfredat başlıklarının ticari üründe kullanımı.
+- **Azaltıcılar:** soru metni hiçbir kalıcı yere yazılmaz; biçim profili kendi cümlelerimizle ve yalnızca korunmayan öğelerle (yapı,
+  gösterim kuralları, puanlama düzeni) yazılır; Blueprint'te kaynak soru bağı yok; incelemeciler "bilinen bir sınav sorusuna benziyor mu"
+  sorusunu açıkça yanıtlar; orijinal içerik yolları rights kapısı ve kill switch arkasında kapalı; hukuki danışmanlık.
 - **Sahibi:** proje sahibi + hukuk danışmanı.
 
 ### R-02 — Yaş, rıza ve reşit olmayan verisi · **Yüksek** · ⚖️

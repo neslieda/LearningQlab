@@ -8,8 +8,8 @@
 ```mermaid
 flowchart LR
   M0[M0 Temeller ve ölçüm] --> M1[M1 İçerik çekirdeği]
-  M1 --> M2[M2 Kapalı beta]
   M1 --> M3[M3 Üretim hattı]
+  M3 --> M2[M2 Kapalı beta]
   M2 --> M4[M4 AI puanlama]
   M3 --> M4
   M3 --> M5[M5 Kapsam genişletme]
@@ -19,6 +19,10 @@ flowchart LR
   L[Hukuki danışmanlık: şimdi başlar] -.-> M2
   L -.-> M6
 ```
+
+> **2026-10-11 değişikliği (D-44–D-46):** orijinal sınav soruları sisteme alınmıyor ve gösterilmiyor. Kapalı beta üretilmiş içerikle
+> yapılacağı için M3, M2'den önce gelir. Ürün hattı M2'nin içerikten bağımsız parçalarını (kimlik, kurum, soru çözme arayüzü, deneme)
+> M3 ile paralel geliştirir; beta, yeterli sayıda onaylı soru olunca açılır.
 
 İki paralel hat (M1 sonrası):
 
@@ -44,15 +48,15 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 | Claude Code düzeni: `CLAUDE.md`, ajan tanımları, hook ve izinler, CODEOWNERS | [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) uygulanmış |
 | Soru şeması v1 (Pydantic) + formül zinciri şeması + Blueprint şeması | Şema gerçek sorularla sınanmış |
 | Program, sınav biçimi, puanlama politikası, müfredat ağacı (IB DP Physics) | Resmi rehberden girilmiş ve uzmanca doğrulanmış |
-| İçerik alma karşılaştırması (50 sayfa): vision model ↔ Docling | Karar ve ölçüm raporu |
+| Biçim profili (IB DP Physics): sınav belgelerinden ve uzmanlardan, kendi cümlelerimizle | Uzmanca onaylanmış, sürümlü profil; soru metni içermez |
 | Sağlayıcı ölçümü: üç aday, rol başına | Rol ataması; no-retention koşullarının yazılı teyidi |
-| Ölçüm setlerinin ilk hali (çıkarma, sınıflandırma, hata ekilmiş) | Sürümlü setler |
+| Ölçüm setlerinin ilk hali (hata ekilmiş set; sentetik sorularla) | Sürümlü setler |
 | Sağlayıcı seçimleri: identity (13–17 yaş koşulu belirleyici), PaaS, kuyruk kütüphanesi, matematik alanı | [TECH_STACK.md](TECH_STACK.md) güncellenmiş |
 | Hukuki danışmanlık başlatılır | Sorular iletilmiş ([SECURITY.md](SECURITY.md) §4.3, §5) |
 
 **Kabul kriteri**
-- Şema v1, her soru tipinden (1A, 1B, Paper 2 kısa ve uzun) uzmanların seçtiği gerçek örnekleri kayıpsız temsil ediyor.
-- İçerik alma ve sağlayıcı kararları ölçüm raporuyla verilmiş.
+- Şema v1, biçim profilindeki her soru türünü temsil ediyor; uzmanlar sentetik örnekler üzerinden doğrulamış.
+- Sağlayıcı kararları ölçüm raporuyla verilmiş.
 - CI: lint, tip, test, import kuralları, yetki tablosu iskeleti çalışıyor.
 
 > Not: müfredat yapısı (beş tema, Paper 1A çoktan seçmeli, 1B veri temelli, Paper 2 kısa ve uzun cevap, SL/HL süreleri) üçüncü taraf
@@ -63,20 +67,18 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 | İş | Not |
 |---|---|
 | `rights`, `syllabus`, `content` modülleri | Rights fail-closed ve sürüm değişmezliği testleriyle |
-| İçerik alma hattı | Durum makinesi, kuyruk, çift çıkarım, kod kontrolleri |
+| Blueprint yazım ve onay ekranı | Uzman yazar ya da AI müfredattan önerir; kapsam dengesi görünümü |
 | Soru gösterim bileşeni | Tüm blok tipleri; görsel regresyon seti |
 | Editör (Tiptap + özel düğümler) | Kaydet-aç gidiş-dönüş testi |
-| İnceleme ekranı | Kaynak sayfa bölgesiyle yan yana; sayfa kırpımı ↔ yapılandırılmış geçişi |
-| Müfredat sınıflandırma | Müfredat dışı ayrımı dahil |
+| İnceleme ekranı | Aday, raporlar ve Blueprint yan yana |
 | Audit log | |
 
 **Kabul kriteri**
-- Bir sınav kâğıdı uçtan uca alınıyor, inceleniyor ve doğrulanan sorular yapılandırılmış gösterime geçiyor.
+- Elle yazılmış bir soru editörde oluşturulup inceleniyor ve yayınlanıyor.
 - Doğrulanmış sorular masaüstü ve mobil genişlikte görsel regresyon testini geçiyor.
-- Rights kaydı olmayan belge işlenemiyor (test).
-- Çıkarma seti ve sınıflandırma setinde M0'da belirlenen hedefler tutuyor.
+- Rights kaydı olmayan içerik kaydedilemiyor ve gösterilemiyor (test); `source_original` yolları kapalı.
 
-### M2 — Kapalı beta (ürün hattı)
+### M2 — Kapalı beta (ürün hattı; M3'ten sonra açılır)
 
 | İş | Not |
 |---|---|
@@ -88,11 +90,10 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 | Temel analitik | Konu bazlı doğruluk |
 
 **Kabul kriteri**
-- Kendi öğrencileriniz gerçek sorularla çalışabiliyor.
+- Kendi öğrencileriniz onaylı, üretilmiş sorularla çalışabiliyor.
 - Kurum dışı hesap `source_original` içeriğe hiçbir uç noktadan erişemiyor (yetki tablosu testi).
 - Uçtan uca akış 1–3 ve 9 geçiyor ([TESTING_STRATEGY.md](TESTING_STRATEGY.md) §5).
-- ⚖️ Kaynak soruların kendi öğrencilerinize gösterimi için hukuki görüş alınmış; alınmadıysa bu özellik kapalı kalır ve beta sentetik
-  ya da üretilmiş içerikle başlar.
+- Orijinal sınav soruları hiçbir uç noktadan dönmüyor (D-46).
 
 ### M3 — Üretim hattı (içerik ve AI hattı)
 
@@ -101,7 +102,7 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 | İş | Not |
 |---|---|
 | Formül yorumlayıcısı | Beyaz liste, alt süreç, özellik tabanlı test, mutation |
-| Blueprint çıkarımı + sızıntı kontrolü | Kill switch ve rights bayrağına bağlı |
+| Blueprint önerisi (müfredattan) ve kontrolü | Model sınav sorusu görmez |
 | `generation` | `content` import yasağıyla |
 | Kod kontrolleri | [AI_PIPELINE.md](AI_PIPELINE.md) §6 tablosu |
 | Kör çözüm, eleştirmen | Sağlayıcı ayrımı |
@@ -113,7 +114,7 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 **Kabul kriteri**
 - Hata ekilmiş sette sayısal ve birim hataları hedeflenen oranda yakalanıyor (hedef M0'da konur).
 - Kritik kontrolü kalan aday, API doğrudan çağrılsa bile yayınlanamıyor.
-- Üretilmiş soru, kaynak soruyla benzerlik eşiğinin altında; lineage her soruda mevcut.
+- Her üretilmiş soru Blueprint'e, müfredat düğümüne ve biçim profili sürümüne bağlı; inceleme formunda ezber sorusu zorunlu.
 - İncelemeci onay oranı ve yayınlanan soru başı toplam maliyet (LLM + inceleme süresi) ölçülüyor.
 - Formül zincirine sığan soru oranı ölçülmüş; sığmayanlar için karar verilmiş.
 

@@ -16,12 +16,10 @@
 
 | # | Adım | Tür | Girdi | Çıktı | Başarısızlıkta |
 |---|---|---|---|---|---|
-| 0 | Rights kapısı | Kod | Kaynak belge | İzin / ret | Dur; işlenmez |
-| 1 | İçerik alma | Vision LLM + kod | Sayfa görüntüsü | Soru taslağı, bölge koordinatları | İnsan kuyruğu |
-| 2 | Çıkarma kontrolleri | Kod | Taslak | Rapor | İnsan kuyruğu |
-| 3 | Müfredat sınıflandırma | LLM (küçük) + kod | Soru metni, izinli düğüm listesi | Düğüm ID'leri ya da müfredat dışı | Düşük güven → insan |
-| 4 | Blueprint çıkarımı | LLM (orta) | Kaynak soru | Blueprint | Yeniden dene |
-| 5 | Sızıntı kontrolü | Kod | Blueprint, kaynak metin | Geçti / kaldı | 4'e dön |
+| 0 | Biçim profili (bir kerelik, sürümlü) | İnsan + AI yardımı | Sınav belgeleri, uzman bilgisi | Biçim profili; soru metni içermez | Uzman onayı olmadan kullanılmaz |
+| 1 | Blueprint yazımı | İnsan, ya da LLM önerir + insan onaylar | Müfredat düğümü, biçim profili | Blueprint | Uzman reddeder |
+| 2 | Blueprint kontrolü | Kod | Blueprint | Şema ve müfredat düğümü geçerli; kapsam dengesi | Düzeltmeye döner |
+| 3–5 | *(Askıda, D-46)* Orijinal soru alma, çıkarma kontrolleri, sınıflandırma | — | — | — | Yazılı lisans olmadan çalışmaz |
 | 6 | Üretim | LLM (orta; zor tipte üst) | Yalnızca Blueprint | Soru, parçalar, markscheme, formül zinciri, şekil tarifi | Yeniden dene |
 | 7 | Deterministic kontroller | Kod | Aday | Rapor | Gerekçeyle 6'ya dön |
 | 8 | Şekil üretimi | Kod (şablon) | Şekil tarifi, parametreler | SVG, alt metin | Aday reddi |
@@ -34,7 +32,9 @@
 Klasik ML yok: sınıflandırma kapalı listeden seçimdir ve küçük LLM ile yapılır; etiketli veri biriktiğinde ucuz bir sınıflandırıcıya
 geçiş değerlendirilebilir (ertelendi).
 
-## 3. İçerik alma (adım 1–2)
+## 3. İçerik alma (askıda, D-46)
+
+> Bu bölüm, bir sınav kurumundan yazılı lisans alınırsa kullanılacak tasarımı anlatır. Şu an hiçbir parçası uygulanmaz ve çalıştırılmaz.
 
 **Yöntem (D-15):** sayfa görüntüsü vision modele verilir; çıktı soru şemasındadır (kök, parçalar, puanlar, seçenekler, matematik LaTeX,
 şekil bölgeleri). M0'da 50 sayfalık örnek sette vision model ile Docling karşılaştırılır; çıkarma bir arayüzün arkasındadır.
@@ -53,19 +53,27 @@ geçiş değerlendirilebilir (ertelendi).
 
 **Talimat enjeksiyonu:** PDF'teki metin veridir; sistem talimatından ayrı alanda verilir ve çıktı şemayla sınırlıdır.
 
-## 4. Blueprint ve sızıntı kontrolü (adım 4–5)
+## 4. Biçim profili ve Blueprint (adım 0–2)
 
-Blueprint şeması: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) §5. Alanlar kapalı listelerden ve kısa değerlerden oluşur; serbest metin
-alanı yoktur. Model kaynak soruyu görür ve yalnızca soyut yapıyı çıkarır.
+**Biçim profili (D-44).** Sınav belgeleri yalnızca şunu öğrenmek için incelenir: bir soru nasıl görünür, nasıl yapılandırılır ve bilimsel
+olarak eksiksiz olması için neleri taşır. Profil kendi cümlelerimizle yazılır ve şunları içerir:
 
-Sızıntı kontrolü kodla yapılır:
+- Bölüm yapısı: soru türleri, soru ve parça sayıları, puan aralıkları, süre, hesap makinesi ve veri kitapçığı kullanımı.
+- Parça düzeni: etiketleme, puan gösterimi, komut sözcükleri ve her birinin beklediği cevap türü.
+- Gösterim kuralları: birim yazımı, anlamlı basamak, sembol ve değişken biçimi, tablo ve grafik düzeni.
+- Şekil türleri: hangi konularda hangi tür şema ya da grafik kullanılır.
+- Markscheme düzeni: madde türleri, alternatif cevap ve hata taşıma gösterimi.
+- Eksiksizlik ölçütleri: verilen büyüklükler birimli mi, varsayımlar belirtilmiş mi, tek cevap var mı, puan emeğe uygun mu.
 
-- Blueprint'teki tüm metin değerleri birleştirilir; kaynak soruyla en uzun ortak kelime dizisi ölçülür.
-- Sayısal değerler: Blueprint kaynak sorudaki sayıları taşımaz (şema sayısal veri alanı içermez).
-- Eşik aşılırsa Blueprint reddedilir ve yeniden çıkarılır.
+Profil soru metni, sayı, senaryo ya da şekil içermez. İnceleme sırasında çıkarılan geçici dosyalar oturum sonunda silinir.
 
-> **R-01:** bu adım kaynak soruyu bir LLM'e verir. Kullanıcı kararıyla açıktır; rights kaydında `ai_processing_allowed` yoksa çalışmaz ve
-> kill switch ile tek ayardan kapatılır.
+**Blueprint (D-45).** Şema: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) §5. Kaynağı müfredat düğümü ve biçim profilidir:
+
+- Uzman doğrudan yazar; ya da
+- LLM, müfredat düğümü + biçim profili + kapsam hedeflerinden Blueprint önerir ve uzman onaylar. Model hiçbir sınav sorusu görmez.
+
+Kod kontrolü: şema geçerliliği, müfredat düğümünün varlığı, biçim profiliyle uyum (parça sayısı ve puan aralığı) ve havuzdaki konu, tür
+ve zorluk dağılımının dengesi.
 
 ## 5. Üretim (adım 6)
 
@@ -127,11 +135,12 @@ olabilir. Bu yüzden insan incelemesi kaldırılmaz.
 
 ## 8. Benzerlik ve özgünlük (adım 11)
 
-- Embedding ile en yakın komşular (her iki köken havuzunda) + kelime dizisi örtüşmesi + yapısal imza (parametre adları, formül
+- Embedding ile en yakın komşular (kendi soru havuzumuzda) + kelime dizisi örtüşmesi + yapısal imza (parametre adları, formül
   zincirinin biçimi, bağlam etiketi).
 - Üç bölge: **yüksek** → otomatik ret; **orta** → incelemeciye en yakın komşularla birlikte gösterilir; **düşük** → devam.
 - Eşikler M0'da etiketli soru çiftleriyle kalibre edilir. PDF'teki 0.82 / 0.92 değerleri başlangıç tahminidir, bağlayıcı değildir.
-- Kaynak soruya karşı ayrıca sıkı kontrol: üretilen soru, türediği kaynak soruyla aynı sayısal değerleri ve aynı bağlamı taşımamalı.
+- **Ezber riski:** üretici model, eğitim verisinden bildiği gerçek bir sınav sorusunu yeniden üretebilir ve elimizde karşılaştıracak
+  kaynak havuzu yoktur (D-44). İnceleme formunda "bilinen bir sınav sorusuna benziyor mu" sorusu zorunludur; evet ise aday reddedilir.
 
 ## 9. İnsan incelemesi (adım 12)
 
@@ -163,13 +172,12 @@ sonucu, eleştirmen bulguları, en yakın benzer sorular, model ve prompt sürü
 
 | Rol | Kademe | Kısıt |
 |---|---|---|
-| İçerik alma (vision) | Orta | No-retention zorunlu |
-| Sınıflandırma | Küçük | No-retention zorunlu (kaynak metin görür) |
-| Blueprint çıkarımı | Orta | No-retention zorunlu |
+| Blueprint önerisi | Orta | Sınav sorusu görmez |
+| *(Askıda)* İçerik alma, sınıflandırma | — | Lisans ve no-retention koşulu |
 | Üretim | Orta; zor tipte üst | — |
 | Kör çözüm | Orta; üreticiden farklı sağlayıcı | — |
 | Eleştirmen | Orta ya da üst | — |
-| Embedding | Sağlayıcı API'si | Kaynak sorular gömüldüğü için no-retention aranır |
+| Embedding | Sağlayıcı API'si | Yalnızca kendi sorularımız |
 | Fotoğraf çevirisi | Orta (vision) | Öğrenci verisi; koşullar [SECURITY.md](SECURITY.md) |
 | Puanlama | Küçük ya da orta; ölçümle | Öğrenci verisi |
 

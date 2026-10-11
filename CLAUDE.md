@@ -35,6 +35,10 @@ S3-uyumlu storage · Next.js + TypeScript · KaTeX · Tiptap · REST + OpenAPI (
 11. Kaynak içerik gören LLM adımları yalnızca no-retention koşulundaki modellerle çalışır.
 12. Tablo, modül ve alan adlarında belirli bir sınav kurumunun adı geçmez; programa özgü kavramlar veridir.
 13. Öğrenciye canlı üretilmiş, incelenmemiş içerik gösterilmez (kendi cevabına verilen puanlama geri bildirimi hariç).
+14. Sınav kurumlarının belgeleri yalnızca biçim öğrenmek için kullanılır (D-44). Soru metni, sayıları, senaryosu ya da şekli depoya,
+    veritabanına, prompt'a, Blueprint'e, test verisine ya da belgelere girmez. Biçim profilleri kendi cümlelerimizle yazılır.
+15. Blueprint bir sınav sorusundan türetilmez; müfredat düğümü ve biçim profilinden yazılır (D-45). Orijinal sınav sorusu alma ve
+    gösterme yolları kapalıdır (D-46).
 
 ## Çalışma biçimi
 
@@ -49,5 +53,5 @@ S3-uyumlu storage · Next.js + TypeScript · KaTeX · Tiptap · REST + OpenAPI (
 
 ## Açık riskler
 
-R-01 (kaynak sınav içeriğinin AI ile işlenmesi ve dağıtımı) ve R-02 (yaş, rıza, reşit olmayan verisi) hukuki teyit bekliyor.
+R-01 (sınav kurumu içeriğinin kullanımı; D-44–D-46 ile daraltıldı) ve R-02 (yaş, rıza, reşit olmayan verisi) hukuki teyit bekliyor.
 Ayrıntı: `docs/DECISIONS.md` §4.

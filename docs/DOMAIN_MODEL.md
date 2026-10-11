@@ -91,7 +91,8 @@ erDiagram
 - `MarkPoint`: sıra, metin JSONB, `marks`, tür (yöntem / cevap / açıklama), isteğe bağlı `solution_step_id`.
 - `SolutionModel`: formül zinciri JSONB; sürüme bağlı.
 - `Asset`: object storage anahtarı, MIME, boyut, sha256, alt metin, üretim kaynağı (yüklenmiş / şablondan üretilmiş + parametreler).
-- `Blueprint`: yapılandırılmış soyut tarif; `source_question_id` (lineage), çıkarım yöntemi, model/prompt sürümü.
+- `Blueprint`: yapılandırılmış soyut tarif; müfredat düğümü, biçim profili sürümü, yazım yöntemi (uzman / AI önerisi + onaylayan), model ve prompt sürümü.
+- `FormatProfile`: bir sınav bölümünün biçim tarifi; sürümlü, uzman onaylı, soru metni içermez (D-44).
 
 ### 2.3 Üretim ve kalite
 
@@ -182,7 +183,7 @@ Her adım idempotenttir: aynı girdi özetiyle yeniden çalıştırılan adım �
 ## 6. Değişmez kurallar (invariant)
 
 1. Her `Question` bir `RightsRecord`'a bağlıdır.
-2. `generated` her soru bir `Blueprint`'e, her Blueprint bir kaynak soruya bağlıdır (lineage).
+2. `generated` her soru bir `Blueprint`'e, her Blueprint bir müfredat düğümüne ve biçim profili sürümüne bağlıdır. Blueprint bir sınav sorusuna bağlanmaz (D-45).
 3. `Response` her zaman belirli bir `QuestionVersion`'a bağlanır, `Question`'a değil.
 4. Parça puanlarının toplamı sürümün toplam puanına, madde puanlarının toplamı parça puanına eşittir.
 5. Sayısal cevaplı her parçanın cevabı `SolutionModel`'deki bir adıma bağlıdır.

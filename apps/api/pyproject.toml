@@ -3,7 +3,9 @@ name = "qlab"
 version = "0.0.0"
 description = "Backend for the exam-prep platform (modular monolith: API + worker)"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic>=2.14.0",
+]
 
 [dependency-groups]
 dev = [
@@ -23,6 +25,7 @@ packages = ["src/qlab"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra --strict-markers"
 
 [tool.ruff]
@@ -31,6 +34,9 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["qlab", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101"]

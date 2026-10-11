@@ -86,6 +86,7 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 | ID | Karar | Kim | Not |
 |---|---|---|---|
 | D-38 | M1 sonrası iki paralel hat; kapalı beta MCQ + sayısal ile açılır; hukuki danışmanlık şimdi; sabit tarih yok | S / Ö | |
+| D-49 | Sıra değişikliği: "M1-G Görünür ürün" aşaması (şema, veritabanı, pilot soruların içe aktarılması, gösterim, admin inceleme/düzenleme, öğrenci önizlemesi) üretim hattından (M3) önce. İlk kapsam admin + öğrenci önizlemesi; önce yerelde, sonra web'e; şekli eksik sorular admin'de görünür, öğrenciden gizli ve yayınlanamaz | S / Ö | 2026-10-11. Gerekçe: 130 pilot soru hazır, gösterecek sistem yok |
 | D-39 | Kod büyük ölçüde Claude ile; tek depo; kritik alanlarda insan onayı zorunlu, diğerlerinde ajan incelemesi + CI | S / Ö | Ek kapılar: mutation testing, aşama sonu uygunluk incelemesi, dış denetim |
 | D-41 | Mimari belgeler onaylandı; M0 başladı (2026-10-11) | S | |
 | ~~D-42~~ | *(Yürürlükten kalktı → D-44)* Kaynak sınav PDF'leri geliştirme oturumunda (Claude Code) şema tasarımı ve M0 ölçümleri için okunur | S | **İtiraz:** bu kanalın veri saklama koşulu teyit edilmedi; D-31'in gerekçesiyle çelişir. Mimar sentetik örnekle başlamayı önerdi; sahibi riski üstlendi (R-01). PDF'ler ve onlardan kopyalanan sorular depoya ve test verisine girmez |

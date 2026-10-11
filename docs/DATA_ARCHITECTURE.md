@@ -93,6 +93,34 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 - MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürümü sabittir; yükseltme görsel regresyon testinden geçer.
 - Hesaplama biçimi LaTeX'ten türetilmez; ayrı olarak `solution_model` içinde durur.
 
+### 3.5 Şema v1 — uygulanan hali (2026-10-11)
+
+Kod: `apps/api/src/qlab/content/schema/`. Bu bölüm §3.1–§3.4 ile çelişirse **bu bölüm geçerlidir**; farklar
+[blueprint-format-reference.md](formats/blueprint-format-reference.md) bulgularından gelir.
+
+**`QuestionDocument` alanları:** `schema_version` · `question_class` (`mcq`, `data_based`, `short_structured`, `long_structured`) ·
+`exam_section` (programın tanımladığı değer, ör. `paper_1a`) · `levels` (kullanılabildiği kâğıtlar: `sl`, `hl`; en az bir) ·
+`language` · `calculator` · `primary_syllabus_node`, `secondary_syllabus_nodes` · `stem` · `stimuli[]` · `mcq` · `parts[]` ·
+`total_marks` · `solution_model`.
+
+| Konu | v1'deki kural |
+|---|---|
+| Düzey | Tek etiket yok. `levels` kâğıt kümesidir; her parça ayrıca `level_content` (`sl_core` / `ahl`) taşır. `sl` içeren soruda `ahl` parça olamaz |
+| Uyaranlar | Şekil, grafik vb. `stimuli[]` içinde: `id`, `kind`, `use` (`read_only`, `read_values`, `student_annotates`), `description`, `asset_id`, `alt_text`. Metindeki `figure` düğümü yalnızca `stimulus_id` taşır. `asset_id` varsa `alt_text` zorunlu. `asset_id` olmayan uyaran soruyu "görsel bekliyor" yapar ve yayını engeller |
+| Çoktan seçmeli | Seçenekler blok düğümü değil, `mcq` bloğunda: `option_kind`, `option_layout`, tam olarak A–D sırasıyla dört seçenek, `correct_key`; her yanlış seçenek için `rationale` zorunlu. `total_marks` = 1, `parts` boş |
+| Yapılandırılmış | `mcq` yok; her parçanın `marks` değeri 1–3; parça puanları toplamı `total_marks` |
+| Parça | `id`, `label` (`a`, `b.ii`), `body`, `marks`, `command_term`, `answer_type` (14 değer), `assessment_objective`, `level_content`, `syllabus_node`, `stimulus_refs`, `depends_on`, `ecf_from`, `mark_points[]`. Bağımlılıklar yalnızca önceki parçalara olabilir |
+| Markscheme maddesi | Her madde 1 puan: `id`, `content`, `kind` (`method`, `answer`, `statement`), `alternative_group` (aynı gruptakiler birbirinin alternatifi; en çok biri puan alır), `accept_range`, `solution_step`, `note`. İsteğe bağlı ve zorunlu sözcükler metin işaretidir (`optional`, `essential`). Ödüllendirilebilir madde sayısı parça puanından az olamaz; fazla olabilir ("max") |
+| Çözüm modeli | Veri olarak saklanır, **hesaplanmaz** (`verified: false`); yorumlayıcı üretim hattı aşamasında gelir. Adlar tekil; cevap bağları var olan parça ve adıma gider |
+| Büyüklük bağı | `param` taşıyan her `quantity`, çözüm modelindeki aynı adlı parametreyle değer ve birim olarak birebir aynı olmalı |
+| Bilinmeyen alan | Reddedilir (`extra = forbid`) |
+
+**v1'de bilerek olmayanlar:** `option_list` ve `answer_space` blok düğümleri (seçenekler `mcq` bloğunda; cevap alanı gösterim
+bileşeninin işi); düzey tanımlayıcılı (3/2/1/0) puanlama; soru düzeyinde zorluk alanı; Blueprint şeması.
+
+**Henüz kodla zorlanmayanlar:** KaTeX render kontrolü (dilim 3), `exam_section`, `command_term` ve müfredat düğümünün programın
+sözlüğüne göre doğrulanması (dilim 2), dört seçeneğin aynı türde ve sıralı olması, komut sözcüğü ↔ puan ↔ cevap türü kuralları.
+
 ## 4. Çözüm modeli: bildirimsel formül zinciri (D-23)
 
 ```json

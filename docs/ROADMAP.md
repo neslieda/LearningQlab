@@ -1,0 +1,179 @@
+# ROADMAP
+
+> **Durum: ONAYLANDI** (2026-10-11, proje sahibi). Değişiklikler [DECISIONS.md](DECISIONS.md) üzerinden işlenir.
+> Sabit tarih yok; aşamalar kabul kriterleri karşılandıkça geçilir (D-38). Süreler kaba tahmindir.
+
+## 1. Genel görünüm
+
+```mermaid
+flowchart LR
+  M0[M0 Temeller ve ölçüm] --> M1[M1 İçerik çekirdeği]
+  M1 --> M2[M2 Kapalı beta]
+  M1 --> M3[M3 Üretim hattı]
+  M2 --> M4[M4 AI puanlama]
+  M3 --> M4
+  M3 --> M5[M5 Kapsam genişletme]
+  M4 --> M6[M6 Genel erişim kapısı]
+  M5 --> M6
+  M6 --> M7[M7 Native mobil]
+  L[Hukuki danışmanlık: şimdi başlar] -.-> M2
+  L -.-> M6
+```
+
+İki paralel hat (M1 sonrası):
+
+| Hat | Aşamalar |
+|---|---|
+| Ürün hattı | M2 → M4 (arayüz, kota) → M6 (ödeme, rıza, açık sayfalar) |
+| İçerik ve AI hattı | M3 → M4 (puanlama mantığı) → M5 |
+
+**Hukuki hat** geliştirmeden bağımsızdır ve hemen başlar. Olumsuz görüş M2'nin içeriğini ve M3'ün girdisini değiştirir; ne kadar erken
+öğrenilirse o kadar az iş boşa gider.
+
+Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine ve inceleme kapasitesine göre ciddi biçimde değişir.
+
+## 2. Aşamalar
+
+### M0 — Temeller ve ölçüm
+
+**Amaç:** varsayımları ölçümle karara çevirmek; herkesin üzerinde çalışacağı zemini kurmak.
+
+| İş | Çıktı |
+|---|---|
+| Depo, CI, üç ortam, gözlem, gizli anahtar yönetimi | Boş uygulama staging'e dağıtılıyor |
+| Claude Code düzeni: `CLAUDE.md`, ajan tanımları, hook ve izinler, CODEOWNERS | [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) uygulanmış |
+| Soru şeması v1 (Pydantic) + formül zinciri şeması + Blueprint şeması | Şema gerçek sorularla sınanmış |
+| Program, sınav biçimi, puanlama politikası, müfredat ağacı (IB DP Physics) | Resmi rehberden girilmiş ve uzmanca doğrulanmış |
+| İçerik alma karşılaştırması (50 sayfa): vision model ↔ Docling | Karar ve ölçüm raporu |
+| Sağlayıcı ölçümü: üç aday, rol başına | Rol ataması; no-retention koşullarının yazılı teyidi |
+| Ölçüm setlerinin ilk hali (çıkarma, sınıflandırma, hata ekilmiş) | Sürümlü setler |
+| Sağlayıcı seçimleri: identity (13–17 yaş koşulu belirleyici), PaaS, kuyruk kütüphanesi, matematik alanı | [TECH_STACK.md](TECH_STACK.md) güncellenmiş |
+| Hukuki danışmanlık başlatılır | Sorular iletilmiş ([SECURITY.md](SECURITY.md) §4.3, §5) |
+
+**Kabul kriteri**
+- Şema v1, her soru tipinden (1A, 1B, Paper 2 kısa ve uzun) uzmanların seçtiği gerçek örnekleri kayıpsız temsil ediyor.
+- İçerik alma ve sağlayıcı kararları ölçüm raporuyla verilmiş.
+- CI: lint, tip, test, import kuralları, yetki tablosu iskeleti çalışıyor.
+
+> Not: müfredat yapısı (beş tema, Paper 1A çoktan seçmeli, 1B veri temelli, Paper 2 kısa ve uzun cevap, SL/HL süreleri) üçüncü taraf
+> kaynaklardan derlendi; resmi ders rehberinden teyit edilecek.
+
+### M1 — İçerik çekirdeği
+
+| İş | Not |
+|---|---|
+| `rights`, `syllabus`, `content` modülleri | Rights fail-closed ve sürüm değişmezliği testleriyle |
+| İçerik alma hattı | Durum makinesi, kuyruk, çift çıkarım, kod kontrolleri |
+| Soru gösterim bileşeni | Tüm blok tipleri; görsel regresyon seti |
+| Editör (Tiptap + özel düğümler) | Kaydet-aç gidiş-dönüş testi |
+| İnceleme ekranı | Kaynak sayfa bölgesiyle yan yana; sayfa kırpımı ↔ yapılandırılmış geçişi |
+| Müfredat sınıflandırma | Müfredat dışı ayrımı dahil |
+| Audit log | |
+
+**Kabul kriteri**
+- Bir sınav kâğıdı uçtan uca alınıyor, inceleniyor ve doğrulanan sorular yapılandırılmış gösterime geçiyor.
+- Doğrulanmış sorular masaüstü ve mobil genişlikte görsel regresyon testini geçiyor.
+- Rights kaydı olmayan belge işlenemiyor (test).
+- Çıkarma seti ve sınıflandırma setinde M0'da belirlenen hedefler tutuyor.
+
+### M2 — Kapalı beta (ürün hattı)
+
+| İş | Not |
+|---|---|
+| `identity`, `organizations`, `entitlements` | Kurumunuz ilk Organization; yaş bandı ve ülke alanları |
+| Soru listeleme ve çözme | Erişim tek politika katmanından |
+| MCQ ve sayısal otomatik kontrol | Tolerans, birim, anlamlı basamak |
+| Açık uçlu sorularda markscheme gösterimi | AI puanlama M4'te |
+| Deneme sınavı | Süre sunucuda |
+| Temel analitik | Konu bazlı doğruluk |
+
+**Kabul kriteri**
+- Kendi öğrencileriniz gerçek sorularla çalışabiliyor.
+- Kurum dışı hesap `source_original` içeriğe hiçbir uç noktadan erişemiyor (yetki tablosu testi).
+- Uçtan uca akış 1–3 ve 9 geçiyor ([TESTING_STRATEGY.md](TESTING_STRATEGY.md) §5).
+- ⚖️ Kaynak soruların kendi öğrencilerinize gösterimi için hukuki görüş alınmış; alınmadıysa bu özellik kapalı kalır ve beta sentetik
+  ya da üretilmiş içerikle başlar.
+
+### M3 — Üretim hattı (içerik ve AI hattı)
+
+Önce MCQ (Paper 1A), sonra sayısal ve yapılandırılmış Paper 2.
+
+| İş | Not |
+|---|---|
+| Formül yorumlayıcısı | Beyaz liste, alt süreç, özellik tabanlı test, mutation |
+| Blueprint çıkarımı + sızıntı kontrolü | Kill switch ve rights bayrağına bağlı |
+| `generation` | `content` import yasağıyla |
+| Kod kontrolleri | [AI_PIPELINE.md](AI_PIPELINE.md) §6 tablosu |
+| Kör çözüm, eleştirmen | Sağlayıcı ayrımı |
+| Benzerlik | Embedding + metin örtüşmesi; eşik kalibrasyonu |
+| İnceleme iş akışı | 1 / 2 incelemeci kuralı, ikinci inceleme örneklemi, iş dağıtımı |
+| Yayın ve geri çekme | Lineage ile toplu geri çekme |
+| Prompt sürümleme ve ölçüm kapısı | |
+
+**Kabul kriteri**
+- Hata ekilmiş sette sayısal ve birim hataları hedeflenen oranda yakalanıyor (hedef M0'da konur).
+- Kritik kontrolü kalan aday, API doğrudan çağrılsa bile yayınlanamıyor.
+- Üretilmiş soru, kaynak soruyla benzerlik eşiğinin altında; lineage her soruda mevcut.
+- İncelemeci onay oranı ve yayınlanan soru başı toplam maliyet (LLM + inceleme süresi) ölçülüyor.
+- Formül zincirine sığan soru oranı ölçülmüş; sığmayanlar için karar verilmiş.
+
+### M4 — AI puanlama
+
+| İş | Not |
+|---|---|
+| Görsel matematik alanı ile yazılı cevap | Mobil tarayıcıda sınanmış |
+| Madde bazlı puanlama + hata taşıma | Toplamı kod hesaplar |
+| Fotoğraf: yükleme, çeviri, öğrenci onayı | İmzalı erişim, meta veri temizliği |
+| İtiraz akışı | Sonuçlar ölçüm setine akar |
+| Kota | Aylık tavan |
+| Öğretmen onay ekranı | Kapalı dönem ölçümü |
+
+**Kabul kriteri**
+- Puanlama setinde öğretmenle uyum, belirlenen eşiğin üstünde (eşik bu aşamanın başında, ilk ölçümden sonra konur).
+- Cevap başı maliyet yazılı ve fotoğraf için ölçülmüş; kota buna göre belirlenmiş.
+- Enjeksiyon testleri: cevap metni puanı yükseltemiyor.
+
+### M5 — Kapsam genişletme
+
+- Paper 1B: veri tabloları, grafikler, belirsizlik; grafikler veriden üretilir.
+- Diyagram şablon kütüphanesi: konulara göre öncelik sırasıyla.
+- Uzun açıklamalı sorular: iki incelemeci.
+- Abonelik 2 içerikleri: detaylı çözümler ve konu özetleri; önceden üretilir, incelemeden geçer.
+- Gerekirse: formül zincirine sığmayan tipler için sınırlı, izole Python yolu.
+
+**Kabul kriteri:** her yeni tip için şema, doğrulama kuralı ve inceleme kuralı tanımlı; ilgili ölçüm seti genişletilmiş ve hedefler tutuyor.
+
+### M6 — Genel erişim kapısı
+
+| Kapı | Ölçüt |
+|---|---|
+| ⚖️ Hukuki görüş | [SECURITY.md](SECURITY.md) §4.3 sorularına yazılı yanıt; gereken değişiklikler uygulanmış |
+| ⚖️ Yaş ve rıza | Açılış ülkeleri için `ConsentPolicy` satırları danışmanca doldurulmuş; veli-öder akışı çalışıyor |
+| Ödeme | Üç kademe, abonelik yaşam döngüsü, kota; webhook idempotent |
+| Güvenlik | Bağımsız sızma testi ve dış kod denetimi; kritik bulgu yok |
+| Gizlilik | Veri indirme ve silme akışları; gizlilik bildirimi |
+| Puanlama kalitesi | M4 eşiği kapalı dönem verisiyle hâlâ tutuyor |
+| İçerik | Açılış için yeterli sayıda yayınlanmış soru (sayı ürün kararı) |
+| Açık sayfalar | Ücretsiz sorular ve konu sayfaları; erişilebilirlik denetimi (WCAG 2.2 AA) |
+| İşletme | Uyarılar, yedekten geri yükleme tatbikatı, olay müdahale planı |
+
+### M7 — Native mobil
+
+- Karar: Expo ya da Capacitor; mobil tarayıcı kullanım verisiyle.
+- Fotoğrafla cevap native kamerayla.
+- **Kabul kriteri:** görsel regresyon seti web ile aynı sonucu veriyor; mağaza incelemesinden geçmiş.
+
+### Sonrası — Genişleme
+
+1. Aynı programda ikinci ders (ör. Mathematics): yeni doğrulayıcılar, şablonlar, ölçüm setleri. Soyutlamalar burada, iki gerçek örnekten çıkarılır.
+2. İkinci sınav kurumu: sınav biçimi, puanlama politikası, **ayrı hukuki dosya**.
+3. Kabul ve yetenek sınavları (SAT/ACT, ESAT, TMUA): ölçekli puan, uyarlanır deneme.
+
+Her yeni ders için kabul kriteri şu soruyu yanıtlar: **"Bu derste doğruluğu neyle garanti ediyoruz?"** (R-03)
+
+## 3. Her aşamanın sonunda
+
+- Mimari uygunluk incelemesi: kod `docs/` ile karşılaştırılır; sapma düzeltilir ya da [DECISIONS.md](DECISIONS.md)'e yazılır.
+- Kritik modüllerde mutation testing sonucu gözden geçirilir.
+- Risk kaydı güncellenir.
+- Belgeler güncellenir; belge ile kod çelişiyorsa aşama kapanmaz.

@@ -1,0 +1,217 @@
+# DATA_ARCHITECTURE
+
+> **Durum: ONAYLANDI** (2026-10-11, proje sahibi). Değişiklikler [DECISIONS.md](DECISIONS.md) üzerinden işlenir.
+> Şemalar gösterim amaçlıdır; kesin alan adları M0'da Pydantic modelleriyle sabitlenir.
+
+## 1. Depolama yerleşimi
+
+| Veri | Yer | Not |
+|---|---|---|
+| İlişkisel veri, soru gövdeleri (JSONB), iş kuyruğu, embedding'ler | PostgreSQL | Tek veritabanı; pgvector eklentisi |
+| Kaynak PDF'ler, sayfa görüntüleri, sayfa kırpımları, diyagramlar, cevap fotoğrafları | S3-uyumlu object storage | Veritabanında yalnızca anahtar ve meta veri |
+| Yayınlanmış soru dokümanları, açık görseller | CDN | Sürüm değişmez olduğu için süresiz önbellek |
+| Gizli anahtarlar | PaaS gizli anahtar deposu | Depoda ve veritabanında yok |
+
+Ayrı vector DB, doküman DB ya da Redis MVP'de yok. Tetikleyici: [TECH_STACK.md](TECH_STACK.md).
+
+## 2. İlişkisel iskelet + JSONB içerik (D-19)
+
+Yapı satırlarda, zengin içerik JSONB'de durur. Gerekçe: cevap, puan ve analitik parçaya ve markscheme maddesine foreign key ile bağlanır.
+
+```
+question(id, origin, rights_record_id, program_id, subject_id, syllabus_status,
+         current_published_version_id, created_at)
+question_version(id, question_id, version_no, status, schema_version, language,
+                 exam_section, level, calculator, total_marks, stem jsonb,
+                 display_mode, blueprint_id, created_by, created_at)      -- değişmez
+part(id, question_version_id, position, label, body jsonb, marks,
+     answer_type, answer_spec jsonb)
+mark_point(id, part_id, position, body jsonb, marks, kind, solution_step_id)
+solution_model(id, question_version_id, chain jsonb)
+question_version_syllabus(question_version_id, syllabus_node_id, is_primary)
+question_version_asset(question_version_id, asset_id, role)
+```
+
+Değişmezlik: `question_version` ve alt satırları `status` ilk kez `in_review` olduktan sonra içerik olarak güncellenmez; yalnızca durum
+alanları değişir. Veritabanı tetikleyicisi ya da uygulama katmanı zorlar, test doğrular.
+
+## 3. İçerik bloğu şeması
+
+ProseMirror-uyumlu düğüm yapısı: `{type, attrs?, content?, text?, marks?}`. Tek doğruluk kaynağı backend'deki Pydantic modelidir;
+editör şeması ve TypeScript tipleri ondan üretilir (D-21).
+
+### 3.1 Düğüm tipleri (şema v1)
+
+| Tip | Tür | Öznitelikler | Not |
+|---|---|---|---|
+| `doc` | kök | — | `stem`, `part.body`, `mark_point.body` alanlarının kökü |
+| `paragraph` | blok | — | |
+| `text` | satır içi | `marks`: bold, italic, sub, sup | |
+| `math_inline` | satır içi | `latex` | KaTeX alt kümesi; kayıtta render kontrolü |
+| `math_block` | blok | `latex` | |
+| `quantity` | satır içi | `value`, `unit`, `param`, `sig_figs?`, `uncertainty?` | Gösterim bundan üretilir |
+| `table` / `table_row` / `table_cell` | blok | `header`, `colspan`, `rowspan` | Hücre içeriği satır içi düğümler |
+| `figure` | blok | `asset_id`, `role`, `caption?` | Alt metin `asset` kaydında |
+| `list` / `list_item` | blok | `ordered` | |
+| `option_list` / `option` | blok | `key` (A–D) | Yalnızca MCQ parçalarında |
+| `answer_space` | blok | `lines` | Kâğıt düzenini korumak için; ekranda cevap alanına dönüşür |
+
+### 3.2 Örnek: parça gövdesi
+
+```json
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "A ball is projected with speed " },
+        { "type": "quantity", "attrs": { "value": "20", "unit": "m/s", "param": "v0", "sig_figs": 2 } },
+        { "type": "text", "text": " at " },
+        { "type": "quantity", "attrs": { "value": "30", "unit": "deg", "param": "theta", "sig_figs": 2 } },
+        { "type": "text", "text": " above the horizontal. Calculate the horizontal range " },
+        { "type": "math_inline", "attrs": { "latex": "R" } },
+        { "type": "text", "text": "." }
+      ]
+    },
+    { "type": "figure", "attrs": { "asset_id": "ast_01H...", "role": "question_diagram" } }
+  ]
+}
+```
+
+### 3.3 `quantity` düğümü (D-20)
+
+- `value` metin olarak saklanır; yazıldığı haliyle anlamlı basamak korunur (`"20"` ile `"20.0"` farklıdır).
+- `unit` Pint'in ayrıştırabildiği bir ifade; gösterim programın birim yazım kuralına göre deterministic üretilir (IB: `m s⁻¹`).
+- `param` çözüm modelindeki parametre adıdır. Doğrulama: düğümün değeri ve birimi parametreyle birebir eşleşmelidir.
+- İçerik alma bir sayıyı `quantity`'ye çeviremezse düz `math_inline` kalır; bu durumda soru "sayısal bağ doğrulanamadı" işaretiyle incelemeye gider.
+
+### 3.4 Matematik gösterimi
+
+- Kanonik biçim: LaTeX, KaTeX'in desteklediği alt küme. İzinli komut listesi şemanın parçasıdır.
+- Kayıtta her matematik düğümü sunucuda KaTeX ile render edilir; hata varsa kayıt reddedilir (D-13).
+- MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürümü sabittir; yükseltme görsel regresyon testinden geçer.
+- Hesaplama biçimi LaTeX'ten türetilmez; ayrı olarak `solution_model` içinde durur.
+
+## 4. Çözüm modeli: bildirimsel formül zinciri (D-23)
+
+```json
+{
+  "schema_version": "1.0",
+  "parameters": [
+    { "name": "v0", "value": "20", "unit": "m/s" },
+    { "name": "theta", "value": "30", "unit": "deg" }
+  ],
+  "constants": [
+    { "name": "g", "ref": "ib_dp_physics.data_booklet.g" }
+  ],
+  "steps": [
+    { "id": "s1", "name": "R", "expr": "v0**2 * sin(2*theta) / g", "unit": "m" }
+  ],
+  "answers": [
+    { "part_label": "a", "step": "s1", "sig_figs": 2 }
+  ],
+  "ranges": [
+    { "param": "v0", "min": "1", "max": "100", "unit": "m/s" },
+    { "param": "theta", "min": "5", "max": "85", "unit": "deg" }
+  ]
+}
+```
+
+- `expr` yalnızca izinli öğeleri içerir: sayılar, tanımlı adlar, `+ - * / **`, parantez ve beyaz listedeki fonksiyonlar
+  (`sin cos tan asin acos atan sqrt exp ln log10 abs pi`). Yorumlayıcı ifadeyi kendi ayrıştırıcısıyla ağaca çevirir; Python `eval` ya da
+  SymPy `sympify` ham metne uygulanmaz.
+- Sabitler programın sabit tablosundan gelir (ör. veri kitapçığı değerleri); soruya gömülmez.
+- `ranges` varyant üretiminde parametrelerin fiziksel olarak makul kalacağı aralığı tanımlar.
+- Zincirle ifade edilemeyen soru `solution_model` taşımaz ve "kodla doğrulanamaz" tipinde sayılır; inceleme kuralı buna göre sıkılaşır.
+
+## 5. Blueprint
+
+Üretimin tek girdisi. Kaynak sorudan serbest metin taşımaz; alanlar kapalı listeler ve kısa yapılandırılmış değerlerdir.
+
+```json
+{
+  "schema_version": "1.0",
+  "program": "ib_dp", "subject": "physics", "level": "HL", "exam_section": "paper_2",
+  "syllabus_nodes": ["A.1"],
+  "skills": ["apply_kinematics_2d", "resolve_components"],
+  "structure": [
+    { "label": "a", "command_term": "calculate", "marks": 2, "answer_type": "numeric" },
+    { "label": "b", "command_term": "explain", "marks": 2, "answer_type": "short_text" }
+  ],
+  "difficulty": 3,
+  "reasoning_steps": 3,
+  "context_constraints": ["no_air_resistance", "single_object"],
+  "needs_figure": true, "figure_template": "projectile_trajectory",
+  "avoid": ["same_numerical_values", "same_context"]
+}
+```
+
+Sızıntı kontrolü (kod): Blueprint'teki metin değerleri ile kaynak soru metni arasında uzun ortak kelime dizisi aranır; eşik aşılırsa
+Blueprint reddedilir. Ayrıntı: [AI_PIPELINE.md](AI_PIPELINE.md) §4.
+
+## 6. Asset yönetimi
+
+```
+asset(id, storage_key, mime, bytes, width, height, sha256, alt_text,
+      source: uploaded | page_crop | template_generated,
+      template_id, template_params jsonb, rights_record_id, created_at)
+```
+
+- Görseller JSONB'ye gömülmez. Anahtar düzeni: `{env}/{kind}/{yyyy}/{id}.{ext}`.
+- Şablondan üretilen diyagram, şablon kimliği ve parametreleriyle yeniden üretilebilir; alt metin aynı parametrelerden yazılır.
+- Erişim: açık içerik CDN'den; hak kısıtlı içerik ve kullanıcı yüklemeleri kısa süreli imzalı bağlantıyla.
+- Yüklemede: tür ve boyut kontrolü, görselin yeniden kodlanması, konum ve cihaz bilgisinin silinmesi.
+
+## 7. Sürümleme ve kaynak takibi
+
+| Ne | Nasıl |
+|---|---|
+| Soru içeriği | Değişmez `question_version`; `version_no` artar |
+| Şema | Her JSONB alanında `schema_version`; şema değişikliği için ileri taşıma fonksiyonu ve test |
+| Müfredat | `syllabus_version`; soru etiketleri belirli sürüme bağlı |
+| Kaynak izi | `source_document` (sha256) → sayfa → bölge (bbox) → `question` |
+| Üretim izi | `question` → `blueprint` → kaynak `question`; her adımın `step_run` ve `llm_call` kaydı |
+| Prompt ve model | `prompt_version` tablosu; `llm_call` hangi sürümle çalıştığını taşır |
+| Karar izi | `review`, `audit_log` (değiştirilemez, yalnızca ekleme) |
+
+## 8. Benzerlik verisi
+
+- `question_embedding(question_version_id, model, vector)`; pgvector indeksli.
+- Yeni aday, hem `generated` hem `source_original` havuzuna karşı aranır. Embedding'i üreten sağlayıcı için no-retention koşulu aranır
+  çünkü kaynak sorular da gömülür.
+- Embedding modeli değişirse tüm vektörler yeniden üretilir; `model` sütunu karışmayı önler.
+
+## 9. Öğrenci verisi
+
+```
+attempt(id, user_id, exam_id?, mode, started_at, due_at, submitted_at, status)
+response(id, attempt_id, part_id, question_version_id, kind, payload jsonb,
+         photo_asset_id?, transcript jsonb?, transcript_confirmed_at?, created_at)
+marking_result(id, response_id, method, model?, prompt_version?, total, status, created_at)
+mark_point_decision(marking_result_id, mark_point_id, awarded, evidence, reason)
+appeal(id, marking_result_id, user_id, reason, reviewer_id?, outcome?, resolved_at?)
+```
+
+Büyüme: yılda milyonlarca `response` satırı beklenir. `(user_id, created_at)` ve `(part_id)` indeksleri; hacim artarsa aya göre bölümleme.
+
+## 10. Veri yaşam döngüsü ve saklama
+
+| Veri | Saklama | Silme tetikleyicisi |
+|---|---|---|
+| Yayınlanmış soru sürümleri | Süresiz | Hak sahibi talebi → geri çekme; öğrenci kaydı için içerik saklanır mı hukuki soru |
+| Kaynak PDF ve sayfa görüntüleri | Rights kaydı geçerli olduğu sürece | Rights iptali |
+| LLM çağrı kayıtları (girdi/çıktı gövdesi) | Kaynak içerik içerenler rights kaydıyla aynı; diğerleri 12 ay (öneri) | Süre dolumu |
+| Öğrenci cevapları (metin) | Hesap boyunca | Hesap silme, silme talebi |
+| Cevap fotoğrafları | Hesap boyunca (D-27); süre `ConsentPolicy`'de ülke ve yaş bandına göre ayarlanabilir | Hesap silme, silme talebi, kural değişikliği |
+| Rıza kayıtları | Yasal süre boyunca (hukuki teyit) | — |
+| Audit log | Süresiz (öneri) | — |
+| Yedekler | Günlük + zaman noktasına dönüş penceresi | Pencere dolumu |
+
+Hesap silme kaskadı: kullanıcı satırları, cevaplar, fotoğraflar (object storage dahil), rıza dışı kişisel veriler. Analitik için anonim
+toplamlar kalabilir (hukuki teyit).
+
+## 11. Yedekleme
+
+Günlük tam yedek ve zaman noktasına geri dönüş. Geri yükleme yılda en az iki kez staging'e gerçekten yapılır. Object storage'da
+sürümleme açık.

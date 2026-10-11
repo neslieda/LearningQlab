@@ -1,0 +1,33 @@
+# Source exam materials: copyrighted, never committed (docs/SECURITY.md section 4)
+IBexampleQuestions_forPhysics/
+source_materials/
+*.pdf
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.import_linter_cache/
+dist/
+*.egg-info/
+
+# Node
+node_modules/
+.next/

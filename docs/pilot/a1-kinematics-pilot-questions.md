@@ -6,8 +6,9 @@
 >
 > **Kaynak:** yalnızca müfredat düğümü A.1 ve genel fizik. Hiçbir sınav sorusu girdi olarak kullanılmadı.
 > **Sayısal doğrulama:** tüm sonuçlar ayrı bir hesapla yeniden üretildi (g = 9.8 m s⁻² alındı; veri kitapçığı değeri uzmanca teyit edilmeli).
-> **Doğrulanmayan:** bu sorular bağımsız ikinci bir çözücüden ve uzman incelemesinden geçmedi; bilinen bir sınav sorusuna benzerlik
-> açısından uzman gözüyle bakılmadı.
+> **Bağımsız kontrol:** beş soru da yazarından farklı bir kör çözücü tarafından cevaplar görülmeden çözüldü; anahtarlar, çeldirici
+> hesapları ve markscheme değerleri uyuştu ([review/recheck-2026-10-11.md](review/recheck-2026-10-11.md)).
+> **Doğrulanmayan:** uzman incelemesinden geçmedi; bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle bakılmadı.
 
 ## Kapsam tablosu
 
@@ -167,23 +168,18 @@ on the value of *g* obtained. [2]
 
 ### Markscheme
 
-| Parça | Madde | Puan |
-|---|---|---|
-| (a) | Durgun halden düşme için h = ½gt² (ilk hız sıfır) | 1 |
-| | h, t² ile doğru orantılıdır / eğim ½g sabittir | 1 |
-| (b) | t'nin kesirli belirsizliği 0.01 / 0.45 (= 0.022) | 1 |
-| | t² için iki katı: %4.4 (≈ %4) | 1 |
-| (c) | g = 2 × eğim = 10 m s⁻² | 1 |
-| | Eğimin belirsizliği (5.4 − 4.6) / 2 = 0.4 m s⁻² | 1 |
-| | g = (10.0 ± 0.8) m s⁻² | 1 |
-| (d) | Tutarlı; 9.8 m s⁻² bulunan aralığın (9.2–10.8 m s⁻²) içinde | 1 |
-| (e) | Ölçülen süreler gerçek düşme süresinden büyüktür / sistematik hata | 1 |
-| | Eğim küçülür, bu yüzden bulunan g gerçek değerden küçük olur | 1 |
+| Question | | | Answers | Notes | Total |
+|---|---|---|---|---|---|
+| 5. | a | | *h* = ½*gt*² «as the ball starts from rest» ✓<br>*h* is proportional to *t*² **OR** gradient = ½*g* is constant ✓ | | 2 |
+| 5. | b | | fractional uncertainty in *t* = 0.01 / 0.45 «= 0.022» ✓<br>doubled for *t*²: 4.4 % ✓ | *Accept 4 %.* | 2 |
+| 5. | c | | *g* = 2 × gradient = 10 «m s⁻²» ✓<br>uncertainty in gradient = (5.4 − 4.6) / 2 = 0.4 «m s⁻²» ✓<br>*g* = (10.0 ± 0.8) «m s⁻²» ✓ | *Accept ± 1 m s⁻² if the answer is given as (10 ± 1).* | 3 |
+| 5. | d | | consistent, as 9.8 m s⁻² lies within the range 9.2–10.8 m s⁻² ✓ | *Allow ECF from (c): the conclusion must follow from the candidate's own range.* | 1 |
+| 5. | e | | measured times are greater than the true times of fall / this is a systematic error ✓<br>the gradient is smaller so the value of *g* obtained is too small ✓ | *OWTTE* | 2 |
 
 ### Şekil notu
 
 Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu *h*–*t*² grafiği yer alır. Grafik aynı veriden kodla üretilir
-(D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.99 m s⁻²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri
+(D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.98 m s⁻²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri
 5.35 ve 4.56 m s⁻²'dir; soruda verilen 5.0, 5.4 ve 4.6 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.
 
 ---
@@ -199,7 +195,7 @@ Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre g
 | 1A: olumsuzluk sözcüğü koyu | Soru 2 ("below") ve Soru 3 ("not") uygun |
 | 1A: tablo seçenekli biçim örnekte doğrulanamadı | Soru 3 bu yüzden tek kavramlı, kısa seçenekli biçime çevrildi |
 | Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 4 uygun (1, 2, 3, 2, 1; toplam 9) |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 4 uygun; Soru 5 henüz eski biçimde |
+| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 4 ve Soru 5 uygun |
 | 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 5 uygun (2, 2, 3, 1, 2; toplam 10) |
 | 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 5 uygun |
 | 1B: öğrenci verilen grafiğe en uygun doğruyu çizer ve eğimi kendisi bulur | **Soru 5 uygun değil:** grafik üretilemediği için eğimler metinde verildi. Grafik şablonu hazır olunca (c) parçası yeniden yazılmalı |

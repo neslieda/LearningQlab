@@ -15,7 +15,7 @@
 |---|---|---|---|---|---|---|---|
 | 1 | Paper 1A | SL | Yol ile yer değiştirme farkı; ortalama hız | AO2 | — | 1 | Kolay |
 | 2 | Paper 1A | SL | Aşağı açılı eğik atışın bileşenlerle çözümü | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Akışkan direncinin ivmeye ve uçuş süresine nitel etkisi | AO3 | — | 1 | Orta |
+| 3 | Paper 1A | SL | Akışkan direncinin ivmeye nitel etkisi | AO2 | — | 1 | Orta |
 | 4 | Paper 2 | SL | Yatay atış; hız bileşenleri; dirençli hareketin nitel etkisi | AO1–AO3 | State, Calculate, Determine, Explain | 9 | Orta |
 | 5 | Paper 1B | SL | Serbest düşme verisinin işlenmesi; belirsizlik; sistematik hata | AO2–AO3 | Outline, Calculate, Determine, Explain | 10 | Orta–zor |
 
@@ -74,28 +74,25 @@ D. 26 m
 
 ## Soru 3 — Paper 1A
 
-A ball is thrown vertically upwards and returns to the point of release. Air resistance is **not** negligible.
+A ball is thrown vertically upwards. Air resistance is **not** negligible.
 
-Which row is correct?
+What is the magnitude of the acceleration of the ball immediately after it is released?
 
-| | Magnitude of the acceleration of the ball immediately after release | Time taken to rise compared with time taken to fall |
-|---|---|---|
-| A. | greater than *g* | shorter |
-| B. | greater than *g* | longer |
-| C. | less than *g* | shorter |
-| D. | less than *g* | longer |
+A. zero
+B. less than *g*
+C. *g*
+D. greater than *g*
 
-**Cevap: A**
+**Cevap: D**
 
-**Çözüm.** Yukarı çıkarken direnç kuvveti aşağı yönlüdür ve ağırlıkla aynı yöndedir; bileşke kuvvet ağırlıktan büyük, ivmenin büyüklüğü
-*g*'den büyüktür. İnerken direnç yukarı yönlüdür, ivme *g*'den küçüktür. Aynı yükseklik çıkışta daha büyük ortalama yavaşlamayla,
-inişte daha küçük ortalama ivmeyle alınır; bu yüzden çıkış süresi iniş süresinden kısadır.
+**Çözüm.** Yukarı çıkarken direnç kuvveti aşağı yönlüdür, yani ağırlıkla aynı yöndedir. Bileşke kuvvet ağırlıktan büyüktür; ivmenin
+büyüklüğü *g*'den büyüktür.
 
 | Seçenek | Dayandığı yanılgı |
 |---|---|
-| B | İvme doğru; "direnç hareketi yavaşlatır, çıkış uzar" düşüncesi |
-| C | Direncin her zaman ivmeyi azalttığı varsayılır |
-| D | Her iki sütunda da aynı yanılgı |
+| A | "Atıldığı anda hızı en büyük, ivmesi yok" düşüncesi; hız ile ivmenin karıştırılması |
+| B | Direncin her durumda ivmeyi azalttığı varsayılır (iniş için doğru, çıkış için yanlış) |
+| C | Direnç yok sayılır; serbest düşme ivmesi alınır |
 
 ---
 
@@ -118,19 +115,13 @@ In practice, air resistance on the package is not negligible.
 
 ### Markscheme
 
-| Parça | Madde | Puan |
-|---|---|---|
-| (a) | 18 m s⁻¹ | 1 |
-| (b) | Düşey ilk hız sıfır alınarak doğru yerine koyma: 44 = ½ × 9.8 × t² | 1 |
-| | t = 3.0 s | 1 |
-| (c) | Düşey bileşen: 9.8 × 3.0 = 29 m s⁻¹ | 1 |
-| | Büyüklük: √(18² + 29²) = 34 m s⁻¹ | 1 |
-| | Yön: yatayın 58° altında (ya da düşeyle 32°) | 1 |
-| (d)(i) | Direnç kuvvetinin yukarı yönlü (düşey) bileşeni vardır / düşmeye karşı koyar | 1 |
-| | Düşey ivme *g*'den küçük olur, bu yüzden süre uzar | 1 |
-| (d)(ii) | 18 m s⁻¹'den küçük | 1 |
-
-Hata taşıma: (b)'deki yanlış süre (c)'de doğru yöntemle kullanılırsa (c)'nin yöntem puanları verilir.
+| Question | | | Answers | Notes | Total |
+|---|---|---|---|---|---|
+| 4. | a | | 18 «m s⁻¹» ✓ | | 1 |
+| 4. | b | | 44 = ½ × 9.8 × *t*² ✓<br>*t* = 3.0 «s» ✓ | | 2 |
+| 4. | c | | *v*<sub>y</sub> = 9.8 × 3.0 «= 29 m s⁻¹» ✓<br>*v* = √(18² + 29²) = 34 «m s⁻¹» ✓<br>58° below the horizontal **OR** 32° to the vertical ✓ | *Allow ECF from (b).* | 3 |
+| 4. | d | i | air resistance has an upward / vertical component «opposing the fall» ✓<br>vertical acceleration is less than *g* so the time is longer ✓ | *OWTTE* | 2 |
+| 4. | d | ii | less «than 18 m s⁻¹» ✓ | | 1 |
 
 ### Formül zinciri (çözüm modeli)
 
@@ -150,7 +141,7 @@ A student investigates free fall. A steel ball is held by an electromagnet. When
 the ball falls a height *h* onto a trapdoor switch that stops the timer. The student repeats the measurement for each height and
 records the mean time *t*.
 
-| *h* / m | *t* / s (± 0.01 s) |
+| *h* / m | *t* / s ± 0.01 s |
 |---|---|
 | 0.200 | 0.20 |
 | 0.400 | 0.29 |
@@ -196,6 +187,23 @@ on the value of *g* obtained. [2]
 5.35 ve 4.56 m s⁻²'dir; soruda verilen 5.0, 5.4 ve 4.6 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.
 
 ---
+
+## Biçim uyumu
+
+Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+
+| Kural | Durum |
+|---|---|
+| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–3 uygun |
+| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–2 uygun (artan); Soru 3 sözel sıralı ölçek |
+| 1A: olumsuzluk sözcüğü koyu | Soru 2 ("below") ve Soru 3 ("not") uygun |
+| 1A: tablo seçenekli biçim örnekte doğrulanamadı | Soru 3 bu yüzden tek kavramlı, kısa seçenekli biçime çevrildi |
+| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 4 uygun (1, 2, 3, 2, 1; toplam 9) |
+| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 4 uygun; Soru 5 henüz eski biçimde |
+| 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 5 uygun (2, 2, 3, 1, 2; toplam 10) |
+| 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 5 uygun |
+| 1B: öğrenci verilen grafiğe en uygun doğruyu çizer ve eğimi kendisi bulur | **Soru 5 uygun değil:** grafik üretilemediği için eğimler metinde verildi. Grafik şablonu hazır olunca (c) parçası yeniden yazılmalı |
+| Değer–birim yazımı (m s⁻¹), 2 anlamlı basamak | Uygun |
 
 ## Bu denemeden çıkan gözlemler
 

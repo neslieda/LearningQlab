@@ -20,7 +20,8 @@ flowchart LR
   L -.-> M6
 ```
 
-> **2026-10-11 değişikliği (D-44–D-46):** orijinal sınav soruları sisteme alınmıyor ve gösterilmiyor. Kapalı beta üretilmiş içerikle
+> **2026-10-11 değişikliği (D-44, D-45, D-47):** orijinal sınav soruları öğrencilere gösterilmiyor ve üretime girdi olmuyor; yalnızca
+> sahibin kişisel kitaplığında durabiliyor (M1'de küçük bir dilim). Kapalı beta üretilmiş içerikle
 > yapılacağı için M3, M2'den önce gelir. Ürün hattı M2'nin içerikten bağımsız parçalarını (kimlik, kurum, soru çözme arayüzü, deneme)
 > M3 ile paralel geliştirir; beta, yeterli sayıda onaylı soru olunca açılır.
 
@@ -72,6 +73,7 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 | Editör (Tiptap + özel düğümler) | Kaydet-aç gidiş-dönüş testi |
 | İnceleme ekranı | Aday, raporlar ve Blueprint yan yana |
 | Audit log | |
+| Sahibin kişisel kitaplığı (D-47) | PDF yükleme, sayfa görüntüsü olarak gösterim; yalnızca sahibin hesabı; AI adımı ve metne çevirme yok |
 
 **Kabul kriteri**
 - Elle yazılmış bir soru editörde oluşturulup inceleniyor ve yayınlanıyor.
@@ -93,7 +95,7 @@ Kaba süre: sırayla 7–9 ay; iki paralel hatla M6'ya 5–6 ay. Ekip deneyimine
 - Kendi öğrencileriniz onaylı, üretilmiş sorularla çalışabiliyor.
 - Kurum dışı hesap `source_original` içeriğe hiçbir uç noktadan erişemiyor (yetki tablosu testi).
 - Uçtan uca akış 1–3 ve 9 geçiyor ([TESTING_STRATEGY.md](TESTING_STRATEGY.md) §5).
-- Orijinal sınav soruları hiçbir uç noktadan dönmüyor (D-46).
+- Orijinal sınav belgeleri yalnızca sahibin hesabına dönüyor; başka hiçbir hesap ve hiçbir açık uç nokta erişemiyor (D-47; yetki tablosu testi).
 
 ### M3 — Üretim hattı (içerik ve AI hattı)
 

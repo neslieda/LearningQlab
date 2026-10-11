@@ -124,7 +124,7 @@ Tek `Question` varlığı vardır; `origin` alanı kökeni belirtir (D-22).
 
 | Köken | Kimler görür | AI üretimine girdi olur mu |
 |---|---|---|
-| `source_original` (sınav kurumunun orijinal sorusu) | **Askıda (D-46):** yazılı lisans olmadan sisteme alınmaz ve gösterilmez | Hayır (D-44) |
+| `source_original` (sınav kurumunun orijinal sorusu) | **Yalnızca sahibin kişisel kitaplığı (D-47):** tek hesap görür; sayfa görüntüsü olarak; başka hiçbir kullanıcıya, yazılı lisans olmadan, gösterilmez | Hayır (D-44) |
 | `generated` (AI üretimi, insan onaylı) | Entitlement'a göre herkes | — |
 | `authored` (ileride: elle yazılmış) | Entitlement'a göre | — |
 

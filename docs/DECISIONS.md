@@ -91,8 +91,10 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 | ~~D-42~~ | *(Yürürlükten kalktı → D-44)* Kaynak sınav PDF'leri geliştirme oturumunda (Claude Code) şema tasarımı ve M0 ölçümleri için okunur | S | **İtiraz:** bu kanalın veri saklama koşulu teyit edilmedi; D-31'in gerekçesiyle çelişir. Mimar sentetik örnekle başlamayı önerdi; sahibi riski üstlendi (R-01). PDF'ler ve onlardan kopyalanan sorular depoya ve test verisine girmez |
 | D-43 | Yerel git + özel GitHub deposu; kaynak materyal klasörü `.gitignore`'da | S / Ö | Uzak depo henüz açılmadı (sahibinin kararı) |
 | D-44 | Sınav kurumlarının belgeleri **yalnızca biçim öğrenmek için** kullanılır: bir sorunun nasıl göründüğü, yapısı ve bilimsel olarak hangi öğeleri taşıması gerektiği. Soru üretimine girdi olmazlar. Soru metni, sayıları ve senaryosu depoya, veritabanına, prompt'a, Blueprint'e ve test verisine girmez. Çıktı, kendi cümlelerimizle yazılmış **biçim profilidir** | S | D-08 ve D-42'nin yerine geçer. Sahibi kalan sorumluluğu üstlendi. **Mimar notu:** belgelerin bir AI oturumunda okunması, sınav kurumunun koşullarıyla hâlâ çelişebilir (R-01) |
-| D-45 | Blueprint bir sınav sorusundan türetilmez. Kaynağı müfredat düğümü + biçim profilidir; uzman yazar ya da AI müfredattan önerir ve uzman onaylar. Kaynak soruya lineage yoktur | Ö | D-44'ün uygulaması; **sahibinin onayını bekliyor** |
-| D-46 | Orijinal sınav sorularının sisteme alınması ve öğrencilere gösterimi **askıda**: yazılı lisans ve hukuki görüş olmadan açılmaz. Kapalı beta üretilmiş içerikle yapılır; sıra M1 → M3 → M2 olur | Ö | D-44'ten türetildi; **sahibinin onayını bekliyor** |
+| D-45 | Blueprint bir sınav sorusundan türetilmez. Kaynağı müfredat düğümü + biçim profilidir; uzman yazar ya da AI müfredattan önerir ve uzman onaylar. Kaynak soruya lineage yoktur | S / Ö | **Onaylandı (2026-10-11).** Sahibi sınav sorularından bire bir Blueprint çıkarımını tercih ediyordu; mimar bunu yapmayı reddetti (türetilen her sorunun belirli bir telifli soruya bağlanması), sahibi müfredat yolunu kabul etti |
+| ~~D-46~~ | *(Yerine geçti → D-47)* Orijinal sınav sorularının sisteme alınması ve gösterimi askıda | Ö | |
+| D-47 | **Sahibin kişisel kitaplığı.** Proje sahibi elindeki sınav belgelerini sistemde yalnızca kendisi görmek için saklayabilir. Koşullar: yalnızca sahibin hesabı erişir (kurum, öğrenci ya da açık uç nokta yok); belgeler olduğu gibi (sayfa görüntüsü) gösterilir, metne çevrilmez; hiçbir AI adımına, embedding'e ya da üretime girdi olmaz; depoya girmez | S | Sahibinin değerlendirmesi: kişisel kullanım yasal sorun taşımaz. **Mimar notu:** bu, konuşulan kullanımların en düşük risklisidir, ama hukuki değerlendirme mimara ait değildir (⚖️ R-01). Ürün ticari olarak açıldığında kitaplık teknik olarak ayrık kalmalıdır |
+| D-48 | Sınav belgeleri **Blueprint biçimini tasarlamak için referans** olarak kullanılabilir: hangi alanların gerektiği ve değerlerin dağılımı, toplu (aggregate) olarak. Soru başına Blueprint kaydı tutulmaz; soru metni, sayı ya da senaryo alınmaz. Referans seti: örnek (specimen) kâğıtlar | S / Ö | D-44'ün uzantısı; sahibinin önerisi |
 
 ## 3. Ertelenen kararlar
 
@@ -125,7 +127,7 @@ Sütunlar — **Kim:** S = proje sahibi kararı, Ö = mimar önerisi, sahibi ona
 - **Bilinmeyen:** kurumun statüsü; bildirimin şirketin kurulu olduğu ülkedeki hukuki karşılığı; diğer sınav kurumlarının koşulları.
 - **Karar geçmişi:** sahibi önce sınav sorularından üretimi (D-08) ve PDF'lerin geliştirme oturumunda okunmasını (D-42) üstlendi; mimar
   itiraz etti. Bildirim görüldükten sonra strateji değişti: **D-44** (yalnızca biçim öğrenme), **D-45** (Blueprint müfredattan),
-  **D-46** (orijinal soru gösterimi askıda).
+  **D-47** (orijinal belgeler yalnızca sahibin kişisel kitaplığında), **D-48** (Blueprint biçimi için referans kullanımı).
 - **Kalan risk:**
   1. Biçim öğrenmek için belgelerin bir AI oturumunda okunması, sınav kurumunun koşullarıyla çelişebilir. Sahibi üstlendi.
   2. Üretici model, eğitim verisinden bildiği gerçek bir sınav sorusunu yeniden üretebilir; elimizde karşılaştıracak kaynak havuzu yok.

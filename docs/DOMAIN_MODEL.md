@@ -79,7 +79,8 @@ erDiagram
 
 - `Program`, `Subject`, `SyllabusVersion`, `SyllabusNode`: sürümlü ağaç. Bir soru sürümü birden çok düğüme bağlanır; biri birincildir.
 - `ExamFormat`: bölüm tanımları (ör. Physics için 1A, 1B, 2), seviye (SL/HL), süre, hesap makinesi izni ve programın etiket sözlüğü
-  (ör. command term listesi). IB'ye özgü kavramlar sütun değil, bu kaydın verisidir.
+  (ör. command term listesi). IB'ye özgü kavramlar sütun değil, bu kaydın verisidir. *(Dilim 2a'da yalnızca bölüm kodları ve
+  komut sözcükleri var; seviye şimdilik müfredat düğümünün özniteliğidir; süre ve hesap makinesi izni uzman teyidinden sonra eklenir.)*
 - `MarkingPolicy`: hata taşıma açık mı, varsayılan tolerans, anlamlı basamak kuralı, ham puandan ölçekli puana dönüşüm tablosu.
 - Müfredat dışı sınıflandırılan soru silinmez; `syllabus_status = out_of_syllabus` ile saklanır (D-04).
 

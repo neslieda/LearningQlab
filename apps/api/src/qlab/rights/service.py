@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from qlab.rights.models import RightsRecord
@@ -94,9 +95,9 @@ def evaluate(
     if record.valid_until is not None and at >= record.valid_until:
         return False
     if purpose is Purpose.AI_PROCESSING:
-        return record.allows_ai_processing
+        return record.allows_ai_processing is True
     if purpose is Purpose.COMMERCIAL_USE:
-        return record.allows_commercial_use
+        return record.allows_commercial_use is True
     if purpose is Purpose.DISPLAY:
         if record.display_scope is DisplayScope.ALL:
             return True
@@ -119,6 +120,8 @@ def create_record(
     note: str | None = None,
 ) -> RightsRecordView:
     """Insert a record inside the caller's transaction. Every permission defaults to off.
+
+    The caller writes the audit entry (docs/SECURITY.md section 10).
 
     Raises ValueError (and writes nothing) when: `holder` is blank; a datetime is naive;
     `valid_until` is not after `valid_from`; or `display_organization_id` is given without
@@ -153,17 +156,25 @@ def create_record(
 
 
 def get_record(session: Session, rights_record_id: uuid.UUID) -> RightsRecordView | None:
-    row = session.get(RightsRecord, rights_record_id)
+    """The record as stored now. Always re-read, so a revocation is never hidden by a cached row."""
+    row = session.scalars(
+        select(RightsRecord)
+        .where(RightsRecord.id == rights_record_id)
+        .execution_options(populate_existing=True)
+    ).one_or_none()
     return None if row is None else _view(row)
 
 
 def revoke(session: Session, rights_record_id: uuid.UUID, *, at: datetime) -> None:
     """Mark the record revoked; a second call keeps the first timestamp.
 
+    Revocation is final and is the only change a stored record accepts. The caller writes the
+    audit entry (rights does not depend on the audit module; docs/SECURITY.md section 10).
+
     Unknown id raises LookupError; a naive `at` raises ValueError.
     """
     _require_aware("at", at)
-    row = session.get(RightsRecord, rights_record_id, with_for_update=True)
+    row = session.get(RightsRecord, rights_record_id, with_for_update=True, populate_existing=True)
     if row is None:
         raise LookupError(f"rights record {rights_record_id} does not exist")
     if row.revoked_at is None:
@@ -181,7 +192,8 @@ def is_permitted(
 ) -> bool:
     """`evaluate` for the stored record; `at` defaults to now. None or unknown id is denied.
 
-    A naive `at` raises ValueError whenever a record id is given.
+    A naive `at` raises ValueError whenever a record id is given. `at` exists for tests and
+    replays; never pass a time taken from a request.
     """
     if rights_record_id is None:
         return False

@@ -1,7 +1,8 @@
 """Rights records: who holds the rights to a piece of content and what may be done with it.
 
 Flags follow docs/SECURITY.md section 4.2. A record is evidence that the platform recorded a
-permission; it is not a legal determination.
+permission; it is not a legal determination. A database trigger (migration 0001) allows a
+single change to a stored record, its first revocation; nothing else can be updated or deleted.
 """
 
 from __future__ import annotations
@@ -26,6 +27,11 @@ class RightsRecord(Base):
             name="display_organization",
         ),
         CheckConstraint("valid_until IS NULL OR valid_until > valid_from", name="validity_order"),
+        CheckConstraint(
+            "isfinite(valid_from) AND (valid_until IS NULL OR isfinite(valid_until)) "
+            "AND (revoked_at IS NULL OR isfinite(revoked_at))",
+            name="finite_times",
+        ),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)

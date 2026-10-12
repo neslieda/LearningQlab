@@ -28,10 +28,10 @@ Kod düzeni modül başınadır; her modül dışarıya bir servis arayüzü ve 
 |---|---|---|
 | `identity` | Kullanıcı, token doğrulama, yaş bandı | — |
 | `organizations` | Kurum, üyelik, roller | `identity` |
-| `rights` | Rights kayıtları, izin sorguları, kill switch | — |
+| `rights` | Rights kayıtları, izin sorguları, kill switch *(kill switch henüz yok)* | — |
 | `entitlements` | Plan, entitlement, kota, rıza kuralları | `identity`, `organizations` |
 | `audit` | Değiştirilemez olay kaydı | — |
-| `syllabus` | Program, ders, müfredat ağacı, sınav biçimi, puanlama politikası | — |
+| `syllabus` | Program, ders, müfredat ağacı, sınav biçimi, puanlama politikası *(puanlama politikası henüz yok)* | — |
 | `content` | Soru, sürüm, parça, madde, asset, yayın, erişim politikası | `syllabus`, `rights`, `entitlements`, `audit` |
 | `ingestion` | Kaynak belge, sayfa, çıkarma | `content`, `rights`, `llm`, `verification` |
 | `generation` | Blueprint'ten aday üretimi | `syllabus`, `llm` — **`content` yasak** |

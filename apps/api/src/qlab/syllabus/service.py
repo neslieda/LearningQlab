@@ -48,12 +48,10 @@ def _nodes(session: Session, syllabus_version_id: uuid.UUID) -> list[SyllabusNod
     )
 
 
-def _exam_formats(session: Session, syllabus_version_id: uuid.UUID) -> list[ExamFormat]:
-    return list(
-        session.scalars(
-            select(ExamFormat).where(ExamFormat.syllabus_version_id == syllabus_version_id)
-        )
-    )
+def _exam_format(session: Session, syllabus_version_id: uuid.UUID) -> ExamFormat | None:
+    return session.scalars(
+        select(ExamFormat).where(ExamFormat.syllabus_version_id == syllabus_version_id)
+    ).one_or_none()
 
 
 def _check_nothing_dropped(
@@ -64,6 +62,10 @@ def _check_nothing_dropped(
         raise ReferenceConflict(f"reference file drops existing nodes: {sorted(dropped)}")
     if exam_format is None:
         return
+    if exam_format.code != reference.exam_format.code:
+        raise ReferenceConflict(
+            f"reference file renames the exam format {exam_format.code!r}; a version has one"
+        )
     current = ExamFormatDefinition.model_validate(exam_format.definition)
     sections = {s.code for s in current.sections} - {s.code for s in reference.exam_format.sections}
     if sections:
@@ -82,8 +84,9 @@ def load_reference(session: Session, reference: SyllabusReference) -> uuid.UUID:
     exam format definition are updated to match the file; new nodes are inserted.
 
     Nothing is ever deleted. If the database holds a node of this version that the file no
-    longer lists, or an exam section or command term that the file drops, ReferenceConflict is
-    raised and nothing is changed, because questions may refer to them.
+    longer lists, or an exam section or command term that the file drops, or an exam format
+    under a different code (a version has exactly one), ReferenceConflict is raised and nothing
+    is changed, because questions may refer to them.
     """
     codes = {
         "program": reference.program.code,
@@ -92,8 +95,7 @@ def load_reference(session: Session, reference: SyllabusReference) -> uuid.UUID:
     }
     version = _find_version(session, **codes)
     nodes = _nodes(session, version.id) if version is not None else []
-    formats = _exam_formats(session, version.id) if version is not None else []
-    exam_format = next((f for f in formats if f.code == reference.exam_format.code), None)
+    exam_format = _exam_format(session, version.id) if version is not None else None
     _check_nothing_dropped(reference, nodes, exam_format)
 
     program = session.scalars(select(Program).where(Program.code == codes["program"])).one_or_none()
@@ -112,11 +114,15 @@ def load_reference(session: Session, reference: SyllabusReference) -> uuid.UUID:
     subject.name = reference.subject.name
     if version is None:
         version = SyllabusVersion(
-            subject_id=subject.id, code=codes["version"], title=reference.syllabus_version.title
+            subject_id=subject.id,
+            code=codes["version"],
+            title=reference.syllabus_version.title,
+            status=reference.status,
         )
         session.add(version)
         session.flush()
     version.title = reference.syllabus_version.title
+    version.status = reference.status
 
     by_code = {n.code: n for n in nodes}
     for position, entry in enumerate(reference.nodes):
@@ -155,19 +161,16 @@ def find_syllabus_version(
 
 
 def get_vocabulary(session: Session, syllabus_version_id: uuid.UUID) -> Vocabulary:
-    """Vocabulary of one syllabus version. Unknown id, or no exam format: LookupError.
-
-    If a version has several exam formats, their sections and command terms are combined.
-    """
-    formats = _exam_formats(session, syllabus_version_id)
-    if not formats:
+    """Vocabulary of one syllabus version. Unknown id, or no exam format: LookupError."""
+    exam_format = _exam_format(session, syllabus_version_id)
+    if exam_format is None:
         raise LookupError(f"no exam format for syllabus version {syllabus_version_id}")
-    definitions = [ExamFormatDefinition.model_validate(f.definition) for f in formats]
+    definition = ExamFormatDefinition.model_validate(exam_format.definition)
     nodes = _nodes(session, syllabus_version_id)
     parents = {n.parent_id for n in nodes}
     return Vocabulary(
-        exam_sections=frozenset(s.code for d in definitions for s in d.sections),
-        command_terms=frozenset(t for d in definitions for t in d.command_terms),
+        exam_sections=frozenset(s.code for s in definition.sections),
+        command_terms=frozenset(definition.command_terms),
         node_codes=frozenset(n.code for n in nodes),
         leaf_node_codes=frozenset(n.code for n in nodes if n.id not in parents),
     )

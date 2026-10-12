@@ -9,7 +9,7 @@ from __future__ import annotations
 import uuid
 from typing import Any
 
-from sqlalchemy import ForeignKey, Text, UniqueConstraint
+from sqlalchemy import ForeignKey, ForeignKeyConstraint, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -42,15 +42,25 @@ class SyllabusVersion(Base):
     subject_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("subject.id"))
     code: Mapped[str] = mapped_column(Text)
     title: Mapped[str] = mapped_column(Text)
+    # Review status of the reference data as declared by the file it was loaded from.
+    status: Mapped[str] = mapped_column(Text)
 
 
 class SyllabusNode(Base):
     __tablename__ = "syllabus_node"
-    __table_args__ = (UniqueConstraint("syllabus_version_id", "code"),)
+    __table_args__ = (
+        UniqueConstraint("syllabus_version_id", "code"),
+        UniqueConstraint("syllabus_version_id", "id"),
+        # A parent is always a node of the same syllabus version.
+        ForeignKeyConstraint(
+            ["syllabus_version_id", "parent_id"],
+            ["syllabus_node.syllabus_version_id", "syllabus_node.id"],
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
     syllabus_version_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("syllabus_version.id"))
-    parent_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("syllabus_node.id"))
+    parent_id: Mapped[uuid.UUID | None]
     code: Mapped[str] = mapped_column(Text)
     title: Mapped[str] = mapped_column(Text)
     position: Mapped[int]
@@ -60,7 +70,8 @@ class SyllabusNode(Base):
 
 class ExamFormat(Base):
     __tablename__ = "exam_format"
-    __table_args__ = (UniqueConstraint("syllabus_version_id", "code"),)
+    # One exam format per syllabus version.
+    __table_args__ = (UniqueConstraint("syllabus_version_id"),)
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
     syllabus_version_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("syllabus_version.id"))

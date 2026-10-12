@@ -34,3 +34,17 @@ def test_downgrade_removes_everything_and_upgrade_restores_it(engine: Engine) ->
         assert leftover == []
         command.upgrade(config, "head")
         assert "audit_log" in inspect(connection).get_table_names()
+
+
+def test_downgrade_refuses_to_drop_recorded_history(engine: Engine) -> None:
+    with engine.connect() as connection:
+        transaction = connection.begin()
+        connection.exec_driver_sql(
+            "INSERT INTO audit_log (id, actor, action, entity_type, entity_id) "
+            "VALUES (gen_random_uuid(), 'system:test', 'thing.done', 'thing', '1')"
+        )
+        with pytest.raises(RuntimeError, match="audit_log is not empty"):
+            command.downgrade(alembic_config(connection), "base")
+        transaction.rollback()
+    with engine.connect() as connection:
+        assert "audit_log" in inspect(connection).get_table_names()

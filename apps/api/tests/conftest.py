@@ -8,6 +8,7 @@ skip: integration tests that silently do not run prove nothing.
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from sqlalchemy.orm import Session
 
 API_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = API_ROOT.parents[1]
+LOCAL_HOSTS = ("localhost", "127.0.0.1", "::1")
 DEFAULT_TEST_URL = "postgresql+psycopg://qlab:qlab-local-only@127.0.0.1:54340/qlab_test"
 
 
@@ -34,8 +36,10 @@ def engine() -> Iterator[Engine]:
     """An engine on a freshly migrated, otherwise empty test database."""
     url = make_url(os.environ.get("QLAB_TEST_DATABASE_URL", DEFAULT_TEST_URL))
     name = url.database
-    if name is None or not name.endswith("_test"):
+    if name is None or not re.fullmatch(r"[a-z0-9_]+_test", name):
         raise RuntimeError("the test database name must end in _test; it is dropped and recreated")
+    if url.host not in LOCAL_HOSTS:
+        raise RuntimeError("the test database must be on this machine; it is dropped and recreated")
     admin = create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
     with admin.connect() as connection:
         connection.execute(text(f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)'))

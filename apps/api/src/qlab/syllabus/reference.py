@@ -6,13 +6,16 @@ Unknown fields are rejected at every level.
 
 from __future__ import annotations
 
-from typing import Annotated, Any, Self
+from typing import Annotated, Self
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 Code = Annotated[str, StringConstraints(pattern=r"^[a-z0-9][a-z0-9_]*$")]
 NodeCode = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9]+(\.[A-Za-z0-9]+)*$")]
-NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+# Reference text is short labels only; the bound keeps anything longer (such as question
+# content, CLAUDE.md rule 14) out by construction.
+NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=300)]
+Label = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=120)]
 
 
 class Model(BaseModel):
@@ -21,25 +24,25 @@ class Model(BaseModel):
 
 class Named(Model):
     code: Code
-    name: NonBlank
+    name: Label
 
 
 class VersionRef(Model):
     code: Code
-    title: NonBlank
+    title: Label
 
 
 class NodeEntry(Model):
     code: NodeCode
-    title: NonBlank
+    title: Label
     # Code of the parent node; None for a top-level node. A parent is listed before its children.
     parent: NodeCode | None = None
-    attributes: dict[str, Any] = {}
+    attributes: dict[Code, Code] = Field(default={}, max_length=8)
 
 
 class Section(Model):
     code: Code
-    title: NonBlank
+    title: Label
 
 
 class ExamFormatDefinition(Model):

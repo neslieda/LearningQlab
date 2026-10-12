@@ -403,8 +403,8 @@ def test_get_vocabulary_for_a_version_without_exam_format_raises_lookup_error(
     )
     connection.execute(
         text(
-            "INSERT INTO syllabus_version (id, subject_id, code, title) "
-            "VALUES (:id, :s, 'v0', 'Bare')"
+            "INSERT INTO syllabus_version (id, subject_id, code, title, status) "
+            "VALUES (:id, :s, 'v0', 'Bare', 'draft')"
         ),
         {"id": version_id, "s": subject_id},
     )
@@ -538,7 +538,7 @@ def test_nodes_are_stored_with_positions_parents_and_attributes(
     version_id = load_demo(
         session,
         nodes=[
-            node("X", attributes={"a": [1, {"b": None}]}),
+            node("X", attributes={"a": "b"}),
             node("X.1", parent="X"),
             node("Y"),
             node("Y.1", parent="Y", attributes={"level": "core"}),
@@ -559,7 +559,7 @@ def test_nodes_are_stored_with_positions_parents_and_attributes(
         "Y": None,
         "Y.1": "Y",
     }
-    assert stored["X"].attributes == {"a": [1, {"b": None}]}
+    assert stored["X"].attributes == {"a": "b"}
     assert stored["X.1"].attributes == {}
     assert stored["Y.1"].attributes == {"level": "core"}
     assert stored["X"].title == "Title of X"
@@ -649,15 +649,15 @@ def test_update_changes_attributes(session: Session, connection: Connection) -> 
     first = load_demo(session)
 
     nodes = [
-        node("X", attributes={"new": True}),
-        node("X.1", parent="X", attributes={"level": "extension", "extra": [1, 2]}),
+        node("X", attributes={"new": "yes"}),
+        node("X.1", parent="X", attributes={"level": "extension", "extra": "one"}),
         node("X.2", parent="X"),
     ]
     load_demo(session, nodes=nodes)
 
     stored = read_nodes(connection, first)
-    assert stored["X"].attributes == {"new": True}
-    assert stored["X.1"].attributes == {"level": "extension", "extra": [1, 2]}
+    assert stored["X"].attributes == {"new": "yes"}
+    assert stored["X.1"].attributes == {"level": "extension", "extra": "one"}
     assert stored["X.2"].attributes == {}
 
 

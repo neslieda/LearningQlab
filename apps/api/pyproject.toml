@@ -109,6 +109,7 @@ forbidden_modules = [
     "qlab.marking",
     "qlab.analytics",
     "qlab.llm",
+    "qlab.pipeline",
 ]
 
 [[tool.importlinter.contracts]]

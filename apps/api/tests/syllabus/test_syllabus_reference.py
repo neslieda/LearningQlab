@@ -113,11 +113,36 @@ def test_children_may_be_listed_apart_from_their_parent() -> None:
     assert len(validate(data).nodes) == 4
 
 
-def test_attributes_may_hold_arbitrary_json() -> None:
+@pytest.mark.parametrize(
+    "attributes",
+    [
+        {"a": [1, {"b": None}]},
+        {"a": 1.5},
+        {"a": "Free text"},
+        {"Not A Code": "x"},
+        {f"k{i}": "v" for i in range(9)},
+    ],
+)
+def test_attributes_are_a_small_map_of_codes(attributes: dict[str, object]) -> None:
     data = valid_data()
-    data["nodes"][0]["attributes"] = {"a": [1, {"b": None}], "c": "d", "e": 1.5, "f": True}
+    data["nodes"][0]["attributes"] = attributes
 
-    assert validate(data).nodes[0].attributes["a"] == [1, {"b": None}]
+    with pytest.raises(ValidationError):
+        validate(data)
+
+
+@pytest.mark.parametrize(
+    "path", [("nodes", 0, "title"), ("program", "name"), ("syllabus_version", "title")]
+)
+def test_labels_are_too_short_to_carry_content(path: tuple[str | int, ...]) -> None:
+    data: Any = valid_data()
+    target = data
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = "x" * 121
+
+    with pytest.raises(ValidationError):
+        validate(data)
 
 
 def test_validated_reference_round_trips_through_json() -> None:

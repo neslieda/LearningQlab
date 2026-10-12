@@ -158,6 +158,19 @@ Yalnızca eklenen, değiştirilemeyen `audit_log`. Kaydedilenler: içerik durum 
 değişiklikleri, rights ve kill switch değişiklikleri, kural tablosu ve prompt sürümü değişiklikleri, `source_original` erişimleri, veri
 indirme ve silme talepleri, rıza olayları.
 
+**Uygulama (dilim 2a):** UPDATE, DELETE ve TRUNCATE veritabanı tetikleyicisiyle reddedilir; kayıt zamanını veritabanı koyar; `actor`
+ve `data` biçimi tabloda kısıtlıdır ([DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) §2.1).
+
+**Rol ayrımı zorunludur.** Tablonun sahibi ya da superuser olan bir rol tetikleyiciyi kapatabilir, işlevi değiştirebilir ya da tabloyu
+silebilir; bunu hiçbir tetikleyici önleyemez. Bu yüzden paylaşılan her ortamda (staging, production) iki rol olur: nesnelerin sahibi
+olan **migration rolü** ve superuser olmayan, `audit_log` üzerinde yalnızca SELECT ve INSERT yetkisi olan **uygulama rolü**. Böyle bir
+rolün geçmişi değiştiremediği ve korumaları kapatamadığı testle gösterilir (`tests/test_database_rules.py`). Yerelde ve CI'da şimdilik
+tek rol kullanılıyor; rol tanımları ve yetkiler web'e açılış hazırlığında (M1-G dilim 9) yazılır ve o zamana kadar "değiştirilemez"
+iddiası yalnızca yerel geliştirme veritabanı için geçerli değildir. Uzun vadede kayıtların veritabanı dışına da aktarılması değerlendirilir.
+
+⚖️ **Açık soru:** silinemeyen bir kayıt ile kullanıcının silme hakkı (§5.4) nasıl bağdaşır? Teknik önlem, kayda kişisel veri yerine
+opak kimlik yazmaktır; yeterli olup olmadığı hukuk danışmanının kararıdır (R-02).
+
 ## 11. İçerik koruma
 
 Düzey: temel (kullanıcı kararı). Ücretli içerik yalnızca yetkili istekle döner; hesap başına hız sınırı; olağandışı çekme örüntüsü tespiti

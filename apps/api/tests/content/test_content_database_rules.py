@@ -29,6 +29,7 @@ from tests.content import samples
 from tests.content.support import (
     ALL_STATUSES,
     ALLOWED_MOVES,
+    REQUIRED_CHECKS,
     VISUAL_SAMPLES,
     Env,
     RawVersion,
@@ -575,7 +576,7 @@ def test_check_rows_cannot_be_added_once_a_version_is_in_review(
         raw_check(connection, raw.version_id, "late", "critical", "failed")
 
 
-def test_removing_the_failed_check_while_in_needs_fix_clears_the_way(
+def test_a_version_whose_failed_check_is_removed_still_needs_its_required_checks(
     connection: Connection, env: Env
 ) -> None:
     raw = raw_full_version(connection, env)
@@ -592,6 +593,130 @@ def test_removing_the_failed_check_while_in_needs_fix_clears_the_way(
             {"s": step, "v": raw.version_id},
         )
     assert status_of(connection, raw.version_id) == "published"
+
+
+def test_deleting_a_required_check_in_needs_fix_blocks_review_again(
+    connection: Connection, env: Env
+) -> None:
+    raw = raw_full_version(connection, env)
+    raw_walk(connection, raw.version_id, "needs_fix")
+    connection.execute(
+        text(
+            "DELETE FROM question_version_check "
+            "WHERE question_version_id = :v AND check_code = 'schema_valid'"
+        ),
+        {"v": raw.version_id},
+    )
+    for step in ("draft", "auto_checking"):
+        connection.execute(
+            text("UPDATE question_version SET status = :s WHERE id = :v"),
+            {"s": step, "v": raw.version_id},
+        )
+    message = rejected(
+        connection,
+        "UPDATE question_version SET status = 'in_review' WHERE id = :v",
+        v=raw.version_id,
+    )
+    assert "cannot move to in_review: a required check has not passed" in message
+    assert status_of(connection, raw.version_id) == "auto_checking"
+
+
+# --- required checks: a missing check is not a pass (CLAUDE.md rule 8) ----------------------
+
+REQUIRED_PROBLEMS = {
+    "no_check_rows_at_all": ((), ()),
+    "only_schema_valid": (("schema_valid",), ()),
+    "only_vocabulary_valid": (("vocabulary_valid",), ()),
+    "required_as_warning": (
+        ("schema_valid",),
+        (("vocabulary_valid", "warning", "passed"),),
+    ),
+    "required_not_applicable": (
+        ("schema_valid",),
+        (("vocabulary_valid", "critical", "not_applicable"),),
+    ),
+    "required_as_warning_not_applicable": (
+        (),
+        (
+            ("schema_valid", "warning", "not_applicable"),
+            ("vocabulary_valid", "warning", "passed"),
+        ),
+    ),
+    "other_checks_do_not_count": (
+        (),
+        (("ext_check", "critical", "passed"), ("another", "critical", "passed")),
+    ),
+}
+
+
+@pytest.mark.parametrize("case", list(REQUIRED_PROBLEMS))
+def test_a_version_cannot_enter_review_unless_both_required_checks_passed_as_critical(
+    connection: Connection, env: Env, case: str
+) -> None:
+    proper, other = REQUIRED_PROBLEMS[case]
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    for code in proper:
+        raw_check(connection, version_id, code, "critical", "passed")
+    for code, severity, outcome in other:
+        raw_check(connection, version_id, code, severity, outcome)
+    raw_walk(connection, version_id, "auto_checking")
+    before = row_of(connection, version_id)
+
+    message = rejected(
+        connection, "UPDATE question_version SET status = 'in_review' WHERE id = :v", v=version_id
+    )
+
+    assert "cannot move to in_review: a required check has not passed" in message
+    assert row_of(connection, version_id) == before
+    assert status_of(connection, version_id) == "auto_checking"
+
+
+def test_a_version_with_both_required_checks_passed_may_enter_review(
+    connection: Connection, env: Env
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    for code in REQUIRED_CHECKS:
+        raw_check(connection, version_id, code, "critical", "passed")
+    raw_walk(connection, version_id, "in_review")
+    assert status_of(connection, version_id) == "in_review"
+
+
+def test_a_failed_critical_check_is_reported_before_a_missing_required_one(
+    connection: Connection, env: Env
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    raw_check(connection, version_id, "schema_valid", "critical", "failed")
+    raw_walk(connection, version_id, "auto_checking")
+    message = rejected(
+        connection, "UPDATE question_version SET status = 'in_review' WHERE id = :v", v=version_id
+    )
+    assert "a critical check failed" in message
+
+
+@pytest.mark.parametrize("target", ["approved", "published"])
+def test_no_route_reaches_approval_or_publishing_without_the_required_checks(
+    connection: Connection, env: Env, target: str
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    raw_check(connection, version_id, "schema_valid", "critical", "passed")
+    for status in ("auto_checking", "needs_fix", "draft", "auto_checking"):
+        connection.execute(
+            text("UPDATE question_version SET status = :s WHERE id = :v"),
+            {"s": status, "v": version_id},
+        )
+    for step in ("in_review", "approved", "published"):
+        with pytest.raises(DBAPIError), connection.begin_nested():
+            connection.execute(
+                text("UPDATE question_version SET status = :s WHERE id = :v"),
+                {"s": step, "v": version_id},
+            )
+        if step == target:
+            break
+    assert status_of(connection, version_id) == "auto_checking"
 
 
 def test_stimuli_are_refused_at_publishing_whatever_the_checks_say(
@@ -633,9 +758,10 @@ def test_a_published_version_keeps_its_content_and_children_for_good(
 
 def test_a_question_cannot_be_deleted(connection: Connection, env: Env) -> None:
     raw = raw_full_version(connection, env)
+    before = count(connection, "question")
     message = rejected(connection, "DELETE FROM question WHERE id = :q", q=raw.question_id)
     assert "DELETE on question is not allowed" in message
-    assert count(connection, "question") == 1
+    assert count(connection, "question") == before
 
 
 @pytest.mark.parametrize("status", ALL_STATUSES)
@@ -993,7 +1119,11 @@ def test_nothing_else_on_the_question_row_changes_either(
 
 
 def add_version(connection: Connection, raw: RawVersion, version_no: int) -> uuid.UUID:
-    return raw_version(connection, raw.question_id, version_no=version_no)
+    """A further draft version with the required checks, so it can be walked forward."""
+    version_id = raw_version(connection, raw.question_id, version_no=version_no)
+    for code in REQUIRED_CHECKS:
+        raw_check(connection, version_id, code, "critical", "passed")
+    return version_id
 
 
 @pytest.mark.parametrize(
@@ -1037,21 +1167,37 @@ def test_a_question_cannot_have_two_published_versions(connection: Connection, e
     assert status_of(connection, raw.version_id) == "published"
 
 
-def test_a_withdrawn_version_cannot_be_republished_beside_a_published_one(
-    connection: Connection, env: Env
+@pytest.mark.parametrize("newer", ["draft", "approved", "rejected", "published"])
+def test_a_withdrawn_version_cannot_be_republished_when_a_newer_version_exists(
+    connection: Connection, env: Env, newer: str
 ) -> None:
     raw = version_at(connection, env, "withdrawn")
     second = add_version(connection, raw, 2)
-    raw_walk(connection, second, "published")
-    with (
-        pytest.raises(DBAPIError, match="uq_question_version_one_published"),
-        connection.begin_nested(),
-    ):
-        connection.execute(
-            text("UPDATE question_version SET status = 'published' WHERE id = :v"),
-            {"v": raw.version_id},
-        )
+    raw_walk(connection, second, newer)
+    message = rejected(
+        connection,
+        "UPDATE question_version SET status = 'published' WHERE id = :v",
+        v=raw.version_id,
+    )
+    assert "cannot republish: a newer version exists" in message
     assert status_of(connection, raw.version_id) == "withdrawn"
+    assert status_of(connection, second) == newer
+
+
+def test_a_withdrawn_version_can_be_republished_when_only_older_versions_exist(
+    connection: Connection, env: Env
+) -> None:
+    first = version_at(connection, env, "withdrawn")
+    second = add_version(connection, first, 2)
+    raw_walk(connection, second, "published")
+    connection.execute(
+        text("UPDATE question_version SET status = 'withdrawn' WHERE id = :v"), {"v": second}
+    )
+    connection.execute(
+        text("UPDATE question_version SET status = 'published' WHERE id = :v"), {"v": second}
+    )
+    assert status_of(connection, second) == "published"
+    assert status_of(connection, first.version_id) == "withdrawn"
 
 
 def test_version_numbers_are_unique_per_question(connection: Connection, env: Env) -> None:
@@ -1145,15 +1291,194 @@ def test_a_node_of_the_questions_own_syllabus_version_is_accepted(
 
 
 # =============================================================================================
+# Size and range limits
+# =============================================================================================
+
+
+def test_total_marks_must_be_at_least_one(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    for value in (0, -1):
+        message = rejected(
+            connection,
+            "UPDATE question_version SET total_marks = :m WHERE id = :v",
+            m=value,
+            v=raw.version_id,
+        )
+        assert "ck_question_version_total_marks" in message
+    connection.execute(
+        text("UPDATE question_version SET total_marks = 1 WHERE id = :v"), {"v": raw.version_id}
+    )
+
+
+def test_a_document_over_one_megabyte_of_text_is_refused(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    before = row_of(connection, raw.version_id)
+    message = rejected(
+        connection,
+        "UPDATE question_version SET document = document || "
+        "jsonb_build_object('pad', repeat('x', 1100000)) WHERE id = :v",
+        v=raw.version_id,
+    )
+    assert "ck_question_version_document_size" in message
+    assert row_of(connection, raw.version_id) == before
+    connection.execute(
+        text(
+            "UPDATE question_version SET document = document || "
+            "jsonb_build_object('pad', repeat('x', 500000)) WHERE id = :v"
+        ),
+        {"v": raw.version_id},
+    )
+
+
+def test_check_detail_over_16_kb_is_refused(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    insert = (
+        "INSERT INTO question_version_check (id, question_version_id, check_code, severity, "
+        "outcome, detail) VALUES (gen_random_uuid(), :v, :code, 'warning', 'passed', "
+        "jsonb_build_object('pad', repeat('x', :n)))"
+    )
+    message = rejected(connection, insert, v=raw.version_id, code="big", n=17000)
+    assert "ck_question_version_check_detail" in message
+    connection.execute(text(insert), {"v": raw.version_id, "code": "ok_size", "n": 15000})
+
+
+def test_a_check_code_is_at_most_64_characters(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    with (
+        pytest.raises(DBAPIError, match="ck_question_version_check_check_code"),
+        connection.begin_nested(),
+    ):
+        raw_check(connection, raw.version_id, "z" * 65, "warning", "passed")
+    raw_check(connection, raw.version_id, "z" * 64, "warning", "passed")
+
+
+# =============================================================================================
+# Hardening: text-identical content, updated_at, search_path
+# =============================================================================================
+
+
+@pytest.mark.parametrize("status", NOT_EDITABLE)
+def test_a_numerically_equal_but_differently_written_document_counts_as_a_change(
+    connection: Connection, env: Env, status: str
+) -> None:
+    raw = version_at(connection, env, status)
+    marks = connection.execute(
+        text("SELECT document ->> 'total_marks' FROM question_version WHERE id = :v"),
+        {"v": raw.version_id},
+    ).scalar_one()
+    before = row_of(connection, raw.version_id)
+    message = rejected(
+        connection,
+        "UPDATE question_version SET document = jsonb_set(document, '{total_marks}', "
+        "CAST(:written AS jsonb)) WHERE id = :v",
+        written=f"{marks}.00",
+        v=raw.version_id,
+    )
+    assert "cannot change" in message
+    assert row_of(connection, raw.version_id) == before
+
+
+def test_an_unchanged_document_in_a_locked_status_is_not_a_change(
+    connection: Connection, env: Env
+) -> None:
+    raw = version_at(connection, env, "published")
+    connection.execute(
+        text("UPDATE question_version SET document = document WHERE id = :v"), {"v": raw.version_id}
+    )
+    assert status_of(connection, raw.version_id) == "published"
+
+
+def updated_at_is_now(connection: Connection, version_id: uuid.UUID) -> bool:
+    return bool(
+        connection.execute(
+            text("SELECT updated_at = now() FROM question_version WHERE id = :v"), {"v": version_id}
+        ).scalar_one()
+    )
+
+
+@pytest.mark.parametrize("status", ["draft", "published"])
+def test_updated_at_cannot_be_set_by_a_writer(
+    connection: Connection, env: Env, status: str
+) -> None:
+    raw = version_at(connection, env, status)
+    connection.execute(
+        text("UPDATE question_version SET updated_at = '2000-01-01+00' WHERE id = :v"),
+        {"v": raw.version_id},
+    )
+    stored = connection.execute(
+        text("SELECT updated_at FROM question_version WHERE id = :v"), {"v": raw.version_id}
+    ).scalar_one()
+    assert stored.year != 2000
+    assert updated_at_is_now(connection, raw.version_id)
+
+
+def test_updated_at_follows_every_accepted_update(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    connection.execute(
+        text("UPDATE question_version SET updated_at = '2001-01-01+00' WHERE id = :v"),
+        {"v": raw.version_id},
+    )
+    for statement in (
+        "UPDATE question_version SET total_marks = 2 WHERE id = :v",
+        "UPDATE question_version SET status = 'auto_checking' WHERE id = :v",
+    ):
+        connection.execute(
+            text("UPDATE question_version SET updated_at = '2002-01-01+00' WHERE id = :v"),
+            {"v": raw.version_id},
+        )
+        connection.execute(text(statement), {"v": raw.version_id})
+        assert updated_at_is_now(connection, raw.version_id)
+
+
+def test_updated_at_starts_at_now_on_insert(connection: Connection, env: Env) -> None:
+    raw = raw_full_version(connection, env)
+    assert updated_at_is_now(connection, raw.version_id)
+
+
+def test_every_function_in_public_pins_its_search_path(connection: Connection) -> None:
+    unpinned = (
+        connection.execute(
+            text(
+                "SELECT p.proname FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+                "WHERE n.nspname = 'public' AND NOT EXISTS ("
+                "SELECT 1 FROM unnest(coalesce(p.proconfig, ARRAY[]::text[])) AS c "
+                "WHERE c LIKE 'search_path=%')"
+            )
+        )
+        .scalars()
+        .all()
+    )
+    assert unpinned == []
+    guards = connection.execute(
+        text(
+            "SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+            "WHERE n.nspname = 'public'"
+        )
+    ).scalar_one()
+    assert guards >= 9
+
+
+def test_every_pinned_search_path_ends_with_pg_temp(connection: Connection) -> None:
+    paths = connection.execute(
+        text(
+            "SELECT p.proname, c FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+            "CROSS JOIN LATERAL unnest(p.proconfig) AS c "
+            "WHERE n.nspname = 'public' AND c LIKE 'search_path=%'"
+        )
+    ).all()
+    assert paths
+    for name, setting in paths:
+        assert setting.rstrip().endswith("pg_temp"), (name, setting)
+
+
+# =============================================================================================
 # The deployment requirement (docs/SECURITY.md section 10)
 # =============================================================================================
 
 
-@pytest.fixture
-def runtime_role(connection: Connection, env: Env) -> Iterator[RawVersion]:
-    """A published version, then the connection acting as a plain role that may read and write
-    the question tables, like the application's runtime role."""
-    raw = version_at(connection, env, "published")
+def become_runtime_role(connection: Connection) -> None:
+    """Act as a plain role that may read and write the question tables, like the application's
+    runtime role. It may also create temporary tables (PUBLIC has TEMPORARY by default)."""
     connection.execute(text("CREATE ROLE qlab_content_probe NOSUPERUSER"))
     connection.execute(
         text(
@@ -1161,7 +1486,17 @@ def runtime_role(connection: Connection, env: Env) -> Iterator[RawVersion]:
             "mark_point, question_version_syllabus, question_version_check TO qlab_content_probe"
         )
     )
+    connection.execute(
+        text("GRANT SELECT ON syllabus_node, syllabus_version TO qlab_content_probe")
+    )
     connection.execute(text("SET LOCAL ROLE qlab_content_probe"))
+
+
+@pytest.fixture
+def runtime_role(connection: Connection, env: Env) -> Iterator[RawVersion]:
+    """A published version, then the connection acting as the runtime role."""
+    raw = version_at(connection, env, "published")
+    become_runtime_role(connection)
     yield raw
 
 
@@ -1209,3 +1544,168 @@ def test_the_service_vocabulary_matches_the_database_vocabulary() -> None:
     assert {o.value for o in svc.Origin} == {"authored", "generated", "source_original"}
     assert {s.value for s in svc.Severity} == {"critical", "warning"}
     assert {o.value for o in svc.Outcome} == {"passed", "failed", "not_applicable"}
+
+
+# =============================================================================================
+# Temporary tables cannot make a guard read something other than the real tables
+# =============================================================================================
+
+
+def shadow(connection: Connection, table: str) -> None:
+    """A temporary table of the same name, which an unqualified name in a guard would find
+    first. Only the runtime role does this; the owner is outside the guards' promise."""
+    connection.execute(
+        text(f"CREATE TEMP TABLE {table} (LIKE public.{table} INCLUDING DEFAULTS)")  # noqa: S608
+    )
+
+
+def auto_checking_version_with(
+    connection: Connection, env: Env, checks: tuple[tuple[str, str, str], ...]
+) -> uuid.UUID:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    for code, severity, outcome in checks:
+        raw_check(connection, version_id, code, severity, outcome)
+    raw_walk(connection, version_id, "auto_checking")
+    return version_id
+
+
+def test_a_temporary_check_table_does_not_hide_a_stored_failed_critical_check(
+    connection: Connection, env: Env
+) -> None:
+    version_id = auto_checking_version_with(
+        connection,
+        env,
+        (
+            ("schema_valid", "critical", "passed"),
+            ("vocabulary_valid", "critical", "passed"),
+            ("ext_check", "critical", "failed"),
+        ),
+    )
+    become_runtime_role(connection)
+    shadow(connection, "question_version_check")  # empty: "no check has failed"
+    message = rejected(
+        connection,
+        "UPDATE public.question_version SET status = 'in_review' WHERE id = :v",
+        v=version_id,
+    )
+    assert "a critical check failed" in message
+    assert status_of(connection, version_id) == "auto_checking"
+
+
+def test_a_temporary_check_table_cannot_vouch_for_required_checks_that_were_never_stored(
+    connection: Connection, env: Env
+) -> None:
+    version_id = auto_checking_version_with(connection, env, ())
+    become_runtime_role(connection)
+    shadow(connection, "question_version_check")
+    for code in REQUIRED_CHECKS:
+        connection.execute(
+            text(
+                "INSERT INTO pg_temp.question_version_check (id, question_version_id, "
+                "check_code, severity, outcome) VALUES (gen_random_uuid(), :v, :c, 'critical', "
+                "'passed')"
+            ),
+            {"v": version_id, "c": code},
+        )
+    message = rejected(
+        connection,
+        "UPDATE public.question_version SET status = 'in_review' WHERE id = :v",
+        v=version_id,
+    )
+    assert "a required check has not passed" in message
+    assert status_of(connection, version_id) == "auto_checking"
+
+
+def test_temporary_version_and_part_tables_do_not_unlock_the_children_of_a_published_version(
+    connection: Connection, env: Env
+) -> None:
+    raw = version_at(connection, env, "published")
+    become_runtime_role(connection)
+    shadow(connection, "question_version")
+    shadow(connection, "part")
+    fake_version = uuid.uuid4()
+    connection.execute(
+        text(
+            "INSERT INTO pg_temp.question_version (id, question_id, version_no, status, "
+            "schema_version, document, content_sha256, question_class, exam_section, levels, "
+            "total_marks, has_unverified_visuals, created_by) VALUES (:v, :q, 1, 'draft', "
+            "'1.0', '{}', repeat('a', 64), 'mcq', 'paper_1a', ARRAY['sl'], 1, false, 'u_author')"
+        ),
+        {"v": fake_version, "q": raw.question_id},
+    )
+    connection.execute(
+        text(
+            "INSERT INTO pg_temp.part (id, question_version_id, position, part_key, marks, "
+            "answer_type) VALUES (:p, :v, 0, 'p-a', 1, 'word_phrase')"
+        ),
+        {"p": raw.part_id, "v": fake_version},
+    )
+    before = count(connection, "public.part")
+
+    for statement in (
+        "DELETE FROM public.mark_point WHERE id = :m",
+        "INSERT INTO public.mark_point (id, part_id, position, point_key, kind) "
+        "VALUES (gen_random_uuid(), :p, 5, 'late', 'statement')",
+        "DELETE FROM public.part WHERE id = :p",
+        "INSERT INTO public.part (id, question_version_id, position, part_key, marks, "
+        "answer_type) VALUES (gen_random_uuid(), :v, 5, 'late', 1, 'word_phrase')",
+        "DELETE FROM public.question_version_check WHERE id = :c",
+    ):
+        message = rejected(
+            connection,
+            statement,
+            m=raw.mark_point_id,
+            p=raw.part_id,
+            v=raw.version_id,
+            c=raw.check_id,
+        )
+        assert "cannot change while the version is published" in message
+    assert count(connection, "public.part") == before
+    real_status = connection.execute(
+        text("SELECT status FROM public.question_version WHERE id = :v"), {"v": raw.version_id}
+    ).scalar_one()
+    assert real_status == "published"
+
+
+def test_a_temporary_node_table_does_not_let_a_foreign_node_tag_a_question_version(
+    connection: Connection, env: Env, second_syllabus_version: uuid.UUID
+) -> None:
+    raw = raw_full_version(connection, env)
+    foreign = connection.execute(
+        text("SELECT id FROM syllabus_node WHERE syllabus_version_id = :s AND code = 'A.1'"),
+        {"s": second_syllabus_version},
+    ).scalar_one()
+    become_runtime_role(connection)
+    for table in ("syllabus_node", "question_version", "question"):
+        shadow(connection, table)
+    connection.execute(
+        text(
+            "INSERT INTO pg_temp.syllabus_node (id, syllabus_version_id, code, title, position) "
+            "VALUES (:n, :s, 'A.1', 'claims to be ours', 0)"
+        ),
+        {"n": foreign, "s": env.syllabus_version_id},
+    )
+    message = rejected(
+        connection,
+        "INSERT INTO public.question_version_syllabus (question_version_id, syllabus_node_id, "
+        "is_primary) VALUES (:v, :n, false)",
+        v=raw.version_id,
+        n=foreign,
+    )
+    assert "syllabus node belongs to another syllabus version" in message
+
+
+def test_a_temporary_question_table_cannot_reopen_a_closed_origin(
+    connection: Connection, env: Env
+) -> None:
+    become_runtime_role(connection)
+    shadow(connection, "question")
+    message = rejected(
+        connection,
+        "INSERT INTO public.question (id, origin, rights_record_id, syllabus_version_id, "
+        "created_by) VALUES (gen_random_uuid(), 'generated', :r, :s, 'u_author')",
+        r=env.rights_record_id,
+        s=env.syllabus_version_id,
+    )
+    assert "origin generated is closed" in message

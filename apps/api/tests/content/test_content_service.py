@@ -13,6 +13,7 @@ What the database enforces on its own is in test_content_database_rules.py.
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 import hashlib
 import json
 import re
@@ -36,13 +37,16 @@ from tests.content.support import (
     ALL_SAMPLES,
     ALL_STATUSES,
     AUTHOR,
+    NO_HASH,
     PLAIN_SAMPLES,
     PUBLISHER,
+    REQUIRED_CHECKS,
     REVIEWER,
     VISUAL_SAMPLES,
     WORKING_STATUSES,
     Env,
     Json,
+    approve,
     audit_actions,
     audit_for,
     bring_to,
@@ -62,10 +66,14 @@ from tests.content.support import (
     now,
     other_document,
     parts_of,
+    publish,
     publish_new,
+    raw_question,
+    republish,
     set_status_raw,
     snapshot,
     status_of,
+    stored_hash,
     stored_json,
     syllabus_rows_of,
     table_counts,
@@ -85,6 +93,18 @@ REASON = "needs a clearer stem"
 @pytest.fixture
 def env(session: Session) -> Env:
     return make_env(session)
+
+
+STATE_FIELDS = {"id", "question_id", "version_no", "status", "content_sha256"}
+
+
+def assert_state_without_content(result: object) -> None:
+    """The answer of a state-changing call is a VersionState: no document, no staff view."""
+    assert type(result) is svc.VersionState
+    assert isinstance(result, svc.VersionState)
+    assert not isinstance(result, svc.QuestionVersionView)
+    assert {f.name for f in dataclasses.fields(result)} == STATE_FIELDS
+    assert not hasattr(result, "document")
 
 
 # =============================================================================================
@@ -280,19 +300,22 @@ def test_after_revocation_get_published_version_is_not_found_not_a_stale_view(
         svc.get_published_version(session, own.question_id)
 
 
-@pytest.mark.parametrize(
-    ("operation", "status"),
-    [
-        ("update_draft", "draft"),
-        ("update_draft", "needs_fix"),
-        ("submit", "draft"),
-        ("approve", "in_review"),
-        ("start_revision", "published"),
-        ("start_revision", "rejected"),
-        ("start_revision", "withdrawn"),
-    ],
-)
-def test_after_revocation_writes_are_denied_and_change_nothing(
+REVOKED_WRITES: dict[str, Callable[[Session, svc.QuestionVersionView], object]] = {
+    "update_draft": lambda s, v: svc.update_draft(
+        s, actor=OP_ACTOR, version_id=v.id, document=other_document()
+    ),
+    "submit": lambda s, v: svc.submit(s, actor=OP_ACTOR, version_id=v.id),
+    "approve": lambda s, v: approve(s, v.id, OP_ACTOR),
+    "record_check": lambda s, v: svc.record_check(
+        s, actor=OP_ACTOR, version_id=v.id, result=failed_critical()
+    ),
+    "start_revision": lambda s, v: svc.start_revision(s, actor=OP_ACTOR, question_id=v.question_id),
+}
+
+
+@pytest.mark.parametrize("status", ALL_STATUSES)
+@pytest.mark.parametrize("operation", list(REVOKED_WRITES))
+def test_after_revocation_writes_are_denied_whatever_the_status_and_change_nothing(
     session: Session, connection: Connection, env: Env, operation: str, status: str
 ) -> None:
     record_id = new_rights(session)
@@ -301,14 +324,7 @@ def test_after_revocation_writes_are_denied_and_change_nothing(
     before = snapshot(session, connection, version.question_id)
 
     with pytest.raises(rights.RightsDenied):
-        if operation == "update_draft":
-            svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document())
-        elif operation == "submit":
-            svc.submit(session, actor=OP_ACTOR, version_id=version.id)
-        elif operation == "approve":
-            svc.approve(session, actor=OP_ACTOR, version_id=version.id)
-        else:
-            svc.start_revision(session, actor=OP_ACTOR, question_id=version.question_id)
+        REVOKED_WRITES[operation](session, version)
 
     assert snapshot(session, connection, version.question_id) == before
     usable(session)
@@ -321,10 +337,50 @@ def test_after_revocation_publish_is_refused_with_rights_denied_and_stays_approv
     version = bring_to(session, connection, env, "approved", rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
     with pytest.raises(svc.NotPublishable) as caught:
-        svc.publish(session, actor=OP_ACTOR, version_id=version.id)
+        publish(session, version.id, OP_ACTOR)
     assert caught.value.reasons == ("rights_denied",)
     assert status_of(connection, version.id) == "approved"
     usable(session)
+
+
+def test_publish_checks_status_and_hash_before_it_reports_missing_rights(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    record_id = new_rights(session)
+    in_review = bring_to(session, connection, env, "in_review", rights_record_id=record_id)
+    approved = bring_to(session, connection, env, "approved", rights_record_id=record_id)
+    rights.revoke(session, record_id, at=now())
+    with pytest.raises(svc.InvalidTransition):
+        publish(session, in_review.id, OP_ACTOR)
+    with pytest.raises(svc.StaleContent):
+        svc.publish(
+            session, actor=OP_ACTOR, version_id=approved.id, expected_content_sha256=NO_HASH
+        )
+    with pytest.raises(svc.NotPublishable) as caught:
+        publish(session, approved.id, OP_ACTOR)
+    assert "rights_denied" in caught.value.reasons
+
+
+def test_republish_checks_status_and_hash_before_it_reports_missing_rights(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    record_id = new_rights(session)
+    published = bring_to(session, connection, env, "published", rights_record_id=record_id)
+    withdrawn = bring_to(session, connection, env, "withdrawn", rights_record_id=record_id)
+    rights.revoke(session, record_id, at=now())
+    with pytest.raises(svc.InvalidTransition):
+        republish(session, published.id, OP_ACTOR)
+    with pytest.raises(svc.StaleContent):
+        svc.republish(
+            session,
+            actor=OP_ACTOR,
+            version_id=withdrawn.id,
+            expected_content_sha256=NO_HASH,
+            reason=REASON,
+        )
+    with pytest.raises(svc.NotPublishable) as caught:
+        republish(session, withdrawn.id, OP_ACTOR)
+    assert "rights_denied" in caught.value.reasons
 
 
 def test_publish_lists_every_reason_that_applies(
@@ -341,7 +397,7 @@ def test_publish_lists_every_reason_that_applies(
     )
     rights.revoke(session, record_id, at=now())
     with pytest.raises(svc.NotPublishable) as caught:
-        svc.publish(session, actor=OP_ACTOR, version_id=version.id)
+        publish(session, version.id, OP_ACTOR)
     assert set(caught.value.reasons) == {"rights_denied", "unverified_visuals"}
 
 
@@ -352,6 +408,7 @@ def test_after_revocation_a_published_version_can_still_be_withdrawn(
     version = bring_to(session, connection, env, "published", rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
     result = svc.withdraw(session, actor=OP_ACTOR, version_id=version.id, reason=REASON)
+    assert_state_without_content(result)
     assert result.status is svc.VersionStatus.WITHDRAWN
     assert status_of(connection, version.id) == "withdrawn"
     assert audit_actions(session, version.id)[-1] == "question_version.withdrawn"
@@ -364,6 +421,7 @@ def test_after_revocation_an_in_review_version_can_still_be_rejected(
     version = bring_to(session, connection, env, "in_review", rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
     result = svc.reject(session, actor=OP_ACTOR, version_id=version.id, reason=REASON)
+    assert_state_without_content(result)
     assert result.status is svc.VersionStatus.REJECTED
     assert status_of(connection, version.id) == "rejected"
 
@@ -376,6 +434,7 @@ def test_after_revocation_changes_can_still_be_requested(
     version = bring_to(session, connection, env, status, rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
     result = svc.request_changes(session, actor=OP_ACTOR, version_id=version.id, reason=REASON)
+    assert_state_without_content(result)
     assert result.status is svc.VersionStatus.NEEDS_FIX
     assert status_of(connection, version.id) == "needs_fix"
 
@@ -387,7 +446,7 @@ def test_republish_needs_rights_like_publish(
     version = bring_to(session, connection, env, "withdrawn", rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
     with pytest.raises(svc.NotPublishable) as caught:
-        svc.republish(session, actor=OP_ACTOR, version_id=version.id)
+        republish(session, version.id, OP_ACTOR)
     assert "rights_denied" in caught.value.reasons
     assert status_of(connection, version.id) == "withdrawn"
 
@@ -559,10 +618,13 @@ def test_happy_path_writes_the_documented_audit_sequence(
     created = create(session, env, actor="u_author")
     sha = created.content_sha256
     submitted = svc.submit(session, actor="u_submitter", version_id=created.id)
+    assert_state_without_content(submitted)
     assert submitted.status is svc.VersionStatus.IN_REVIEW
-    approved = svc.approve(session, actor="u_approver", version_id=created.id)
+    approved = approve(session, created.id, "u_approver")
+    assert_state_without_content(approved)
     assert approved.status is svc.VersionStatus.APPROVED
-    published = svc.publish(session, actor="u_publisher", version_id=created.id)
+    published = publish(session, created.id, "u_publisher")
+    assert_state_without_content(published)
     assert published.status is svc.VersionStatus.PUBLISHED
     assert published.id == created.id
     assert published.content_sha256 == sha
@@ -731,7 +793,7 @@ OPS: dict[str, OpSpec] = {
         "needs_fix",
     ),
     "approve": OpSpec(
-        lambda s, v: svc.approve(s, actor=OP_ACTOR, version_id=v),
+        lambda s, v: approve(s, v, OP_ACTOR),
         frozenset({"in_review"}),
         ("question_version.approved",),
         "approved",
@@ -743,7 +805,7 @@ OPS: dict[str, OpSpec] = {
         "rejected",
     ),
     "publish": OpSpec(
-        lambda s, v: svc.publish(s, actor=OP_ACTOR, version_id=v),
+        lambda s, v: publish(s, v, OP_ACTOR),
         frozenset({"approved"}),
         ("question_version.published",),
         "published",
@@ -755,7 +817,7 @@ OPS: dict[str, OpSpec] = {
         "withdrawn",
     ),
     "republish": OpSpec(
-        lambda s, v: svc.republish(s, actor=OP_ACTOR, version_id=v),
+        lambda s, v: republish(s, v, OP_ACTOR),
         frozenset({"withdrawn"}),
         ("question_version.republished",),
         "published",
@@ -798,7 +860,13 @@ def test_an_operation_in_its_statuses_adds_exactly_the_documented_audit_entries(
     assert {e.actor for e in new} == {OP_ACTOR}
     expected = spec.result_status or status
     assert status_of(connection, version.id) == expected
-    if isinstance(result, svc.QuestionVersionView):
+    if operation == "update_draft":
+        assert type(result) is svc.QuestionVersionView
+    elif operation == "record_check":
+        assert result is None
+    else:
+        assert_state_without_content(result)
+    if isinstance(result, svc.QuestionVersionView | svc.VersionState):
         assert result.status.value == expected
         assert result.id == version.id
 
@@ -828,38 +896,42 @@ def test_transition_entries_carry_the_hash_and_both_statuses(
         assert REASON in data_text(entry)
 
 
-@pytest.mark.parametrize("operation", ["request_changes", "reject", "withdraw"])
+REASON_OPS: dict[str, tuple[str, Callable[[Session, uuid.UUID, str], object]]] = {
+    "request_changes": (
+        "in_review",
+        lambda s, v, r: svc.request_changes(s, actor=OP_ACTOR, version_id=v, reason=r),
+    ),
+    "reject": ("in_review", lambda s, v, r: svc.reject(s, actor=OP_ACTOR, version_id=v, reason=r)),
+    "withdraw": (
+        "published",
+        lambda s, v, r: svc.withdraw(s, actor=OP_ACTOR, version_id=v, reason=r),
+    ),
+    "republish": ("withdrawn", lambda s, v, r: republish(s, v, OP_ACTOR, r)),
+}
+
+
+@pytest.mark.parametrize("operation", list(REASON_OPS))
 @pytest.mark.parametrize("reason", ["", "   ", "\n\t ", "x" * 501, "  " + "x" * 501 + "  "])
 def test_a_blank_or_overlong_reason_is_a_value_error_and_changes_nothing(
     session: Session, connection: Connection, env: Env, operation: str, reason: str
 ) -> None:
-    status = "published" if operation == "withdraw" else "in_review"
+    status, call = REASON_OPS[operation]
     version = bring_to(session, connection, env, status)
     before = snapshot(session, connection, version.question_id)
-    call = {
-        "request_changes": svc.request_changes,
-        "reject": svc.reject,
-        "withdraw": svc.withdraw,
-    }[operation]
     with pytest.raises(ValueError):
-        call(session, actor=OP_ACTOR, version_id=version.id, reason=reason)
+        call(session, version.id, reason)
     assert snapshot(session, connection, version.question_id) == before
     usable(session)
 
 
-@pytest.mark.parametrize("operation", ["request_changes", "reject", "withdraw"])
+@pytest.mark.parametrize("operation", list(REASON_OPS))
 @pytest.mark.parametrize("reason", ["x", "x" * 500, "  " + "x" * 500 + "\n"])
 def test_a_reason_of_one_to_five_hundred_characters_after_trimming_is_accepted(
     session: Session, connection: Connection, env: Env, operation: str, reason: str
 ) -> None:
-    status = "published" if operation == "withdraw" else "in_review"
+    status, call = REASON_OPS[operation]
     version = bring_to(session, connection, env, status)
-    call = {
-        "request_changes": svc.request_changes,
-        "reject": svc.reject,
-        "withdraw": svc.withdraw,
-    }[operation]
-    call(session, actor=OP_ACTOR, version_id=version.id, reason=reason)
+    call(session, version.id, reason)
     assert reason.strip() in data_text(audit_for(session, version.id)[-1])
     assert svc.MAX_REASON_LENGTH == 500
 
@@ -1012,13 +1084,59 @@ def test_update_draft_discards_earlier_check_results(
     assert result.status is svc.VersionStatus.IN_REVIEW
 
 
+def test_saving_the_same_content_again_keeps_a_failed_check(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = create(session, env)
+    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
+
+    saved = svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document())
+
+    assert saved.content_sha256 == version.content_sha256
+    assert [r.code for r in svc.get_checks(session, version.id)] == ["ext_check"]
+    assert svc.submit(session, actor=OP_ACTOR, version_id=version.id).status is (
+        svc.VersionStatus.NEEDS_FIX
+    )
+
+
+def test_resaving_identical_content_from_needs_fix_returns_to_draft_and_fails_again(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = bring_to(session, connection, env, "needs_fix")
+    kept = {r.code: r.outcome for r in svc.get_checks(session, version.id)}
+    assert kept["ext_check"] is svc.Outcome.FAILED
+
+    saved = svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document())
+
+    assert saved.status is svc.VersionStatus.DRAFT
+    assert {r.code: r.outcome for r in svc.get_checks(session, version.id)} == kept
+    assert svc.submit(session, actor=OP_ACTOR, version_id=version.id).status is (
+        svc.VersionStatus.NEEDS_FIX
+    )
+
+
+def test_changed_content_discards_the_failed_check_that_identical_content_kept(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = create(session, env)
+    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
+    svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document())
+    svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=other_document())
+    assert svc.get_checks(session, version.id) == []
+    assert svc.submit(session, actor=OP_ACTOR, version_id=version.id).status is (
+        svc.VersionStatus.IN_REVIEW
+    )
+
+
 def test_a_version_fixed_after_a_failed_check_can_be_submitted_again(
     session: Session, connection: Connection, env: Env
 ) -> None:
     version = bring_to(session, connection, env, "needs_fix")
     assert {r.code for r in svc.get_checks(session, version.id)} >= {"ext_check", "schema_valid"}
 
-    fixed = svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document())
+    fixed = svc.update_draft(
+        session, actor=OP_ACTOR, version_id=version.id, document=other_document()
+    )
 
     assert fixed.status is svc.VersionStatus.DRAFT
     assert svc.get_checks(session, version.id) == []
@@ -1110,7 +1228,7 @@ def test_a_version_with_stimuli_can_be_approved_but_never_published(
     entries = len(audit_for(session, version.id))
 
     with pytest.raises(svc.NotPublishable) as caught:
-        svc.publish(session, actor=OP_ACTOR, version_id=version.id)
+        publish(session, version.id, OP_ACTOR)
 
     assert caught.value.reasons == ("unverified_visuals",)
     assert snapshot(session, connection, version.question_id) == before
@@ -1137,14 +1255,19 @@ def test_check_results_other_than_a_failed_critical_one_do_not_block_publishing(
 ) -> None:
     version = create(session, env)
     set_status_raw(connection, version.id, "auto_checking")
+    for code in REQUIRED_CHECKS:  # a missing required check is not a pass (rule 8)
+        svc.record_check(
+            session,
+            actor=OP_ACTOR,
+            version_id=version.id,
+            result=check(code, svc.Severity.CRITICAL, svc.Outcome.PASSED),
+        )
     svc.record_check(
         session, actor=OP_ACTOR, version_id=version.id, result=check("extra", severity, outcome)
     )
     set_status_raw(connection, version.id, "in_review")
-    svc.approve(session, actor=REVIEWER, version_id=version.id)
-    assert svc.publish(session, actor=OP_ACTOR, version_id=version.id).status is (
-        svc.VersionStatus.PUBLISHED
-    )
+    approve(session, version.id, REVIEWER)
+    assert publish(session, version.id, OP_ACTOR).status is (svc.VersionStatus.PUBLISHED)
 
 
 def test_a_failed_critical_check_stops_a_version_before_review_and_fixing_it_clears_the_way(
@@ -1155,33 +1278,36 @@ def test_a_failed_critical_check_stops_a_version_before_review_and_fixing_it_cle
     svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=other_document())
     assert svc.get_checks(session, version.id) == []
     svc.submit(session, actor=OP_ACTOR, version_id=version.id)
-    svc.approve(session, actor=REVIEWER, version_id=version.id)
-    assert svc.publish(session, actor=PUBLISHER, version_id=version.id).status is (
-        svc.VersionStatus.PUBLISHED
-    )
+    approve(session, version.id, REVIEWER)
+    assert publish(session, version.id, PUBLISHER).status is (svc.VersionStatus.PUBLISHED)
 
 
-@pytest.mark.parametrize("code", ["Bad", "1abc", "", "has space", "a-b", "UPPER", "_x", "ü"])
-def test_record_check_with_a_code_that_is_not_a_lower_case_identifier_is_a_value_error(
-    session: Session, connection: Connection, env: Env, code: str
+def check_refused(
+    session: Session, connection: Connection, env: Env, result: svc.CheckResult
 ) -> None:
     version = create(session, env)
     before = snapshot(session, connection, version.question_id)
     entries = len(audit_for(session, version.id))
     with pytest.raises(ValueError):
-        svc.record_check(
-            session,
-            actor=OP_ACTOR,
-            version_id=version.id,
-            result=check(code, svc.Severity.WARNING, svc.Outcome.PASSED),
-        )
+        svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=result)
     assert snapshot(session, connection, version.question_id) == before
     assert len(audit_for(session, version.id)) == entries
     usable(session)
 
 
-@pytest.mark.parametrize("code", ["a", "a1", "a_1", "z" * 60])
-def test_record_check_accepts_lower_case_identifiers(session: Session, env: Env, code: str) -> None:
+@pytest.mark.parametrize(
+    "code", ["Bad", "1abc", "", "has space", "a-b", "UPPER", "_x", "ü", "z" * 65, "a\n"]
+)
+def test_record_check_with_a_code_that_is_not_a_lower_case_identifier_is_a_value_error(
+    session: Session, connection: Connection, env: Env, code: str
+) -> None:
+    check_refused(session, connection, env, check(code, svc.Severity.WARNING, svc.Outcome.PASSED))
+
+
+@pytest.mark.parametrize("code", ["a", "a1", "a_1", "z" * 60, "z" * 64])
+def test_record_check_accepts_lower_case_identifiers_of_up_to_64_characters(
+    session: Session, env: Env, code: str
+) -> None:
     version = create(session, env)
     svc.record_check(
         session,
@@ -1192,14 +1318,58 @@ def test_record_check_accepts_lower_case_identifiers(session: Session, env: Env,
     assert [r.code for r in svc.get_checks(session, version.id)] == [code]
 
 
-def test_record_check_needs_no_rights_because_it_can_only_restrict(
+@pytest.mark.parametrize(
+    "detail",
+    [
+        {"obj": object()},
+        {"bytes": b"abc"},
+        {"set": {1, 2}},
+        {"nan": float("nan")},
+        {"pad": "x" * 9000},
+        {"many": ["y" * 100] * 100},
+    ],
+    ids=["object", "bytes", "set", "nan", "over_8k", "many_items_over_8k"],
+)
+def test_record_check_with_unserialisable_or_oversized_detail_is_a_value_error(
+    session: Session, connection: Connection, env: Env, detail: dict[str, object]
+) -> None:
+    check_refused(
+        session,
+        connection,
+        env,
+        svc.CheckResult(
+            code="detail_check",
+            severity=svc.Severity.WARNING,
+            outcome=svc.Outcome.FAILED,
+            detail=detail,
+        ),
+    )
+
+
+def test_record_check_accepts_a_detail_well_under_8_kb(session: Session, env: Env) -> None:
+    version = create(session, env)
+    detail = {"pad": "x" * 6000, "list": [1, 2, 3], "nested": {"a": None, "b": True}}
+    recorded = svc.CheckResult(
+        code="big_detail",
+        severity=svc.Severity.WARNING,
+        outcome=svc.Outcome.FAILED,
+        detail=detail,
+    )
+    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=recorded)
+    assert svc.get_checks(session, version.id) == [recorded]
+
+
+def test_record_check_needs_rights_like_create_question_and_stores_nothing_without_them(
     session: Session, connection: Connection, env: Env
 ) -> None:
     record_id = new_rights(session)
     version = create(session, env, rights_record_id=record_id)
     rights.revoke(session, record_id, at=now())
-    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
-    assert checks_raw(connection, version.id) == [("ext_check", "critical", "failed")]
+    with pytest.raises(rights.RightsDenied):
+        svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
+    assert checks_raw(connection, version.id) == []
+    assert len(audit_for(session, version.id)) == 1
+    usable(session)
 
 
 @pytest.mark.parametrize("name", list(PLAIN_SAMPLES))
@@ -1240,7 +1410,7 @@ def test_start_revision_copies_the_published_version_and_leaves_it_published(
 
     (entry,) = audit_for(session, v2.id)
     assert (entry.action, entry.actor) == ("question_version.created", "u_reviser")
-    assert entry.data["based_on"] in (str(v1.id), v1.version_no)
+    assert entry.data["based_on"] == str(v1.id)
     assert audit_actions(session, v1.id)[-1] == "question_version.published"  # v1 untouched
 
 
@@ -1276,10 +1446,10 @@ def test_publishing_a_revision_withdraws_the_previous_version_in_the_same_call(
     v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
     svc.update_draft(session, actor=OP_ACTOR, version_id=v2.id, document=other_document())
     svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
-    svc.approve(session, actor=OP_ACTOR, version_id=v2.id)
+    approve(session, v2.id, OP_ACTOR)
     v1_entries = len(audit_for(session, v1.id))
 
-    published = svc.publish(session, actor="u_publisher", version_id=v2.id)
+    published = publish(session, v2.id, "u_publisher")
 
     assert published.id == v2.id
     assert published.status is svc.VersionStatus.PUBLISHED
@@ -1306,7 +1476,7 @@ def test_a_withdrawn_version_can_be_published_again_when_nothing_newer_exists(
         svc.get_published_version(session, v1.question_id)
     before = len(audit_for(session, v1.id))
 
-    result = svc.republish(session, actor="u_publisher", version_id=v1.id)
+    result = republish(session, v1.id, "u_publisher")
 
     assert result.status is svc.VersionStatus.PUBLISHED
     assert result.content_sha256 == v1.content_sha256
@@ -1321,12 +1491,12 @@ def test_republish_is_refused_when_another_version_is_published(
     v1 = publish_new(session, connection, env)
     v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
     svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
-    svc.approve(session, actor=OP_ACTOR, version_id=v2.id)
-    svc.publish(session, actor=OP_ACTOR, version_id=v2.id)  # v1 is withdrawn now
+    approve(session, v2.id, OP_ACTOR)
+    publish(session, v2.id, OP_ACTOR)  # v1 is withdrawn now
     before = snapshot(session, connection, v1.question_id)
 
     with pytest.raises(svc.InvalidTransition):
-        svc.republish(session, actor=OP_ACTOR, version_id=v1.id)
+        republish(session, v1.id, OP_ACTOR)
 
     assert snapshot(session, connection, v1.question_id) == before
     assert svc.get_published_version(session, v1.question_id).id == v2.id
@@ -1342,13 +1512,13 @@ def test_republish_is_refused_when_a_newer_version_exists(
     if newer != "draft":
         svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
     if newer == "approved":
-        svc.approve(session, actor=OP_ACTOR, version_id=v2.id)
+        approve(session, v2.id, OP_ACTOR)
     if newer == "rejected":
         svc.reject(session, actor=OP_ACTOR, version_id=v2.id, reason=REASON)
     before = snapshot(session, connection, v1.question_id)
 
     with pytest.raises(svc.InvalidTransition):
-        svc.republish(session, actor=OP_ACTOR, version_id=v1.id)
+        republish(session, v1.id, OP_ACTOR)
 
     assert snapshot(session, connection, v1.question_id) == before
     usable(session)
@@ -1428,8 +1598,8 @@ def test_a_withdrawn_version_stays_readable_for_staff_after_a_newer_one_is_publi
     v1 = publish_new(session, connection, env)
     v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
     svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
-    svc.approve(session, actor=OP_ACTOR, version_id=v2.id)
-    svc.publish(session, actor=OP_ACTOR, version_id=v2.id)
+    approve(session, v2.id, OP_ACTOR)
+    publish(session, v2.id, OP_ACTOR)
     old = svc.get_version(session, v1.id)
     assert old.status is svc.VersionStatus.WITHDRAWN
     assert old.document == v1.document
@@ -1439,21 +1609,21 @@ def test_a_withdrawn_version_stays_readable_for_staff_after_a_newer_one_is_publi
 def test_a_question_goes_through_several_revisions(
     session: Session, connection: Connection, env: Env
 ) -> None:
-    current = publish_new(session, connection, env)
+    question_id = publish_new(session, connection, env).question_id
     for expected_no in (2, 3, 4):
-        revision = svc.start_revision(session, actor=OP_ACTOR, question_id=current.question_id)
+        revision = svc.start_revision(session, actor=OP_ACTOR, question_id=question_id)
         assert revision.version_no == expected_no
         svc.submit(session, actor=OP_ACTOR, version_id=revision.id)
-        svc.approve(session, actor=OP_ACTOR, version_id=revision.id)
-        current = svc.publish(session, actor=OP_ACTOR, version_id=revision.id)
-    versions = svc.list_versions(session, current.question_id)
+        approve(session, revision.id, OP_ACTOR)
+        publish(session, revision.id, OP_ACTOR)
+    versions = svc.list_versions(session, question_id)
     assert [v.status.value for v in versions] == [
         "withdrawn",
         "withdrawn",
         "withdrawn",
         "published",
     ]
-    assert svc.get_published_version(session, current.question_id).version_no == 4
+    assert svc.get_published_version(session, question_id).version_no == 4
 
 
 # =============================================================================================
@@ -1491,9 +1661,9 @@ def test_rejected_calls_write_no_audit_entries(
     before = len(audit_for(session, version.id))
     total = table_counts(connection)["audit_log"]
     with pytest.raises(svc.NotPublishable):
-        svc.publish(session, actor=OP_ACTOR, version_id=version.id)
+        publish(session, version.id, OP_ACTOR)
     with pytest.raises(svc.InvalidTransition):
-        svc.approve(session, actor=OP_ACTOR, version_id=version.id)
+        approve(session, version.id, OP_ACTOR)
     with pytest.raises(ValueError):
         svc.request_changes(session, actor=OP_ACTOR, version_id=version.id, reason=" ")
     assert len(audit_for(session, version.id)) == before
@@ -1521,6 +1691,362 @@ def test_no_entries_exist_for_a_question_that_failed_to_be_created(
 
 
 # =============================================================================================
+# 11. Content the caller looked at (StaleContent) and what the answers contain
+# =============================================================================================
+
+
+def test_approving_content_that_changed_since_it_was_read_is_refused(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = bring_to(session, connection, env, "in_review")
+    h1 = version.content_sha256
+    svc.request_changes(session, actor=REVIEWER, version_id=version.id, reason=REASON)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=other_document())
+    svc.submit(session, actor=OP_ACTOR, version_id=version.id)
+    h2 = stored_hash(session, version.id)
+    assert h1 != h2
+    before = snapshot(session, connection, version.question_id)
+
+    with pytest.raises(svc.StaleContent):
+        svc.approve(session, actor=REVIEWER, version_id=version.id, expected_content_sha256=h1)
+
+    assert snapshot(session, connection, version.question_id) == before
+    assert status_of(connection, version.id) == "in_review"
+    usable(session)
+    approved = svc.approve(
+        session, actor=REVIEWER, version_id=version.id, expected_content_sha256=h2
+    )
+    assert approved.status is svc.VersionStatus.APPROVED
+    assert approved.content_sha256 == h2
+
+
+def test_publishing_content_that_changed_since_it_was_read_is_refused(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = bring_to(session, connection, env, "approved")
+    h1 = version.content_sha256
+    svc.request_changes(session, actor=REVIEWER, version_id=version.id, reason=REASON)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=other_document())
+    svc.submit(session, actor=OP_ACTOR, version_id=version.id)
+    approve(session, version.id)
+    before = snapshot(session, connection, version.question_id)
+
+    with pytest.raises(svc.StaleContent):
+        svc.publish(session, actor=PUBLISHER, version_id=version.id, expected_content_sha256=h1)
+
+    assert snapshot(session, connection, version.question_id) == before
+    assert status_of(connection, version.id) == "approved"
+    with pytest.raises(svc.NotFound):
+        svc.get_published_version(session, version.question_id)
+    usable(session)
+    assert publish(session, version.id).status is svc.VersionStatus.PUBLISHED
+
+
+@pytest.mark.parametrize("operation", ["approve", "publish", "republish"])
+@pytest.mark.parametrize("wrong", [NO_HASH, "f" * 64, "not a hash", ""])
+def test_a_hash_that_is_not_the_current_one_changes_nothing(
+    session: Session, connection: Connection, env: Env, operation: str, wrong: str
+) -> None:
+    status = {"approve": "in_review", "publish": "approved", "republish": "withdrawn"}[operation]
+    version = bring_to(session, connection, env, status)
+    before = snapshot(session, connection, version.question_id)
+    entries = len(audit_for(session, version.id))
+    with pytest.raises(svc.StaleContent):
+        if operation == "approve":
+            svc.approve(
+                session, actor=OP_ACTOR, version_id=version.id, expected_content_sha256=wrong
+            )
+        elif operation == "publish":
+            svc.publish(
+                session, actor=OP_ACTOR, version_id=version.id, expected_content_sha256=wrong
+            )
+        else:
+            svc.republish(
+                session,
+                actor=OP_ACTOR,
+                version_id=version.id,
+                expected_content_sha256=wrong,
+                reason=REASON,
+            )
+    assert snapshot(session, connection, version.question_id) == before
+    assert len(audit_for(session, version.id)) == entries
+    usable(session)
+
+
+def test_the_status_is_checked_before_the_hash_on_publish(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = bring_to(session, connection, env, "in_review")
+    with pytest.raises(svc.InvalidTransition):
+        svc.publish(session, actor=OP_ACTOR, version_id=version.id, expected_content_sha256=NO_HASH)
+
+
+def test_writing_calls_return_the_full_view_only_where_they_create_or_edit_content(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    created = create(session, env)
+    assert type(created) is svc.QuestionVersionView
+    updated = svc.update_draft(
+        session, actor=OP_ACTOR, version_id=created.id, document=other_document()
+    )
+    assert type(updated) is svc.QuestionVersionView
+    published = publish_new(session, connection, env)
+    revision = svc.start_revision(session, actor=OP_ACTOR, question_id=published.question_id)
+    assert type(revision) is svc.QuestionVersionView
+    assert revision.document == published.document
+
+
+@pytest.mark.parametrize("operation", ["submit", "request_changes", "approve", "reject"])
+def test_review_calls_return_a_state_without_content(
+    session: Session, connection: Connection, env: Env, operation: str
+) -> None:
+    status = "draft" if operation == "submit" else "in_review"
+    version = bring_to(session, connection, env, status)
+    result = OPS[operation].call(session, version.id)
+    assert_state_without_content(result)
+    assert isinstance(result, svc.VersionState)
+    assert (result.id, result.question_id, result.version_no) == (
+        version.id,
+        version.question_id,
+        1,
+    )
+    assert result.content_sha256 == version.content_sha256
+
+
+@pytest.mark.parametrize("operation", ["publish", "withdraw", "republish"])
+def test_publication_calls_return_a_state_without_content(
+    session: Session, connection: Connection, env: Env, operation: str
+) -> None:
+    status = {"publish": "approved", "withdraw": "published", "republish": "withdrawn"}[operation]
+    version = bring_to(session, connection, env, status)
+    result = OPS[operation].call(session, version.id)
+    assert_state_without_content(result)
+    assert isinstance(result, svc.VersionState)
+    assert result.content_sha256 == version.content_sha256
+
+
+# =============================================================================================
+# 12. Every writing function is atomic
+# =============================================================================================
+
+BAD_ACTORS = ["someone@example.org", "bad actor", ""]
+
+
+def call_with(
+    session: Session, operation: str, version: svc.QuestionVersionView, actor: str
+) -> object:
+    """Call `operation` against `version` as `actor` (the state it needs is set up by the test)."""
+    vid = version.id
+    if operation == "update_draft":
+        return svc.update_draft(session, actor=actor, version_id=vid, document=other_document())
+    if operation == "record_check":
+        extra = check("atomic_extra", svc.Severity.WARNING, svc.Outcome.PASSED, round=1)
+        return svc.record_check(session, actor=actor, version_id=vid, result=extra)
+    if operation == "submit":
+        return svc.submit(session, actor=actor, version_id=vid)
+    if operation == "request_changes":
+        return svc.request_changes(session, actor=actor, version_id=vid, reason=REASON)
+    if operation == "approve":
+        return approve(session, vid, actor)
+    if operation == "reject":
+        return svc.reject(session, actor=actor, version_id=vid, reason=REASON)
+    if operation == "publish":
+        return publish(session, vid, actor)
+    if operation == "withdraw":
+        return svc.withdraw(session, actor=actor, version_id=vid, reason=REASON)
+    if operation == "republish":
+        return republish(session, vid, actor)
+    if operation == "start_revision":
+        return svc.start_revision(session, actor=actor, question_id=version.question_id)
+    raise AssertionError(operation)
+
+
+ATOMIC_CASES = [
+    ("update_draft", "draft"),
+    ("update_draft", "needs_fix"),
+    ("record_check", "draft"),
+    ("record_check", "needs_fix"),
+    ("submit", "draft"),
+    ("request_changes", "in_review"),
+    ("request_changes", "approved"),
+    ("approve", "in_review"),
+    ("reject", "in_review"),
+    ("publish", "approved"),
+    ("withdraw", "published"),
+    ("republish", "withdrawn"),
+    ("start_revision", "published"),
+    ("start_revision", "withdrawn"),
+    ("start_revision", "rejected"),
+]
+
+
+@pytest.mark.parametrize("actor", BAD_ACTORS)
+@pytest.mark.parametrize(("operation", "status"), ATOMIC_CASES)
+def test_a_call_the_audit_log_refuses_leaves_nothing_behind(
+    session: Session, connection: Connection, env: Env, operation: str, status: str, actor: str
+) -> None:
+    version = bring_to(session, connection, env, status)
+    before = snapshot(session, connection, version.question_id)
+    entries = [(e.action, e.actor) for e in audit_for(session, version.id)]
+
+    with pytest.raises(ValueError):
+        call_with(session, operation, version, actor)
+
+    assert snapshot(session, connection, version.question_id) == before
+    assert [(e.action, e.actor) for e in audit_for(session, version.id)] == entries
+    assert status_of(connection, version.id) == status
+    usable(session)
+    call_with(session, operation, version, OP_ACTOR)  # the same call, properly attributed
+    assert snapshot(session, connection, version.question_id) != before
+
+
+@pytest.mark.parametrize("actor", BAD_ACTORS)
+def test_a_refused_submit_does_not_leave_the_version_in_auto_checking(
+    session: Session, connection: Connection, env: Env, actor: str
+) -> None:
+    version = create(session, env)
+    with pytest.raises(ValueError):
+        svc.submit(session, actor=actor, version_id=version.id)
+    assert status_of(connection, version.id) == "draft"
+    assert checks_raw(connection, version.id) == []
+    assert audit_actions(session, version.id) == ["question_version.created"]
+    assert svc.submit(session, actor=OP_ACTOR, version_id=version.id).status is (
+        svc.VersionStatus.IN_REVIEW
+    )
+
+
+@pytest.mark.parametrize("actor", BAD_ACTORS)
+def test_a_refused_publish_keeps_the_previous_version_published(
+    session: Session, connection: Connection, env: Env, actor: str
+) -> None:
+    v1 = publish_new(session, connection, env)
+    v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=v2.id, document=other_document())
+    svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
+    approve(session, v2.id)
+    before = snapshot(session, connection, v1.question_id)
+
+    with pytest.raises(ValueError):
+        publish(session, v2.id, actor)
+
+    assert snapshot(session, connection, v1.question_id) == before
+    assert status_of(connection, v1.id) == "published"
+    assert status_of(connection, v2.id) == "approved"
+    assert svc.get_published_version(session, v1.question_id).id == v1.id
+    publish(session, v2.id)
+    assert status_of(connection, v1.id) == "withdrawn"
+    assert status_of(connection, v2.id) == "published"
+
+
+@pytest.mark.parametrize("actor", BAD_ACTORS)
+def test_a_refused_create_writes_no_question_version_or_derived_row(
+    session: Session, connection: Connection, env: Env, actor: str
+) -> None:
+    before = table_counts(connection)
+    with pytest.raises(ValueError):
+        create(session, env, document(samples.show_that_document()), actor=actor)
+    assert table_counts(connection) == before
+    usable(session)
+    create(session, env, document(samples.show_that_document()), actor=OP_ACTOR)
+    assert table_counts(connection)["question"] == before["question"] + 1
+
+
+# =============================================================================================
+# 13. Source of a revision, size limits, questions without versions
+# =============================================================================================
+
+
+def test_start_revision_skips_a_rejected_latest_version_when_an_earlier_one_was_not_rejected(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    v1 = bring_to(session, connection, env, "withdrawn")
+    v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=v2.id, document=other_document())
+    svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
+    svc.reject(session, actor=OP_ACTOR, version_id=v2.id, reason=REASON)
+
+    v3 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
+
+    assert v3.version_no == 3
+    assert v3.document == v1.document != other_document()
+    (entry,) = audit_for(session, v3.id)
+    assert entry.data["based_on"] == str(v1.id)
+
+
+def test_start_revision_with_only_rejected_versions_copies_the_latest(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    v1 = bring_to(session, connection, env, "rejected")
+    v2 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=v2.id, document=other_document())
+    svc.submit(session, actor=OP_ACTOR, version_id=v2.id)
+    svc.reject(session, actor=OP_ACTOR, version_id=v2.id, reason=REASON)
+    v3 = svc.start_revision(session, actor=OP_ACTOR, question_id=v1.question_id)
+    assert (v3.version_no, v3.document) == (3, other_document())
+    assert audit_for(session, v3.id)[0].data["based_on"] == str(v2.id)
+
+
+def test_start_revision_of_a_question_without_versions_is_not_found(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    question_id = raw_question(connection, env)
+    before = table_counts(connection)
+    with pytest.raises(svc.NotFound):
+        svc.start_revision(session, actor=OP_ACTOR, question_id=question_id)
+    assert table_counts(connection) == before
+    usable(session)
+
+
+def oversized_document() -> QuestionDocument:
+    d = samples.data_based_document()
+    d["stem"] = samples.line(samples.text("x" * 600_000))
+    return document(d)
+
+
+def nul_document() -> QuestionDocument:
+    d = samples.data_based_document()
+    d["stem"] = samples.line(samples.text("before\u0000after"))
+    return document(d)
+
+
+BAD_SIZED = {"over_512_kb": oversized_document, "nul_character": nul_document}
+
+
+@pytest.mark.parametrize("case", list(BAD_SIZED))
+def test_create_refuses_documents_over_512_kb_or_with_a_nul_character(
+    session: Session, connection: Connection, env: Env, case: str
+) -> None:
+    doc = BAD_SIZED[case]()
+    before = table_counts(connection)
+    with pytest.raises(svc.InvalidDocument):
+        create(session, env, doc)
+    assert table_counts(connection) == before
+    usable(session)
+
+
+@pytest.mark.parametrize("case", list(BAD_SIZED))
+def test_update_draft_refuses_such_documents_and_changes_nothing(
+    session: Session, connection: Connection, env: Env, case: str
+) -> None:
+    version = create(session, env)
+    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
+    before = snapshot(session, connection, version.question_id)
+    entries = len(audit_for(session, version.id))
+    with pytest.raises(svc.InvalidDocument):
+        svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=BAD_SIZED[case]())
+    assert snapshot(session, connection, version.question_id) == before
+    assert len(audit_for(session, version.id)) == entries
+    usable(session)
+
+
+def test_a_large_document_under_the_limit_is_accepted(session: Session, env: Env) -> None:
+    d = samples.data_based_document()
+    d["stem"] = samples.line(samples.text("x" * 100_000))
+    view = create(session, env, document(d))
+    assert svc.get_version(session, view.id).document == document(d)
+
+
+# =============================================================================================
 # 10. Properties (rule 8 holds whatever sequence of calls is made)
 # =============================================================================================
 
@@ -1530,6 +2056,7 @@ STEPS = (
     "record_failed_critical",
     "record_failed_warning",
     "record_passed_critical",
+    "record_required_passed",
     "raw_to_auto_checking",
     "raw_to_in_review",
     "submit",
@@ -1573,6 +2100,14 @@ def apply_step(session: Session, connection: Connection, question_id: uuid.UUID,
             version_id=vid,
             result=check("ext_check", svc.Severity.CRITICAL, svc.Outcome.PASSED),
         )
+    elif step == "record_required_passed":
+        for code in REQUIRED_CHECKS:
+            svc.record_check(
+                session,
+                actor=actor,
+                version_id=vid,
+                result=check(code, svc.Severity.CRITICAL, svc.Outcome.PASSED),
+            )
     elif step == "raw_to_auto_checking":
         if target.status is svc.VersionStatus.DRAFT:
             set_status_raw(connection, vid, "auto_checking")
@@ -1584,17 +2119,17 @@ def apply_step(session: Session, connection: Connection, question_id: uuid.UUID,
     elif step == "submit":
         svc.submit(session, actor=actor, version_id=vid)
     elif step == "approve":
-        svc.approve(session, actor=actor, version_id=vid)
+        approve(session, vid, actor)
     elif step == "request_changes":
         svc.request_changes(session, actor=actor, version_id=vid, reason=REASON)
     elif step == "reject":
         svc.reject(session, actor=actor, version_id=vid, reason=REASON)
     elif step == "publish":
-        svc.publish(session, actor=actor, version_id=vid)
+        publish(session, vid, actor)
     elif step == "withdraw":
         svc.withdraw(session, actor=actor, version_id=vid, reason=REASON)
     elif step == "republish":
-        svc.republish(session, actor=actor, version_id=vid)
+        republish(session, vid, actor)
     else:
         svc.start_revision(session, actor=actor, question_id=question_id)
 
@@ -1619,6 +2154,15 @@ def assert_invariants(connection: Connection, question_id: uuid.UUID) -> None:
                 {"v": row.id},
             ).scalar_one()
             assert blocked == 0
+            passed = connection.execute(
+                text(
+                    "SELECT count(*) FROM question_version_check WHERE question_version_id = :v "
+                    "AND check_code IN ('schema_valid', 'vocabulary_valid') "
+                    "AND severity = 'critical' AND outcome = 'passed'"
+                ),
+                {"v": row.id},
+            ).scalar_one()
+            assert passed == 2  # a missing required check is not a pass
     assert len(published) <= 1
     assert len([r for r in rows if r.status in WORKING_STATUSES]) <= 1
     for row in published:

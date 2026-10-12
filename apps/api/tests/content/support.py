@@ -199,6 +199,52 @@ def create(
     )
 
 
+REQUIRED_CHECKS: tuple[str, ...] = ("schema_valid", "vocabulary_valid")
+WITHDRAWAL_REASON = "the withdrawal no longer applies"
+NO_HASH = "0" * 64
+
+
+def stored_hash(session: Session, version_id: uuid.UUID) -> str:
+    """The version's current hash read with raw SQL (works also when rights were revoked)."""
+    value = session.execute(
+        text("SELECT content_sha256 FROM question_version WHERE id = :v"), {"v": version_id}
+    ).scalar_one_or_none()
+    return str(value) if value is not None else NO_HASH
+
+
+def approve(session: Session, version_id: uuid.UUID, actor: str = REVIEWER) -> svc.VersionState:
+    return svc.approve(
+        session,
+        actor=actor,
+        version_id=version_id,
+        expected_content_sha256=stored_hash(session, version_id),
+    )
+
+
+def publish(session: Session, version_id: uuid.UUID, actor: str = PUBLISHER) -> svc.VersionState:
+    return svc.publish(
+        session,
+        actor=actor,
+        version_id=version_id,
+        expected_content_sha256=stored_hash(session, version_id),
+    )
+
+
+def republish(
+    session: Session,
+    version_id: uuid.UUID,
+    actor: str = PUBLISHER,
+    reason: str = WITHDRAWAL_REASON,
+) -> svc.VersionState:
+    return svc.republish(
+        session,
+        actor=actor,
+        version_id=version_id,
+        expected_content_sha256=stored_hash(session, version_id),
+        reason=reason,
+    )
+
+
 def failed_critical(code: str = "ext_check") -> svc.CheckResult:
     return svc.CheckResult(
         code=code,
@@ -254,9 +300,9 @@ def bring_to(
         if status == "rejected":
             svc.reject(session, actor=REVIEWER, version_id=vid, reason="not suitable")
         elif status != "in_review":
-            svc.approve(session, actor=REVIEWER, version_id=vid)
+            approve(session, vid)
             if status in ("published", "withdrawn"):
-                svc.publish(session, actor=PUBLISHER, version_id=vid)
+                publish(session, vid)
             if status == "withdrawn":
                 svc.withdraw(session, actor=PUBLISHER, version_id=vid, reason="taken down")
     result = svc.get_version(session, vid)
@@ -283,7 +329,7 @@ def count(connection: Connection, table: str) -> int:
         "question_version_check",
         "audit_log",
     }
-    assert table in allowed
+    assert table.removeprefix("public.") in allowed
     return int(connection.execute(text(f"SELECT count(*) FROM {table}")).scalar_one())  # noqa: S608
 
 
@@ -594,14 +640,20 @@ class RawVersion:
 
 
 def raw_full_version(
-    connection: Connection, env: Env, doc: QuestionDocument | None = None
+    connection: Connection,
+    env: Env,
+    doc: QuestionDocument | None = None,
+    *,
+    required: tuple[str, ...] = REQUIRED_CHECKS,
 ) -> RawVersion:
-    """A draft version with one part, one mark point, one syllabus row and one check row
-    (a passed critical check, so the version can still be published)."""
+    """A draft version with one part, one mark point, one syllabus row, the required checks
+    (critical, passed) and one more passed critical check."""
     question_id = raw_question(connection, env)
     version_id = raw_version(connection, question_id, doc)
     part_id = raw_part(connection, version_id, "p-a")
     point_id = raw_mark_point(connection, part_id, "a-1")
     raw_syllabus_row(connection, env, version_id, "A.1", primary=True)
+    for code in required:
+        raw_check(connection, version_id, code, "critical", "passed")
     check_id = raw_check(connection, version_id, "ext_check", "critical", "passed")
     return RawVersion(question_id, version_id, part_id, point_id, check_id)

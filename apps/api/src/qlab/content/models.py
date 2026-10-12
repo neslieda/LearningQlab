@@ -71,6 +71,8 @@ class QuestionVersion(Base):
         UniqueConstraint("question_id", "version_no"),
         CheckConstraint(_in("status", STATUSES), name="status"),
         CheckConstraint("version_no >= 1", name="version_no"),
+        CheckConstraint("total_marks >= 1", name="total_marks"),
+        CheckConstraint("octet_length(document::text) <= 1048576", name="document_size"),
         CheckConstraint("content_sha256 ~ '^[0-9a-f]{64}$'", name="content_sha256"),
         Index(
             "uq_question_version_one_published",
@@ -106,7 +108,8 @@ class QuestionVersion(Base):
     )
     created_by: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = created_at_column()
-    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
+    # Maintained by the update guard.
+    updated_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
 
 class Part(Base):
@@ -167,7 +170,8 @@ class QuestionVersionCheck(Base):
     __tablename__ = "question_version_check"
     __table_args__ = (
         UniqueConstraint("question_version_id", "check_code"),
-        CheckConstraint("check_code ~ '^[a-z][a-z0-9_]*$'", name="check_code"),
+        CheckConstraint("check_code ~ '^[a-z][a-z0-9_]{0,63}$'", name="check_code"),
+        CheckConstraint("octet_length(detail::text) <= 16384", name="detail"),
         CheckConstraint("severity IN ('critical', 'warning')", name="severity"),
         CheckConstraint("outcome IN ('passed', 'failed', 'not_applicable')", name="outcome"),
     )

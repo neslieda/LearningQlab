@@ -21,6 +21,11 @@ _STATUSES = (
     "'approved', 'published', 'withdrawn', 'rejected'"
 )
 _WORKING = "'draft', 'auto_checking', 'needs_fix', 'in_review', 'approved'"
+_FOUNDATION_FUNCTIONS = (
+    "audit_log_reject_change()",
+    "audit_log_stamp()",
+    "rights_record_guard()",
+)
 _GUARDED_TABLES = (
     "question",
     "question_version",
@@ -92,6 +97,11 @@ def upgrade() -> None:
         ),
         sa.CheckConstraint(f"status IN ({_STATUSES})", name=op.f("ck_question_version_status")),
         sa.CheckConstraint("version_no >= 1", name=op.f("ck_question_version_version_no")),
+        sa.CheckConstraint("total_marks >= 1", name=op.f("ck_question_version_total_marks")),
+        sa.CheckConstraint(
+            "octet_length(document::text) <= 1048576",
+            name=op.f("ck_question_version_document_size"),
+        ),
         sa.CheckConstraint(
             "content_sha256 ~ '^[0-9a-f]{64}$'", name=op.f("ck_question_version_content_sha256")
         ),
@@ -189,7 +199,11 @@ def upgrade() -> None:
             name="uq_question_version_check_question_version_id_check_code",
         ),
         sa.CheckConstraint(
-            "check_code ~ '^[a-z][a-z0-9_]*$'", name=op.f("ck_question_version_check_check_code")
+            "check_code ~ '^[a-z][a-z0-9_]{0,63}$'",
+            name=op.f("ck_question_version_check_check_code"),
+        ),
+        sa.CheckConstraint(
+            "octet_length(detail::text) <= 16384", name=op.f("ck_question_version_check_detail")
         ),
         sa.CheckConstraint(
             "severity IN ('critical', 'warning')", name=op.f("ck_question_version_check_severity")
@@ -201,11 +215,15 @@ def upgrade() -> None:
     )
 
     # Guards. They hold for every writer that is not the table owner or a superuser
-    # (docs/SECURITY.md section 10) and fire in replica mode too (ENABLE ALWAYS).
+    # (docs/SECURITY.md section 10) and fire in replica mode too (ENABLE ALWAYS). Every function
+    # pins its search_path with pg_temp last and names tables with their schema, so a session
+    # cannot make a guard read a temporary table of the same name.
+    for function in _FOUNDATION_FUNCTIONS:
+        op.execute(f"ALTER FUNCTION {function} SET search_path = pg_catalog, public, pg_temp")
     op.execute(
         """
         CREATE FUNCTION content_reject_change() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             RAISE EXCEPTION '% on % is not allowed', TG_OP, TG_TABLE_NAME
                 USING ERRCODE = 'restrict_violation';
@@ -217,7 +235,7 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_guard() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             IF (to_jsonb(NEW) - 'syllabus_status') IS DISTINCT FROM
                (to_jsonb(OLD) - 'syllabus_status') THEN
@@ -234,7 +252,7 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_insert_guard() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             IF NEW.origin <> 'authored' THEN
                 RAISE EXCEPTION 'origin % is closed', NEW.origin
@@ -249,13 +267,13 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_version_syllabus_same_version() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             IF NOT EXISTS (
                 SELECT 1
-                FROM question_version v
-                JOIN question q ON q.id = v.question_id
-                JOIN syllabus_node n ON n.syllabus_version_id = q.syllabus_version_id
+                FROM public.question_version v
+                JOIN public.question q ON q.id = v.question_id
+                JOIN public.syllabus_node n ON n.syllabus_version_id = q.syllabus_version_id
                 WHERE v.id = NEW.question_version_id AND n.id = NEW.syllabus_node_id
             ) THEN
                 RAISE EXCEPTION 'syllabus node belongs to another syllabus version'
@@ -269,7 +287,7 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_version_insert_guard() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             IF NEW.status <> 'draft' THEN
                 RAISE EXCEPTION 'a question version starts as draft, not %', NEW.status
@@ -286,12 +304,14 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_version_update_guard() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         BEGIN
             -- has_unverified_visuals is generated and not yet computed in a BEFORE trigger.
             IF (to_jsonb(NEW) - 'status' - 'updated_at' - 'has_unverified_visuals')
                IS DISTINCT FROM
-               (to_jsonb(OLD) - 'status' - 'updated_at' - 'has_unverified_visuals') THEN
+               (to_jsonb(OLD) - 'status' - 'updated_at' - 'has_unverified_visuals')
+               -- jsonb equality is numeric (4 = 4.00); the stored text must not change either.
+               OR NEW.document::text <> OLD.document::text THEN
                 IF OLD.status NOT IN ('draft', 'needs_fix') THEN
                     RAISE EXCEPTION 'the content of a % question version cannot change', OLD.status
                         USING ERRCODE = 'restrict_violation';
@@ -320,13 +340,33 @@ def upgrade() -> None:
                     RAISE EXCEPTION 'question version cannot move from % to %',
                         OLD.status, NEW.status USING ERRCODE = 'restrict_violation';
                 END IF;
-                -- A failed critical check stops a version before review and before publishing.
-                IF NEW.status IN ('in_review', 'published') AND EXISTS (
-                    SELECT 1 FROM question_version_check c
-                    WHERE c.question_version_id = NEW.id
-                      AND c.severity = 'critical' AND c.outcome = 'failed'
+                -- Review and publishing need every required check passed on this content and no
+                -- critical check failed (CLAUDE.md rule 8). The required codes mirror
+                -- qlab.content.service.REQUIRED_CHECKS.
+                IF NEW.status IN ('in_review', 'published') THEN
+                    IF EXISTS (
+                        SELECT 1 FROM public.question_version_check c
+                        WHERE c.question_version_id = NEW.id
+                          AND c.severity = 'critical' AND c.outcome = 'failed'
+                    ) THEN
+                        RAISE EXCEPTION 'cannot move to %: a critical check failed', NEW.status
+                            USING ERRCODE = 'restrict_violation';
+                    END IF;
+                    IF (
+                        SELECT count(*) FROM public.question_version_check c
+                        WHERE c.question_version_id = NEW.id
+                          AND c.check_code IN ('schema_valid', 'vocabulary_valid')
+                          AND c.severity = 'critical' AND c.outcome = 'passed'
+                    ) <> 2 THEN
+                        RAISE EXCEPTION 'cannot move to %: a required check has not passed',
+                            NEW.status USING ERRCODE = 'restrict_violation';
+                    END IF;
+                END IF;
+                IF OLD.status = 'withdrawn' AND EXISTS (
+                    SELECT 1 FROM public.question_version v
+                    WHERE v.question_id = NEW.question_id AND v.version_no > NEW.version_no
                 ) THEN
-                    RAISE EXCEPTION 'cannot move to %: a critical check failed', NEW.status
+                    RAISE EXCEPTION 'cannot republish: a newer version exists'
                         USING ERRCODE = 'restrict_violation';
                 END IF;
                 IF NEW.status = 'published' THEN
@@ -336,6 +376,7 @@ def upgrade() -> None:
                     END IF;
                 END IF;
             END IF;
+            NEW.updated_at := now();
             RETURN NEW;
         END;
         $$
@@ -346,7 +387,7 @@ def upgrade() -> None:
     op.execute(
         """
         CREATE FUNCTION question_version_child_guard() RETURNS trigger
-        LANGUAGE plpgsql AS $$
+        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
         DECLARE
             version_id uuid;
             version_status text;
@@ -358,17 +399,17 @@ def upgrade() -> None:
             IF TG_TABLE_NAME = 'mark_point' THEN
                 IF TG_OP = 'DELETE' THEN
                     SELECT p.question_version_id INTO version_id
-                    FROM part p WHERE p.id = OLD.part_id;
+                    FROM public.part p WHERE p.id = OLD.part_id;
                 ELSE
                     SELECT p.question_version_id INTO version_id
-                    FROM part p WHERE p.id = NEW.part_id;
+                    FROM public.part p WHERE p.id = NEW.part_id;
                 END IF;
             ELSIF TG_OP = 'DELETE' THEN
                 version_id := OLD.question_version_id;
             ELSE
                 version_id := NEW.question_version_id;
             END IF;
-            SELECT v.status INTO version_status FROM question_version v
+            SELECT v.status INTO version_status FROM public.question_version v
             WHERE v.id = version_id FOR SHARE;
             IF version_status IS NULL
                OR NOT (version_status = ANY (string_to_array(TG_ARGV[0], ','))) THEN
@@ -466,3 +507,5 @@ def downgrade() -> None:
     op.execute("DROP FUNCTION question_insert_guard()")
     op.execute("DROP FUNCTION question_guard()")
     op.execute("DROP FUNCTION content_reject_change()")
+    for function in _FOUNDATION_FUNCTIONS:
+        op.execute(f"ALTER FUNCTION {function} RESET search_path")

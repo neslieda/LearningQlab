@@ -6,22 +6,29 @@ entry per change. `actor` is the opaque account identifier written to the audit 
 roles may call what is decided by the authorization layer, not here.
 
 Rights are fail-closed (CLAUDE.md rule 2): every function except `withdraw`, `reject` and
-`request_changes`, which only ever restrict, needs the question's rights record to permit
-display to everyone right now. A write that lacks it raises `qlab.rights.service.RightsDenied`;
-a read behaves as if the question did not exist.
+`request_changes`, which only ever restrict and return no content, needs the question's rights
+record to permit display to everyone right now. A write that lacks it raises
+`qlab.rights.service.RightsDenied`, before the version's status is looked at; a read behaves as
+if the question did not exist.
+
+Every writing function is atomic: when it raises, for whatever reason, neither the change nor
+any audit entry remains, and the session stays usable.
 """
 
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
+from functools import wraps
 from typing import Any
 
+from pydantic import ValidationError
 from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
@@ -40,7 +47,12 @@ from qlab.rights import service as rights
 from qlab.syllabus import service as syllabus
 
 MAX_REASON_LENGTH = 500
-_CHECK_CODE = re.compile(r"[a-z][a-z0-9_]*")
+MAX_DOCUMENT_BYTES = 512 * 1024
+MAX_CHECK_DETAIL_BYTES = 8 * 1024
+_CHECK_CODE = re.compile(r"[a-z][a-z0-9_]{0,63}")
+# Critical checks that must have passed on the current content before review and publishing.
+# Mirrored in the database guard (migration 0002); extend both together.
+REQUIRED_CHECKS = ("schema_valid", "vocabulary_valid")
 
 
 class Origin(StrEnum):
@@ -99,9 +111,14 @@ class WorkingVersionExists(ContentError):
     """The question already has a version that is being worked on."""
 
 
+class StaleContent(ContentError):
+    """The version's content is not the content the caller says it looked at."""
+
+
 class NotPublishable(ContentError):
-    """Publishing was refused. `reasons` holds one or more of: `critical_checks_failed`,
-    `unverified_visuals`, `rights_denied`."""
+    """Publishing was refused. `reasons` holds one or more of: `critical_checks_failed` (a
+    critical check failed or a required one has not passed), `unverified_visuals`,
+    `rights_denied`."""
 
     def __init__(self, reasons: tuple[str, ...]) -> None:
         super().__init__(", ".join(reasons))
@@ -138,6 +155,17 @@ class QuestionVersionView:
     created_by: str
     created_at: datetime
     updated_at: datetime
+
+
+@dataclass(frozen=True)
+class VersionState:
+    """Where a version stands, without its content."""
+
+    id: uuid.UUID
+    question_id: uuid.UUID
+    version_no: int
+    status: VersionStatus
+    content_sha256: str
 
 
 def content_sha256(document: QuestionDocument) -> str:
@@ -178,15 +206,58 @@ def _displayable(session: Session, question: Question) -> bool:
     return rights.is_permitted(session, question.rights_record_id, rights.Purpose.DISPLAY)
 
 
+def _state(row: QuestionVersion) -> VersionState:
+    return VersionState(
+        id=row.id,
+        question_id=row.question_id,
+        version_no=row.version_no,
+        status=VersionStatus(row.status),
+        content_sha256=row.content_sha256,
+    )
+
+
+def _atomic[**P, R](function: Callable[P, R]) -> Callable[P, R]:
+    """Run a writing function in a savepoint: on any error nothing it wrote remains."""
+
+    @wraps(function)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        session = args[0]
+        assert isinstance(session, Session)  # noqa: S101 - every writer takes the session first
+        with session.begin_nested():
+            return function(*args, **kwargs)
+
+    return wrapper
+
+
+def _lock_question(session: Session, question_id: uuid.UUID) -> Question:
+    question = session.get(Question, question_id, with_for_update=True, populate_existing=True)
+    if question is None:
+        raise NotFound(f"question {question_id}")
+    return question
+
+
 def _locked(session: Session, version_id: uuid.UUID) -> tuple[QuestionVersion, Question]:
-    """The version, locked for update, and its question."""
-    version = session.get(QuestionVersion, version_id, with_for_update=True, populate_existing=True)
-    if version is None:
+    """The version and its question, both locked. The question is always locked first, so
+    operations on the versions of one question run one after another."""
+    question_id = session.scalar(
+        select(QuestionVersion.question_id).where(QuestionVersion.id == version_id)
+    )
+    if question_id is None:
         raise NotFound(f"question version {version_id}")
-    question = session.get(Question, version.question_id)
-    if question is None:  # the foreign key makes this unreachable
-        raise NotFound(f"question {version.question_id}")
+    question = _lock_question(session, question_id)
+    version = session.get(QuestionVersion, version_id, with_for_update=True, populate_existing=True)
+    if version is None:  # versions are never deleted
+        raise NotFound(f"question version {version_id}")
     return version, question
+
+
+def _require_rights(session: Session, question: Question) -> None:
+    rights.require(session, question.rights_record_id, rights.Purpose.DISPLAY)
+
+
+def _expect_content(version: QuestionVersion, expected_content_sha256: str) -> None:
+    if version.content_sha256 != expected_content_sha256:
+        raise StaleContent("the version's content has changed since it was read")
 
 
 def _expect(version: QuestionVersion, *allowed: VersionStatus) -> None:
@@ -255,6 +326,11 @@ def _write_content(
     session: Session, version: QuestionVersion, question: Question, document: QuestionDocument
 ) -> None:
     """Store the document on the version and rebuild every row derived from it."""
+    encoded = document.model_dump_json()
+    if len(encoded.encode()) > MAX_DOCUMENT_BYTES:
+        raise InvalidDocument((f"document is larger than {MAX_DOCUMENT_BYTES} bytes",))
+    if "\\u0000" in encoded:
+        raise InvalidDocument(("document contains a NUL character",))
     vocabulary = syllabus.get_vocabulary(session, question.syllabus_version_id)
     errors = _vocabulary_errors(document, vocabulary)
     if errors:
@@ -262,9 +338,11 @@ def _write_content(
     nodes = (document.primary_syllabus_node, *document.secondary_syllabus_nodes)
     node_ids = syllabus.node_ids(session, question.syllabus_version_id, frozenset(nodes))
 
+    new_hash = content_sha256(document)
+    unchanged = version.content_sha256 == new_hash
     version.schema_version = document.schema_version
     version.document = document.model_dump(mode="json")
-    version.content_sha256 = content_sha256(document)
+    version.content_sha256 = new_hash
     version.question_class = document.question_class.value
     version.exam_section = document.exam_section
     version.levels = [level.value for level in document.levels]
@@ -272,10 +350,13 @@ def _write_content(
     session.add(version)
     session.flush()
 
-    # Results of checks describe the previous content.
-    session.execute(
-        delete(QuestionVersionCheck).where(QuestionVersionCheck.question_version_id == version.id)
-    )
+    # Check results describe the content they ran on; they survive only an identical save.
+    if not unchanged:
+        session.execute(
+            delete(QuestionVersionCheck).where(
+                QuestionVersionCheck.question_version_id == version.id
+            )
+        )
     part_ids = select(Part.id).where(Part.question_version_id == version.id)
     session.execute(delete(MarkPoint).where(MarkPoint.part_id.in_(part_ids)))
     session.execute(delete(Part).where(Part.question_version_id == version.id))
@@ -348,26 +429,28 @@ def _store_check(session: Session, version_id: uuid.UUID, result: CheckResult) -
     session.flush()
 
 
-def _failed_critical(session: Session, version_id: uuid.UUID) -> list[str]:
-    return list(
-        session.scalars(
-            select(QuestionVersionCheck.check_code)
-            .where(
-                QuestionVersionCheck.question_version_id == version_id,
-                QuestionVersionCheck.severity == Severity.CRITICAL.value,
-                QuestionVersionCheck.outcome == Outcome.FAILED.value,
-            )
-            .order_by(QuestionVersionCheck.check_code)
+def _blocking_checks(session: Session, version_id: uuid.UUID) -> list[str]:
+    """Codes that stop review and publishing: critical checks that failed, and required
+    checks that have not passed on the current content."""
+    rows = session.execute(
+        select(QuestionVersionCheck.check_code, QuestionVersionCheck.outcome).where(
+            QuestionVersionCheck.question_version_id == version_id,
+            QuestionVersionCheck.severity == Severity.CRITICAL.value,
         )
-    )
+    ).all()
+    outcomes = {code: outcome for code, outcome in rows}
+    failed = {code for code, outcome in outcomes.items() if outcome == Outcome.FAILED.value}
+    missing = {c for c in REQUIRED_CHECKS if outcomes.get(c) != Outcome.PASSED.value}
+    return sorted(failed | missing)
 
 
 def _check_schema(session: Session, version: QuestionVersion, question: Question) -> CheckResult:
     try:
         QuestionDocument.model_validate(version.document)
-    except ValueError as error:
+    except ValidationError as error:
+        # Counts only: validation messages quote the content.
         return CheckResult(
-            "schema_valid", Severity.CRITICAL, Outcome.FAILED, {"error": str(error)[:500]}
+            "schema_valid", Severity.CRITICAL, Outcome.FAILED, {"errors": error.error_count()}
         )
     return CheckResult("schema_valid", Severity.CRITICAL, Outcome.PASSED, {})
 
@@ -377,7 +460,7 @@ def _check_vocabulary(
 ) -> CheckResult:
     try:
         document = QuestionDocument.model_validate(version.document)
-    except ValueError:
+    except ValidationError:
         return CheckResult("vocabulary_valid", Severity.CRITICAL, Outcome.NOT_APPLICABLE, {})
     errors = _vocabulary_errors(
         document, syllabus.get_vocabulary(session, question.syllabus_version_id)
@@ -397,6 +480,7 @@ _OWN_CHECKS: list[Callable[[Session, QuestionVersion, Question], CheckResult]] =
 # --- writing ------------------------------------------------------------------------------
 
 
+@_atomic
 def create_question(
     session: Session,
     *,
@@ -412,7 +496,8 @@ def create_question(
     - The rights record must permit display to everyone now, else RightsDenied.
     - Unknown `syllabus_version_id` raises LookupError.
     - The document's exam section, command terms and syllabus nodes (leaf nodes only) must
-      belong to the syllabus version, else InvalidDocument listing every problem.
+      belong to the syllabus version, else InvalidDocument listing every problem. A document
+      over 512 kB or containing a NUL character is also InvalidDocument.
 
     Nothing is written when an error is raised. On success the derived rows exist (one `part`
     per part, or a single one with key "mcq" for a multiple-choice question; one `mark_point`
@@ -424,63 +509,73 @@ def create_question(
         raise OriginClosed(f"origin {Origin(origin).value} is not accepted yet")
     rights.require(session, rights_record_id, rights.Purpose.DISPLAY)
     syllabus.get_vocabulary(session, syllabus_version_id)
-    with session.begin_nested():
-        question = Question(
-            origin=Origin.AUTHORED.value,
-            rights_record_id=rights_record_id,
-            syllabus_version_id=syllabus_version_id,
-            created_by=actor,
-        )
-        session.add(question)
-        session.flush()
-        version = QuestionVersion(question_id=question.id, version_no=1, created_by=actor)
-        _write_content(session, version, question, document)
-        _audit(session, actor, "created", version)
+    question = Question(
+        origin=Origin.AUTHORED.value,
+        rights_record_id=rights_record_id,
+        syllabus_version_id=syllabus_version_id,
+        created_by=actor,
+    )
+    session.add(question)
+    session.flush()
+    version = QuestionVersion(question_id=question.id, version_no=1, created_by=actor)
+    _write_content(session, version, question, document)
+    _audit(session, actor, "created", version)
     return _view(version)
 
 
+@_atomic
 def update_draft(
     session: Session, *, actor: str, version_id: uuid.UUID, document: QuestionDocument
 ) -> QuestionVersionView:
     """Replace the content of a `draft` or `needs_fix` version; the result is `draft`.
 
     Any other status raises InvalidTransition (a published version is corrected with
-    `start_revision`). Same rights and vocabulary rules as `create_question`. The derived rows
-    are rebuilt and earlier check results are discarded. Audit: `question_version.updated`
-    with the new content hash and `previous_content_sha256`. Unknown id: NotFound.
+    `start_revision`). Same rights and document rules as `create_question`. The derived rows
+    are rebuilt. Earlier check results are discarded, unless the new document is identical to
+    the stored one (same hash): saving the same content again does not clear a failed check.
+    Audit: `question_version.updated` with the new content hash and
+    `previous_content_sha256`. Unknown id: NotFound.
     """
     version, question = _locked(session, version_id)
+    _require_rights(session, question)
     _expect(version, VersionStatus.DRAFT, VersionStatus.NEEDS_FIX)
-    rights.require(session, question.rights_record_id, rights.Purpose.DISPLAY)
     previous_status, previous_hash = version.status, version.content_sha256
-    with session.begin_nested():
-        version.status = VersionStatus.DRAFT.value
-        _write_content(session, version, question, document)
-        _audit(
-            session,
-            actor,
-            "updated",
-            version,
-            previous_status=previous_status,
-            previous_content_sha256=previous_hash,
-        )
+    version.status = VersionStatus.DRAFT.value
+    _write_content(session, version, question, document)
+    _audit(
+        session,
+        actor,
+        "updated",
+        version,
+        previous_status=previous_status,
+        previous_content_sha256=previous_hash,
+    )
     return _view(version)
 
 
+@_atomic
 def record_check(
     session: Session, *, actor: str, version_id: uuid.UUID, result: CheckResult
 ) -> None:
     """Store the result of an external check, replacing an earlier result with the same code.
 
     Allowed while the version is `draft`, `needs_fix` or `auto_checking`; otherwise
-    InvalidTransition. Results are discarded when the content changes. A failed critical
-    result sends the next `submit` to `needs_fix` and blocks publishing. Audit:
-    `question_version.check_recorded`. Unknown id: NotFound. A code that is not a lower-case
-    identifier raises ValueError.
+    InvalidTransition. Rights as in `create_question` (running a check is processing). A
+    failed critical result sends the next `submit` to `needs_fix` and blocks publishing; it
+    is discarded only when the content actually changes. Audit:
+    `question_version.check_recorded`. Unknown id: NotFound. ValueError when the code is not a
+    lower-case identifier of at most 64 characters or `detail` is not JSON of at most 8 kB.
     """
     if not _CHECK_CODE.fullmatch(result.code):
-        raise ValueError(f"check code {result.code!r} is not a lower-case identifier")
-    version, _ = _locked(session, version_id)
+        raise ValueError(f"check code {result.code[:80]!r} is not a short lower-case identifier")
+    try:
+        detail_size = len(json.dumps(result.detail, allow_nan=False).encode())
+    except (TypeError, ValueError) as error:
+        raise ValueError(f"check detail is not JSON: {error}") from None
+    if detail_size > MAX_CHECK_DETAIL_BYTES:
+        raise ValueError("check detail is too large")
+    version, question = _locked(session, version_id)
+    _require_rights(session, question)
     _expect(version, VersionStatus.DRAFT, VersionStatus.NEEDS_FIX, VersionStatus.AUTO_CHECKING)
     _store_check(session, version.id, result)
     _audit(
@@ -494,73 +589,89 @@ def record_check(
     )
 
 
-def submit(session: Session, *, actor: str, version_id: uuid.UUID) -> QuestionVersionView:
+@_atomic
+def submit(session: Session, *, actor: str, version_id: uuid.UUID) -> VersionState:
     """Run the automatic checks on a `draft` version and move it on.
 
-    `draft` → `auto_checking` → `in_review` when no critical check has failed, else
-    `needs_fix`. The service's own checks (`schema_valid`, `vocabulary_valid`) are run and
-    stored; results recorded earlier with `record_check` count too. Unverified visuals do not
-    stop a review; they stop publishing. Audit: `question_version.submitted`, then
-    `question_version.checks_passed` or `question_version.checks_failed` (with the failed
-    codes). Other status: InvalidTransition. Rights as in `create_question`.
+    `draft` → `auto_checking` → `in_review`, or `needs_fix` when a critical check has failed
+    or a required check (`schema_valid`, `vocabulary_valid`) has not passed. The service's own
+    checks are run and stored; results recorded earlier with `record_check` count too.
+    Unverified visuals do not stop a review; they stop publishing. Audit:
+    `question_version.submitted`, then `question_version.checks_passed` or
+    `question_version.checks_failed` (with the blocking codes). Other status:
+    InvalidTransition. Rights as in `create_question`.
     """
     version, question = _locked(session, version_id)
+    _require_rights(session, question)
     _expect(version, VersionStatus.DRAFT)
-    rights.require(session, question.rights_record_id, rights.Purpose.DISPLAY)
     _move(session, actor, version, VersionStatus.AUTO_CHECKING, "submitted")
     for check in _OWN_CHECKS:
         _store_check(session, version.id, check(session, version, question))
-    failed = _failed_critical(session, version.id)
-    if failed:
-        _move(session, actor, version, VersionStatus.NEEDS_FIX, "checks_failed", failed=failed)
+    blocking = _blocking_checks(session, version.id)
+    if blocking:
+        _move(session, actor, version, VersionStatus.NEEDS_FIX, "checks_failed", failed=blocking)
     else:
         _move(session, actor, version, VersionStatus.IN_REVIEW, "checks_passed")
-    return _view(version)
+    return _state(version)
 
 
+@_atomic
 def request_changes(
     session: Session, *, actor: str, version_id: uuid.UUID, reason: str
-) -> QuestionVersionView:
+) -> VersionState:
     """Send an `in_review` or `approved` version back: → `needs_fix`, where it can be edited.
 
     `reason` is required (1 to 500 characters after trimming, else ValueError) and is written
-    to the audit entry `question_version.changes_requested`. Other status: InvalidTransition.
+    to the audit entry `question_version.changes_requested`; it must describe the content, not
+    a person. Other status: InvalidTransition. Needs no rights.
     """
     reason = _reason(reason)
     version, _ = _locked(session, version_id)
     _expect(version, VersionStatus.IN_REVIEW, VersionStatus.APPROVED)
     _move(session, actor, version, VersionStatus.NEEDS_FIX, "changes_requested", reason=reason)
-    return _view(version)
+    return _state(version)
 
 
-def approve(session: Session, *, actor: str, version_id: uuid.UUID) -> QuestionVersionView:
+@_atomic
+def approve(
+    session: Session, *, actor: str, version_id: uuid.UUID, expected_content_sha256: str
+) -> VersionState:
     """`in_review` → `approved`. One approval is enough in M1-G (D-53); the approver is the
-    audit entry's actor (`question_version.approved`). Other status: InvalidTransition. Rights
-    as in `create_question`."""
+    audit entry's actor (`question_version.approved`).
+
+    `expected_content_sha256` is the hash of the content the approver looked at; if the
+    version's content is different now, StaleContent is raised. Other status:
+    InvalidTransition. Rights as in `create_question`.
+    """
     version, question = _locked(session, version_id)
+    _require_rights(session, question)
     _expect(version, VersionStatus.IN_REVIEW)
-    rights.require(session, question.rights_record_id, rights.Purpose.DISPLAY)
+    _expect_content(version, expected_content_sha256)
     _move(session, actor, version, VersionStatus.APPROVED, "approved")
-    return _view(version)
+    return _state(version)
 
 
-def reject(
-    session: Session, *, actor: str, version_id: uuid.UUID, reason: str
-) -> QuestionVersionView:
+@_atomic
+def reject(session: Session, *, actor: str, version_id: uuid.UUID, reason: str) -> VersionState:
     """`in_review` → `rejected` (final). `reason` as in `request_changes`. Audit:
-    `question_version.rejected`. Other status: InvalidTransition."""
+    `question_version.rejected`. Other status: InvalidTransition. Needs no rights."""
     reason = _reason(reason)
     version, _ = _locked(session, version_id)
     _expect(version, VersionStatus.IN_REVIEW)
     _move(session, actor, version, VersionStatus.REJECTED, "rejected", reason=reason)
-    return _view(version)
+    return _state(version)
 
 
 def _publish(
-    session: Session, actor: str, version: QuestionVersion, question: Question, action: str
+    session: Session,
+    actor: str,
+    version: QuestionVersion,
+    question: Question,
+    action: str,
+    **data: object,
 ) -> None:
     reasons: list[str] = []
-    if _failed_critical(session, version.id):
+    if _blocking_checks(session, version.id):
         reasons.append("critical_checks_failed")
     if version.has_unverified_visuals:
         reasons.append("unverified_visuals")
@@ -575,6 +686,7 @@ def _publish(
             QuestionVersion.status == VersionStatus.PUBLISHED.value,
         )
         .with_for_update()
+        .execution_options(populate_existing=True)
     ).one_or_none()
     if current is not None:
         _move(
@@ -585,46 +697,61 @@ def _publish(
             "superseded",
             superseded_by=str(version.id),
         )
-    _move(session, actor, version, VersionStatus.PUBLISHED, action)
+    _move(session, actor, version, VersionStatus.PUBLISHED, action, **data)
 
 
-def publish(session: Session, *, actor: str, version_id: uuid.UUID) -> QuestionVersionView:
+@_atomic
+def publish(
+    session: Session, *, actor: str, version_id: uuid.UUID, expected_content_sha256: str
+) -> VersionState:
     """`approved` → `published`. The backend refuses, whatever the caller is (rule 8):
 
     - a status other than `approved` raises InvalidTransition;
-    - otherwise NotPublishable with every reason that applies: `critical_checks_failed`,
-      `unverified_visuals` (the document has stimuli; no asset can be verified yet, D-49),
-      `rights_denied`.
+    - content other than `expected_content_sha256` raises StaleContent;
+    - otherwise NotPublishable with every reason that applies: `critical_checks_failed` (a
+      critical check failed or a required check has not passed), `unverified_visuals` (the
+      document has stimuli; no asset can be verified yet, D-49), `rights_denied`.
 
     If the question already has a published version, that one becomes `withdrawn` in the same
     transaction (audit `question_version.superseded`). Audit: `question_version.published`.
     """
     version, question = _locked(session, version_id)
     _expect(version, VersionStatus.APPROVED)
+    _expect_content(version, expected_content_sha256)
     _publish(session, actor, version, question, "published")
-    return _view(version)
+    return _state(version)
 
 
-def withdraw(
-    session: Session, *, actor: str, version_id: uuid.UUID, reason: str
-) -> QuestionVersionView:
+@_atomic
+def withdraw(session: Session, *, actor: str, version_id: uuid.UUID, reason: str) -> VersionState:
     """`published` → `withdrawn`. Always possible, also when rights have been revoked.
     `reason` as in `request_changes`. Audit: `question_version.withdrawn`."""
     reason = _reason(reason)
     version, _ = _locked(session, version_id)
     _expect(version, VersionStatus.PUBLISHED)
     _move(session, actor, version, VersionStatus.WITHDRAWN, "withdrawn", reason=reason)
-    return _view(version)
+    return _state(version)
 
 
-def republish(session: Session, *, actor: str, version_id: uuid.UUID) -> QuestionVersionView:
+@_atomic
+def republish(
+    session: Session,
+    *,
+    actor: str,
+    version_id: uuid.UUID,
+    expected_content_sha256: str,
+    reason: str,
+) -> VersionState:
     """`withdrawn` → `published`, under the same conditions as `publish`.
 
-    Refused with InvalidTransition when the question has a published version or a newer
-    version than this one. Audit: `question_version.republished`.
+    `reason` (as in `request_changes`) says why the withdrawal no longer applies. Refused
+    with InvalidTransition when the question has a published version or any newer version
+    than this one. Audit: `question_version.republished`.
     """
+    reason = _reason(reason)
     version, question = _locked(session, version_id)
     _expect(version, VersionStatus.WITHDRAWN)
+    _expect_content(version, expected_content_sha256)
     blocking = session.scalar(
         select(func.count())
         .select_from(QuestionVersion)
@@ -636,41 +763,43 @@ def republish(session: Session, *, actor: str, version_id: uuid.UUID) -> Questio
     )
     if blocking:
         raise InvalidTransition("a published or newer version of this question exists")
-    _publish(session, actor, version, question, "republished")
-    return _view(version)
+    _publish(session, actor, version, question, "republished", reason=reason)
+    return _state(version)
 
 
+@_atomic
 def start_revision(session: Session, *, actor: str, question_id: uuid.UUID) -> QuestionVersionView:
     """Open a new `draft` version to correct a question (CLAUDE.md rule 7).
 
-    The new version copies the document of the published version, or, if none is published,
-    of the latest version; its number is the highest existing number plus one. The source
-    version is not changed. If the question already has a working version (`draft`,
-    `auto_checking`, `needs_fix`, `in_review` or `approved`) WorkingVersionExists is raised.
-    Rights as in `create_question`. Audit: `question_version.created` with `based_on`.
-    Unknown id: NotFound.
+    The new version copies the document of the published version; if none is published, of
+    the latest version that was not rejected; if all were rejected, of the latest. Its number
+    is the highest existing number plus one. The source version is not changed. If the
+    question already has a working version (`draft`, `auto_checking`, `needs_fix`, `in_review`
+    or `approved`) WorkingVersionExists is raised. Rights as in `create_question`. Audit:
+    `question_version.created` with `based_on` (the source version's id). Unknown id: NotFound.
     """
-    question = session.get(Question, question_id, with_for_update=True)
-    if question is None:
-        raise NotFound(f"question {question_id}")
-    rights.require(session, question.rights_record_id, rights.Purpose.DISPLAY)
+    question = _lock_question(session, question_id)
+    _require_rights(session, question)
     versions = list(
         session.scalars(
             select(QuestionVersion)
             .where(QuestionVersion.question_id == question_id)
             .order_by(QuestionVersion.version_no)
+            .execution_options(populate_existing=True)
         )
     )
+    if not versions:
+        raise NotFound(f"question {question_id} has no versions")
     if any(v.status in WORKING_STATUSES for v in versions):
         raise WorkingVersionExists(f"question {question_id} already has a working version")
     published = [v for v in versions if v.status == VersionStatus.PUBLISHED.value]
-    source = published[0] if published else versions[-1]
-    with session.begin_nested():
-        version = QuestionVersion(
-            question_id=question_id, version_no=versions[-1].version_no + 1, created_by=actor
-        )
-        _write_content(session, version, question, QuestionDocument.model_validate(source.document))
-        _audit(session, actor, "created", version, based_on=str(source.id))
+    not_rejected = [v for v in versions if v.status != VersionStatus.REJECTED.value]
+    source = (published or not_rejected or versions)[-1]
+    version = QuestionVersion(
+        question_id=question_id, version_no=versions[-1].version_no + 1, created_by=actor
+    )
+    _write_content(session, version, question, QuestionDocument.model_validate(source.document))
+    _audit(session, actor, "created", version, based_on=str(source.id))
     return _view(version)
 
 
@@ -708,10 +837,13 @@ def list_versions(session: Session, question_id: uuid.UUID) -> list[QuestionVers
 
 
 def get_published_version(session: Session, question_id: uuid.UUID) -> QuestionVersionView:
-    """The published version of a question: the only view a learner may be given.
+    """The published version of a question, with its whole document.
 
-    NotFound when the question does not exist, has no published version (a draft, approved or
-    withdrawn version is never returned), or its rights do not permit display.
+    This is the only version a learner may ever be shown, but the view is not a learner
+    projection: it contains the answers and the mark scheme. The API layer builds what a
+    learner sees from it. NotFound when the question does not exist, has no published version
+    (a draft, approved or withdrawn version is never returned), or its rights do not permit
+    display.
     """
     get_question(session, question_id)
     row = session.scalars(

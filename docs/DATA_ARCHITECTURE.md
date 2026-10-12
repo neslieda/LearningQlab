@@ -81,16 +81,27 @@ question_version_check(id, question_version_id, check_code, severity, outcome, d
   (`start_revision`). Türetilmiş satırlar da yalnızca bu iki durumda değiştirilebilir; hiçbir soru ya da sürüm silinemez.
 - **Durum geçişleri** [DOMAIN_MODEL.md](DOMAIN_MODEL.md) §4'teki çizgeyle sınırlıdır; hem servis hem tetikleyici zorlar. Yeni sürüm
   yalnızca `draft` olarak eklenebilir.
-- **Yayın koşulları** (CLAUDE.md kural 8; servis ve tetikleyici): durum `approved`; başarısız kritik kontrol yok; doğrulanmamış
-  görsel yok; rights kaydı gösterime izin veriyor (bu sonuncusu yalnızca serviste). Asset tablosu gelene kadar uyaranı olan her
-  belge "doğrulanmamış görsel" sayılır: incelenip onaylanabilir ama yayınlanamaz (D-49).
+- **Yayın koşulları** (CLAUDE.md kural 8; servis ve tetikleyici): durum `approved` (ya da yeniden yayın için `withdrawn` ve daha
+  yeni sürüm yok); zorunlu kontrollerin hepsi geçmiş ve başarısız kritik kontrol yok; doğrulanmamış görsel yok; rights kaydı gösterime
+  izin veriyor (bu sonuncusu yalnızca serviste). Asset tablosu gelene kadar uyaranı olan her belge "doğrulanmamış görsel" sayılır:
+  incelenip onaylanabilir ama yayınlanamaz (D-49).
 - **Kontroller.** `submit` kendi kontrollerini (`schema_valid`, `vocabulary_valid`) çalıştırır ve saklar; dış kontroller
-  `record_check` ile yazılır (üretim hattı, M3). Başarısız kritik kontrol sürümü `needs_fix`'e gönderir. İçerik değişince sonuçlar silinir.
+  `record_check` ile yazılır (üretim hattı, M3). **Eksik kontrol geçmiş sayılmaz:** incelemeye ve yayına geçiş, zorunlu kontrollerin
+  bu içerik üzerinde "geçti" olarak kayıtlı olmasını ister (servis `REQUIRED_CHECKS`, tetikleyici aynı listeyi taşır; yeni zorunlu
+  kontrol ikisine birlikte eklenir). Sonuçlar yalnızca içerik gerçekten değişince silinir; aynı belgeyi yeniden kaydetmek başarısız
+  bir sonucu temizlemez. Sonuçlar `in_review`'dan sonra değiştirilemez.
+- **İçeriğe bağlı kararlar.** Onay, yayın ve yeniden yayın çağrıları, çağıranın gördüğü içeriğin özetini (`expected_content_sha256`)
+  taşır; içerik o arada değiştiyse reddedilir. Durum değiştiren işlemler içerik döndürmez (yalnızca kimlik, durum, özet).
+- **Bütünlük.** Her yazma işlemi bir savepoint içinde çalışır: hata olursa ne değişiklik ne audit kaydı kalır. Aynı sorunun
+  sürümleri üzerindeki işlemler soru satırı kilitlenerek sıraya girer.
+- **Sınırlar.** Belge en çok 512 kB (serviste; tabloda 1 MB), kontrol ayrıntısı en çok 8 kB, gerekçe en çok 500 karakter.
+- **Tetikleyici güvenliği.** Koruma işlevleri `search_path` değerini sabitler (`pg_temp` sonda) ve tabloları şema adıyla anar; aynı
+  adlı geçici tablo yaratılarak atlatılamaz.
 - **Sözlük.** Kayıtta sınav bölümü, komut sözcükleri ve müfredat düğümleri (yalnızca yaprak düğümler) sorunun müfredat sürümüne
   göre doğrulanır; uymayan belge kaydedilmez.
-- **Köken ve rights.** Servis yalnızca `authored` kabul eder (D-52). Her işlem rights kaydının şu an herkese gösterime izin
-  vermesini ister; izin yoksa yazma reddedilir, okuma "bulunamadı" döner. Yalnızca kısıtlayan işlemler (geri çekme, ret, düzeltme
-  isteme) rights iptal edilmiş olsa da çalışır.
+- **Köken ve rights.** Servis ve tetikleyici yalnızca `authored` kabul eder (D-52). Her işlem (kontrol kaydı dahil) rights kaydının
+  şu an herkese gösterime izin vermesini ister; izin yoksa yazma reddedilir, okuma "bulunamadı" döner. Yalnızca kısıtlayan işlemler
+  (geri çekme, ret, düzeltme isteme) rights iptal edilmiş olsa da çalışır ve içerik döndürmez.
 - **Onay.** M1-G'de tek onay yeter (D-53). Rol denetimi bu katmanda değil, yetki katmanındadır (dilim 5); servis yalnızca `actor`
   kimliğini audit'e yazar.
 
@@ -100,6 +111,17 @@ question_version_check(id, question_version_id, check_code, severity, outcome, d
 2. Kill switch eklendiğinde her çağıranda değil `rights.is_permitted` içinde durur.
 3. `source_original` açılırsa `content`, rights sonucundan bağımsız olarak kurum üyeliğini de ister (CLAUDE.md kural 3); şu an köken tümden kapalı.
 4. Rol denetimi ve "onaylayan yazardan farklı olmalı mı" sorusu yetki katmanıyla birlikte ele alınır (dilim 5; D-53 web'e açılıştan önce yeniden değerlendirilir).
+5. **Öğrenci görünümü (dilim 5 ve 8).** `get_published_version` belgenin tamamını döndürür (doğru cevap, açıklamalar, markscheme,
+   yazarın hesap kimliği). Öğrenci uç noktası bunu olduğu gibi veremez; cevap malzemesini ve personel kimliklerini çıkaran ayrı bir
+   görünüm tipi yazılır, entitlement ve `syllabus_status` orada denetlenir.
+6. Veritabanı, `content_sha256` değerinin, kopya sütunların ve türetilmiş satırların belgeyle uyumunu denetlemez; `draft` ve
+   `needs_fix` durumunda ham SQL ile ayrıştırılabilir. Uygulama rolüyle ham SQL yazabilen biri zaten uygulamanın kendisidir; yine de
+   cevaplar `part`/`mark_point` satırlarına bağlanmadan önce (M2) okuma anında özet doğrulaması değerlendirilir.
+7. Yayın anında rights kaydı kilitlenmez; yayınla aynı anda yapılan iptal yayını durdurmayabilir. Her okuma rights'ı yeniden
+   denetlediği için içerik yine de dönmez. Kill switch ile birlikte ele alınır.
+8. ⚖️ Geri çekme, ret ve düzeltme isteme gerekçeleri serbest metindir ve silinemeyen audit kaydına yazılır. Gerekçeye kişi adı ya da
+   soru metni yazılmamalıdır; arayüz bunu belirtir (dilim 7). Silme hakkıyla ilişkisi [SECURITY.md](SECURITY.md) §10'daki açık sorudur.
+9. İncelemede bulunan bir hata kontrol sonucu olarak kaydedilemez (sonuçlar `in_review`'da kilitlidir); `request_changes` ile geri gönderilir.
 
 ## 3. İçerik bloğu şeması
 
@@ -198,7 +220,7 @@ sırası, işaretlerin sırası dahil, yazıldığı gibi korunur; kanonik sıra
 |---|---|
 | `schema_version` | Zorunlu, `"1.0"` |
 | `question_class` | `mcq`, `data_based`, `short_structured`, `long_structured` |
-| `exam_section` | Küçük harfli kısa ad (ör. `paper_1a`); programın sözlüğüne göre doğrulama dilim 2'de |
+| `exam_section` | Küçük harfli kısa ad (ör. `paper_1a`); kayıtta sorunun müfredat sürümünün sözlüğüne göre doğrulanır (§2.2) |
 | `levels` | Kullanılabildiği kâğıtlar; en az bir; tekrarsız ve kanonik sırada (`sl`, `hl`) |
 | `language`, `calculator`, `difficulty` (`easy`/`medium`/`hard`), `outcome` | İsteğe bağlı üst veri; `outcome` yazarın kendi cümlesi |
 | `primary_syllabus_node`, `secondary_syllabus_nodes` | Tekrarsız |
@@ -264,7 +286,7 @@ metninde yazılır) · `answer_space` düğümü · Blueprint şeması · doğru
 Boş bırakılabilen metinler (`lead_in`, madde ve not içeriği, seçenek hücresi, açıklama) · yolların eşit puanlı olması · işaretlerin
 kanonik sırası · kullanılmayan uyaran ·
 
-KaTeX render kontrolü (dilim 3) · `exam_section`, `command_term` ve müfredat düğümlerinin programın sözlüğüne göre doğrulanması (dilim 2) ·
+KaTeX render kontrolü (dilim 3) ·
 sayısal cevaplı her parçanın bir cevap bağı taşıması (yorumlayıcıyla) · birim dilbilgisi · adım ifadelerindeki adların tanımlı olması ·
 dört seçeneğin aynı türde ve sıralı olması · komut sözcüğü ↔ puan ↔ cevap türü kuralları · soru sınıfına göre toplam puan sınırları.
 

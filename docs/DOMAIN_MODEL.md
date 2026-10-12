@@ -157,7 +157,8 @@ stateDiagram-v2
 
 Kurallar:
 
-- `published` geçişi yalnızca `approved` durumundan ve kritik kontrolü kalan rapor yokken yapılır; backend zorlar.
+- `published` geçişi yalnızca `approved` durumundan (yeniden yayında: daha yeni sürümü olmayan `withdrawn` sürümden), zorunlu
+  kontroller geçmişken ve kritik kontrolü kalan rapor yokken yapılır; backend ve veritabanı zorlar. Eksik kontrol geçmiş sayılmaz.
 - Gerekli onay sayısı soru tipine bağlıdır: kodla doğrulanmış tiplerde 1, uzun açıklamalıda 2 (D-18).
 - İçerik yalnızca `draft` ve `needs_fix` durumunda düzenlenir (D-55); incelemecinin geri gönderdiği sürüm yerinde düzeltilir ve her
   geçişte içerik özeti audit'e yazılır. `needs_fix` durumundaki sürüm düzenlenince `draft` olur.

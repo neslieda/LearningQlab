@@ -89,7 +89,8 @@ M1'in tamamını ve M2'nin öğrenci önizlemesini kapsar; aşağıdaki M1 ve M2
 **Kabul kriteri**
 - 130 pilot soru veritabanında; kaynak Markdown ile otomatik karşılaştırmada fark yok.
 - Bir çoktan seçmeli, bir Paper 2 ve bir veri temelli soru masaüstü ve 375 px genişlikte sınav düzeninde görünüyor.
-- Admin bir soruyu yerinde düzeltebiliyor; düzenleme yeni sürüm açıyor; hatalı LaTeX kaydedilemiyor.
+- Admin bir soruyu yerinde düzeltebiliyor; yayınlanmış sorunun düzeltmesi yeni sürüm açıyor, taslak ve düzeltme bekleyen sürüm yerinde
+  düzenleniyor (D-55); hatalı LaTeX kaydedilemiyor.
 - Onaylanmamış ya da görseli eksik soru, API doğrudan çağrılsa bile yayınlanamıyor.
 - Yayınlanan soru öğrenci önizlemesinde görünüyor; öğrenci rolü admin uç noktalarına erişemiyor.
 

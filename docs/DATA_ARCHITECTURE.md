@@ -85,10 +85,12 @@ question_version_check(id, question_version_id, check_code, severity, outcome, d
   yeni sürüm yok); zorunlu kontrollerin hepsi geçmiş ve başarısız kritik kontrol yok; doğrulanmamış görsel yok; rights kaydı gösterime
   izin veriyor (bu sonuncusu yalnızca serviste). Asset tablosu gelene kadar uyaranı olan her belge "doğrulanmamış görsel" sayılır:
   incelenip onaylanabilir ama yayınlanamaz (D-49).
-- **Kontroller.** `submit` kendi kontrollerini (`schema_valid`, `vocabulary_valid`) çalıştırır ve saklar; dış kontroller
+- **Kontroller.** `submit` kendi kontrollerini (`schema_valid`, `vocabulary_valid`, `math_renders`) çalıştırır ve saklar; dış kontroller
   `record_check` ile yazılır (üretim hattı, M3). **Eksik kontrol geçmiş sayılmaz:** incelemeye ve yayına geçiş, zorunlu kontrollerin
-  bu içerik üzerinde "geçti" olarak kayıtlı olmasını ister (servis `REQUIRED_CHECKS`, tetikleyici aynı listeyi taşır; yeni zorunlu
-  kontrol ikisine birlikte eklenir). Sonuçlar yalnızca içerik gerçekten değişince silinir; aynı belgeyi yeniden kaydetmek başarısız
+  bu içerik üzerinde "geçti" olarak kayıtlı olmasını ister (servis `REQUIRED_CHECKS`; tetikleyici listeyi
+  `content_required_checks()` SQL işlevinden okur, migration 0003; yeni zorunlu kontrol sabiti ve o işlevi birlikte değiştirir ve
+  eşitlikleri testle doğrulanır). Zorunlu kontrollerin kodları `record_check` ile dışarıdan yazılamaz. Yeni bir zorunlu kontrol
+  eklenmeden önce incelemeden geçmiş sürümler, yeniden kontrol edilene kadar yayınlanamaz. Sonuçlar yalnızca içerik gerçekten değişince silinir; aynı belgeyi yeniden kaydetmek başarısız
   bir sonucu temizlemez. Sonuçlar `in_review`'dan sonra değiştirilemez.
 - **İçeriğe bağlı kararlar.** Onay, yayın ve yeniden yayın çağrıları, çağıranın gördüğü içeriğin özetini (`expected_content_sha256`)
   taşır; içerik o arada değiştiyse reddedilir. Durum değiştiren işlemler içerik döndürmez (yalnızca kimlik, durum, özet).
@@ -176,10 +178,27 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 
 ### 3.4 Matematik gösterimi
 
-- Kanonik biçim: LaTeX, KaTeX'in desteklediği alt küme. İzinli komut listesi şemanın parçasıdır.
-- Kayıtta her matematik düğümü sunucuda KaTeX ile render edilir; hata varsa kayıt reddedilir (D-13).
-- MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürümü sabittir; yükseltme görsel regresyon testinden geçer.
-- Hesaplama biçimi LaTeX'ten türetilmez; ayrı olarak `solution_model` içinde durur.
+- Kanonik biçim: LaTeX, KaTeX'in desteklediği alt küme. Hesaplama biçimi LaTeX'ten türetilmez; ayrı olarak `solution_model` içinde durur.
+- **Kayıt kontrolü (D-13, D-57; kod: `apps/api/src/qlab/content/math.py`).** Her `math_inline` ve `math_block` düğümü kayıtta iki
+  katmandan geçer; geçemeyen belge kaydedilmez:
+  1. **Kapalı liste.** Kaynak yalnızca yazdırılabilir ASCII'dir (sekme ve satır sonu dahil), böylece her sembolün tek yazımı vardır
+     (`×` değil `\times`, `µ` değil `\mu`). Her komut, ortam ve kaçış `ALLOWED_COMMANDS`, `ALLOWED_ENVIRONMENTS`, `ALLOWED_ESCAPES`
+     listelerindedir; yorum (`%`), `@` içeren iç komutlar, makro tanımları, bağlantı/görsel/HTML komutları ve satır sonu uzunluk
+     seçeneği (`\\[…]`) reddedilir. Sınırlar: düğüm başına 2 000 karakter, 40 iç içe grup, 200 hizalama sekmesi, 100 satır sonu;
+     belge başına 2 000 farklı düğüm. Listeye komut eklemek bir kod değişikliğidir; listedeki her komutun örneği testte render edilir.
+  2. **Render.** Sabitlenmiş KaTeX (`KATEX_VERSION`, `apps/api/katex/package.json` ve kilit dosyası; üçü testle eşit tutulur) kısa
+     ömürlü bir Node sürecinde çalışır. Ayarlar gösterim sözleşmesinin parçasıdır ve web gösterimi aynılarını kullanır:
+     `strict: "error"`, `trust: false`, `maxExpand: 1000`, `maxSize: 20`, paylaşılan makro yok. Üretilen işaretleme 100 000
+     karakteri aşarsa düğüm reddedilir. Sunucu başka bir KaTeX sürümüyle çalışmayı reddeder.
+- **Renderer çalışmazsa kayıt yapılmaz** (`RendererUnavailable`); süreç başlangıcında `ensure_renderer()` ile denetlenir. Bir süreç
+  içinde daha önce yanıtlanmış düğümler yeniden render edilmez.
+- `submit` aynı kontrolü zorunlu kritik kontrol `math_renders` olarak kaydeder (§2.2). Revizyon, kaynak sürümün belgesini matematik
+  kontrolünden geçirmeden kopyalar: liste ya da KaTeX sürümü değiştiğinde eski içerik düzeltilebilir kalır; geçmeyen matematik
+  `submit` aşamasında durur ve yeniden kaydedilemez.
+- MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürüm yükseltmesi üç yerdeki sabiti birlikte değiştirir, görsel regresyon
+  testinden geçer ve saklı tüm düğümlerin yeniden doğrulanmasını gerektirir.
+- **Kapsam dışı:** `quantity` düğümlerinin gösterimi (birim alanları `µ` ve `Ω` karakterlerine izin verir; nasıl dizileceği gösterim
+  bileşeniyle belirlenir, dilim 6), `text` düğümleri (istemci bunlarda otomatik matematik taraması yapmaz), boş matematik düğümü.
 
 ### 3.5 Şema v1 — uygulanan hali (2026-10-11, bağımsız inceleme sonrası)
 
@@ -195,7 +214,7 @@ sırası, işaretlerin sırası dahil, yazıldığı gibi korunur; kanonik sıra
 |---|---|---|
 | `doc` | kök | en az bir blok |
 | `paragraph` | blok | satır içi düğümler (boş olabilir) |
-| `math_block` | blok | `attrs.latex` (boş olamaz) |
+| `math_block` | blok | `attrs.latex` (boş olamaz); kayıtta render kontrolü (§3.4) |
 | `table` → `table_row` → `table_header` / `table_cell` | blok | hücre: yalnızca `paragraph`, en az bir; `attrs.colspan` (1–12), `attrs.rowspan` (1–50). Satır birleştirme yoksa tüm satırların genişliği eşit olmalı |
 | `figure` | blok | `attrs.stimulus_id` |
 | `bullet_list`, `ordered_list` → `list_item` | blok | madde: yalnızca `paragraph`, en az bir (iç içe liste yok) |
@@ -286,7 +305,6 @@ metninde yazılır) · `answer_space` düğümü · Blueprint şeması · doğru
 Boş bırakılabilen metinler (`lead_in`, madde ve not içeriği, seçenek hücresi, açıklama) · yolların eşit puanlı olması · işaretlerin
 kanonik sırası · kullanılmayan uyaran ·
 
-KaTeX render kontrolü (dilim 3) ·
 sayısal cevaplı her parçanın bir cevap bağı taşıması (yorumlayıcıyla) · birim dilbilgisi · adım ifadelerindeki adların tanımlı olması ·
 dört seçeneğin aynı türde ve sıralı olması · komut sözcüğü ↔ puan ↔ cevap türü kuralları · soru sınıfına göre toplam puan sınırları.
 

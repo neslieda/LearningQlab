@@ -142,7 +142,9 @@ microservice, GraphQL, MathJax.
 ## 10. Matematik gösterimi ve girişi
 
 - **Gösterim:** yalnızca KaTeX. Kayıt anında render kontrolü; MathML çıktısı erişilebilirlik için. MathJax fallback yok (iki renderer
-  tutarsızlık üretir).
+  tutarsızlık üretir). Kayıt kontrolü resmi `katex` npm paketini (sabit sürüm) bir Node alt sürecinde çalıştırır (D-57): API ve worker
+  imajında **Node ≥ 24** ile `apps/api/katex` (`npm ci` çıktısı) bulunur; paket kaynak ağacının dışına kurulursa `QLAB_KATEX_DIR`
+  ayarlanır. Kimya gösterimi eklentisi (`mhchem`) yüklü değildir.
   - **Başka çözüm ne zaman:** bir ders KaTeX'in desteklemediği gösterimi zorunlu kılarsa. Kimya için KaTeX eklentisi o derste ölçülür.
 - **Giriş:** görsel matematik alanı. Aday MathLive: web bileşeni, mobil sanal klavye, LaTeX çıktısı, MIT lisansı 🔶 (resmi depodaki lisans
   dosyası ve güncel sürüm teyit edilmeli). M0'da mobil tarayıcıda denenir.

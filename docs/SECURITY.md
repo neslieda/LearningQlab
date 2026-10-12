@@ -138,6 +138,19 @@ Agent ve araç kullanan model olmaması etki alanını sınırlar: kandırılmı
 - Ayrı alt süreç; süre, bellek ve ifade boyutu sınırı; ağ ve dosya erişimi yok.
 - Özellik tabanlı testler ve mutation testing kapsamındadır; değişikliği insan onayı gerektirir.
 
+### 7.1 KaTeX renderer alt süreci (D-57)
+
+- Girdi (LaTeX) güvenilmezdir: bugün yazarlardan, ileride model çıktısından gelir. Komut satırına değil stdin üzerinden JSON olarak
+  gider; önce kapalı komut listesinden geçer ([DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) §3.4).
+- Süreç: sabit argümanlar, devralınmış ortam değişkeni yok, 10 saniye süre ve 256 MB bellek sınırı, dizgeden kod üretimi kapalı,
+  Node izin modeliyle yalnızca KaTeX klasörünü okuma (dosya yazma, alt süreç ve worker yok).
+- **Ağ:** izin modeli ağ erişimini Node 25'ten itibaren kapatır; Node 24'te kapatmaz (2026-10-12'de iki sürümde denenerek doğrulandı;
+  yalnızca macOS'ta). Bu yüzden dağıtımda renderer'ın ağ çıkışı container düzeyinde kapatılır; bu, web'e açılış hazırlığının
+  (M1-G dilim 9) koşuludur.
+- KaTeX'in güvenli ayarları (`trust: false`, `strict: "error"`) `\href`, `\includegraphics` ve `\def` için hata vermez; bunları
+  yalnızca kapalı liste durdurur. Liste bu yüzden kritik alandır: değişikliği güvenlik incelemesi ve insan onayı ister.
+- İstemci tarafı: gösterim bileşeni matematiği taşmayı kesen bir kapsayıcıda çizer ve paylaşılan makro kullanmaz (dilim 6).
+
 ## 8. Yükleme güvenliği
 
 - İzinli türler: PDF (personel), görsel (öğrenci). Boyut ve sayfa sınırı.

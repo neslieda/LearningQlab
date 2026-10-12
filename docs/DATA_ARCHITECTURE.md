@@ -38,6 +38,51 @@ question_version_asset(question_version_id, asset_id, role)
 Değişmezlik: `question_version` ve alt satırları `status` ilk kez `in_review` olduktan sonra içerik olarak güncellenmez; yalnızca durum
 alanları değişir. Veritabanı tetikleyicisi ya da uygulama katmanı zorlar, test doğrular.
 
+### 2.1 Temel tablolar — uygulanan hali (dilim 2a, 2026-10-12)
+
+Kod: `apps/api/src/qlab/{audit,rights,syllabus}/models.py`; migration `apps/api/migrations/versions/0001_foundation.py`.
+Kimlikler UUIDv7'dir; ön ekli biçim (`q_…`) yalnızca API sınırında üretilir (D-54).
+
+```
+audit_log(id, occurred_at, actor, action, entity_type, entity_id, data jsonb)      -- yalnızca ekleme
+rights_record(id, holder, license_ref, display_scope: none | organization | all,
+              display_organization_id, allows_ai_processing, allows_commercial_use,
+              valid_from, valid_until, revoked_at, note, created_at)
+program(id, code, name)
+subject(id, program_id, code, name)
+syllabus_version(id, subject_id, code, title)
+syllabus_node(id, syllabus_version_id, parent_id, code, title, position, attributes jsonb)
+exam_format(id, syllabus_version_id, code, definition jsonb)
+```
+
+- `audit_log`: UPDATE, DELETE ve TRUNCATE veritabanı tetikleyicisiyle reddedilir; tetikleyiciler `ENABLE ALWAYS` durumundadır.
+  `occurred_at` değerini yazan değil veritabanı koyar (ekleme anının saati); geriye tarihli kayıt yazılamaz ve kayıtlar oluş sırasıyla
+  okunur. `actor` opak hesap kimliği ya da `system:<süreç>` biçimindedir (harf, rakam ve `_ . : | -`); ad ya da e-posta yazılamaz.
+  `data` sınırlı boyutta bir JSON nesnesidir ve kişisel veri değil kimlik ve kod taşır. Bu kuralları hem servis hem tablo (CHECK) zorlar.
+  Kayıt, anlattığı değişiklikle aynı transaction'da yazılır.
+  **Sınır:** tetikleyiciler tablonun sahibi olan ya da superuser olan rolü durduramaz. Uygulama, tablo sahibi olmayan ve superuser
+  olmayan ayrı bir rolle çalışmalıdır ([SECURITY.md](SECURITY.md) §10); yerelde ve CI'da şimdilik tek rol var.
+- `rights_record`: her izin varsayılan olarak kapalıdır. Karar kuralı (`qlab.rights.service.evaluate`): kayıt yoksa, geçerlilik
+  aralığının dışındaysa, iptal edilmişse ya da ilgili bayrak kapalıysa **ret**. Karar her seferinde veritabanından okunur.
+  Saklanan kayıt değişmez: tek izinli değişiklik ilk iptaldir (tetikleyici); genişletme, iptali geri alma ve silme reddedilir. Farklı
+  bir izin yeni bir kayıttır. `rights` modülü `audit`'e bağımlı olamadığı için kayıt açma ve iptalin audit kaydını **çağıran** yazar.
+  Kill switch bu dilimde yok; `source_original` yolları `content` modülünde tümden kapalıdır (D-47, D-52).
+- Müfredat ve sınav biçimi bir referans dosyasından yüklenir (`content/reference/*-syllabus.json`,
+  `python -m qlab.syllabus <dosya>`). Yükleme idempotenttir ve hiçbir şey silmez: dosya var olan bir düğümü, sınav bölümünü ya da
+  komut sözcüğünü düşürüyorsa ya da sınav biçiminin kodunu değiştiriyorsa reddedilir. Bir müfredat sürümünün tek sınav biçimi vardır;
+  bir düğümün üst düğümü aynı sürümdendir. Dosyanın beyan ettiği inceleme durumu (`status`) sürümle birlikte saklanır. Başlıklar kısa
+  etiketlerdir (en çok 120 karakter) ve düğüm öznitelikleri küçük bir kod → kod eşlemesidir; daha uzun metin dosyaya giremez.
+  Programa özgü kavramlar (bölüm kodları, komut sözcükleri, düğüm düzeyi) sütun değil veridir (CLAUDE.md kural 12).
+  `MarkingPolicy`, bölüm süreleri ve puanları, hesap makinesi izni henüz yok; uzman teyidinden sonra eklenir.
+
+**Dilim 2b'ye devredenler** (2a incelemelerinden):
+
+1. `content`, `source_original` içeriği rights sonucundan bağımsız olarak reddeder; kapsamı `all` olan bir rights kaydı tek başına
+   yeterli sayılmaz (CLAUDE.md kural 3). Kabul testi olarak yazılır.
+2. Rights kaydı açan ya da iptal eden her yol audit kaydı yazar; bunu bir test doğrular.
+3. Kill switch eklendiğinde her çağıranda değil `rights.is_permitted` içinde durur.
+4. Sözlük doğrulaması açıldığında şema test örneğindeki `show_that` komut sözcüğü ile sözlükteki `show` uzlaştırılır.
+
 ## 3. İçerik bloğu şeması
 
 ProseMirror-uyumlu düğüm yapısı: `{type, attrs?, content?, text?, marks?}`. Tek doğruluk kaynağı backend'deki Pydantic modelidir;

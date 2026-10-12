@@ -185,3 +185,19 @@ deterministic bir iş akışıyla dağıtılabilir. Bu, token tüketimini hızla
 
 Kod yazımı geliştirme aboneliğiyle yapılır. Ürünün LLM çağrıları ve ölçüm çalıştırmaları ürünün kendi API anahtarları ve bütçesiyle
 yapılır; ikisi karıştırılmaz. Paralel alt ajanlar abonelik kotasını hızlı tüketir; paralellik yalnızca gerçekten bağımsız işlerde kullanılır.
+
+## 13. Yerel ortam
+
+```
+docker compose -f infra/local/compose.yaml up -d      # PostgreSQL, 127.0.0.1:54340
+cd apps/api
+export QLAB_DATABASE_URL=postgresql+psycopg://qlab:qlab-local-only@127.0.0.1:54340/qlab
+uv run alembic upgrade head
+uv run python -m qlab.syllabus ../../content/reference/dp-physics-2025-syllabus.json
+uv run pytest                                          # veritabanı testleri qlab_test veritabanını silip yeniden kurar
+```
+
+- Veritabanı testleri (`db` işaretli) gerçek PostgreSQL ister; sunucuya ulaşılamazsa atlanmaz, **başarısız olur**. Yalnızca saf
+  testler: `uv run pytest -m "not db"`. Başka bir sunucu için `QLAB_TEST_DATABASE_URL` (veritabanı adı `_test` ile bitmelidir).
+- Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
+- Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).

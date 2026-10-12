@@ -1,0 +1,24 @@
+# Local development database. Not used in staging or production.
+# Start: docker compose -f infra/local/compose.yaml up -d
+name: qlab-local
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: qlab
+      POSTGRES_PASSWORD: qlab-local-only
+      POSTGRES_DB: qlab
+    ports:
+      # Bound to loopback only; 54340 avoids clashing with other local databases.
+      - "127.0.0.1:54340:5432"
+    volumes:
+      - qlab-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qlab -d qlab"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+volumes:
+  qlab-pgdata:

@@ -1,0 +1,266 @@
+{
+  "status": "draft: compiled from docs/syllabus/dp-physics-2025-analysis.md; node list, levels and vocabulary to be confirmed by a subject expert",
+  "program": {
+    "code": "ib_dp",
+    "name": "IB Diploma Programme"
+  },
+  "subject": {
+    "code": "physics",
+    "name": "Physics"
+  },
+  "syllabus_version": {
+    "code": "2025",
+    "title": "First assessment 2025"
+  },
+  "nodes": [
+    {
+      "code": "A",
+      "title": "Space, time and motion"
+    },
+    {
+      "code": "A.1",
+      "title": "Kinematics",
+      "parent": "A",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "A.2",
+      "title": "Forces and momentum",
+      "parent": "A",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "A.3",
+      "title": "Work, energy and power",
+      "parent": "A",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "A.4",
+      "title": "Rigid body mechanics",
+      "parent": "A",
+      "attributes": {
+        "level": "extension"
+      }
+    },
+    {
+      "code": "A.5",
+      "title": "Galilean and special relativity",
+      "parent": "A",
+      "attributes": {
+        "level": "extension"
+      }
+    },
+    {
+      "code": "B",
+      "title": "The particulate nature of matter"
+    },
+    {
+      "code": "B.1",
+      "title": "Thermal energy transfers",
+      "parent": "B",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "B.2",
+      "title": "Greenhouse effect",
+      "parent": "B",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "B.3",
+      "title": "Gas laws",
+      "parent": "B",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "B.4",
+      "title": "Thermodynamics",
+      "parent": "B",
+      "attributes": {
+        "level": "extension"
+      }
+    },
+    {
+      "code": "B.5",
+      "title": "Current and circuits",
+      "parent": "B",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "C",
+      "title": "Wave behaviour"
+    },
+    {
+      "code": "C.1",
+      "title": "Simple harmonic motion",
+      "parent": "C",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "C.2",
+      "title": "Wave model",
+      "parent": "C",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "C.3",
+      "title": "Wave phenomena",
+      "parent": "C",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "C.4",
+      "title": "Standing waves and resonance",
+      "parent": "C",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "C.5",
+      "title": "Doppler effect",
+      "parent": "C",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "D",
+      "title": "Fields"
+    },
+    {
+      "code": "D.1",
+      "title": "Gravitational fields",
+      "parent": "D",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "D.2",
+      "title": "Electric and magnetic fields",
+      "parent": "D",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "D.3",
+      "title": "Motion in electromagnetic fields",
+      "parent": "D",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "D.4",
+      "title": "Induction",
+      "parent": "D",
+      "attributes": {
+        "level": "extension"
+      }
+    },
+    {
+      "code": "E",
+      "title": "Nuclear and quantum physics"
+    },
+    {
+      "code": "E.1",
+      "title": "Structure of the atom",
+      "parent": "E",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "E.2",
+      "title": "Quantum physics",
+      "parent": "E",
+      "attributes": {
+        "level": "extension"
+      }
+    },
+    {
+      "code": "E.3",
+      "title": "Radioactive decay",
+      "parent": "E",
+      "attributes": {
+        "level": "core_and_extension"
+      }
+    },
+    {
+      "code": "E.4",
+      "title": "Fission",
+      "parent": "E",
+      "attributes": {
+        "level": "core"
+      }
+    },
+    {
+      "code": "E.5",
+      "title": "Fusion and stars",
+      "parent": "E",
+      "attributes": {
+        "level": "core"
+      }
+    }
+  ],
+  "exam_format": {
+    "code": "written_papers",
+    "sections": [
+      {
+        "code": "paper_1a",
+        "title": "Paper 1A"
+      },
+      {
+        "code": "paper_1b",
+        "title": "Paper 1B"
+      },
+      {
+        "code": "paper_2",
+        "title": "Paper 2"
+      }
+    ],
+    "command_terms": [
+      "state",
+      "draw",
+      "annotate",
+      "calculate",
+      "describe",
+      "estimate",
+      "outline",
+      "analyse",
+      "determine",
+      "discuss",
+      "explain",
+      "predict",
+      "show",
+      "sketch",
+      "suggest",
+      "deduce",
+      "identify",
+      "complete"
+    ]
+  }
+}

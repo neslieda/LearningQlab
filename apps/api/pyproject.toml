@@ -116,3 +116,22 @@ forbidden_modules = [
 name = "audit, rights and syllabus do not depend on each other"
 type = "independence"
 modules = ["qlab.audit", "qlab.rights", "qlab.syllabus"]
+
+[[tool.importlinter.contracts]]
+name = "content depends only on syllabus, rights, entitlements and audit (docs/API_DESIGN.md section 2)"
+type = "forbidden"
+source_modules = ["qlab.content"]
+forbidden_modules = [
+    "qlab.identity",
+    "qlab.organizations",
+    "qlab.ingestion",
+    "qlab.generation",
+    "qlab.verification",
+    "qlab.review",
+    "qlab.exams",
+    "qlab.attempts",
+    "qlab.marking",
+    "qlab.analytics",
+    "qlab.llm",
+    "qlab.pipeline",
+]

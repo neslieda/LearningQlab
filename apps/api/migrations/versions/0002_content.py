@@ -229,6 +229,43 @@ def upgrade() -> None:
         $$
         """
     )
+    # Only authored content is accepted until the other origins are opened by a decision and a
+    # migration (D-52; source_original stays closed, D-47).
+    op.execute(
+        """
+        CREATE FUNCTION question_insert_guard() RETURNS trigger
+        LANGUAGE plpgsql AS $$
+        BEGIN
+            IF NEW.origin <> 'authored' THEN
+                RAISE EXCEPTION 'origin % is closed', NEW.origin
+                    USING ERRCODE = 'restrict_violation';
+            END IF;
+            RETURN NEW;
+        END;
+        $$
+        """
+    )
+    # A question is tagged only with nodes of its own syllabus version.
+    op.execute(
+        """
+        CREATE FUNCTION question_version_syllabus_same_version() RETURNS trigger
+        LANGUAGE plpgsql AS $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1
+                FROM question_version v
+                JOIN question q ON q.id = v.question_id
+                JOIN syllabus_node n ON n.syllabus_version_id = q.syllabus_version_id
+                WHERE v.id = NEW.question_version_id AND n.id = NEW.syllabus_node_id
+            ) THEN
+                RAISE EXCEPTION 'syllabus node belongs to another syllabus version'
+                    USING ERRCODE = 'restrict_violation';
+            END IF;
+            RETURN NEW;
+        END;
+        $$
+        """
+    )
     op.execute(
         """
         CREATE FUNCTION question_version_insert_guard() RETURNS trigger
@@ -283,17 +320,18 @@ def upgrade() -> None:
                     RAISE EXCEPTION 'question version cannot move from % to %',
                         OLD.status, NEW.status USING ERRCODE = 'restrict_violation';
                 END IF;
+                -- A failed critical check stops a version before review and before publishing.
+                IF NEW.status IN ('in_review', 'published') AND EXISTS (
+                    SELECT 1 FROM question_version_check c
+                    WHERE c.question_version_id = NEW.id
+                      AND c.severity = 'critical' AND c.outcome = 'failed'
+                ) THEN
+                    RAISE EXCEPTION 'cannot move to %: a critical check failed', NEW.status
+                        USING ERRCODE = 'restrict_violation';
+                END IF;
                 IF NEW.status = 'published' THEN
                     IF jsonb_array_length(NEW.document -> 'stimuli') > 0 THEN
                         RAISE EXCEPTION 'cannot publish: unverified visuals'
-                            USING ERRCODE = 'restrict_violation';
-                    END IF;
-                    IF EXISTS (
-                        SELECT 1 FROM question_version_check c
-                        WHERE c.question_version_id = NEW.id
-                          AND c.severity = 'critical' AND c.outcome = 'failed'
-                    ) THEN
-                        RAISE EXCEPTION 'cannot publish: a critical check failed'
                             USING ERRCODE = 'restrict_violation';
                     END IF;
                 END IF;
@@ -349,6 +387,14 @@ def upgrade() -> None:
     triggers = [
         ("question", "question_no_delete", "BEFORE DELETE", "ROW", "content_reject_change()"),
         ("question", "question_guard", "BEFORE UPDATE", "ROW", "question_guard()"),
+        ("question", "question_insert_guard", "BEFORE INSERT", "ROW", "question_insert_guard()"),
+        (
+            "question_version_syllabus",
+            "question_version_syllabus_same_version",
+            "BEFORE INSERT",
+            "ROW",
+            "question_version_syllabus_same_version()",
+        ),
         (
             "question_version",
             "question_version_no_delete",
@@ -416,5 +462,7 @@ def downgrade() -> None:
     op.execute("DROP FUNCTION question_version_child_guard()")
     op.execute("DROP FUNCTION question_version_update_guard()")
     op.execute("DROP FUNCTION question_version_insert_guard()")
+    op.execute("DROP FUNCTION question_version_syllabus_same_version()")
+    op.execute("DROP FUNCTION question_insert_guard()")
     op.execute("DROP FUNCTION question_guard()")
     op.execute("DROP FUNCTION content_reject_change()")

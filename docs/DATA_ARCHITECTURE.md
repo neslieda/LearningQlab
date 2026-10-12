@@ -16,27 +16,9 @@ Ayrı vector DB, doküman DB ya da Redis MVP'de yok. Tetikleyici: [TECH_STACK.md
 
 ## 2. İlişkisel iskelet + JSONB içerik (D-19)
 
-> Aşağıdaki tablo taslağı dilim 2'de §3.5'e göre yeniden yazılacaktır (ör. her madde 1 puan, `levels` küme, `answer_spec` yok).
-> **Doğruluk kaynağı JSON belgedir;** ilişkisel satırlar ondan türetilir (D-50).
-
-Yapı satırlarda, zengin içerik JSONB'de durur. Gerekçe: cevap, puan ve analitik parçaya ve markscheme maddesine foreign key ile bağlanır.
-
-```
-question(id, origin, rights_record_id, program_id, subject_id, syllabus_status,
-         current_published_version_id, created_at)
-question_version(id, question_id, version_no, status, schema_version, language,
-                 exam_section, level, calculator, total_marks, stem jsonb,
-                 display_mode, blueprint_id, created_by, created_at)      -- değişmez
-part(id, question_version_id, position, label, body jsonb, marks,
-     answer_type, answer_spec jsonb)
-mark_point(id, part_id, position, body jsonb, marks, kind, solution_step_id)
-solution_model(id, question_version_id, chain jsonb)
-question_version_syllabus(question_version_id, syllabus_node_id, is_primary)
-question_version_asset(question_version_id, asset_id, role)
-```
-
-Değişmezlik: `question_version` ve alt satırları `status` ilk kez `in_review` olduktan sonra içerik olarak güncellenmez; yalnızca durum
-alanları değişir. Veritabanı tetikleyicisi ya da uygulama katmanı zorlar, test doğrular.
+**Doğruluk kaynağı JSON belgedir;** ilişkisel satırlar ondan türetilir (D-50). Yapı satırlarda, zengin içerik JSONB'de durur.
+Gerekçe: cevap, puan ve analitik parçaya ve markscheme maddesine foreign key ile bağlanır. Uygulanan tablolar §2.2'dedir; ilk
+taslaktaki `answer_spec`, madde başına `marks`, ayrı `solution_model` ve `asset` tabloları şema v1 ile kalktı ya da ertelendi.
 
 ### 2.1 Temel tablolar — uygulanan hali (dilim 2a, 2026-10-12)
 
@@ -75,13 +57,49 @@ exam_format(id, syllabus_version_id, code, definition jsonb)
   Programa özgü kavramlar (bölüm kodları, komut sözcükleri, düğüm düzeyi) sütun değil veridir (CLAUDE.md kural 12).
   `MarkingPolicy`, bölüm süreleri ve puanları, hesap makinesi izni henüz yok; uzman teyidinden sonra eklenir.
 
-**Dilim 2b'ye devredenler** (2a incelemelerinden):
+### 2.2 Soru tabloları — uygulanan hali (dilim 2b, 2026-10-12)
 
-1. `content`, `source_original` içeriği rights sonucundan bağımsız olarak reddeder; kapsamı `all` olan bir rights kaydı tek başına
-   yeterli sayılmaz (CLAUDE.md kural 3). Kabul testi olarak yazılır.
-2. Rights kaydı açan ya da iptal eden her yol audit kaydı yazar; bunu bir test doğrular.
-3. Kill switch eklendiğinde her çağıranda değil `rights.is_permitted` içinde durur.
-4. Sözlük doğrulaması açıldığında şema test örneğindeki `show_that` komut sözcüğü ile sözlükteki `show` uzlaştırılır.
+Kod: `apps/api/src/qlab/content/models.py`, `service.py`; migration `0002_content.py`.
+
+```
+question(id, origin, rights_record_id, syllabus_version_id, syllabus_status, created_by, created_at)
+question_version(id, question_id, version_no, status, schema_version, document jsonb, content_sha256,
+                 question_class, exam_section, levels[], total_marks,
+                 has_unverified_visuals (veritabanı hesaplar), created_by, created_at, updated_at)
+part(id, question_version_id, position, part_key, label, marks, answer_type)          -- belgeden türetilir
+mark_point(id, part_id, position, point_key, kind, alternative_group, route)          -- belgeden türetilir
+question_version_syllabus(question_version_id, syllabus_node_id, is_primary)          -- belgeden türetilir
+question_version_check(id, question_version_id, check_code, severity, outcome, detail jsonb, created_at)
+```
+
+- **Belge ve özet.** `document` şema v1 belgesidir; `content_sha256` kanonik JSON'un özetidir ve her durum geçişinde audit kaydına
+  yazılır. Okunan belge yazılanla aynı baytlara serileşir. Çoktan seçmeli soru tek `part` satırı taşır (`part_key = "mcq"`).
+- **Yayınlanan sürüm** ayrı bir işaretçi sütunuyla değil durumla bulunur: bir sorunun en çok bir `published` ve en çok bir
+  "üzerinde çalışılan" (`draft`, `auto_checking`, `needs_fix`, `in_review`, `approved`) sürümü olabilir (kısmi tekil indeks).
+- **Değişmezlik (D-55).** İçerik yalnızca `draft` ve `needs_fix` durumunda değişir; `in_review`, `approved`, `published`,
+  `withdrawn` ve `rejected` durumlarında veritabanı tetikleyicisi reddeder. Yayınlanmış sürümün düzeltmesi yeni sürümdür
+  (`start_revision`). Türetilmiş satırlar da yalnızca bu iki durumda değiştirilebilir; hiçbir soru ya da sürüm silinemez.
+- **Durum geçişleri** [DOMAIN_MODEL.md](DOMAIN_MODEL.md) §4'teki çizgeyle sınırlıdır; hem servis hem tetikleyici zorlar. Yeni sürüm
+  yalnızca `draft` olarak eklenebilir.
+- **Yayın koşulları** (CLAUDE.md kural 8; servis ve tetikleyici): durum `approved`; başarısız kritik kontrol yok; doğrulanmamış
+  görsel yok; rights kaydı gösterime izin veriyor (bu sonuncusu yalnızca serviste). Asset tablosu gelene kadar uyaranı olan her
+  belge "doğrulanmamış görsel" sayılır: incelenip onaylanabilir ama yayınlanamaz (D-49).
+- **Kontroller.** `submit` kendi kontrollerini (`schema_valid`, `vocabulary_valid`) çalıştırır ve saklar; dış kontroller
+  `record_check` ile yazılır (üretim hattı, M3). Başarısız kritik kontrol sürümü `needs_fix`'e gönderir. İçerik değişince sonuçlar silinir.
+- **Sözlük.** Kayıtta sınav bölümü, komut sözcükleri ve müfredat düğümleri (yalnızca yaprak düğümler) sorunun müfredat sürümüne
+  göre doğrulanır; uymayan belge kaydedilmez.
+- **Köken ve rights.** Servis yalnızca `authored` kabul eder (D-52). Her işlem rights kaydının şu an herkese gösterime izin
+  vermesini ister; izin yoksa yazma reddedilir, okuma "bulunamadı" döner. Yalnızca kısıtlayan işlemler (geri çekme, ret, düzeltme
+  isteme) rights iptal edilmiş olsa da çalışır.
+- **Onay.** M1-G'de tek onay yeter (D-53). Rol denetimi bu katmanda değil, yetki katmanındadır (dilim 5); servis yalnızca `actor`
+  kimliğini audit'e yazar.
+
+**Sonraki dilimlere devredenler**
+
+1. Rights kaydı açan ya da iptal eden her yol audit kaydı yazar; bunu bir test doğrular (içe aktarma komutu, dilim 4; yönetim uç noktaları).
+2. Kill switch eklendiğinde her çağıranda değil `rights.is_permitted` içinde durur.
+3. `source_original` açılırsa `content`, rights sonucundan bağımsız olarak kurum üyeliğini de ister (CLAUDE.md kural 3); şu an köken tümden kapalı.
+4. Rol denetimi ve "onaylayan yazardan farklı olmalı mı" sorusu yetki katmanıyla birlikte ele alınır (dilim 5; D-53 web'e açılıştan önce yeniden değerlendirilir).
 
 ## 3. İçerik bloğu şeması
 

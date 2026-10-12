@@ -199,7 +199,7 @@ def create(
     )
 
 
-REQUIRED_CHECKS: tuple[str, ...] = ("schema_valid", "vocabulary_valid")
+REQUIRED_CHECKS: tuple[str, ...] = ("schema_valid", "vocabulary_valid", "math_renders")
 WITHDRAWAL_REASON = "the withdrawal no longer applies"
 NO_HASH = "0" * 64
 

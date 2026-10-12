@@ -30,6 +30,7 @@ from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
 
 from qlab.content import service as svc
+from qlab.content.math import KATEX_VERSION, RendererUnavailable
 from qlab.content.schema import QuestionDocument
 from qlab.rights import service as rights
 from tests.content import samples
@@ -68,7 +69,9 @@ from tests.content.support import (
     parts_of,
     publish,
     publish_new,
+    raw_full_version,
     raw_question,
+    raw_walk,
     republish,
     set_status_raw,
     snapshot,
@@ -997,6 +1000,8 @@ def test_submit_stores_the_services_own_checks(session: Session, env: Env) -> No
     results = {r.code: r for r in svc.get_checks(session, version.id)}
     assert results["schema_valid"].outcome is svc.Outcome.PASSED
     assert results["vocabulary_valid"].outcome is svc.Outcome.PASSED
+    assert results["math_renders"].outcome is svc.Outcome.PASSED
+    assert set(svc.REQUIRED_CHECKS) <= set(results)
 
 
 def test_get_checks_is_ordered_by_code(session: Session, env: Env) -> None:
@@ -2157,12 +2162,12 @@ def assert_invariants(connection: Connection, question_id: uuid.UUID) -> None:
             passed = connection.execute(
                 text(
                     "SELECT count(*) FROM question_version_check WHERE question_version_id = :v "
-                    "AND check_code IN ('schema_valid', 'vocabulary_valid') "
+                    "AND check_code IN ('schema_valid', 'vocabulary_valid', 'math_renders') "
                     "AND severity = 'critical' AND outcome = 'passed'"
                 ),
                 {"v": row.id},
             ).scalar_one()
-            assert passed == 2  # a missing required check is not a pass
+            assert passed == len(REQUIRED_CHECKS)  # a missing required check is not a pass
     assert len(published) <= 1
     assert len([r for r in rows if r.status in WORKING_STATUSES]) <= 1
     for row in published:
@@ -2203,3 +2208,271 @@ def test_hash_of_a_document_survives_a_json_round_trip(name: str) -> None:
     doc = document(ALL_SAMPLES[name]())
     again = QuestionDocument.model_validate(json.loads(doc.model_dump_json()))
     assert svc.content_sha256(again) == svc.content_sha256(doc)
+
+
+# =============================================================================================
+# 14. Math is checked when content is saved (CLAUDE.md rule 6)
+# =============================================================================================
+
+node = pytest.mark.node
+
+
+def unique_formula() -> str:
+    """A formula that no other test renders, so it has to reach the renderer."""
+    return "w" + "".join(chr(ord("a") + int(c, 16)) for c in uuid.uuid4().hex)
+
+
+def math_document(*latex: str, block: bool = False) -> QuestionDocument:
+    d = samples.data_based_document()
+    d["stem"] = samples.doc(
+        *[samples.math_block(x) if block else samples.paragraph(samples.math(x)) for x in latex],
+        samples.paragraph(samples.text("A ball is timed.")),
+    )
+    return document(d)
+
+
+def no_renderer(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("QLAB_NODE_BIN", "no-such-node-binary-" + uuid.uuid4().hex)
+
+
+def renderer_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("QLAB_NODE_BIN")
+
+
+BAD_MATH = {
+    "refused_command": lambda: rf"{unique_formula()} \href{{http://example.org}}{{x}}",
+    "refused_definition": lambda: rf"\def\{unique_formula()}{{1}}",
+    "does_not_render": lambda: f"{unique_formula()}^",
+    "unbalanced_braces": lambda: f"{{{unique_formula()}",
+}
+
+
+@node
+@pytest.mark.parametrize("case", list(BAD_MATH))
+@pytest.mark.parametrize("block", [False, True], ids=["inline", "block"])
+def test_create_refuses_math_that_is_not_allowed_or_does_not_render(
+    session: Session, connection: Connection, env: Env, case: str, block: bool
+) -> None:
+    latex = BAD_MATH[case]()
+    before = table_counts(connection)
+    with pytest.raises(svc.InvalidDocument) as caught:
+        create(session, env, math_document(latex, block=block))
+    assert any(latex[:50] in error for error in caught.value.errors), caught.value.errors
+    assert table_counts(connection) == before
+    usable(session)
+
+
+@node
+@pytest.mark.parametrize("case", list(BAD_MATH))
+def test_update_draft_refuses_such_math_and_changes_nothing(
+    session: Session, connection: Connection, env: Env, case: str
+) -> None:
+    version = create(session, env)
+    svc.record_check(session, actor=OP_ACTOR, version_id=version.id, result=failed_critical())
+    latex = BAD_MATH[case]()
+    before = snapshot(session, connection, version.question_id)
+    entries = len(audit_for(session, version.id))
+
+    with pytest.raises(svc.InvalidDocument) as caught:
+        svc.update_draft(
+            session, actor=OP_ACTOR, version_id=version.id, document=math_document(latex)
+        )
+
+    assert any(latex[:50] in error for error in caught.value.errors), caught.value.errors
+    assert snapshot(session, connection, version.question_id) == before
+    assert len(audit_for(session, version.id)) == entries
+    assert svc.get_version(session, version.id).content_sha256 == version.content_sha256
+    usable(session)
+
+
+@node
+def test_every_bad_node_is_named_and_good_ones_are_not(session: Session, env: Env) -> None:
+    bad_one, bad_two, good = (
+        f"{unique_formula()}^",
+        rf"\input{{{unique_formula()}}}",
+        unique_formula(),
+    )
+    with pytest.raises(svc.InvalidDocument) as caught:
+        create(session, env, math_document(bad_one, good, bad_two))
+    errors = " | ".join(caught.value.errors)
+    assert bad_one in errors and bad_two in errors
+    assert f"`{good}`" not in errors
+
+
+@node
+def test_math_that_is_fine_is_saved_and_returned_unchanged(session: Session, env: Env) -> None:
+    doc = math_document(unique_formula(), rf"\frac{{{unique_formula()}}}{{2}}", block=False)
+    view = create(session, env, doc)
+    assert svc.get_version(session, view.id).document == doc
+
+
+@node
+def test_math_and_vocabulary_problems_together_are_reported_as_observed(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    d = samples.data_based_document()
+    d["exam_section"] = "paper_9"
+    bad = f"{unique_formula()}^"
+    d["stem"] = samples.doc(samples.paragraph(samples.math(bad)))
+    before = table_counts(connection)
+    with pytest.raises(svc.InvalidDocument) as caught:
+        create(session, env, document(d))
+    assert mentions(caught.value.errors, "paper_9")  # the vocabulary problem is always reported
+    # Whether the math problem is listed as well is not promised by the contract.
+    assert table_counts(connection) == before
+
+
+@node
+@pytest.mark.parametrize("operation", ["create_question", "update_draft"])
+def test_content_whose_math_cannot_be_checked_is_not_saved(
+    session: Session,
+    connection: Connection,
+    env: Env,
+    monkeypatch: pytest.MonkeyPatch,
+    operation: str,
+) -> None:
+    doc = math_document(unique_formula())
+    if operation == "create_question":
+        before = table_counts(connection)
+        no_renderer(monkeypatch)
+        with pytest.raises(RendererUnavailable):
+            create(session, env, doc)
+        assert table_counts(connection) == before
+        usable(session)
+        renderer_back(monkeypatch)
+        assert create(session, env, doc).document == doc
+        return
+    version = create(session, env)
+    before = snapshot(session, connection, version.question_id)
+    entries = len(audit_for(session, version.id))
+    no_renderer(monkeypatch)
+    with pytest.raises(RendererUnavailable):
+        svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=doc)
+    assert snapshot(session, connection, version.question_id) == before
+    assert len(audit_for(session, version.id)) == entries
+    assert status_of(connection, version.id) == "draft"
+    usable(session)
+    renderer_back(monkeypatch)
+    assert (
+        svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=doc).document
+        == doc
+    )
+
+
+@node
+def test_a_revision_whose_math_cannot_be_checked_is_not_opened(
+    session: Session, connection: Connection, env: Env, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    doc = math_document(unique_formula())
+    raw = raw_full_version(connection, env, doc)
+    raw_walk(connection, raw.version_id, "published")
+    before = snapshot(session, connection, raw.question_id)
+    entries = len(audit_for(session, raw.version_id))
+    no_renderer(monkeypatch)
+
+    with pytest.raises(RendererUnavailable):
+        svc.start_revision(session, actor=OP_ACTOR, question_id=raw.question_id)
+
+    assert snapshot(session, connection, raw.question_id) == before
+    assert len(audit_for(session, raw.version_id)) == entries
+    usable(session)
+    renderer_back(monkeypatch)
+    revision = svc.start_revision(session, actor=OP_ACTOR, question_id=raw.question_id)
+    assert revision.version_no == 2 and revision.document == doc
+
+
+@node
+def test_submit_without_a_renderer_is_not_stuck_in_auto_checking(
+    session: Session, connection: Connection, env: Env, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    doc = math_document(unique_formula())
+    raw = raw_full_version(connection, env, doc, required=())  # a draft nobody has checked
+    connection.execute(
+        text("DELETE FROM question_version_check WHERE question_version_id = :v"),
+        {"v": raw.version_id},
+    )
+    before = snapshot(session, connection, raw.question_id)
+    no_renderer(monkeypatch)
+
+    with pytest.raises(RendererUnavailable):
+        svc.submit(session, actor=OP_ACTOR, version_id=raw.version_id)
+
+    assert snapshot(session, connection, raw.question_id) == before
+    assert status_of(connection, raw.version_id) == "draft"
+    assert checks_raw(connection, raw.version_id) == []
+    assert audit_for(session, raw.version_id) == []
+    usable(session)
+    renderer_back(monkeypatch)
+    assert svc.submit(session, actor=OP_ACTOR, version_id=raw.version_id).status is (
+        svc.VersionStatus.IN_REVIEW
+    )
+
+
+@node
+def test_submit_stores_math_renders_as_passed_with_the_katex_version(
+    session: Session, env: Env
+) -> None:
+    version = create(session, env, math_document(unique_formula()))
+    svc.submit(session, actor=OP_ACTOR, version_id=version.id)
+    results = {r.code: r for r in svc.get_checks(session, version.id)}
+    result = results["math_renders"]
+    assert result.outcome is svc.Outcome.PASSED
+    assert result.severity is svc.Severity.CRITICAL
+    assert KATEX_VERSION in json.dumps(result.detail)
+
+
+@node
+def test_a_stored_document_with_math_that_does_not_render_sends_submit_to_needs_fix(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    marker = unique_formula()
+    version = create(session, env, math_document(marker))
+    # Only raw SQL on a draft can put such a document in: the service refuses it at save time.
+    bad = f"{marker}^"
+    connection.execute(
+        text(
+            "UPDATE question_version SET document = replace(document::text, "
+            "CAST(:old AS text), CAST(:new AS text))::jsonb WHERE id = :v"
+        ),
+        {"old": f'"latex": "{marker}"', "new": f'"latex": "{bad}"', "v": version.id},
+    )
+    assert bad in json.dumps(
+        connection.execute(
+            text("SELECT document FROM question_version WHERE id = :v"), {"v": version.id}
+        ).scalar_one()
+    )
+
+    result = svc.submit(session, actor=OP_ACTOR, version_id=version.id)
+
+    assert result.status is svc.VersionStatus.NEEDS_FIX
+    failed = audit_for(session, version.id)[-1]
+    assert failed.action == "question_version.checks_failed"
+    assert "math_renders" in data_text(failed)
+    stored = {r.code: r for r in svc.get_checks(session, version.id)}
+    math_result = stored["math_renders"]
+    assert math_result.outcome is svc.Outcome.FAILED
+    assert math_result.severity is svc.Severity.CRITICAL
+    detail = json.dumps(math_result.detail)
+    assert marker not in detail  # a count, not the formula text (which is the author's data)
+    assert any(isinstance(v, int) and not isinstance(v, bool) for v in math_result.detail.values())
+    assert status_of(connection, version.id) == "needs_fix"
+
+
+@node
+def test_a_version_cannot_leave_needs_fix_for_review_without_passing_the_math_check(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    marker = unique_formula()
+    version = create(session, env, math_document(marker))
+    connection.execute(
+        text(
+            "UPDATE question_version SET document = replace(document::text, "
+            "CAST(:old AS text), CAST(:new AS text))::jsonb WHERE id = :v"
+        ),
+        {"old": f'"latex": "{marker}"', "new": f'"latex": "{marker}^"', "v": version.id},
+    )
+    svc.submit(session, actor=OP_ACTOR, version_id=version.id)
+    svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=math_document(marker))
+    assert svc.submit(session, actor=OP_ACTOR, version_id=version.id).status is (
+        svc.VersionStatus.IN_REVIEW
+    )

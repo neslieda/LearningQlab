@@ -577,7 +577,7 @@ def show_that_document() -> Json:
                 "a",
                 1,
                 show_that=True,
-                command_term="show_that",
+                command_term="show",
                 answer_type="derivation_numeric",
                 level_content="ahl",
                 syllabus_node="A.4",

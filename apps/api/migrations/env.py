@@ -5,6 +5,7 @@ from logging.config import fileConfig
 from alembic import context
 
 import qlab.audit.models
+import qlab.content.models
 import qlab.rights.models
 import qlab.syllabus.models  # noqa: F401
 from qlab.database import Base, make_engine

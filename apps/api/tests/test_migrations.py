@@ -9,6 +9,7 @@ from alembic.migration import MigrationContext
 from sqlalchemy import Connection, Engine, inspect
 
 import qlab.audit.models
+import qlab.content.models
 import qlab.rights.models
 import qlab.syllabus.models  # noqa: F401
 from qlab.database import Base

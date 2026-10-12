@@ -33,6 +33,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from qlab.audit import service as audit
+from qlab.content import math
 from qlab.content.models import (
     WORKING_STATUSES,
     MarkPoint,
@@ -51,8 +52,9 @@ MAX_DOCUMENT_BYTES = 512 * 1024
 MAX_CHECK_DETAIL_BYTES = 8 * 1024
 _CHECK_CODE = re.compile(r"[a-z][a-z0-9_]{0,63}")
 # Critical checks that must have passed on the current content before review and publishing.
-# Mirrored in the database guard (migration 0002); extend both together.
-REQUIRED_CHECKS = ("schema_valid", "vocabulary_valid")
+# Mirrored by the database function content_required_checks() (migration 0003); extend both
+# together.
+REQUIRED_CHECKS = ("schema_valid", "vocabulary_valid", "math_renders")
 
 
 class Origin(StrEnum):
@@ -335,6 +337,10 @@ def _write_content(
     errors = _vocabulary_errors(document, vocabulary)
     if errors:
         raise InvalidDocument(errors)
+    # Every math node must render now, or the document is not stored (CLAUDE.md rule 6).
+    errors = math.check(document)
+    if errors:
+        raise InvalidDocument(errors)
     nodes = (document.primary_syllabus_node, *document.secondary_syllabus_nodes)
     node_ids = syllabus.node_ids(session, question.syllabus_version_id, frozenset(nodes))
 
@@ -469,11 +475,27 @@ def _check_vocabulary(
     return CheckResult("vocabulary_valid", Severity.CRITICAL, outcome, {"errors": list(errors)})
 
 
-# The checks `submit` runs itself. Later slices append to this list (KaTeX rendering) or record
-# results from outside with `record_check` (the verification pipeline).
+def _check_math(session: Session, version: QuestionVersion, question: Question) -> CheckResult:
+    try:
+        document = QuestionDocument.model_validate(version.document)
+    except ValidationError:
+        return CheckResult("math_renders", Severity.CRITICAL, Outcome.NOT_APPLICABLE, {})
+    errors = math.check(document)
+    outcome = Outcome.FAILED if errors else Outcome.PASSED
+    return CheckResult(
+        "math_renders",
+        Severity.CRITICAL,
+        outcome,
+        {"errors": len(errors), "katex": math.KATEX_VERSION},
+    )
+
+
+# The checks `submit` runs itself. External results (the verification pipeline) arrive through
+# `record_check`.
 _OWN_CHECKS: list[Callable[[Session, QuestionVersion, Question], CheckResult]] = [
     _check_schema,
     _check_vocabulary,
+    _check_math,
 ]
 
 
@@ -498,6 +520,9 @@ def create_question(
     - The document's exam section, command terms and syllabus nodes (leaf nodes only) must
       belong to the syllabus version, else InvalidDocument listing every problem. A document
       over 512 kB or containing a NUL character is also InvalidDocument.
+    - Every math node must use only allowed LaTeX commands and render in the pinned KaTeX
+      (`qlab.content.math`), else InvalidDocument naming each node. If the renderer cannot be
+      run, `qlab.content.math.RendererUnavailable` is raised and nothing is saved.
 
     Nothing is written when an error is raised. On success the derived rows exist (one `part`
     per part, or a single one with key "mcq" for a multiple-choice question; one `mark_point`
@@ -594,7 +619,8 @@ def submit(session: Session, *, actor: str, version_id: uuid.UUID) -> VersionSta
     """Run the automatic checks on a `draft` version and move it on.
 
     `draft` → `auto_checking` → `in_review`, or `needs_fix` when a critical check has failed
-    or a required check (`schema_valid`, `vocabulary_valid`) has not passed. The service's own
+    or a required check (`schema_valid`, `vocabulary_valid`, `math_renders`) has not
+    passed. The service's own
     checks are run and stored; results recorded earlier with `record_check` count too.
     Unverified visuals do not stop a review; they stop publishing. Audit:
     `question_version.submitted`, then `question_version.checks_passed` or

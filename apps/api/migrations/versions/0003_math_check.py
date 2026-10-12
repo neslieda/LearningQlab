@@ -1,5 +1,9 @@
 """Math render check becomes a required check; the required list moves into one function.
 
+Versions that passed review before this migration have no `math_renders` result and cannot be
+published or republished until they are checked again (request changes, save, submit; or a new
+revision). No environment holds question rows yet: the first import is M1-G slice 4.
+
 Revision ID: 0003
 Revises: 0002
 """
@@ -111,7 +115,7 @@ def upgrade() -> None:
     # (CLAUDE.md rules 6 and 8). A later required check replaces only this function.
     op.execute(
         """
-        CREATE FUNCTION content_required_checks() RETURNS text[]
+        CREATE FUNCTION public.content_required_checks() RETURNS text[]
         LANGUAGE sql IMMUTABLE SET search_path = pg_catalog, public, pg_temp
         AS $$ SELECT ARRAY['schema_valid', 'vocabulary_valid', 'math_renders'] $$
         """
@@ -121,4 +125,4 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.execute(_GUARD.format(required_clause=_REQUIRED_IN_0002))
-    op.execute("DROP FUNCTION content_required_checks()")
+    op.execute("DROP FUNCTION public.content_required_checks()")

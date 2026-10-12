@@ -107,7 +107,8 @@ Setler ve ölçüler: [AI_PIPELINE.md](AI_PIPELINE.md) §13.
 
 ## 10. Ortamlar ve veri
 
-- Yerel: container ile PostgreSQL; sentetik veri üreten tohum betiği.
+- Yerel: container ile PostgreSQL (`infra/local/compose.yaml`; [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) §13); sentetik veri üreten tohum betiği.
+- Veritabanı testleri migration'ları boş bir veritabanına uygulayarak başlar; her test kendi transaction'ında çalışır ve geri alınır.
 - Staging: production ile aynı yapı; gerçek öğrenci verisi kopyalanmaz.
 - Test verisinde gerçek kaynak soru bulunmaz; sentetik sorular kullanılır.
 

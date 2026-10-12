@@ -8,10 +8,12 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 
 from sqlalchemy.orm import Session
+
+from qlab.rights.models import RightsRecord
 
 
 class Purpose(StrEnum):
@@ -44,6 +46,26 @@ class RightsRecordView:
     revoked_at: datetime | None
 
 
+def _require_aware(name: str, value: datetime) -> None:
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError(f"rights: {name} must be timezone-aware")
+
+
+def _view(row: RightsRecord) -> RightsRecordView:
+    return RightsRecordView(
+        id=row.id,
+        holder=row.holder,
+        license_ref=row.license_ref,
+        display_scope=DisplayScope(row.display_scope),
+        display_organization_id=row.display_organization_id,
+        allows_ai_processing=row.allows_ai_processing,
+        allows_commercial_use=row.allows_commercial_use,
+        valid_from=row.valid_from,
+        valid_until=row.valid_until,
+        revoked_at=row.revoked_at,
+    )
+
+
 def evaluate(
     record: RightsRecordView | None,
     purpose: Purpose,
@@ -59,11 +81,28 @@ def evaluate(
 
     DISPLAY: scope "all" permits everyone; scope "organization" permits only when
     `organization_id` equals the record's `display_organization_id`; scope "none" permits no one.
-    `organization_id` is ignored for the other purposes.
+    Display does not depend on the two `allows_*` flags. `organization_id` is ignored for the
+    other purposes.
 
     `at` must be timezone-aware; a naive datetime raises ValueError.
     """
-    raise NotImplementedError
+    _require_aware("at", at)
+    if record is None or record.revoked_at is not None:
+        return False
+    if at < record.valid_from:
+        return False
+    if record.valid_until is not None and at >= record.valid_until:
+        return False
+    if purpose is Purpose.AI_PROCESSING:
+        return record.allows_ai_processing
+    if purpose is Purpose.COMMERCIAL_USE:
+        return record.allows_commercial_use
+    if purpose is Purpose.DISPLAY:
+        if record.display_scope is DisplayScope.ALL:
+            return True
+        if record.display_scope is DisplayScope.ORGANIZATION:
+            return organization_id is not None and organization_id == record.display_organization_id
+    return False
 
 
 def create_record(
@@ -85,11 +124,37 @@ def create_record(
     `valid_until` is not after `valid_from`; or `display_organization_id` is given without
     scope "organization", or missing with it.
     """
-    raise NotImplementedError
+    if not holder.strip():
+        raise ValueError("rights: holder is blank")
+    _require_aware("valid_from", valid_from)
+    if valid_until is not None:
+        _require_aware("valid_until", valid_until)
+        if valid_until <= valid_from:
+            raise ValueError("rights: valid_until must be after valid_from")
+    scope = DisplayScope(display_scope)
+    if (scope is DisplayScope.ORGANIZATION) != (display_organization_id is not None):
+        raise ValueError(
+            "rights: display_organization_id is required for, and only for, scope 'organization'"
+        )
+    row = RightsRecord(
+        holder=holder,
+        license_ref=license_ref,
+        display_scope=scope.value,
+        display_organization_id=display_organization_id,
+        allows_ai_processing=allows_ai_processing,
+        allows_commercial_use=allows_commercial_use,
+        valid_from=valid_from,
+        valid_until=valid_until,
+        note=note,
+    )
+    session.add(row)
+    session.flush()
+    return _view(row)
 
 
 def get_record(session: Session, rights_record_id: uuid.UUID) -> RightsRecordView | None:
-    raise NotImplementedError
+    row = session.get(RightsRecord, rights_record_id)
+    return None if row is None else _view(row)
 
 
 def revoke(session: Session, rights_record_id: uuid.UUID, *, at: datetime) -> None:
@@ -97,7 +162,13 @@ def revoke(session: Session, rights_record_id: uuid.UUID, *, at: datetime) -> No
 
     Unknown id raises LookupError; a naive `at` raises ValueError.
     """
-    raise NotImplementedError
+    _require_aware("at", at)
+    row = session.get(RightsRecord, rights_record_id, with_for_update=True)
+    if row is None:
+        raise LookupError(f"rights record {rights_record_id} does not exist")
+    if row.revoked_at is None:
+        row.revoked_at = at
+        session.flush()
 
 
 def is_permitted(
@@ -108,8 +179,18 @@ def is_permitted(
     at: datetime | None = None,
     organization_id: uuid.UUID | None = None,
 ) -> bool:
-    """`evaluate` for the stored record; `at` defaults to now. None or unknown id is denied."""
-    raise NotImplementedError
+    """`evaluate` for the stored record; `at` defaults to now. None or unknown id is denied.
+
+    A naive `at` raises ValueError whenever a record id is given.
+    """
+    if rights_record_id is None:
+        return False
+    return evaluate(
+        get_record(session, rights_record_id),
+        purpose,
+        at=at if at is not None else datetime.now(UTC),
+        organization_id=organization_id,
+    )
 
 
 def require(
@@ -121,4 +202,5 @@ def require(
     organization_id: uuid.UUID | None = None,
 ) -> None:
     """Raise RightsDenied unless `is_permitted` holds."""
-    raise NotImplementedError
+    if not is_permitted(session, rights_record_id, purpose, at=at, organization_id=organization_id):
+        raise RightsDenied(f"{purpose.value} is not permitted for rights record {rights_record_id}")

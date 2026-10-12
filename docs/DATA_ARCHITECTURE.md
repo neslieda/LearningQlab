@@ -38,6 +38,33 @@ question_version_asset(question_version_id, asset_id, role)
 Değişmezlik: `question_version` ve alt satırları `status` ilk kez `in_review` olduktan sonra içerik olarak güncellenmez; yalnızca durum
 alanları değişir. Veritabanı tetikleyicisi ya da uygulama katmanı zorlar, test doğrular.
 
+### 2.1 Temel tablolar — uygulanan hali (dilim 2a, 2026-10-12)
+
+Kod: `apps/api/src/qlab/{audit,rights,syllabus}/models.py`; migration `apps/api/migrations/versions/0001_foundation.py`.
+Kimlikler UUIDv7'dir; ön ekli biçim (`q_…`) yalnızca API sınırında üretilir (D-54).
+
+```
+audit_log(id, occurred_at, actor, action, entity_type, entity_id, data jsonb)      -- yalnızca ekleme
+rights_record(id, holder, license_ref, display_scope: none | organization | all,
+              display_organization_id, allows_ai_processing, allows_commercial_use,
+              valid_from, valid_until, revoked_at, note, created_at)
+program(id, code, name)
+subject(id, program_id, code, name)
+syllabus_version(id, subject_id, code, title)
+syllabus_node(id, syllabus_version_id, parent_id, code, title, position, attributes jsonb)
+exam_format(id, syllabus_version_id, code, definition jsonb)
+```
+
+- `audit_log`: UPDATE, DELETE ve TRUNCATE veritabanı tetikleyicisiyle reddedilir. `actor` opak hesap kimliği ya da `system:<süreç>`
+  biçimindedir; ad ya da e-posta yazılmaz. Kayıt, anlattığı değişiklikle aynı transaction'da yazılır.
+- `rights_record`: her izin varsayılan olarak kapalıdır. Karar kuralı (`qlab.rights.service.evaluate`): kayıt yoksa, geçerlilik
+  aralığının dışındaysa, iptal edilmişse ya da ilgili bayrak kapalıysa **ret**. Kill switch bu dilimde yok; `source_original` yolları
+  `content` modülünde tümden kapalıdır (D-47, D-52).
+- Müfredat ve sınav biçimi bir referans dosyasından yüklenir (`content/reference/*-syllabus.json`,
+  `python -m qlab.syllabus <dosya>`). Yükleme idempotenttir ve hiçbir şey silmez: dosya var olan bir düğümü, sınav bölümünü ya da
+  komut sözcüğünü düşürüyorsa reddedilir. Programa özgü kavramlar (bölüm kodları, komut sözcükleri, düğüm düzeyi) sütun değil veridir
+  (CLAUDE.md kural 12). `MarkingPolicy` ve bölüm süreleri/puanları henüz yok; uzman teyidinden sonra eklenir.
+
 ## 3. İçerik bloğu şeması
 
 ProseMirror-uyumlu düğüm yapısı: `{type, attrs?, content?, text?, marks?}`. Tek doğruluk kaynağı backend'deki Pydantic modelidir;

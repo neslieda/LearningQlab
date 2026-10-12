@@ -28,6 +28,18 @@ class AuditEntry:
     data: Mapping[str, Any]
 
 
+def _entry(row: AuditLog) -> AuditEntry:
+    return AuditEntry(
+        id=row.id,
+        occurred_at=row.occurred_at,
+        actor=row.actor,
+        action=row.action,
+        entity_type=row.entity_type,
+        entity_id=row.entity_id,
+        data=row.data,
+    )
+
+
 def record(
     session: Session,
     *,
@@ -43,13 +55,34 @@ def record(
     lower-case name such as "question_version.published". `actor`, `entity_type` and `entity_id`
     must be non-blank. Invalid arguments raise ValueError and write nothing.
     """
-    raise NotImplementedError
+    for name, value in (("actor", actor), ("entity_type", entity_type), ("entity_id", entity_id)):
+        if not value.strip():
+            raise ValueError(f"audit: {name} is blank")
+    if not _ACTION.fullmatch(action):
+        raise ValueError(f"audit: action {action!r} is not a dotted lower-case name")
+    row = AuditLog(
+        actor=actor,
+        action=action,
+        entity_type=entity_type,
+        entity_id=entity_id,
+        data=dict(data or {}),
+    )
+    session.add(row)
+    session.flush()
+    session.refresh(row)
+    return _entry(row)
 
 
 def entries_for(session: Session, entity_type: str, entity_id: str) -> list[AuditEntry]:
-    """Entries for one entity, oldest first."""
-    raise NotImplementedError
+    """Entries for one entity, oldest first.
 
-
-__all__ = ["AuditEntry", "entries_for", "record"]
-_ = (select, AuditLog)
+    Entries written in one transaction share `occurred_at`; they come back in the order they
+    were recorded (the identifier is time-ordered).
+    """
+    rows = session.scalars(
+        select(AuditLog)
+        .where(AuditLog.entity_type == entity_type, AuditLog.entity_id == entity_id)
+        # now() is constant within a transaction; the time-ordered id breaks the tie.
+        .order_by(AuditLog.occurred_at, AuditLog.id)
+    )
+    return [_entry(row) for row in rows]

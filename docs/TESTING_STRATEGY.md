@@ -55,7 +55,7 @@ mimari kuralları zorlar. "Testler geçti" ifadesinin anlam taşıması için te
 | Rights fail-closed | Rights'ı olmayan, süresi dolmuş ya da bayrağı kapalı içerik işlenmez ve dönmez |
 | Kurum dışı hesap `source_original` göremez | Her okuma uç noktası için |
 | Kritik kontrol varken yayın olmaz | Arayüzü atlayıp doğrudan API ile denenir |
-| Sürüm değişmezliği | İncelemeye girmiş sürümün içeriğini değiştirme denemesi reddedilir |
+| Sürüm değişmezliği | `draft` ve `needs_fix` dışındaki sürümün içeriğini değiştirme denemesi (servisle ve ham SQL ile) reddedilir (D-55) |
 | Her matematik düğümü render olur | Kayıt yolunda ve yayın öncesi toplu tarama |
 | Kill switch | Açıkken kaynak içerik adımları çalışmaz, kuyruktakiler iptal olur |
 | Reşit olmayan satın alması | Kural gerektiriyorsa `Consent` olmadan entitlement verilmez |

@@ -86,11 +86,11 @@ erDiagram
 
 ### 2.2 İçerik
 
-- `Question`: `origin`, `rights_record_id` (zorunlu), `program_id`, `subject_id`, `current_published_version_id`.
-- `QuestionVersion`: değişmez. Kök gövde (ortak giriş metni) JSONB; `exam_section`, `level`, `calculator`, `language`, `schema_version`.
-- `Part`: sıra, etiket, gövde JSONB, `marks`, `answer_spec` (tip: `mcq`, `numeric`, `short_text`, `extended`, `drawing`), tolerans.
-- `MarkPoint`: sıra, metin JSONB, `marks`, tür (yöntem / cevap / açıklama), isteğe bağlı `solution_step_id`.
-- `SolutionModel`: formül zinciri JSONB; sürüme bağlı.
+- `Question`: `origin`, `rights_record_id` (zorunlu), `syllabus_version_id` (program ve ders bundan türer). Yayınlanan sürüm durumdan bulunur.
+- `QuestionVersion`: şema v1 belgesi (JSONB, doğruluk kaynağı; D-50), içerik özeti, durum. Yayınlandıktan sonra değişmez.
+- `Part`, `MarkPoint`: belgeden türetilen satırlar (sıra, belge içi anahtar, etiket, puan, cevap türü; madde türü, alternatif grubu,
+  yol). Gövde ve metinler belgededir; her madde 1 puandır. Çözüm modeli belgenin içindedir, ayrı tablo değildir.
+  Ayrıntı: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) §2.2 ve §3.5.
 - `Asset`: object storage anahtarı, MIME, boyut, sha256, alt metin, üretim kaynağı (yüklenmiş / şablondan üretilmiş + parametreler).
 - `Blueprint`: yapılandırılmış soyut tarif; müfredat düğümü, biçim profili sürümü, yazım yöntemi (uzman / AI önerisi + onaylayan), model ve prompt sürümü.
 - `FormatProfile`: bir sınav bölümünün biçim tarifi; sürümlü, uzman onaylı, soru metni içermez (D-44).
@@ -148,6 +148,7 @@ stateDiagram-v2
   in_review --> approved: gerekli onay sayısı tamam
   in_review --> needs_fix: düzeltme istendi
   in_review --> rejected: ret
+  approved --> needs_fix: onay geri alındı
   approved --> published: yayınla
   published --> withdrawn: geri çek
   withdrawn --> published: yeniden yayınla
@@ -156,9 +157,14 @@ stateDiagram-v2
 
 Kurallar:
 
-- `published` geçişi yalnızca `approved` durumundan ve kritik kontrolü kalan rapor yokken yapılır; backend zorlar.
+- `published` geçişi yalnızca `approved` durumundan (yeniden yayında: daha yeni sürümü olmayan `withdrawn` sürümden), zorunlu
+  kontroller geçmişken ve kritik kontrolü kalan rapor yokken yapılır; backend ve veritabanı zorlar. Eksik kontrol geçmiş sayılmaz.
 - Gerekli onay sayısı soru tipine bağlıdır: kodla doğrulanmış tiplerde 1, uzun açıklamalıda 2 (D-18).
-- Yayınlanmış sürüm düzenlenmez. Düzeltme yeni `draft` sürüm açar; eski sürüm öğrenci kayıtları için durur.
+- İçerik yalnızca `draft` ve `needs_fix` durumunda düzenlenir (D-55); incelemecinin geri gönderdiği sürüm yerinde düzeltilir ve her
+  geçişte içerik özeti audit'e yazılır. `needs_fix` durumundaki sürüm düzenlenince `draft` olur.
+- Yayınlanmış sürüm düzenlenmez. Düzeltme yeni `draft` sürüm açar; eski sürüm öğrenci kayıtları için durur. Yeni sürüm yayınlanınca
+  eskisi aynı işlemde `withdrawn` olur.
+- M1-G'de gerekli onay sayısı tüm sınıflar için 1'dir (D-53, geçici).
 - `source_original` sorular için ek durum: `display_mode = page_crop | structured`. İnsan doğrulayana kadar `page_crop`.
 
 ## 5. Pipeline çalışması yaşam döngüsü

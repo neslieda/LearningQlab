@@ -16,6 +16,7 @@ from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
 
 import qlab.audit.models
+import qlab.content.models
 import qlab.rights.models
 import qlab.syllabus.models  # noqa: F401
 from qlab.audit import service as audit
@@ -66,16 +67,20 @@ def test_guard_triggers_fire_even_in_replica_mode(connection: Connection) -> Non
     rows = connection.execute(
         text(
             "SELECT tgrelid::regclass::text AS table, tgname, tgenabled::text AS enabled "
-            "FROM pg_trigger WHERE NOT tgisinternal ORDER BY 1, 2"
+            "FROM pg_trigger WHERE NOT tgisinternal"
         )
     ).all()
-    assert [(r.table, r.tgname, r.enabled) for r in rows] == [
-        ("audit_log", "audit_log_no_truncate", "A"),
-        ("audit_log", "audit_log_no_update_delete", "A"),
-        ("audit_log", "audit_log_stamp", "A"),
-        ("rights_record", "rights_record_guard_row", "A"),
-        ("rights_record", "rights_record_guard_truncate", "A"),
-    ]
+    assert {r.enabled for r in rows} == {"A"}
+    guarded = {r.table for r in rows}
+    assert guarded == set(Base.metadata.tables) - {
+        "program",
+        "subject",
+        "syllabus_version",
+        "syllabus_node",
+        "exam_format",
+    }
+    # Every guarded table refuses TRUNCATE.
+    assert {r.table for r in rows if r.tgname.endswith("truncate")} == guarded
 
 
 # --- audit log ----------------------------------------------------------------------------
@@ -245,7 +250,7 @@ def make_record(session: Session) -> uuid.UUID:
         "UPDATE rights_record SET valid_until = NULL, holder = 'Other' WHERE id = :id",
         "UPDATE rights_record SET revoked_at = now(), allows_commercial_use = true WHERE id = :id",
         "DELETE FROM rights_record WHERE id = :id",
-        "TRUNCATE rights_record",
+        "TRUNCATE rights_record CASCADE",
     ],
 )
 def test_a_stored_record_cannot_be_widened_edited_or_removed(

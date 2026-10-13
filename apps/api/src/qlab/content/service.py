@@ -52,6 +52,9 @@ MAX_DOCUMENT_BYTES = 512 * 1024
 MAX_CHECK_DETAIL_BYTES = 8 * 1024
 _CHECK_CODE = re.compile(r"[a-z][a-z0-9_]{0,63}")
 _SOURCE_REF = re.compile(r"[a-z0-9][a-z0-9/_#.-]{0,199}")
+# First key of the two-key advisory lock taken per source_ref; keeps this use apart from any
+# other advisory locks in the database.
+_SOURCE_REF_LOCK_SPACE = 0x514C4142
 # Critical checks that must have passed on the current content before review and publishing.
 # Mirrored by the database function content_required_checks() (migration 0003); extend both
 # together.
@@ -559,7 +562,9 @@ def create_question(
     syllabus.get_vocabulary(session, syllabus_version_id)
     if source_ref is not None:
         # Serialises concurrent imports of the same key; the unique constraint is the backstop.
-        session.execute(select(func.pg_advisory_xact_lock(func.hashtextextended(source_ref, 0))))
+        session.execute(
+            select(func.pg_advisory_xact_lock(_SOURCE_REF_LOCK_SPACE, func.hashtext(source_ref)))
+        )
         taken = session.scalar(select(Question.id).where(Question.source_ref == source_ref))
         if taken is not None:
             raise DuplicateSourceRef(source_ref)

@@ -29,6 +29,13 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    # Without the keys a re-import would create every imported question a second time.
+    if (
+        op.get_bind()
+        .exec_driver_sql("SELECT 1 FROM question WHERE source_ref IS NOT NULL LIMIT 1")
+        .first()
+    ):
+        raise RuntimeError("refusing to downgrade: questions with a source_ref exist")
     op.drop_constraint(op.f("ck_question_source_ref"), "question", type_="check")
     op.drop_constraint("uq_question_source_ref", "question", type_="unique")
     op.drop_column("question", "source_ref")

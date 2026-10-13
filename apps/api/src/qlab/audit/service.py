@@ -50,6 +50,12 @@ def _entry(row: AuditLog) -> AuditEntry:
     )
 
 
+def is_valid_actor(actor: str) -> bool:
+    """Whether `actor` has the form the audit log accepts: an opaque account identifier or
+    "system:<process>" (letters, digits and `_ . : | -`; no spaces, no e-mail address)."""
+    return _ACTOR.fullmatch(actor) is not None
+
+
 def record(
     session: Session,
     *,

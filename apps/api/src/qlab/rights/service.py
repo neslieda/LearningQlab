@@ -165,6 +165,18 @@ def get_record(session: Session, rights_record_id: uuid.UUID) -> RightsRecordVie
     return None if row is None else _view(row)
 
 
+def find_by_license_ref(session: Session, license_ref: str) -> list[RightsRecordView]:
+    """Every record with this licence reference, oldest first, as stored now (revoked and
+    expired ones included; the caller decides with `evaluate`)."""
+    rows = session.scalars(
+        select(RightsRecord)
+        .where(RightsRecord.license_ref == license_ref)
+        .order_by(RightsRecord.created_at, RightsRecord.id)
+        .execution_options(populate_existing=True)
+    )
+    return [_view(row) for row in rows]
+
+
 def revoke(session: Session, rights_record_id: uuid.UUID, *, at: datetime) -> None:
     """Mark the record revoked; a second call keeps the first timestamp.
 

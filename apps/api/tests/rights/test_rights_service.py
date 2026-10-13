@@ -25,6 +25,7 @@ from qlab.rights.service import (
     RightsRecordView,
     create_record,
     evaluate,
+    find_by_license_ref,
     get_record,
     is_permitted,
     require,
@@ -958,3 +959,115 @@ def test_holder_and_valid_from_are_required(connection: Connection) -> None:
         )
 
     assert _rights_count(connection) == 0
+
+
+# =============================================================================================
+# find_by_license_ref
+# =============================================================================================
+
+REF = "synthetic:licence-a"
+
+
+def _with_ref(session: Session, ref: str | None, **kwargs: Any) -> RightsRecordView:
+    kwargs.setdefault("valid_from", T0)
+    return create_record(session, holder="Synthetic Holder", license_ref=ref, **kwargs)
+
+
+@pytest.mark.db
+def test_find_by_license_ref_returns_every_record_with_the_reference_oldest_first(
+    session: Session,
+) -> None:
+    first = _with_ref(session, REF, valid_from=T0)
+    second = _with_ref(session, REF, valid_from=T0 + timedelta(days=1))
+    third = _with_ref(session, REF, valid_from=T0 + timedelta(days=2))
+
+    found = find_by_license_ref(session, REF)
+
+    assert [record.id for record in found] == [first.id, second.id, third.id]
+    assert all(record.license_ref == REF for record in found)
+
+
+@pytest.mark.db
+def test_find_by_license_ref_returns_the_record_as_get_record_does(session: Session) -> None:
+    created = _with_ref(
+        session,
+        REF,
+        display_scope=DisplayScope.ALL,
+        allows_ai_processing=True,
+        allows_commercial_use=True,
+        valid_until=UNTIL,
+    )
+
+    assert find_by_license_ref(session, REF) == [get_record(session, created.id)]
+
+
+@pytest.mark.db
+def test_find_by_license_ref_with_no_match_is_an_empty_list(session: Session) -> None:
+    assert find_by_license_ref(session, REF) == []
+
+    _with_ref(session, "synthetic:other")
+    _with_ref(session, None)
+
+    assert find_by_license_ref(session, REF) == []
+
+
+@pytest.mark.db
+def test_find_by_license_ref_ignores_records_with_another_or_no_reference(
+    session: Session,
+) -> None:
+    wanted = _with_ref(session, REF)
+    _with_ref(session, "synthetic:other")
+    _with_ref(session, None)
+    _with_ref(session, REF + "-2")
+    _with_ref(session, REF.upper())
+
+    assert [record.id for record in find_by_license_ref(session, REF)] == [wanted.id]
+
+
+@pytest.mark.db
+def test_find_by_license_ref_includes_revoked_and_expired_records(session: Session) -> None:
+    revoked = _with_ref(session, REF, valid_from=T0)
+    expired = _with_ref(
+        session,
+        REF,
+        valid_from=T0 + timedelta(days=1),
+        valid_until=T0 + timedelta(days=2),
+    )
+    live = _with_ref(session, REF, valid_from=T0 + timedelta(days=3))
+    revoke(session, revoked.id, at=T0 + timedelta(hours=1))
+
+    found = {record.id: record for record in find_by_license_ref(session, REF)}
+
+    assert set(found) == {revoked.id, expired.id, live.id}
+    assert found[revoked.id].revoked_at == T0 + timedelta(hours=1)
+    assert found[expired.id].valid_until == T0 + timedelta(days=2)
+    assert found[live.id].revoked_at is None
+
+
+@pytest.mark.db
+def test_find_by_license_ref_sees_a_revocation_made_by_raw_sql_after_an_earlier_call(
+    session: Session,
+) -> None:
+    created = _with_ref(session, REF)
+    before = find_by_license_ref(session, REF)
+    assert [record.revoked_at for record in before] == [None]
+
+    session.execute(
+        text("UPDATE rights_record SET revoked_at = :at WHERE id = :id"),
+        {"at": T0 + timedelta(minutes=5), "id": created.id},
+    )
+
+    after = find_by_license_ref(session, REF)
+    assert [record.id for record in after] == [created.id]
+    assert after[0].revoked_at == T0 + timedelta(minutes=5)
+
+
+@pytest.mark.db
+def test_find_by_license_ref_matches_the_reference_exactly(session: Session) -> None:
+    _with_ref(session, REF)
+
+    assert find_by_license_ref(session, "") == []
+    assert find_by_license_ref(session, REF + " ") == []
+    assert find_by_license_ref(session, REF[:-1]) == []
+    assert find_by_license_ref(session, "%") == []
+    assert find_by_license_ref(session, REF.replace("a", "_")) == []

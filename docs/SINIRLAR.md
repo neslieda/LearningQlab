@@ -114,8 +114,9 @@ Sorular Markdown'dan kurallı bir betikle çevrildi ([pilot/IMPORT_RULES.md](pil
   sonuç değerleri aktarılmadı, 61 adımın 14'ünün birimi boş, sabitler sabit tablosuna bağlı değil ve hiçbiri hesaplanarak doğrulanmadı.
 - **Aktarılmayanlar**: markscheme ve formül zincirinden sonraki serbest yazar notları (12 paragraf; bazıları incelemeci için
   yararlı gerekçeler içerir) ve beş veri temelli sorudaki "Şekil notu" metni (cevabı içerebildiği için). Bunlar yalnızca Markdown'dadır.
-- **Türkçe içerik**: çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni
-  İngilizcedir. Ürün İngilizce olduğundan bunlar öğrenciye açılmadan önce çevrilmelidir.
+- **Türkçe içerik**: çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni,
+  markscheme ve notlar İngilizcedir. Karar (D-59): sistemdeki her içerik İngilizce olacak; bu alanlar çevrilene kadar öğrenciye
+  hiç gösterilmez. Çeviri ayrı bir iştir ve zamanı henüz belirlenmedi.
 - **24 soru yayınlanamaz**: şekil ya da grafik gerektiriyor ve yalnızca tarifi var (§2).
 - Altı sorunun kazanım cümlesinde ham `*` işaretleri kaldı.
 

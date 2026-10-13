@@ -1,6 +1,6 @@
 # M1-G dilim 5 — yetki tanımı (API, yetki katmanı, yerel kimlik)
 
-> **Durum: TASLAK — kısmen onaylı.** Tarih: 2026-10-13. Proje sahibi §2'deki dört kararın üçünü onayladı; §3'teki iki nokta açık.
+> **Durum: ONAYLANDI** (2026-10-13, proje sahibi; kararlar §2 ve D-59). Uygulama ayrıca güvenlik incelemesi ve birleştirme onayı ister.
 > Bu belge dilim 5'in sözleşmesinin yetki kısmıdır ve dilim ayrı bir oturumda uygulanacağı için yazıldı. Dilim birleşirken içeriği
 > [SECURITY.md](../SECURITY.md) §3, [API_DESIGN.md](../API_DESIGN.md) §3 ve [DECISIONS.md](../DECISIONS.md)'e işlenir ve bu dosya kaldırılır.
 > Yetki politikası kritik alandır: uygulama güvenlik incelemesi ve insan onayı ister (CLAUDE.md).
@@ -17,7 +17,7 @@ Roller: [DOMAIN_MODEL.md](../DOMAIN_MODEL.md) §3. M1-G'de kurum ve entitlement 
 | 3 | `GET /v1/programs/{program}/subjects/{subject}/syllabus` | ✔ | ✔ | ✔ | ✔ |
 | 4 | `GET /v1/questions` — yalnızca yayınlanmış; öğrenci görünümü | ✔ | ✔ | ✔ | ✔ |
 | 5 | `GET /v1/questions/{id}` — yayınlanmış sürüm; öğrenci görünümü | ✔ | ✔ | ✔ | ✔ |
-| 6 | `POST /v1/questions/{id}/check` — cevabı işaretle, doğru cevabı gör (**§3.1 açık**) | ✔ | ✔ | ✔ | ✔ |
+| 6 | `POST /v1/questions/{id}/check` — cevabı gönder, doğru cevabı gör (§3) | ✔ | ✔ | ✔ | ✔ |
 | 7 | `GET /v1/admin/questions` — tüm durumlar, filtreli liste | — | ✔ | ✔ | ✔ |
 | 8 | `GET /v1/admin/questions/{id}` — soru ve sürümleri | — | ✔ | ✔ | ✔ |
 | 9 | `GET /v1/admin/question-versions/{id}` — tam belge, kontroller | — | ✔ | ✔ | ✔ |
@@ -47,33 +47,37 @@ Roller: [DOMAIN_MODEL.md](../DOMAIN_MODEL.md) §3. M1-G'de kurum ve entitlement 
 2. **Görev ayrımı hazır ama kapalı.** Aynı hesap bir soruyu düzenleyip onaylayabilir (D-53'ün devamı). "Son düzenleyen onaylayamaz"
    kuralı kodda yazılır ve test edilir, bir ayarla kapalı gelir; her onayın audit kaydında onaylayanın aynı zamanda son düzenleyen
    olup olmadığı işaretlenir. **Kuralın açılması web'e açılışın (dilim 9) koşuludur.**
-3. **Öğrenci, cevabını işaretledikten sonra doğru cevabı görür; öğrenciye görünen her şey İngilizcedir.** (Sahibinin ifadesi;
-   uygulanışı §3'te açık.)
+3. **Öğrenci, cevabını gönderdikten sonra doğru cevabı görür; cevap saklanmaz** (§3).
 4. **Yerel kimlik: yerelde imzalanmış token.** API, gerçek sağlayıcıda olduğu gibi imzalı token doğrular (imza, süre, hedef, veren);
    yerelde token'ı bu makinede üretilen bir anahtarla küçük bir komut üretir (rol başına bir geliştirme hesabı). Geliştirme anahtarı
    depoya girmez; uygulama yerel ortam dışında bu anahtarla açılmayı reddeder. Dilim 9'da yalnızca anahtar kaynağı değişir.
 
-## 3. Açık noktalar (uygulamadan önce sahibinin kararı gerekir)
+5. **Sistemde kayıtlı her içerik İngilizcedir; öğrencinin cevabı da İngilizce beklenir.** Öğrenci Türkçe yazarsa sistem İngilizce
+   yazması için uyarı döndürür (§3).
 
-### 3.1 Cevap nasıl açılır
+## 3. Cevap gönderme ve dil (`POST /v1/questions/{id}/check`)
 
-M1-G'de öğrenci cevaplarını saklayan yapı yoktur (deneme ve cevap kayıtları M2'de; ROADMAP "Bilinen sınırlar").
+- **Cevap sunucuya gider, saklanmaz.** M1-G'de deneme ve cevap kaydı yoktur (M2). İstek ve yanıt hiçbir tabloya yazılmaz; audit
+  kaydına da öğrencinin cevabı girmez.
+- **Çoktan seçmeli:** istek seçilen seçeneği taşır; yanıt doğru/yanlış bilgisini ve doğru seçeneği döndürür.
+- **Yazılı parça:** istek parça kimliğini ve öğrencinin yazdığı metni taşır; yanıt o parçanın puan maddelerini ve notlarını döndürür.
+  Cevap **puanlanmaz** (AI puanlama M4'te); öğrenci kendi cevabını markscheme ile karşılaştırır.
+- **Sunucu zorlar:** doğru seçenek ve markscheme, bir cevap gönderilmeden hiçbir yanıtta yer almaz. Boş cevap kabul edilmez.
+- **Dil uyarısı:** yazılı cevap İngilizce görünmüyorsa yanıt bir uyarı alanı taşır ("cevabınızı İngilizce yazın"); markscheme yine
+  döner. Tespit belirlenimci ve yereldir (Türkçeye özgü harfler ve sık sözcükler gibi basit bir kural); LLM kullanılmaz, cevap
+  hiçbir dış servise gitmez. Kural kaba bir sezgidir: kısa ya da yalnızca sayı ve formülden oluşan cevaplarda uyarı vermez; yanlış
+  uyarı verebilir. Bu bir yardım iletisidir, engel değildir.
+- **Sınır:** metin uzunluğu sınırlıdır; hız sınırı web'e açılışla (dilim 9) gelir.
 
-| Seçenek | Ne olur | Bedel |
-|---|---|---|
-| **A (öneri): cevap sunucuya gider, saklanmaz** | Öğrenci seçeneğini `POST …/check` ile gönderir; sunucu doğru/yanlış bilgisini ve doğru seçeneği döndürür, cevabı kaydetmez. Doğru cevap, cevap gönderilmeden hiçbir yanıtta yer almaz (sunucu zorlar). Yazılı parçada öğrenci parçayı "cevapladım" diye işaretleyince o parçanın markscheme'i döner | Cevap geçmişi, deneme ve analitik yok (M2) |
-| B: cevaplar şimdiden saklanır | Dilime `attempt` ve `response` tabloları eklenir | M2'nin bir parçası öne alınır; yeni tablolar ve migration; öğrenci verisi (R-02 ⚖️ açık); ROADMAP sınırı değişir |
-| C: yalnızca çoktan seçmeli | A gibi, ama yazılı parçaların markscheme'i öğrenci rolüne hiç dönmez | Paper 2 ve 1B sorularında önizleme cevapsız kalır |
+### 3.1 Türkçe içerik (bilinen uyumsuzluk)
 
-### 3.2 Türkçe açıklamalar
+"Sistemde kayıtlı her içerik İngilizcedir" ilkesine bugün uymayan alanlar: çözüm açıklamaları, çeldirici gerekçeleri, kazanım
+cümleleri ve şekil tarifleri (pilot sorular böyle yazıldı; [SINIRLAR.md](../SINIRLAR.md) §7.1). Soru metni, seçenekler, markscheme
+maddeleri ve notlar İngilizcedir.
 
-Çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni, markscheme maddeleri ve notlar
-İngilizcedir ([SINIRLAR.md](../SINIRLAR.md) §7.1).
-
-| Seçenek | Ne olur | Bedel |
-|---|---|---|
-| **A (öneri): öğrenciye kapalı, çeviri ayrı iş** | Öğrenciye yalnızca doğru seçenek ve İngilizce markscheme döner; açıklama ve gerekçeler öğrenci görünümüne girmez. Çeviri (ve eğitmen incelemesi) ayrı bir içerik işi olarak planlanır | Önizlemede "neden" açıklaması olmaz |
-| B: dilim 5'ten önce çevrilir | Açıklamalar kaynak Markdown'da İngilizceye çevrilir, JSON yeniden üretilir; cevapla birlikte açılır | Araya bir içerik dilimi girer; incelenmemiş çeviri öğrenci rolüne açılır (yalnızca yerelde) |
+- Dilim 5'te bu alanların **hiçbiri öğrenci görünümüne girmez** (§4); öğrenci yalnızca doğru seçeneği ve İngilizce markscheme'i görür.
+- İngilizceye çevrilmeleri ayrı bir içerik işidir (çeviri + eğitmen incelemesi); bitince açıklamalar cevapla birlikte açılır.
+  **Zamanlaması sahibinin kararını bekliyor**; dilim 5 buna bağlı değildir.
 
 ## 4. Öğrenci görünümü
 
@@ -83,8 +87,8 @@ M1-G'de öğrenci cevaplarını saklayan yapı yoktur (deneme ve cevap kayıtlar
 - **Girer:** soru metni, seçenekler (çoktan seçmelide), parçaların etiket, gövde, puan ve komut sözcüğü, tablolar, şekil yer tutucusu
   (şekli olan soru zaten yayınlanamaz), sınav bölümü, düzey, toplam puan.
 - **Hiç girmez:** personel hesap kimlikleri, şekil tarifleri, çözüm modeli, kontrol sonuçları, kaynak anahtarı, kazanım cümlesi,
-  kuralla doldurulan üst veri (seçenek türü, cevap türü, ölçme hedefi), Türkçe metinler (§3.2).
-- **Yalnızca cevap işaretlendikten sonra:** doğru seçenek; yazılı parçada o parçanın puan maddeleri ve notları (§3.1).
+  kuralla doldurulan üst veri (seçenek türü, cevap türü, ölçme hedefi), Türkçe metinler (§3.1).
+- **Yalnızca cevap gönderildikten sonra:** doğru seçenek; yazılı parçada o parçanın puan maddeleri ve notları (§3).
 - Sunucu zorlar: görünüm sunucuda kurulur; istemcinin süzmesine bırakılmaz. Her uç nokta × rol testi, öğrenci rolüne dönen yanıtta
   cevap alanlarının bulunmadığını da doğrular.
 
@@ -107,7 +111,10 @@ M1-G'de öğrenci cevaplarını saklayan yapı yoktur (deneme ve cevap kayıtlar
 
 - §1 tablosundaki her hücre bir testtir (19 uç nokta × 6 rol + kimliksiz).
 - Öğrenci rolü admin uç noktalarının hiçbirinden veri alamaz ve kaynağın var olup olmadığını öğrenemez.
-- Öğrenci rolüne dönen hiçbir yanıt, cevap gönderilmeden doğru cevabı ya da markscheme'i içermez.
+- Öğrenci rolüne dönen hiçbir yanıt, cevap gönderilmeden doğru cevabı ya da markscheme'i içermez; gönderilen cevap hiçbir tabloya
+  yazılmaz.
+- Türkçe yazılmış bir cevap dil uyarısı alır; İngilizce bir cevap, yalnızca sayı ve formülden oluşan bir cevap almaz.
+- Öğrenci rolüne dönen hiçbir yanıtta Türkçe içerik alanı (açıklama, gerekçe, kazanım, şekil tarifi) bulunmaz.
 - Onaylanmamış, kontrolü eksik ya da görseli olan soru API doğrudan çağrılsa da yayınlanamaz.
 - Yerel geliştirme anahtarıyla imzalanmış token, yerel ortam dışında kabul edilmez; süresi dolmuş, başka hedefe kesilmiş ya da imzası
   bozuk token 401 alır.

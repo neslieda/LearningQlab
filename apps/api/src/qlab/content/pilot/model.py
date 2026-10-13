@@ -1,4 +1,4 @@
-"""Shape of a converted pilot file (content/pilot/<stem>.json). Rules: docs/pilot/IMPORT_RULES.md."""
+"""Shape of a converted pilot file (content/pilot/<stem>.json); see docs/pilot/IMPORT_RULES.md."""
 
 from __future__ import annotations
 

@@ -210,3 +210,12 @@ uv run pytest                                          # veritabanı testleri ql
   ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md) §7).
 - Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
 - Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).
+- **Oturum başında denetlenecekler.** (1) Docker Desktop yeniden başlatmadan sonra kapalı gelir; veritabanı testleri ve içe aktarma
+  için önce Docker, sonra `docker compose -f infra/local/compose.yaml up -d --wait` çalıştırılır. (2) `git worktree list` ile `main`
+  dalının hangi klasörde açık olduğuna bakılır; bir dal aynı anda yalnızca bir klasörde açık olabilir, bu yüzden dilim dalı `main`'in
+  açık olduğu klasörde ya da ondan türetilen yeni bir worktree'de açılır. (3) Matematik içeren testler için `apps/api/katex` altında
+  `npm ci` yapılmış olmalıdır.
+- **Uzak depo ve CI.** Uzak depo henüz açılmadı (D-43, sahibinin kararı); `.github/workflows/ci.yml` bu yüzden **hiç çalışmadı**.
+  Yerelde aynı denetimler elle çalıştırılır: `ruff format --check .`, `ruff check .`, `mypy`, `lint-imports`,
+  `python -m qlab.content.pilot convert --check`, `pytest`. Uzak depo açıldığında ilk iş akışının sonucu ayrıca doğrulanır
+  (PostgreSQL servisi, Node 24 kurulumu ve `npm ci` adımı denenmemiştir).

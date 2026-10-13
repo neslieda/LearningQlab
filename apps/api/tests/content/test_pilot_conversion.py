@@ -21,9 +21,8 @@ How it works
   `CORRUPTIONS` gives at least one. Those tests need no JSON files.
 
 Normalisation: the only one used is "remove all whitespace" (IMPORT_RULES section 6). Where the
-rules leave a choice open, the `*_candidates` / `outcome_readings` functions return every reading
-that is accepted (and nothing else), so a loosening is visible in code; the report that accompanies
-this module lists each such ambiguity.
+rules leave a choice open, section 8 of IMPORT_RULES records the reading and this module uses that
+one only (a single `expected_*` function per rule).
 """
 
 from __future__ import annotations
@@ -71,6 +70,8 @@ FILE_SUFFIX = "-pilot-questions.md"
 EXPECTED_FILES = 24
 EXPECTED_QUESTIONS = 130
 EXPECTED_BY_SECTION = {"paper_1a": 101, "paper_2": 24, "paper_1b": 5}
+# IMPORT_RULES 3.2: the text of a figure note is not imported; its stimulus carries this sentence.
+FIGURE_NOTE_DESCRIPTION = "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda."
 
 # --------------------------------------------------------------------------------------------
 # Small text helpers
@@ -110,10 +111,9 @@ _GREEK_NAMES: dict[str, str] = {
     **dict(zip("αβγδεζηθικλμνξπρστυφχψω", _LOWER_NAMES.split(), strict=True)),
     **dict(zip("ΓΔΘΛΞΠΣΥΦΨΩ", _UPPER_NAMES.split(), strict=True)),
 }
-# Section 4.3 names no command for every letter that has two (epsilon, phi, theta): both are read.
+# Section 8: where a letter has two commands, the one named after its Unicode letter name is used
+# (epsilon, phi, theta); \varepsilon and friends are not accepted.
 _COMMAND_TO_CHAR: dict[str, str] = {name: ch for ch, name in _GREEK_NAMES.items()}
-_COMMAND_TO_CHAR.update({"varepsilon": "ε", "varphi": "φ", "vartheta": "θ"})
-_VARIANTS = (("varepsilon", "epsilon"), ("varphi", "phi"), ("vartheta", "theta"))
 
 
 def is_latin_or_greek_letter(ch: str) -> bool:
@@ -138,12 +138,6 @@ def tex_of(text: str) -> str:
             out.append(ch)
             after_command = False
     return "".join(out)
-
-
-def canonical_latex(latex: str) -> str:
-    for variant, base in _VARIANTS:
-        latex = re.sub(r"\\" + variant + r"(?![A-Za-z])", "\\\\" + base, latex)
-    return latex
 
 
 def latex_to_plain(latex: str) -> str:
@@ -182,8 +176,11 @@ class Seg:
 _TOKEN = re.compile(r"\*\*|\*|<sub>|</sub>|<sup>|</sup>|<br>|«|»|✓")
 
 
-def scan(raw: str) -> list[Seg]:
-    """Split inline Markdown into runs with their marks. `<br>` becomes a space, `✓` vanishes."""
+def scan(raw: str, *, keep_ticks: bool = False) -> list[Seg]:
+    """Split inline Markdown into runs with their marks. `<br>` becomes a space.
+
+    The tick mark vanishes, except in a markscheme note (`keep_ticks`; IMPORT_RULES section 8).
+    """
     segs: list[Seg] = []
     bold = italic = sub = sup = optional = False
     run = 0
@@ -219,25 +216,16 @@ def scan(raw: str) -> list[Seg]:
             optional = False
         elif piece == "<br>":
             segs.append(Seg(" "))
+        elif piece == "✓" and keep_ticks:
+            emit("✓")
     emit(raw[pos:])
     if bold or italic or sub or sup or optional:
         raise SourceError(f"unbalanced inline markup in: {raw[:80]!r}")
     return segs
 
 
-def plain_of(raw: str) -> str:
-    return "".join(s.text for s in scan(raw))
-
-
-def unwrap_italic(raw: str) -> str:
-    """IMPORT_RULES 3.2: the italic mark that encloses a whole note is dropped."""
-    text = raw.strip()
-    if not text.startswith("*") or text.startswith("**"):
-        return text
-    segs = scan(text)
-    if segs and all(s.italic and s.italic_run == segs[0].italic_run for s in segs):
-        return text[1:-1].strip()
-    return text
+def plain_of(raw: str, *, keep_ticks: bool = False) -> str:
+    return "".join(s.text for s in scan(raw, keep_ticks=keep_ticks))
 
 
 # --------------------------------------------------------------------------------------------
@@ -353,13 +341,18 @@ class SourceQuestion:
     has_formula_chain: bool = False
     figure_note: str | None = None
     free_paragraphs: list[str] = field(default_factory=list)
-    # figure descriptions in document order (stem, lead-ins, then the figure note)
+    # `> **Şekil:**` block texts in document order (stem, lead-ins); the figure note is apart
     figures: list[str] = field(default_factory=list)
     row: dict[str, str] = field(default_factory=dict)
 
     @property
     def ref(self) -> str:
         return source_ref(self.stem, self.number)
+
+    @property
+    def stimulus_count(self) -> int:
+        """One per figure block and one for the figure note, in that order (section 3.3)."""
+        return len(self.figures) + (self.figure_note is not None)
 
     @property
     def is_mcq(self) -> bool:
@@ -571,7 +564,6 @@ def _parse_structured(q: SourceQuestion, els: list[Element]) -> None:
         els_note = sections[figure_note[0]]
         text = " ".join(" ".join(x.strip() for x in el.lines) for el in els_note)
         q.figure_note = text
-        q.figures.append(text)
 
 
 def _parse_kapsam(text: str, stem: str) -> dict[int, dict[str, str]]:
@@ -610,7 +602,16 @@ def parse_source_text(text: str, stem: str, digest: str = "") -> SourceFile:
     numbers = [int(n) for n in re.findall(r"^## Soru (\d+)\b", text, flags=re.M)]
     blocks: list[tuple[re.Match[str], list[str]]] = []
     current: tuple[re.Match[str], list[str]] | None = None
+    after_rule = False
     for line in text.split("\n"):
+        if after_rule and line.strip() and not line.startswith("## "):
+            raise SourceError(
+                f"{stem}: text between a closing --- and the next heading: {line[:60]!r}"
+            )
+        if line.startswith("## "):
+            after_rule = False
+        if line.strip() == "---":
+            after_rule = current is not None
         if line.startswith("## ") or line.strip() == "---":
             current = None
         m = _HEADING.match(line)
@@ -816,10 +817,20 @@ def _joined(nodes: Sequence[DNode], mark: str) -> str:
 
 
 def diff_inline(
-    label: str, raw: str, nodes: Sequence[DNode], *, check_italic: bool = True
+    label: str,
+    raw: str,
+    nodes: Sequence[DNode],
+    *,
+    check_italic: bool = True,
+    keep_ticks: bool = False,
+    drop_italic: bool = False,
 ) -> list[str]:
-    """Visible text (section 6) and the marks that carry meaning, for one paragraph-sized region."""
-    segs = scan(raw)
+    """Visible text (section 6) and the marks that carry meaning, for one paragraph-sized region.
+
+    In a markscheme note (`keep_ticks`, `drop_italic`; section 8) italic words lose their mark and
+    the tick stays; a variable is still a math node.
+    """
+    segs = scan(raw, keep_ticks=keep_ticks)
     problem = first_difference("".join(s.text for s in segs), "".join(n.text for n in nodes))
     if problem:
         return [f"{label}: text differs: {problem}"]
@@ -836,8 +847,8 @@ def diff_inline(
     kept_italic: list[str] = []
     for run in italic_runs(segs):
         kind = classify_run(run.text)
-        wanted = canonical_latex(expected_latex(run))
-        found = canonical_latex(math_nodes[cursor].latex) if cursor < len(math_nodes) else None
+        wanted = expected_latex(run)
+        found = math_nodes[cursor].latex if cursor < len(math_nodes) else None
         if kind in ("A", "B") and found == wanted:
             cursor += 1
             absorbed.update(run.scripts)
@@ -872,7 +883,7 @@ def diff_inline(
         _joined(nodes, "sup"),
     )
     if check_italic:
-        check("italic", "".join(kept_italic), _joined(nodes, "italic"))
+        check("italic", "" if drop_italic else "".join(kept_italic), _joined(nodes, "italic"))
     return errors
 
 
@@ -910,7 +921,27 @@ def diff_items(
     return errors
 
 
-def one_paragraph(label: str, raw: str, doc: Doc, *, check_italic: bool = True) -> list[str]:
+def one_paragraph(
+    label: str,
+    raw: str,
+    doc: Doc,
+    *,
+    check_italic: bool = True,
+    keep_ticks: bool = False,
+    drop_italic: bool = False,
+) -> list[str]:
+    if keep_ticks:
+        nodes = doc_items_nodes(doc)
+        if len(doc.content) != 1 or not isinstance(doc.content[0], Paragraph):
+            return [f"{label}: blocks are not a single paragraph"]
+        return diff_inline(
+            label,
+            raw,
+            nodes,
+            check_italic=check_italic,
+            keep_ticks=True,
+            drop_italic=drop_italic,
+        )
     return diff_items(
         label, [SItem("paragraph", raw=raw)], doc_items(doc), check_italic=check_italic
     )
@@ -941,8 +972,10 @@ def source_text(src: SourceQuestion) -> str:
         parts.append(_items_plain(part.lead_in))
         parts.append(plain_of(part.body_raw))
         parts += [plain_of(raw) for kind, raw in part.answer_lines if kind != "alt"]
-        parts += [plain_of(unwrap_italic(n)) for n in part.notes_raw]
+        parts += [plain_of(n, keep_ticks=True) for n in part.notes_raw]
     parts += [plain_of(f) for f in src.figures]
+    if src.figure_note is not None:
+        parts.append(FIGURE_NOTE_DESCRIPTION)  # the note's own text is not imported
     return " ".join(parts)
 
 
@@ -974,12 +1007,19 @@ def fidelity_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
         errors += _mcq_fidelity(src, doc)
     else:
         errors += _parts_fidelity(src, doc)
-    if len(doc.stimuli) != len(src.figures):
-        errors.append(f"{len(doc.stimuli)} stimuli for {len(src.figures)} figure blocks")
+    if len(doc.stimuli) != src.stimulus_count:
+        errors.append(f"{len(doc.stimuli)} stimuli, the source has {src.stimulus_count}")
     for n, (raw, stimulus) in enumerate(zip(src.figures, doc.stimuli, strict=False), start=1):
         problem = first_difference(plain_of(raw), stimulus.description)
         if problem:
             errors.append(f"stimulus fig{n} description: {problem}")
+    if src.figure_note is not None and doc.stimuli:
+        note = doc.stimuli[-1]
+        if note.description != FIGURE_NOTE_DESCRIPTION:
+            errors.append(
+                f"stimulus {note.id} (figure note) description is {note.description!r}, "
+                f"expected the fixed sentence {FIGURE_NOTE_DESCRIPTION!r}"
+            )
     problem = first_difference(source_text(src), document_text(doc))
     if problem:
         errors.append(f"whole question (section 6 order): {problem}")
@@ -1010,10 +1050,6 @@ def _mcq_fidelity(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
             doc_items(mcq.explanation),
         )
     return errors
-
-
-def note_source(raw: str) -> str:
-    return unwrap_italic(raw)
 
 
 def _parts_fidelity(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
@@ -1048,7 +1084,7 @@ def _parts_fidelity(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
         else:
             for k, (raw, note) in enumerate(zip(sp.notes_raw, dp.notes, strict=True), start=1):
                 errors += one_paragraph(
-                    f"{where} note {k}", note_source(raw), note.content, check_italic=False
+                    f"{where} note {k}", raw, note.content, keep_ticks=True, drop_italic=True
                 )
     return errors
 
@@ -1094,11 +1130,16 @@ DIFFICULTY = {
     "Orta–zor": "hard",
     "Zor": "hard",
 }
-# IMPORT_RULES 3.3, in the order the rule lists them.
+# IMPORT_RULES 3.3 (as amended): keyword -> kind. The earliest keyword in the description wins.
 STIMULUS_KEYWORDS: tuple[tuple[str, str], ...] = (
     ("devre", "circuit_diagram"),
+    ("direnç", "circuit_diagram"),
+    ("batarya", "circuit_diagram"),
+    ("voltmetre", "circuit_diagram"),
+    ("ampermetre", "circuit_diagram"),
     ("grafik", "graph"),
     ("eksen", "graph"),
+    ("p–v", "graph"),
     ("alan çizgi", "field_diagram"),
     ("ışın", "ray_wavefront_diagram"),
     ("dalga cephe", "ray_wavefront_diagram"),
@@ -1121,10 +1162,9 @@ def expected_class(src: SourceQuestion) -> str:
     return "long_structured" if src.total_marks == 20 else "short_structured"
 
 
-def outcome_readings(src: SourceQuestion) -> set[str]:
-    """`outcome` is the Kazanim cell "as it stands"; the markup may or may not be kept."""
-    cell = src.row["Kazanım"]
-    return {squash(cell), squash(plain_of(cell))}
+def expected_outcome(src: SourceQuestion) -> str:
+    """Section 3 and 8: the Kazanim cell as it stands, markup included."""
+    return src.row["Kazanım"]
 
 
 def structure_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
@@ -1148,7 +1188,7 @@ def structure_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
     )
     _eq(errors, "primary_syllabus_node", doc.primary_syllabus_node, src.primary_node)
     _eq(errors, "secondary_syllabus_nodes", doc.secondary_syllabus_nodes, ())
-    if doc.outcome is None or squash(doc.outcome) not in outcome_readings(src):
+    if doc.outcome is None or squash(doc.outcome) != squash(expected_outcome(src)):
         errors.append(f"outcome: {doc.outcome!r}, the scope-table cell is {src.row['Kazanım']!r}")
     _eq(errors, "total_marks", doc.total_marks, src.total_marks)
     errors += _stimulus_structure(src, doc)
@@ -1162,25 +1202,31 @@ def structure_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
 
 def _stimulus_structure(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
     errors: list[str] = []
-    _eq(errors, "number of stimuli", len(doc.stimuli), len(src.figures))
+    count = src.stimulus_count
+    _eq(errors, "number of stimuli", len(doc.stimuli), count)
     _eq(
         errors,
         "stimulus ids",
         [s.id for s in doc.stimuli],
-        [f"fig{k}" for k in range(1, len(src.figures) + 1)],
+        [f"fig{k}" for k in range(1, count + 1)],
     )
+    note_tokens = re.findall(r"\d+(?:\.\d+)?", src.figure_note or "")
     for k, stimulus in enumerate(doc.stimuli, start=1):
         if stimulus.asset_id is not None or stimulus.alt_text is not None:
             errors.append(f"fig{k}: has an asset or alt text (the source has none)")
-        is_note = src.figure_note is not None and k == len(src.figures)
+        is_note = src.figure_note is not None and k == count
         _eq(errors, f"fig{k} use", stimulus.use.value, "read_values" if is_note else "read_only")
+        own = plain_of(src.figures[k - 1]) if not is_note and k <= len(src.figures) else ""
+        for token in note_tokens:
+            if token in stimulus.description and token not in own:
+                errors.append(f"fig{k}: description contains {token!r} from the figure note")
         if is_note:
             _eq(errors, f"fig{k} kind (figure note)", stimulus.kind.value, "graph")
-        elif stimulus.kind.value not in stimulus_kind_candidates(stimulus.description):
-            errors.append(
-                f"fig{k} kind: {stimulus.kind.value!r}, the keyword rule allows "
-                f"{sorted(stimulus_kind_candidates(stimulus.description))}"
-            )
+            _eq(errors, f"fig{k} description", stimulus.description, FIGURE_NOTE_DESCRIPTION)
+            if any(ch.isdigit() for ch in stimulus.description):
+                errors.append(f"fig{k}: the figure note's description contains a digit")
+        else:
+            _eq(errors, f"fig{k} kind", stimulus.kind.value, stimulus_kind(stimulus.description))
     return errors
 
 
@@ -1188,21 +1234,18 @@ def turkish_lower(text: str) -> str:
     return text.replace("I", "ı").replace("İ", "i").lower()
 
 
-def stimulus_kind_candidates(description: str) -> set[str]:
-    """IMPORT_RULES 3.3 "first matching keyword": by list order or by position, two casings."""
-    found: set[str] = set()
-    for lowered in {description.lower(), turkish_lower(description)}:
-        hits = [
-            (lowered.find(word), order, kind)
-            for order, (word, kind) in enumerate(STIMULUS_KEYWORDS)
-            if word in lowered
-        ]
-        if not hits:
-            found.add("schematic_diagram")
-            continue
-        found.add(min(hits, key=lambda h: h[1])[2])  # first in the rule's list
-        found.add(min(hits, key=lambda h: h[0])[2])  # earliest in the text
-    return found
+def stimulus_kind(description: str) -> str:
+    """IMPORT_RULES 3.3: the keyword that comes first in the text, matched case-insensitively
+    (Turkish casing) at a word start; no keyword gives `schematic_diagram`."""
+    lowered = turkish_lower(description)
+    best: tuple[int, str] | None = None
+    for word, kind in STIMULUS_KEYWORDS:
+        for m in re.finditer(re.escape(word), lowered):
+            if m.start() == 0 or not lowered[m.start() - 1].isalpha():
+                if best is None or m.start() < best[0]:
+                    best = (m.start(), kind)
+                break
+    return best[1] if best else "schematic_diagram"
 
 
 def _mcq_structure(src: SourceQuestion, doc: QuestionDocument, level_content: str) -> list[str]:
@@ -1323,36 +1366,27 @@ ANSWER_TYPE = {
 
 _ROMAN_SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹"
 _NUMBER = rf"[+−-]?\d+(?:\.\d+)?(?:\s*×\s*10[⁻⁺]?[{_ROMAN_SUP}]+)?"
-_NUMBER_BROAD = rf"(?:[+−-]?\d*π(?:\s*[⁄/]\s*\d+)?|{_NUMBER})"
 _UNIT_TOKEN = re.compile(rf"[A-Za-zµΩ°%]+[⁻⁺]?[{_ROMAN_SUP}]*")
 
 
-def _number_with_unit(text: str, broad: bool) -> bool:
-    number = _NUMBER_BROAD if broad else _NUMBER
-    m = re.fullmatch(rf"({number})\s*(.+)", text.strip())
+def _number_with_unit(text: str) -> bool:
+    m = re.fullmatch(rf"({_NUMBER})\s*(.+)", text.strip())
     if m is None:
         return False
     return all(_UNIT_TOKEN.fullmatch(tok) for tok in m.group(2).split())
 
 
-def _number_or_ratio(text: str, broad: bool) -> bool:
-    number = _NUMBER_BROAD if broad else _NUMBER
+def _number_or_ratio(text: str) -> bool:
     return bool(
-        re.fullmatch(number, text.strip()) or re.fullmatch(r"\d+\s*[⁄/:]\s*\d+", text.strip())
+        re.fullmatch(_NUMBER, text.strip()) or re.fullmatch(r"\d+\s*[⁄/:]\s*\d+", text.strip())
     )
 
 
-def _option_kind(texts: Sequence[str], has_math: Sequence[bool], broad: bool) -> str:
-    def unit_ok(t: str) -> bool:
-        return _number_with_unit(t, broad) or (broad and t.strip() == "0")
-
-    if (
-        not any(has_math)
-        and all(unit_ok(t) for t in texts)
-        and any(_number_with_unit(t, broad) for t in texts)
-    ):
+def _option_kind(texts: Sequence[str], has_math: Sequence[bool]) -> str:
+    """Section 5 applied to the letter, in the order the rule lists (section 8)."""
+    if not any(has_math) and all(_number_with_unit(t) for t in texts):
         return "numeric_with_unit"
-    if not any(has_math) and all(_number_or_ratio(t, broad) for t in texts):
+    if not any(has_math) and all(_number_or_ratio(t) for t in texts):
         return "ratio"
     if any(has_math):
         return "algebraic_expression"
@@ -1361,8 +1395,7 @@ def _option_kind(texts: Sequence[str], has_math: Sequence[bool], broad: bool) ->
     return "statement"
 
 
-def option_kind_candidates(doc: QuestionDocument) -> set[str]:
-    """IMPORT_RULES 5 `option_kind`: the strict reading and a lenient one of "number + unit"."""
+def expected_option_kind(doc: QuestionDocument) -> str:
     mcq = doc.mcq
     assert mcq is not None
     has_math: list[bool] = []
@@ -1371,42 +1404,31 @@ def option_kind_candidates(doc: QuestionDocument) -> set[str]:
         nodes = doc_items_nodes(option.cells[0])
         plain.append("".join(n.text for n in nodes))
         has_math.append(any(n.kind == "math" for n in nodes))
-    return {
-        _option_kind(plain, has_math, broad=False),
-        _option_kind(plain, has_math, broad=True),
-    }
+    return _option_kind(plain, has_math)
 
 
-def command_term_candidates(body_text: str) -> set[str | None]:
+def expected_command_term(body_text: str) -> str | None:
+    """First word, punctuation dropped, lower case, in the dictionary (section 5 and 8)."""
     words = body_text.split()
     if not words:
-        return {None}
-    first = words[0].lower()
-    terms = command_terms()
-    out: set[str | None] = {first if first in terms else None}
-    stripped = first.rstrip(",.;:")
-    if stripped != first:
-        out.add(stripped if stripped in terms else None)
-    return out
+        return None
+    first = words[0].rstrip(",.;:").lower()
+    return first if first in command_terms() else None
 
 
-def note_kind_candidates(text: str) -> set[str]:
+def expected_note_kind(text: str) -> str:
     t = text.strip()
     if t == "OWTTE":
-        return {"owtte"}
-    if t.startswith("Allow ECF from"):
-        return {"ecf"}
-    if re.match(r"Allow ECF\b", t):
-        return {"general", "ecf"}
+        return "owtte"
+    if t.startswith("Allow ECF"):
+        return "ecf"
     if re.match(r"Accept\b", t):
-        return {"accept"}
+        return "accept"
     if re.match(r"Do not accept\b", t):
-        return {"do_not_accept"}
-    if re.match(r"Award \[\d+\] max\b", t):
-        return {"cap"}
-    if re.match(r"Award \[\d+ max\]", t):
-        return {"general", "cap"}
-    return {"general"}
+        return "do_not_accept"
+    if re.match(r"Award \[\d+\] max\b", t) or re.match(r"Award \[\d+ max\]", t):
+        return "cap"
+    return "general"
 
 
 def ecf_refs(text: str) -> list[str]:
@@ -1422,11 +1444,9 @@ def rule_filled_errors(doc: QuestionDocument) -> list[str]:
     """Recompute section 5 (and the note kinds of 3.2) from the document's own content."""
     errors: list[str] = []
     if doc.mcq is not None:
-        kinds = option_kind_candidates(doc)
-        if doc.mcq.option_kind.value not in kinds:
-            errors.append(
-                f"option_kind {doc.mcq.option_kind.value!r}, the rule gives {sorted(kinds)}"
-            )
+        kind = expected_option_kind(doc)
+        if doc.mcq.option_kind.value != kind:
+            errors.append(f"option_kind {doc.mcq.option_kind.value!r}, the rule gives {kind!r}")
     earlier: list[str] = []
     for part in doc.parts:
         errors += _part_rule_errors(part, earlier)
@@ -1438,9 +1458,9 @@ def _part_rule_errors(part: Part, earlier: list[str]) -> list[str]:
     errors: list[str] = []
     where = f"part {part.label}"
     body = " ".join("".join(n.text for n in item.nodes) for item in doc_items(part.body))
-    candidates = command_term_candidates(body)
-    if part.command_term not in candidates:
-        errors.append(f"{where} command_term {part.command_term!r}, the rule gives {candidates}")
+    term = expected_command_term(body)
+    if part.command_term != term:
+        errors.append(f"{where} command_term {part.command_term!r}, the rule gives {term!r}")
     show_that = re.match(r"show that\b", body.lower()) is not None
     if part.show_that != show_that:
         errors.append(f"{where} show_that {part.show_that}, expected {show_that}")
@@ -1450,13 +1470,15 @@ def _part_rule_errors(part: Part, earlier: list[str]) -> list[str]:
     ecf: list[str] = []
     for n, note in enumerate(part.notes, start=1):
         text = " ".join("".join(x.text for x in item.nodes) for item in doc_items(note.content))
-        allowed = note_kind_candidates(text)
-        if note.kind.value not in allowed:
+        kind = expected_note_kind(text)
+        if note.kind.value != kind:
             errors.append(
-                f"{where} note {n} kind {note.kind.value!r}, the rule gives "
-                f"{sorted(allowed)}: {text[:50]!r}"
+                f"{where} note {n} kind {note.kind.value!r}, the rule gives {kind!r}: {text[:50]!r}"
             )
-        if note.kind.value == "ecf":
+        if kind == "ecf":
+            for ref in ecf_refs(text):
+                if ref not in earlier and any(e.startswith(ref + ".") for e in earlier):
+                    errors.append(f"{where} note {n}: cites {ref!r}, a letter with sub-parts")
             ecf += [r for r in ecf_refs(text) if r in earlier and r not in ecf]
     if list(part.ecf_from) != ecf:
         errors.append(f"{where} ecf_from {list(part.ecf_from)}, expected {ecf}")
@@ -1490,12 +1512,14 @@ def validity_errors(doc: QuestionDocument) -> list[str]:
         for bad in MARKUP_LEFTOVERS:
             if bad in stimulus.description:
                 errors.append(f"stimulus {stimulus.id}: description contains {bad!r}")
+    note_docs = {id(n.content) for part in doc.parts for n in part.notes}
     for number, d in enumerate(doc.docs(), start=1):
-        errors += _doc_hygiene(f"doc {number}", d)
+        # Section 8: a tick inside a markscheme note stays in the text; nowhere else.
+        errors += _doc_hygiene(f"doc {number}", d, allow_tick=id(d) in note_docs)
     return errors
 
 
-def _doc_hygiene(where: str, d: Doc) -> list[str]:
+def _doc_hygiene(where: str, d: Doc, *, allow_tick: bool = False) -> list[str]:
     errors: list[str] = []
     for block in d.content:
         if isinstance(block, MathBlock) or block.type in ("bullet_list", "ordered_list"):
@@ -1519,7 +1543,7 @@ def _doc_hygiene(where: str, d: Doc) -> list[str]:
                 if not inline.text:
                     errors.append(f"{at}: empty text node")
                 for bad in MARKUP_LEFTOVERS:
-                    if bad in inline.text:
+                    if bad in inline.text and not (allow_tick and bad == "✓"):
                         errors.append(f"{at}: text node contains {bad!r}: {inline.text[:40]!r}")
                 if re.search(r"\s{2,}|[\n\r\t]", inline.text):
                     errors.append(f"{at}: whitespace not collapsed: {inline.text[:40]!r}")
@@ -1621,9 +1645,9 @@ The trolley is replaced by a hoop that rolls without slipping.
 | Question | | | Answers | Notes | Total |
 |---|---|---|---|---|---|
 | 2. | a | | m s⁻² «or N kg⁻¹» ✓ | *OWTTE* | 1 |
-| 2. | b | | *v*² = 2 × *a* × *s* **OR** *a* = *v*² / (2 × *s*) ✓<br>*a* = 3.0² / (2 × 2.0) = 2.25 «m s⁻²» ✓ | *Substitution or an answer to at least 3 s.f. must be seen.* | 2 |
+| 2. | b | | *v*² = 2 × *a* × *s* **OR** *a* = *v*² / (2 × *s*) ✓<br>*a* = 3.0² / (2 × 2.0) = 2.25 «m s⁻²» ✓ | *Substitution or an answer to at least 3 s.f. must be seen.*<br>*Credit a correct numerical value ✓ if the method is clear.* | 2 |
 | 2. | c | i | **ALTERNATIVE 1**<br>some of the energy goes into rotation of the hoop ✓<br>so less is available as translational kinetic energy ✓<br>**ALTERNATIVE 2**<br>the friction force acts up the ramp «at the rim» ✓<br>the net force down the ramp is smaller than *mg* sin *θ* ✓ | *OWTTE*<br>*Allow ECF from (b).*<br>*Award [1] max for a statement without a reason.* | 2 |
-| 2. | c | ii | *a*<sub>h</sub> = ½ *g* sin *θ* ✓<br>ratio = 0.5 «= *a*<sub>h</sub> / *a*» ✓ | *Accept 1 : 2.*<br>*Do not accept "half" without a calculation.*<br>*Allow ECF from (b) and (c)(i).* | 2 |
+| 2. | c | ii | *a*<sub>h</sub> = ½ *g* sin *θ* ✓<br>ratio = 0.5 «= *a*<sub>h</sub> / *a*» ✓ | *Accept* 1 : 2.<br>*Do not accept "half" without a calculation.*<br>*Allow ECF from (b) and (c)(i).* | 2 |
 
 This free paragraph uses *g* = 9.8 m s⁻² and is not part of the question text.
 
@@ -1633,6 +1657,10 @@ This free paragraph uses *g* = 9.8 m s⁻² and is not part of the question text
 |---|---|---|
 | Parametreler | s = 2.0 m | |
 | `a` | `v**2/(2*s)` | 2.25 m s⁻² |
+
+### Şekil notu
+
+A graph of *v*² against *s* is drawn with gradient 4.50 m s⁻² and intercept 0.12 m² s⁻².
 
 ---
 """  # noqa: E501  (Markdown lines are as long as in the real files)
@@ -1880,7 +1908,10 @@ def self_check_structured() -> Json:
             },
             {"content": D(P(M("a"), T(" = 3.0² / (2 × 2.0) = 2.25 "), T("m s⁻²", "optional")))},
         ],
-        [_note("general", "Substitution or an answer to at least 3 s.f. must be seen.")],
+        [
+            _note("general", "Substitution or an answer to at least 3 s.f. must be seen."),
+            _note("general", "Credit a correct numerical value ✓ if the method is clear."),
+        ],
         command_term="show",
         answer_type="derivation_numeric",
         show_that=True,
@@ -1993,6 +2024,12 @@ def self_check_structured() -> Json:
                 "use": "read_only",
                 "description": "The hoop at the top of the same ramp.",
             },
+            {
+                "id": "fig3",
+                "kind": "graph",
+                "use": "read_values",
+                "description": FIGURE_NOTE_DESCRIPTION,
+            },
         ],
         "parts": [part_a, part_b, part_ci, part_cii],
         "total_marks": 7,
@@ -2023,7 +2060,8 @@ def test_self_check_source_is_read_as_intended() -> None:
     assert structured.parts[2].awardable == 2
     assert structured.parts[2].lead_in and structured.parts[2].lead_in[-1].kind == "figure"
     assert len(structured.parts[3].notes_raw) == 3
-    assert structured.has_formula_chain and structured.figure_note is None
+    assert structured.has_formula_chain and structured.figure_note is not None
+    assert structured.stimulus_count == 3
 
 
 def test_self_check_faithful_mcq_has_no_error() -> None:
@@ -2039,7 +2077,8 @@ def test_self_check_whole_text_is_the_section_6_order() -> None:
     d = build(self_check_structured())
     assert squash(source_text(q)) == squash(document_text(d))
     assert squash(source_text(q)).startswith("Asmalltrolley")
-    assert squash(source_text(q)).endswith("Thehoopatthetopofthesameramp.")
+    assert squash(source_text(q)).endswith(squash(FIGURE_NOTE_DESCRIPTION))
+    assert "intercept" not in source_text(q)  # the note's own text is not imported
 
 
 def test_self_check_line_without_a_tick_is_compared_with_its_cell() -> None:
@@ -2062,6 +2101,15 @@ def test_self_check_line_without_a_tick_is_compared_with_its_cell() -> None:
     point["content"].append(T("OR", "bold"))
     assert all_errors(src, build(at_end)) == []
     assert all_errors(src, build(self_check_structured())) != []  # the "OR" is gone: detected
+
+
+def test_self_check_text_between_a_closing_rule_and_the_next_heading_is_an_error() -> None:
+    broken = SELF_CHECK_MARKDOWN.replace(
+        "---\n\n## Soru 2", "---\n\nstray words after the rule\n\n## Soru 2"
+    )
+    assert broken != SELF_CHECK_MARKDOWN
+    with pytest.raises(SourceError, match="closing ---"):
+        parse_source_text(broken, "a1-self-check")
 
 
 # --- corruptions ------------------------------------------------------------------------------
@@ -2336,6 +2384,59 @@ def c_stimulus_markup(d: Json) -> None:
     d["stimuli"][1]["description"] = "The *hoop* at the top of the same ramp."
 
 
+def c_note_tick_removed(d: Json) -> None:
+    note = _part_of(d, "b")["notes"][1]["content"]["content"][0]["content"][0]
+    note["text"] = note["text"].replace(" ✓", "")
+
+
+def c_tick_in_mark_point(d: Json) -> None:
+    nodes = _point_inlines(d, "a", 0)
+    nodes[0]["text"] = nodes[0]["text"] + "✓"
+
+
+def c_italic_kept_in_note(d: Json) -> None:
+    paragraph = _part_of(d, "c.ii")["notes"][0]["content"]["content"][0]
+    paragraph["content"] = [T("Accept", "italic"), T(" 1 : 2.")]
+
+
+def c_variable_in_note(d: Json) -> None:
+    paragraph = _part_of(d, "b")["notes"][0]["content"]["content"][0]
+    paragraph["content"] = [
+        T("Substitution or an answer to at least 3 "),
+        M("s"),
+        T(".f. must be seen."),
+    ]
+
+
+def c_note_stimulus_leak(d: Json) -> None:
+    d["stimuli"][2]["description"] = FIGURE_NOTE_DESCRIPTION + " Gradient 4.50."
+
+
+def c_note_stimulus_own_text(d: Json) -> None:
+    d["stimuli"][2]["description"] = "A graph of v² against s is drawn."
+
+
+def c_note_stimulus_kind(d: Json) -> None:
+    d["stimuli"][2]["kind"] = "data_table"
+
+
+def c_note_stimulus_use(d: Json) -> None:
+    d["stimuli"][2]["use"] = "read_only"
+
+
+def c_note_stimulus_missing(d: Json) -> None:
+    d["stimuli"].pop()
+
+
+def c_note_figure_node(d: Json) -> None:
+    d["stem"]["content"].insert(1, FIG("fig3"))
+
+
+def c_greek_variant_command(d: Json) -> None:
+    nodes = _point_inlines(d, "c.ii", 0)
+    nodes[_first(nodes, latex="\\theta")]["attrs"]["latex"] = "\\vartheta"
+
+
 @dataclass(frozen=True)
 class Corruption:
     name: str
@@ -2418,6 +2519,25 @@ CORRUPTIONS: tuple[Corruption, ...] = (
     Corruption("uncollapsed whitespace", "mcq", c_whitespace, "whitespace not collapsed"),
     Corruption("non-ASCII LaTeX", "mcq", c_ascii, "not ASCII"),
     Corruption("markup in a stimulus description", "structured", c_stimulus_markup, "description"),
+    Corruption("a tick lost from a note", "structured", c_note_tick_removed, "text differs"),
+    Corruption("a tick kept in a mark point", "structured", c_tick_in_mark_point, "'✓'"),
+    Corruption("an italic mark kept in a note", "structured", c_italic_kept_in_note, "italic"),
+    Corruption("a variable made math in a note", "structured", c_variable_in_note, "math nodes"),
+    Corruption("text of the figure note leaked", "structured", c_note_stimulus_leak, "description"),
+    Corruption(
+        "the figure note's own text imported", "structured", c_note_stimulus_own_text, "description"
+    ),
+    Corruption(
+        "a wrong kind for the figure note", "structured", c_note_stimulus_kind, "figure note"
+    ),
+    Corruption("a wrong use for the figure note", "structured", c_note_stimulus_use, "use"),
+    Corruption(
+        "the figure note's stimulus missing", "structured", c_note_stimulus_missing, "stimul"
+    ),
+    Corruption(
+        "a figure node pointing at the figure note", "structured", c_note_figure_node, "blocks are"
+    ),
+    Corruption("a variant Greek command", "structured", c_greek_variant_command, "text differs"),
 )
 
 
@@ -2524,11 +2644,9 @@ def test_scanner_reads_each_kind_of_markup() -> None:
         scan("an «unclosed guillemet")
 
 
-def test_unwrap_italic_only_removes_an_enclosing_mark() -> None:
-    assert unwrap_italic("*Allow ECF from (b).*") == "Allow ECF from (b)."
-    assert unwrap_italic("*Accept* x = 2.") == "*Accept* x = 2."
-    assert unwrap_italic("**OR** *tail*") == "**OR** *tail*"
-    assert unwrap_italic("no marks") == "no marks"
+def test_ticks_are_kept_only_when_asked() -> None:
+    assert plain_of("**OR** x ✓", keep_ticks=True) == "OR x ✓"
+    assert plain_of("x ✓") == "x "
 
 
 def test_classification_of_italic_runs() -> None:
@@ -2548,24 +2666,54 @@ def test_classification_of_italic_runs() -> None:
 
 
 def test_note_and_option_rules_on_small_inputs() -> None:
-    assert note_kind_candidates("OWTTE") == {"owtte"}
-    assert note_kind_candidates("Allow ECF from (b).") == {"ecf"}
-    assert note_kind_candidates("Accept 3 s.f.") == {"accept"}
-    assert note_kind_candidates("Do not accept it.") == {"do_not_accept"}
-    assert note_kind_candidates("Award [2] max if x.") == {"cap"}
-    assert note_kind_candidates("Award [2 max] if x.") == {"general", "cap"}
-    assert note_kind_candidates("Award the third mark only if x.") == {"general"}
-    assert note_kind_candidates("Do not award it.") == {"general"}
+    assert expected_note_kind("OWTTE") == "owtte"
+    assert expected_note_kind("Allow ECF from (b).") == "ecf"
+    assert expected_note_kind("Allow ECF for the volume from (a).") == "ecf"
+    assert expected_note_kind("Accept 3 s.f.") == "accept"
+    assert expected_note_kind("Do not accept it.") == "do_not_accept"
+    assert expected_note_kind("Award [2] max if x.") == "cap"
+    assert expected_note_kind("Award [2 max] if x.") == "cap"
+    assert expected_note_kind("Award the third mark only if x.") == "general"
+    assert expected_note_kind("Award [0] for x.") == "general"
+    assert expected_note_kind("Do not award it.") == "general"
+    assert expected_command_term("Explain, with reference to x") == "explain"
+    assert expected_command_term("Determine the x") == "determine"
+    assert expected_command_term("The mass is 2 kg. Calculate x") is None
+    assert expected_command_term("Comment on x") is None
     assert ecf_refs("Allow ECF from (b) and (c)(i).") == ["b", "c.i"]
-    assert _option_kind(["5.0 m s⁻¹", "7 m"], [False, False], broad=False) == "numeric_with_unit"
-    assert _option_kind(["1/3", "9", "2.5 × 10²"], [False] * 3, broad=False) == "ratio"
-    assert _option_kind(["3.0 V and 80 ms", "6 V"], [False, False], broad=False) == "statement"
-    assert _option_kind(["white dwarf", "red giant"], [False, False], broad=False) == "word_phrase"
-    assert _option_kind(["2", "3"], [True, False], broad=False) == "algebraic_expression"
-    assert _option_kind(["a b c d e", "x"], [False, False], broad=False) == "statement"
-    assert stimulus_kind_candidates("Bir devre ve bir grafik") == {"circuit_diagram"}
-    assert stimulus_kind_candidates("Bir grafik ve bir devre") == {"circuit_diagram", "graph"}
-    assert stimulus_kind_candidates("Nothing special") == {"schematic_diagram"}
+    assert _option_kind(["5.0 m s⁻¹", "7 m"], [False, False]) == "numeric_with_unit"
+    assert _option_kind(["1/3", "9", "2.5 × 10²"], [False] * 3) == "ratio"
+    assert _option_kind(["3.0 V and 80 ms", "6 V"], [False, False]) == "statement"
+    assert _option_kind(["white dwarf", "red giant"], [False, False]) == "word_phrase"
+    assert _option_kind(["2", "3"], [True, False]) == "algebraic_expression"
+    assert _option_kind(["a b c d e", "x"], [False, False]) == "statement"
+    # section 8: read to the letter; a lone zero or a plain-text Greek letter spoils "number + unit"
+    assert _option_kind(["−2.0 J K⁻¹", "0", "+0.5 J K⁻¹"], [False] * 3) == "word_phrase"
+    assert _option_kind(["π/6 rad", "π/3 rad"], [False, False]) == "word_phrase"
+
+
+@pytest.mark.parametrize(
+    ("description", "kind"),
+    [
+        ("Bir devre ve bir grafik", "circuit_diagram"),
+        ("Bir grafik ve bir devre", "graph"),  # the earliest keyword wins, not list order
+        ("Nothing special", "schematic_diagram"),
+        ("Kenarın dışında kalan bölge", "schematic_diagram"),  # "ışın" inside "dışında": no match
+        ("Işın demeti levhaya gelir", "ray_wavefront_diagram"),  # capital Turkish dotless I
+        ("IŞIN demeti", "ray_wavefront_diagram"),
+        ("Devreye seri bağlı bir ampermetre", "circuit_diagram"),
+        ("Bir ampermetre ve bir eksen", "circuit_diagram"),
+        ("Bir gaz için P–V çevrimi", "graph"),
+        ("Dalga cepheleri ve ışınlar", "ray_wavefront_diagram"),
+        ("Enerji düzeyleri ve bir tablo", "energy_level_diagram"),
+        ("Bir uzay-zaman çizimi", "spacetime_diagram"),
+        ("Bir tablo", "data_table"),
+        ("Alan çizgileri", "field_diagram"),
+        ("Bir sistemi gösteren şema", "schematic_diagram"),
+    ],
+)
+def test_stimulus_kind_rule(description: str, kind: str) -> None:
+    assert stimulus_kind(description) == kind
 
 
 # ============================================================================================
@@ -2616,7 +2764,7 @@ def test_source_question_is_internally_consistent(src: SourceQuestion) -> None:
 
 
 def test_source_figure_blocks_and_notes_are_28() -> None:
-    quote_blocks = sum(len(q.figures) - (q.figure_note is not None) for q in QUESTIONS)
+    quote_blocks = sum(len(q.figures) for q in QUESTIONS)
     notes = sum(q.figure_note is not None for q in QUESTIONS)
     assert (quote_blocks, notes) == (23, 5)
 
@@ -2761,3 +2909,61 @@ def test_conversion_report_counts_match_the_json() -> None:
     if not any(re.search(rf"(?<!\d){total}(?!\d)", line) for line in lines):
         problems.append(f"the report does not state the total of {total} questions")
     assert not problems, "\n".join(problems)
+
+
+def _report_section(heading_word: str) -> list[str]:
+    """The lines under the first heading (any level) that contains `heading_word`."""
+    lines = REPORT_FILE.read_text(encoding="utf-8").splitlines()
+    start = next(
+        (i for i, line in enumerate(lines) if line.startswith("#") and heading_word in line), None
+    )
+    assert start is not None, f"the report has no heading containing {heading_word!r}"
+    level = len(lines[start]) - len(lines[start].lstrip("#"))
+    out: list[str] = []
+    for line in lines[start + 1 :]:
+        if line.startswith("#") and len(line) - len(line.lstrip("#")) <= level:
+            break
+        out.append(line)
+    return out
+
+
+def _table_first_cells(lines: Sequence[str]) -> list[str]:
+    cells = [split_row(line) for line in lines if line.startswith("|")]
+    return [row[0].strip("`") for row in cells[2:]]  # header and separator skipped
+
+
+def test_report_lists_every_question_with_its_rule_filled_values() -> None:
+    assert REPORT_FILE.is_file(), "content/pilot/CONVERSION_REPORT.md does not exist"
+    section = _report_section("Soru soru")
+    rows = {split_row(line)[0].strip("`"): line for line in section if line.startswith("| `")}
+    assert sorted(rows) == sorted(q.ref for q in QUESTIONS), (
+        "the per-question table does not list exactly the 130 questions"
+    )
+    problems: list[str] = []
+    for src in QUESTIONS:
+        doc = converted(src).document
+        row = rows[src.ref]
+        if doc.mcq is not None:
+            if doc.mcq.option_kind.value not in row:
+                problems.append(
+                    f"{src.ref}: option_kind {doc.mcq.option_kind.value} not in its row"
+                )
+        else:
+            for part in doc.parts:
+                if part.answer_type.value not in row:
+                    problems.append(f"{src.ref}: answer_type of part {part.label} not in its row")
+    assert not problems, "\n".join(problems)
+
+
+def test_report_stimulus_table_matches_the_stimuli_in_the_json() -> None:
+    assert REPORT_FILE.is_file(), "content/pilot/CONVERSION_REPORT.md does not exist"
+    section = _report_section("Uyaranlar")
+    table = [split_row(line) for line in section if line.startswith("|")][2:]
+    reported = {(row[0].strip("`"), row[1].strip("`")): row[2].strip("`") for row in table}
+    assert len(table) == 28 == len(reported)
+    actual = {
+        (q.ref, stimulus.id): stimulus.kind.value
+        for q in QUESTIONS
+        for stimulus in converted(q).document.stimuli
+    }
+    assert reported == actual

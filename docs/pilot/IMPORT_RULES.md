@@ -1,6 +1,6 @@
 # Pilot soruların şemaya çevrilme kuralları
 
-> **Durum: TASLAK.** Tarih: 2026-10-13. M1-G dilim 4'ün sözleşmesi. Kaynak: `docs/pilot/*-pilot-questions.md` (24 dosya, 130 soru;
+> **Durum: TASLAK** (proje sahibinin onayı dilim 4 birleştirmesiyle). Tarih: 2026-10-13. M1-G dilim 4'ün sözleşmesi. Kaynak: `docs/pilot/*-pilot-questions.md` (24 dosya, 130 soru;
 > biçim: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md)). Hedef: şema v1 ([DATA_ARCHITECTURE.md](../DATA_ARCHITECTURE.md) §3.5).
 > Karar (proje sahibi, 2026-10-13): çeviri **kurallı bir betikle** yapılır; metin metin olarak kalır, italik değişkenler matematik
 > düğümü olur, sayılar ve birimler yapılandırılmaz, formül zinciri veri olarak aktarılır.
@@ -166,7 +166,7 @@ yöntemiyle düz metne indirger.
   tablo hücreleri sırayla.
 - **Kaynak tarafı**: aynı bölgeler; `*`, `**`, `<sub>`, `</sub>`, `<sup>`, `</sup>`, `«`, `»`, `✓`, tablo çizgileri, `[n]` puanları,
   parça etiketleri (`**(a)**`, `(ii)`), seçenek harfleri (`A. `), `**Cevap: X**`, `**Çözüm.**`, `> **Şekil:**` etiketleri,
-  `**ALTERNATIVE n**` satırları ve markscheme'in `Question` / `Total` sütunları atılır; `<br>` boşluk olur.
+  `**ALTERNATIVE n**` satırları ve markscheme'in `Question` / `Total` sütunları atılır; `<br>` boşluk olur. Not hücrelerindeki `✓` atılmaz (§8); yalnızca madde satırlarının sonundaki `✓` atılır.
 - İki tarafta da tüm boşluklar atıldıktan sonra karşılaştırılır. Fark varsa test, ilk farkın çevresini gösterir.
 
 Ayrıca: 24 dosya, toplam 130 soru; her `source_ref` tekil; her belge şemadan, müfredat sözlüğünden ve matematik kontrolünden geçer;
@@ -212,7 +212,7 @@ dönüştürücünün davranışıdır; çeviri raporundaki "Kural ekleri" ve "Y
 | Komut sözcüğünden sonra noktalama (`Explain,`) | Noktalama atılır, sözcük sözlükte aranır |
 | `Allow ECF …` ile başlayan her not (`Allow ECF for the volume from (a).`) | `kind = ecf`; `ecf_from` nottaki `(x)` / `(x)(y)` göndermelerinden. Alt parçası olan bir harfe `(c)` diye gönderme: hata (kaynakta yok) |
 | `Award [n] max …`, `Award [n max] …` | `cap`. `Do not award …` ve diğer `Award …` notları `general` |
-| Not içindeki italik | Bütün italik işaretleri atılır (notlar kaynakta kısmen italik) |
+| Not içindeki italik | Hiçbir metin düğümü `italic` işareti taşımaz (notlar kaynakta kısmen italik). Notun italik olmayan kısmında italik yazılmış bir değişken (`*U*`) yine matematik düğümüdür; bütünüyle italik bir notun içindeki harfler ise düz metin kalır |
 | Not içindeki `✓` ve koyu `**ALTERNATIVE:**` | `✓` **metinde kalır** (Notlar sütununa yazılmış alternatif yolun puan sınırlarını gösterir); `ALTERNATIVE` burada yol işareti değil, koyu metindir (not `general` kalır) |
 | `option_kind`: birimsiz tek seçenek (`0`) ya da düz metin Yunan harfi (`π/6 rad`) içeren sayısal dörtlü | Kural harfiyen uygulanır: `word_phrase` ya da `statement` olur. Eğitmen incelemesinde düzeltilecek varsayım |
 | `option_kind`: değişken içeren kısa sözel seçenekler ("less than *g*") | Kural sırası gereği `algebraic_expression` |

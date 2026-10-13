@@ -22,7 +22,7 @@ import json
 import re
 import unicodedata
 from collections import Counter
-from collections.abc import Collection, Iterable, Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Literal
@@ -109,11 +109,17 @@ _ANSWER_TYPES: dict[str, AnswerType] = {
     **dict.fromkeys(("draw", "annotate", "complete"), AnswerType.DRAWING_ON_DIAGRAM),
     "sketch": AnswerType.GRAPH_SKETCH,
 }
-# First keyword found in a figure description (earliest position) decides the kind.
+# Staff-only figure descriptions: the keyword found earliest in the text decides the kind.
+# Matching is case-insensitive and starts at a word start (`ışın` is not found in `dışında`).
 _STIMULUS_KEYWORDS: tuple[tuple[str, StimulusKind], ...] = (
     ("devre", StimulusKind.CIRCUIT_DIAGRAM),
+    ("direnç", StimulusKind.CIRCUIT_DIAGRAM),
+    ("batarya", StimulusKind.CIRCUIT_DIAGRAM),
+    ("voltmetre", StimulusKind.CIRCUIT_DIAGRAM),
+    ("ampermetre", StimulusKind.CIRCUIT_DIAGRAM),
     ("grafik", StimulusKind.GRAPH),
     ("eksen", StimulusKind.GRAPH),
+    ("p–v", StimulusKind.GRAPH),
     ("alan çizgi", StimulusKind.FIELD_DIAGRAM),
     ("ışın", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
     ("dalga cephe", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
@@ -121,6 +127,10 @@ _STIMULUS_KEYWORDS: tuple[tuple[str, StimulusKind], ...] = (
     ("uzay-zaman", StimulusKind.SPACETIME_DIAGRAM),
     ("tablo", StimulusKind.DATA_TABLE),
 )
+FIGURE_NOTE_DESCRIPTION = "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda."
+MAX_FILE_BYTES = 1_048_576
+MAX_LINE_CHARS = 20_000
+MAX_DIGITS = 4
 _MARK_ORDER = (
     MarkType.BOLD,
     MarkType.ITALIC,
@@ -145,10 +155,6 @@ ADDITIONS: dict[str, str] = {
     "note-italic": (
         "Notlarda tüm metin düğümlerinden `italic` işareti atılır (not satırının tamamı italik "
         "yazılır; satır `*Accept* Δ*U* = … *for the second mark.*` gibi bölünmüşse de)."
-    ),
-    "note-tick": (
-        "Not hücresindeki `✓` karakterleri atılır (alternatif yol notun içine yazılmış: "
-        "`**OR** *… ✓ … ✓*`, `**ALTERNATIVE:** … ✓`); kaynak karşılaştırması da `✓` atar."
     ),
     "ecf-prefix": (
         "`Allow ECF` ile başlayan her not `ecf` olur (`Allow ECF from (b)…` kalıbının dışındaki "
@@ -219,7 +225,15 @@ class Tally:
     constants: list[tuple[str, str]] = field(default_factory=list)
     additions: dict[str, list[str]] = field(default_factory=dict)
     file_counts: dict[str, Counter[str]] = field(default_factory=dict)
-    skipped: list[str] = field(default_factory=list)
+    figure_notes_skipped: list[str] = field(default_factory=list)
+    # (ref, stimulus id, kind, source) of every stimulus
+    stimuli: list[tuple[str, str, str, str]] = field(default_factory=list)
+    # (ref, class, option_kind or "", ((label, command term or "", answer type), ...))
+    question_fields: list[tuple[str, str, str, tuple[tuple[str, str, str], ...]]] = field(
+        default_factory=list
+    )
+    # (ref, steps without a unit, steps) of every imported solution model
+    step_units: list[tuple[str, int, int]] = field(default_factory=list)
 
     def count(self, category: str, value: str) -> None:
         self.counters.setdefault(category, Counter())[value] += 1
@@ -376,9 +390,18 @@ def _math_span(latex: str, plain: str, marks: frozenset[MarkType], env: Env) -> 
     return Span("math", latex, plain, marks)
 
 
+def _require_closed(state: _State, text: str, env: Env) -> None:
+    if state.bold:
+        raise env.fail(f"unclosed ** in {_quote(text)}")
+    if state.optional:
+        raise env.fail(f"unclosed « in {_quote(text)}")
+
+
 def _fragment(content: str, env: Env) -> tuple[str, str]:
     """LaTeX and visible text of a sub/superscript that belongs to a variable."""
-    spans = _scan(content, _State(), env)
+    state = _State()
+    spans = _scan(content, state, env)
+    _require_closed(state, content, env)
     parts: list[str] = []
     plain: list[str] = []
     for span in spans:
@@ -457,7 +480,9 @@ def _scan(text: str, state: _State, env: Env, *, italic: bool = False) -> list[S
                 )
                 attach_at = close + 6
             else:
-                inner = _scan(content, _State(), env)
+                inner_state = _State()
+                inner = _scan(content, inner_state, env)
+                _require_closed(inner_state, content, env)
                 mark = MarkType.SUB if tag == "sub" else MarkType.SUP
                 for piece in inner:
                     if piece.kind != "text":
@@ -501,10 +526,7 @@ def parse_inline(text: str, env: Env, *, ticks: bool = False) -> list[Span]:
     collapsed = re.sub(r"\s+", " ", text)
     state = _State()
     spans = _scan(collapsed, state, env)
-    if state.bold:
-        raise env.fail(f"unclosed ** in {_quote(text)}")
-    if state.optional:
-        raise env.fail(f"unclosed « in {_quote(text)}")
+    _require_closed(state, text, env)
     return _tidy(spans)
 
 
@@ -648,6 +670,8 @@ def table_rows(block: SourceBlock, env: Env) -> list[tuple[int, list[str]]]:
         cells = split_row(line, env)
         if not _is_separator(cells):
             rows.append((line.no, cells))
+    if not rows:
+        raise env.at(block.first).fail("table without a header row")
     return rows
 
 
@@ -676,17 +700,19 @@ def _joined(block: SourceBlock) -> str:
 # --- Stimuli -------------------------------------------------------------------------------
 
 
-def _turkish_lower(text: str) -> str:
+def turkish_lower(text: str) -> str:
+    """Lower case with the Turkish pairs I/ı and İ/i (so that `Işın` becomes `ışın`)."""
     return text.replace("I", "ı").replace("İ", "i").lower()
 
 
 def stimulus_kind(description: str) -> StimulusKind:
-    lowered = _turkish_lower(description)
+    """Section 3.3: the kind from the keyword that occurs first, at the start of a word."""
+    lowered = turkish_lower(description)
     best: tuple[int, StimulusKind] | None = None
     for keyword, kind in _STIMULUS_KEYWORDS:
-        position = lowered.find(keyword)
-        if position >= 0 and (best is None or position < best[0]):
-            best = (position, kind)
+        found = re.search(rf"(?<![^\W\d_]){re.escape(keyword)}", lowered)
+        if found is not None and (best is None or found.start() < best[0]):
+            best = (found.start(), kind)
     return best[1] if best is not None else StimulusKind.SCHEMATIC_DIAGRAM
 
 
@@ -716,6 +742,7 @@ def figure_block(block: SourceBlock, stimuli: list[Stimulus], env: Env) -> Figur
             description=description,
         )
     )
+    env.tally.stimuli.append((env.ref, stimulus_id, stimuli[-1].kind.value, "Şekil bloğu"))
     env.tally.count("stimulus_kind", stimuli[-1].kind.value)
     return Figure(type="figure", attrs=FigureAttrs(stimulus_id=stimulus_id))
 
@@ -759,9 +786,18 @@ class Heading:
 
 
 _HEADING = re.compile(
-    r"^## Soru (\d+) — Paper (1A|1B|2)"
-    r"(?: \((?:(HL), )?(\d+) puan\)| \((HL)\))?$"
+    r"^## Soru ([0-9]{1,4}) — Paper (1A|1B|2)"
+    r"(?: \((?:(HL), )?([0-9]{1,4}) puan\)| \((HL)\))?$"
 )
+
+
+def small_int(text: str) -> int | None:
+    """An unsigned integer of at most MAX_DIGITS ASCII digits, else None."""
+    if re.fullmatch(rf"[0-9]{{1,{MAX_DIGITS}}}", text) is None:
+        return None
+    return int(text)
+
+
 _SCOPE_HEADER = (
     "#",
     "Bölüm",
@@ -802,13 +838,15 @@ def parse_scope(lines: Sequence[Line], env: Env) -> dict[int, ScopeRow]:
         cells = split_row(line, env)
         if _is_separator(cells):
             continue
-        if len(cells) != 8 or not cells[0].isdigit() or not cells[6].isdigit():
+        number, marks = (
+            (small_int(cells[0]), small_int(cells[6])) if len(cells) == 8 else (None,) * 2
+        )
+        if number is None or marks is None:
             raise env.at(line.no).fail(f"unexpected scope table row {cells}")
-        number = int(cells[0])
         if number in rows:
             raise env.at(line.no).fail(f"question {number} appears twice in the scope table")
         rows[number] = ScopeRow(
-            number, cells[1], cells[2], cells[3], cells[4], int(cells[6]), cells[7], line.no
+            number, cells[1], cells[2], cells[3], cells[4], marks, cells[7], line.no
         )
     return rows
 
@@ -940,6 +978,7 @@ def convert_mcq(
 
     kind = option_kind(option_spans)
     env.tally.count("option_kind", kind.value)
+    env.tally.question_fields.append((env.ref, "mcq", kind.value, ()))
     objective = None
     match = re.fullmatch(r"AO([123])", scope.objective)
     if match is not None:
@@ -968,7 +1007,7 @@ def convert_mcq(
 
 _PART_LINE = re.compile(r"^\*\*\(([a-z])\)\*\*\s*(?:\(([ivx]+)\)\s+)?(.+)$", re.DOTALL)
 _SUBPART_LINE = re.compile(r"^\(([ivx]+)\)\s+(.+)$", re.DOTALL)
-_MARKS_SUFFIX = re.compile(r"\s*\[(\d+)\]\s*$")
+_MARKS_SUFFIX = re.compile(r"\[([0-9]{1,4})\]$")
 
 
 @dataclass
@@ -1041,6 +1080,7 @@ def parse_parts(
 def _new_draft(letter: str, roman: str, body: str, lead: list[Block], env: Env) -> _PartDraft:
     if roman and roman not in _ROMAN:
         raise env.fail(f"unsupported sub-part numeral ({roman})")
+    body = body.rstrip()
     found = _MARKS_SUFFIX.search(body)
     if found is None:
         raise env.fail(f"part ({letter}){f' ({roman})' if roman else ''} has no `[n]` marks")
@@ -1056,7 +1096,7 @@ def _new_draft(letter: str, roman: str, body: str, lead: list[Block], env: Env) 
     )
 
 
-_ROUTE = re.compile(r"\*\*ALTERNATIVE (\d+)\*\*")
+_ROUTE = re.compile(r"\*\*ALTERNATIVE ([0-9]{1,2})\*\*")
 _ECF_REF = re.compile(r"\(([a-z])\)(?:\(([ivx]+)\))?")
 _CAP = re.compile(r"^Award (?:\[\d+ max\]|\[\d+\] max)(?:\s|$)")
 
@@ -1076,18 +1116,6 @@ def note_kind(plain: str) -> NoteKind:
     return NoteKind.GENERAL
 
 
-def _strip_ticks(spans: list[Span], env: Env) -> list[Span]:
-    cleaned: list[Span] = []
-    for span in spans:
-        if span.kind == "text" and "✓" in span.value:
-            env.add("note-tick")
-            value = re.sub(r"\s+", " ", span.value.replace("✓", " "))
-            cleaned.append(Span("text", value, value, span.marks))
-        else:
-            cleaned.append(span)
-    return _tidy(cleaned)
-
-
 def convert_notes(
     cell: str, part_id: str, earlier: Sequence[str], env: Env
 ) -> tuple[tuple[Note, ...], tuple[str, ...]]:
@@ -1096,7 +1124,7 @@ def convert_notes(
     for text in (t.strip() for t in cell.split("<br>")):
         if not text:
             continue
-        spans = _strip_ticks(parse_inline(text, env, ticks=True), env)
+        spans = parse_inline(text, env, ticks=True)
         if any(MarkType.ITALIC in s.marks for s in spans if s.kind == "text"):
             env.add("note-italic")
             spans = _tidy(
@@ -1210,6 +1238,7 @@ def convert_markscheme(
         if part_id not in draft_ids:
             raise env.at(no).fail(f"mark-scheme row for unknown part ({part_id})")
     parts: list[Part] = []
+    fields: list[tuple[str, str, str]] = []
     for draft in drafts:
         if draft.label not in by_part:
             raise env.at(draft.line).fail(f"part ({draft.label}) has no mark-scheme row")
@@ -1219,7 +1248,7 @@ def convert_markscheme(
         if total.endswith(" max"):
             env.add("total-max")
             total = total.removesuffix(" max")
-        if not total.isdigit() or int(total) != draft.marks:
+        if small_int(total) != draft.marks:
             raise local.fail(f"Total {cells[5]!r} differs from the part's [{draft.marks}]")
         points, capped = convert_answers(cells[3], draft.label, draft.marks, local)
         earlier = [p.id for p in parts]
@@ -1228,6 +1257,7 @@ def convert_markscheme(
         answer_type = answer_type_of(command_term)
         env.tally.count("command_term", command_term or "(boş)")
         env.tally.count("answer_type", answer_type.value)
+        fields.append((draft.label, command_term or "", answer_type.value))
         if capped:
             env.tally.count("marks_capped", "true")
         body_spans = parse_inline(draft.body_text, env.at(draft.line))
@@ -1249,6 +1279,7 @@ def convert_markscheme(
                 notes=notes,
             )
         )
+    env.tally.question_fields.append((env.ref, "parts", "", tuple(fields)))
     return parts
 
 
@@ -1293,7 +1324,7 @@ def _parameters(cell: str, ref: str, tally: Tally) -> list[Parameter]:
             after_constant_word = True
         position = found.end()
         item = re.fullmatch(
-            r"\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(\S+)(?:\s+(.+?))?\s*", found.group(1)
+            r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(\S+)(?:\s+(.+))?", found.group(1).strip()
         )
         if item is None:
             raise _Omit("parametre biçimi", f"{found.group(1)!r} is not `name = value unit`")
@@ -1369,7 +1400,9 @@ def solution_model(
         names = [p.name for p in parameters] + [s.name for s in steps]
         if len(names) != len(set(names)):
             raise _Omit("yinelenen ad", "parameter or step name")
-        return SolutionModel(parameters=tuple(parameters), steps=tuple(steps)), None
+        model = SolutionModel(parameters=tuple(parameters), steps=tuple(steps))
+        env.tally.step_units.append((env.ref, sum(1 for st in steps if not st.unit), len(steps)))
+        return model, None
     except _Omit as omit:
         return None, (omit.code, omit.detail)
     except ValidationError as error:
@@ -1479,20 +1512,19 @@ def convert_question(
         else:
             env.tally.models_omitted.append((env.ref, "bölüm yok", ""))
         if "Şekil notu" in sections:
-            note_blocks = split_blocks(sections["Şekil notu"])
-            if not note_blocks or any(b.kind != "para" for b in note_blocks):
-                raise env.fail("`### Şekil notu` must hold paragraphs only")
-            description = " ".join(
-                plain_text(parse_inline(_joined(b), env.at(b.first))) for b in note_blocks
-            )
+            if not any(line.text.strip() for line in sections["Şekil notu"]):
+                raise env.fail("`### Şekil notu` is empty")
+            # The note is the author's working text and may hold the answer: it is not imported.
+            env.tally.figure_notes_skipped.append(env.ref)
             stimuli.append(
                 Stimulus(
                     id=f"fig{len(stimuli) + 1}",
                     kind=StimulusKind.GRAPH,
                     use=StimulusUse.READ_VALUES,
-                    description=description,
+                    description=FIGURE_NOTE_DESCRIPTION,
                 )
             )
+            env.tally.stimuli.append((env.ref, stimuli[-1].id, "graph", "Şekil notu"))
             env.tally.count("stimulus_kind", StimulusKind.GRAPH.value)
         question_class = (
             QuestionClass.DATA_BASED
@@ -1526,14 +1558,12 @@ def convert_markdown(
     stem: str,
     vocabulary: Vocabulary,
     tally: Tally | None = None,
-    skip: Collection[int] = (),
 ) -> PilotFile:
-    """The whole file. Raises `ConversionFailed` (all question errors) if any question fails.
-
-    `skip` names question numbers to leave out (a development aid; the tally lists them).
-    """
+    """The whole file. Raises `ConversionFailed` (all question errors) if any question fails."""
     tally = tally if tally is not None else Tally()
     env = Env(stem=stem, tally=tally)
+    if len(data) > MAX_FILE_BYTES:
+        raise env.fail(f"file is larger than {MAX_FILE_BYTES} bytes")
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError as error:
@@ -1541,20 +1571,31 @@ def convert_markdown(
     if "\r" in text:
         raise env.fail("file has carriage returns")
     lines = [Line(no, raw) for no, raw in enumerate(text.split("\n"), start=1)]
+    for line in lines:
+        if len(line.text) > MAX_LINE_CHARS:
+            raise env.at(line.no).fail(f"line is longer than {MAX_LINE_CHARS} characters")
 
-    # Cut the file into `## ` sections; a `---` ends the section it follows.
-    sections: list[tuple[Line, list[Line]]] = []
+    # Cut the file into `## ` sections. A `---` ends the section it follows; what comes after it
+    # up to the next `## ` heading must be blank (section 3).
+    sections: list[tuple[Line, list[Line], list[Line]]] = []
     current: list[Line] | None = None
+    after: list[Line] | None = None
     for line in lines:
         if line.text.startswith("## "):
-            current = []
-            sections.append((line, current))
+            current, after = [], []
+            sections.append((line, current, after))
         elif line.text.strip() == "---":
+            if after is not None and current is None:
+                after.append(line)  # a second rule is text after the block end
             current = None
         elif current is not None:
             current.append(line)
+        elif after is not None:
+            after.append(line)
 
-    scope_lines = next((body for head, body in sections if head.text == "## Kapsam tablosu"), None)
+    scope_lines = next(
+        (body for head, body, _ in sections if head.text == "## Kapsam tablosu"), None
+    )
     if scope_lines is None:
         raise env.fail("no `## Kapsam tablosu` section")
     scope = parse_scope(scope_lines, env)
@@ -1562,7 +1603,7 @@ def convert_markdown(
     errors: list[ConversionError] = []
     questions: list[PilotQuestion] = []
     headings_seen: list[int] = []
-    for head, body in sections:
+    for head, body, trailing in sections:
         if not head.text.startswith("## Soru"):
             if head.text[3:] not in _KNOWN_SECTION_TITLES:
                 raise env.at(head.no).fail(f"unknown section heading {head.text!r}")
@@ -1572,8 +1613,17 @@ def convert_markdown(
         row = scope.get(heading.number)
         if row is None:
             raise env.at(head.no).fail(f"question {heading.number} is not in the scope table")
-        if heading.number in skip:
-            tally.skipped.append(source_ref(stem, heading.number))
+        stray = next((ln for ln in trailing if ln.text.strip()), None)
+        if stray is not None:
+            errors.append(
+                ConversionError(
+                    env.file,
+                    heading.number,
+                    stray.no,
+                    "text after the `---` that ends the question block "
+                    f"(rules cannot use `---` inside a question): {_quote(stray.text.strip())}",
+                )
+            )
             continue
         try:
             questions.append(convert_question(body, heading, row, vocabulary, env))
@@ -1585,9 +1635,14 @@ def convert_markdown(
         )
     if errors:
         raise ConversionFailed(errors)
+    if not questions:
+        raise env.fail("the file has no questions")
     tally.file_counts[stem] = Counter(q.document.question_class.value for q in questions)
-    return PilotFile(
-        source_file=f"docs/pilot/{stem}{SOURCE_SUFFIX}",
-        source_sha256=hashlib.sha256(data).hexdigest(),
-        questions=tuple(questions),
-    )
+    try:
+        return PilotFile(
+            source_file=f"docs/pilot/{stem}{SOURCE_SUFFIX}",
+            source_sha256=hashlib.sha256(data).hexdigest(),
+            questions=tuple(questions),
+        )
+    except ValidationError as error:
+        raise env.fail(f"file model rejected: {error.errors()[0]['msg']}") from error

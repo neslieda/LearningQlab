@@ -8,9 +8,7 @@ fresh conversion. Every command is a `run_<name>(args)` function registered in `
 from __future__ import annotations
 
 import argparse
-import re
 import sys
-from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -26,7 +24,6 @@ from qlab.content.pilot.markdown import (
 from qlab.content.pilot.report import render_report
 
 REPORT_NAME = "CONVERSION_REPORT.md"
-_SKIP_REF = re.compile(r"^pilot/([a-z0-9][a-z0-9-]*)#([1-9][0-9]*)$")
 
 
 def default_root() -> Path:
@@ -34,35 +31,53 @@ def default_root() -> Path:
     return Path(__file__).resolve().parents[6]
 
 
-def _skips(refs: Sequence[str]) -> dict[str, set[int]]:
-    skips: dict[str, set[int]] = defaultdict(set)
-    for ref in refs:
-        found = _SKIP_REF.match(ref)
-        if found is None:
-            raise SystemExit(f"--skip {ref!r}: expected pilot/<file stem>#<question number>")
-        skips[found.group(1)].add(int(found.group(2)))
-    return skips
+def _unsafe(path: Path, base: Path, root: Path) -> str | None:
+    """Why `path` may be neither read nor written: a symbolic link, or not inside `base`."""
+    shown = path.relative_to(root).as_posix() if path.is_relative_to(root) else str(path)
+    if path.is_symlink():
+        return f"{shown} is a symbolic link"
+    if not path.resolve().is_relative_to(base.resolve()):
+        return f"{shown} resolves outside {base.relative_to(root).as_posix()}"
+    return None
 
 
-def _convert_all(root: Path, skip_refs: Sequence[str]) -> tuple[dict[str, str], list[str]]:
+def _layout_problems(root: Path) -> list[str]:
+    """Symbolic links and escapes in docs/pilot, content/pilot and the files in them."""
+    problems: list[str] = []
+    docs = root / "docs" / "pilot"
+    target = root / "content" / "pilot"
+    for directory, base in ((docs, root / "docs"), (target, root / "content")):
+        if directory.exists() or directory.is_symlink():
+            problem = _unsafe(directory, base, root)
+            if problem:
+                problems.append(problem)
+    if problems:
+        return problems
+    for directory in (docs, target):
+        if directory.is_dir():
+            for entry in sorted(directory.iterdir()):
+                problem = _unsafe(entry, directory, root)
+                if problem:
+                    problems.append(problem)
+    return problems
+
+
+def _convert_all(root: Path) -> tuple[dict[str, str], list[str]]:
     """Generated file name -> text, and the problems found (empty when everything converted)."""
     sources = sorted((root / "docs" / "pilot").glob(f"*{SOURCE_SUFFIX}"))
     if not sources:
         return {}, [f"no *{SOURCE_SUFFIX} files under {root / 'docs' / 'pilot'}"]
     vocabulary = load_vocabulary(root / "content" / "reference" / "dp-physics-2025-syllabus.json")
-    skips = _skips(skip_refs)
     stems = [source.name.removesuffix(SOURCE_SUFFIX) for source in sources]
-    for stem in skips:
-        if stem not in stems:
-            return {}, [f"--skip names an unknown file stem {stem!r}"]
     tally = Tally()
     outputs: dict[str, str] = {}
     problems: list[str] = []
     for source, stem in zip(sources, stems, strict=True):
+        if not source.is_file():
+            problems.append(f"{source.name} is not a regular file")
+            continue
         try:
-            pilot = convert_markdown(
-                source.read_bytes(), stem, vocabulary, tally, skip=skips.get(stem, ())
-            )
+            pilot = convert_markdown(source.read_bytes(), stem, vocabulary, tally)
         except ConversionFailed as failed:
             problems.extend(str(error) for error in failed.errors)
             continue
@@ -85,8 +100,14 @@ def run_convert(args: argparse.Namespace) -> int:
     if not (root / "docs" / "pilot").is_dir():
         print(f"{root}: no docs/pilot directory; pass --root", file=sys.stderr)
         return 2
+    refused = _layout_problems(root)
+    if refused:
+        print("Refused; nothing was read, written or compared:", file=sys.stderr)
+        for problem in refused:
+            print(f"  {problem}", file=sys.stderr)
+        return 2
     try:
-        outputs, problems = _convert_all(root, args.skip)
+        outputs, problems = _convert_all(root)
     except qmath.RendererUnavailable as error:
         print(f"math check could not run: {error}", file=sys.stderr)
         return 2
@@ -97,6 +118,15 @@ def run_convert(args: argparse.Namespace) -> int:
         return 1
 
     target = root / "content" / "pilot"
+    strays = []
+    if target.is_dir():
+        for path in sorted(target.iterdir()):
+            if path.name in outputs:
+                continue
+            if path.suffix == ".json" and path.is_file():
+                strays.append(f"content/pilot/{path.name} has no source file")
+            else:
+                strays.append(f"content/pilot/{path.name} is not a generated file")
     if args.check:
         differences = []
         for name, text in sorted(outputs.items()):
@@ -105,10 +135,7 @@ def run_convert(args: argparse.Namespace) -> int:
                 differences.append(f"content/pilot/{name} is missing")
             elif path.read_bytes() != text.encode("utf-8"):
                 differences.append(f"content/pilot/{name} differs from a fresh conversion")
-        if target.is_dir():
-            for path in sorted(target.glob("*.json")):
-                if path.name not in outputs:
-                    differences.append(f"content/pilot/{path.name} has no source file")
+        differences.extend(strays)
         if differences:
             print("content/pilot is out of date:", file=sys.stderr)
             for difference in differences:
@@ -122,11 +149,14 @@ def run_convert(args: argparse.Namespace) -> int:
         return 0
 
     target.mkdir(parents=True, exist_ok=True)
-    for path in target.glob("*.json"):
+    for path in sorted(target.glob("*.json")):
         if path.name not in outputs:
             path.unlink()
     for name, text in outputs.items():
         (target / name).write_bytes(text.encode("utf-8"))
+    for stray in strays:
+        if "not a generated file" in stray:
+            print(f"warning: {stray}", file=sys.stderr)
     print(f"Wrote {len(outputs) - 1} files and {REPORT_NAME} to content/pilot.")
     return 0
 
@@ -143,14 +173,27 @@ def run_load(args: argparse.Namespace) -> int:
 
     root = (args.root or default_root()).resolve()
     math.ensure_renderer()
-    with Session(make_engine()) as session, session.begin():
-        report = loader.load_pilot_directory(
-            session, root / "content" / "pilot", holder=args.holder
-        )
-        for ref, status in report.skipped.items():
-            print(f"skipped {ref}: latest version is {status}")
-        if args.dry_run:
-            session.rollback()
+    engine = make_engine()
+    print(f"database: {engine.url.host}/{engine.url.database}")
+    try:
+        with Session(engine) as session, session.begin():
+            report = loader.load_pilot_directory(
+                session,
+                root,
+                holder=args.holder,
+                operator=args.operator,
+                create_rights=args.create_rights,
+            )
+            if args.dry_run:
+                session.rollback()
+    except (loader.OwnContentRightsError, loader.SourceMismatch, LookupError) as error:
+        # Expected refusals: nothing was written. Other errors keep their traceback.
+        print(f"import refused: {error}", file=sys.stderr)
+        return 2
+    for ref, reason in report.skipped.items():
+        print(f"skipped {ref}: {reason}")
+    for ref in report.blocked:
+        print(f"blocked {ref}: its rights record does not permit display")
     print(("dry run: " if args.dry_run else "") + report.summary())
     return 0
 
@@ -162,18 +205,19 @@ def build_parser() -> argparse.ArgumentParser:
     convert = commands.add_parser("convert", help="Markdown -> content/pilot/*.json and report")
     convert.add_argument("--check", action="store_true", help="compare, do not write")
     convert.add_argument("--root", type=Path, default=None, help="repository root")
-    convert.add_argument(
-        "--skip",
-        action="append",
-        default=[],
-        metavar="REF",
-        help="development aid: leave out pilot/<file stem>#<number> (listed in the report)",
-    )
     convert.set_defaults(run=run_convert)
 
     load = commands.add_parser("load", help="import content/pilot/*.json as draft questions")
     load.add_argument("--root", type=Path, default=None, help="repository root")
     load.add_argument("--holder", default="LearningQlab", help="holder of the own-content rights")
+    load.add_argument(
+        "--operator", required=True, help="opaque account id of the person running the import"
+    )
+    load.add_argument(
+        "--create-rights",
+        action="store_true",
+        help="open the platform's own-content rights record if none exists (D-58)",
+    )
     load.add_argument("--dry-run", action="store_true", help="do everything, then roll back")
     load.set_defaults(run=run_load)
     return parser

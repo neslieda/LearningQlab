@@ -6,9 +6,15 @@ The independent comparison of the converted files with their sources is a separa
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
+from qlab.content.pilot.__main__ import _layout_problems
 from qlab.content.pilot.markdown import (
+    FIGURE_NOTE_DESCRIPTION,
+    MAX_FILE_BYTES,
+    MAX_LINE_CHARS,
     ConversionError,
     ConversionFailed,
     Env,
@@ -33,6 +39,7 @@ from qlab.content.pilot.markdown import (
     split_row,
     stimulus_kind,
     to_latex,
+    turkish_lower,
 )
 from qlab.content.schema import (
     AnswerType,
@@ -438,12 +445,15 @@ def test_notes_drop_the_surrounding_italics_and_set_ecf_from() -> None:
         )
 
 
-def test_an_ecf_note_may_name_several_parts_and_the_tick_is_dropped() -> None:
+def test_an_ecf_note_may_name_several_parts_and_ticks_in_notes_stay_text() -> None:
     cell = "*Allow ECF from (a) and (b).*<br>**OR** *alternative ✓ route ✓*"
     notes, ecf = convert_notes(cell, "c", ["a", "b"], make_env())
     assert ecf == ("a", "b")
-    assert plain_text(parse_inline("OR alternative route", make_env())) == "OR alternative route"
     assert notes[1].kind is NoteKind.GENERAL
+    paragraph = notes[1].content.content[0]
+    assert paragraph.type == "paragraph"
+    texts = [n.text for n in paragraph.content if n.type == "text"]
+    assert "".join(texts) == "OR alternative ✓ route ✓"
 
 
 def test_an_ecf_note_that_names_a_later_or_missing_part_is_an_error() -> None:
@@ -551,6 +561,11 @@ def test_every_vocabulary_command_term_has_an_answer_type() -> None:
     ("description", "kind"),
     [
         ("Tek gözlü seri devre çizilmiş.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("Üç Direnç seri bağlı.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("Bir batarya ve bir lamba.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("İdeal voltmetre ölçer.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("Ampermetre seri.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("Bir P–V diyagramı.", StimulusKind.GRAPH),
         ("Yatay eksen zaman, grafik doğrusal.", StimulusKind.GRAPH),
         ("Elektrik alan çizgileri.", StimulusKind.FIELD_DIAGRAM),
         ("Işın diyagramı.", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
@@ -567,6 +582,24 @@ def test_stimulus_kind_from_the_first_keyword(description: str, kind: StimulusKi
 
 def test_stimulus_kind_takes_the_keyword_that_comes_first_in_the_text() -> None:
     assert stimulus_kind("Bir grafik ve bir devre.") is StimulusKind.GRAPH
+    assert stimulus_kind("Bir devre ve bir grafik.") is StimulusKind.CIRCUIT_DIAGRAM
+
+
+def test_stimulus_keywords_match_at_a_word_start_only() -> None:
+    # `ışın` inside "dışında" and `tablo` inside "stablo" are not keywords
+    assert stimulus_kind("Çerçevenin dışında kalan bölge.") is StimulusKind.SCHEMATIC_DIAGRAM
+    assert stimulus_kind("Bir stablo ve bir oku.") is StimulusKind.SCHEMATIC_DIAGRAM
+    assert stimulus_kind("Çerçevenin dışında bir ışın.") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("(ışın) gelir") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+
+
+def test_turkish_lower_casing_keeps_dotted_and_dotless_i_apart() -> None:
+    assert turkish_lower("Işın") == "ışın"
+    assert turkish_lower("İş") == "iş"
+    assert turkish_lower("IŞIN") == "ışın"
+    assert stimulus_kind("IŞIN demeti") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("Işın demeti") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("DEVRE şeması") is StimulusKind.CIRCUIT_DIAGRAM
 
 
 # --- Solution model (section 3.4) ---------------------------------------------------------------
@@ -802,3 +835,133 @@ def test_an_option_row_for_the_correct_answer_or_a_missing_row_is_an_error() -> 
     missing = SAMPLE.replace("| C | Hız ile süre toplanır: 2.0 + 5.0 |\n", "")
     failed, _ = convert_sample(missing)
     assert failed is not None and "no misconception row for C" in failed.errors[0].message
+
+
+# --- Amended rules: figure notes, block end, robustness -----------------------------------------
+
+
+def test_a_figure_note_is_not_imported_and_gets_the_fixed_description() -> None:
+    text = SAMPLE.replace(
+        "Denetim: serbest açıklama.\n",
+        "Denetim: serbest açıklama.\n\n### Şekil notu\n\nThe gradient is exactly 42 N.\n",
+    )
+    tally = Tally()
+    pilot = convert_markdown(text.encode(), "a1-test", VOCABULARY, tally)
+    document = pilot.questions[1].document
+    assert [(s.id, s.kind, s.use.value, s.description) for s in document.stimuli] == [
+        ("fig1", StimulusKind.GRAPH, "read_values", FIGURE_NOTE_DESCRIPTION)
+    ]
+    assert "42" not in pilot.to_json()
+    assert tally.figure_notes_skipped == ["pilot/a1-test#2"]
+    assert [b.type for b in document.stem.content] == ["paragraph"]
+
+
+def test_a_non_blank_line_between_the_rule_and_the_next_heading_is_an_error() -> None:
+    text = SAMPLE.replace("---\n\n## Soru 2", "---\n\nLeftover text.\n\n## Soru 2")
+    failed, _ = convert_sample(text)
+    assert failed is not None
+    error = failed.errors[0]
+    assert error.question == 1 and error.line is not None
+    assert "after the `---`" in error.message
+    assert text.split("\n")[error.line - 1] == "Leftover text."
+
+
+def test_a_second_rule_inside_a_question_block_is_an_error() -> None:
+    text = SAMPLE.replace("**Cevap: D**", "---\n\n**Cevap: D**")
+    failed, _ = convert_sample(text)
+    assert failed is not None and failed.errors[0].question == 1
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        SAMPLE.replace("## Soru 1 —", "## Soru 123456 —"),
+        SAMPLE.replace("| 1 | Paper 1A", "| 12345 | Paper 1A"),
+        SAMPLE.replace("(HL, 3 puan)", "(HL, " + "9" * 5000 + " puan)"),
+        SAMPLE.replace(
+            "| 2. | a | | zero «m s⁻¹» ✓ | *OWTTE* | 1 |", "| 2. | a | | z ✓ | *OWTTE* | ²³ |"
+        ),
+        SAMPLE.replace("State the initial speed of the stone. [1]", "State. [" + "1" * 5000 + "]"),
+    ],
+)
+def test_absurd_numbers_are_conversion_errors(text: str) -> None:
+    with pytest.raises(ConversionError):
+        convert_markdown(text.encode(), "a1-test", VOCABULARY)
+
+
+def test_a_part_line_with_a_long_run_of_spaces_is_handled_in_linear_time() -> None:
+    text = SAMPLE.replace(
+        "State the initial speed of the stone. [1]", "State the speed." + " " * 15000 + "[x]"
+    )
+    failed, _ = convert_sample(text)
+    assert failed is not None and "no `[n]` marks" in failed.errors[0].message
+
+
+def test_input_size_limits_are_conversion_errors() -> None:
+    with pytest.raises(ConversionError, match="larger than"):
+        convert_markdown(SAMPLE.encode() + b"x" * MAX_FILE_BYTES, "a1-test", VOCABULARY)
+    long_line = SAMPLE.replace("A trolley", "A" * (MAX_LINE_CHARS + 1) + " trolley")
+    with pytest.raises(ConversionError, match="longer than"):
+        convert_markdown(long_line.encode(), "a1-test", VOCABULARY)
+
+
+def test_a_table_with_only_a_separator_row_is_an_error_not_an_index_error() -> None:
+    start = SAMPLE.index("| Seçenek")
+    end = SAMPLE.index("Not: yalnızca")
+    text = SAMPLE[:start] + "|---|---|\n\n" + SAMPLE[end:]
+    failed, _ = convert_sample(text)
+    assert failed is not None and "table without a header row" in failed.errors[0].message
+    scope_only = SAMPLE.replace(
+        SAMPLE[SAMPLE.index("| # | Bölüm") : SAMPLE.index("| 1 | Paper 1A")], "|---|---|\n"
+    )
+    with pytest.raises(ConversionError):
+        convert_markdown(scope_only.encode(), "a1-test", VOCABULARY)
+
+
+def test_a_file_without_questions_is_an_error() -> None:
+    head = SAMPLE[: SAMPLE.index("## Soru 1")]
+    only_scope = head.replace("| 1 | Paper 1A", "| x | Paper 1A")
+    with pytest.raises(ConversionError):
+        convert_markdown(only_scope.encode(), "a1-test", VOCABULARY)
+    with pytest.raises(ConversionError, match="no questions|not match"):
+        convert_markdown(head.encode(), "a1-test", VOCABULARY)
+
+
+@pytest.mark.parametrize("text", ["x<sub>**a</sub>", "x<sup>«a</sup>", "*v*<sub>**a</sub>"])
+def test_unclosed_emphasis_inside_subscripts_is_an_error(text: str) -> None:
+    with pytest.raises(ConversionError, match="unclosed"):
+        spans(text)
+
+
+# --- Command line: symbolic links are refused ---------------------------------------------------
+
+
+def make_tree(tmp_path: Path) -> Path:
+    (tmp_path / "docs" / "pilot").mkdir(parents=True)
+    (tmp_path / "content" / "pilot").mkdir(parents=True)
+    (tmp_path / "docs" / "pilot" / "a1-test-pilot-questions.md").write_text("x", encoding="utf-8")
+    (tmp_path / "content" / "pilot" / "a1-test.json").write_text("{}", encoding="utf-8")
+    return tmp_path
+
+
+def test_a_plain_tree_has_no_layout_problems(tmp_path: Path) -> None:
+    assert _layout_problems(make_tree(tmp_path)) == []
+
+
+def test_a_symlinked_source_file_is_refused(tmp_path: Path) -> None:
+    root = make_tree(tmp_path)
+    outside = tmp_path / "outside.md"
+    outside.write_text("x", encoding="utf-8")
+    (root / "docs" / "pilot" / "b1-link-pilot-questions.md").symlink_to(outside)
+    assert _layout_problems(root) == ["docs/pilot/b1-link-pilot-questions.md is a symbolic link"]
+
+
+def test_a_symlinked_output_file_or_directory_is_refused(tmp_path: Path) -> None:
+    root = make_tree(tmp_path)
+    (root / "content" / "pilot" / "a1-test.json").unlink()
+    (root / "content" / "pilot" / "a1-test.json").symlink_to(root / "docs" / "pilot")
+    assert _layout_problems(root) == ["content/pilot/a1-test.json is a symbolic link"]
+    (root / "content" / "pilot" / "a1-test.json").unlink()
+    (root / "content" / "pilot").rmdir()
+    (root / "content" / "pilot").symlink_to(root / "docs" / "pilot")
+    assert _layout_problems(root) == ["content/pilot is a symbolic link"]

@@ -1650,7 +1650,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "schematic_diagram",
+      "kind": "graph",
       "use": "read_only",
       "description": "Basınç–hacim (P–V) diyagramı; ölçekli değil. A'dan B'ye sağa doğru yatay doğru (sabit basınç). B'den C'ye sağa ve aşağı inen dik eğri (adyabatik). C'den A'ya sola ve yukarı çıkan, daha az dik eğri (izotermal). Çevrim saat yönünde dolaşılır.",
       "asset_id": null,

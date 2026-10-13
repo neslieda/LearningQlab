@@ -1657,7 +1657,7 @@
       "id": "fig1",
       "kind": "graph",
       "use": "read_values",
-      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu h–t² grafiği yer alır. Grafik aynı veriden kodla üretilir (D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.98 m s⁻²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 5.35 ve 4.56 m s⁻²'dir; soruda verilen 5.0, 5.4 ve 4.6 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.",
+      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
       "asset_id": null,
       "alt_text": null
      }

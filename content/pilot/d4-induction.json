@@ -52,7 +52,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "ray_wavefront_diagram",
+      "kind": "schematic_diagram",
       "use": "read_only",
       "description": "Sayfa düzleminde dikdörtgen bir bobin (kısa kenar 0.10 m düşey, uzun kenar 0.20 m yatay) sağa doğru v hızıyla hareket ediyor. Sağ tarafta, sayfaya dik düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Bobinin sağdaki 0.10 m'lik kenarı alanın içinde, soldaki kenarı dışında. Diagram not to scale.",
       "asset_id": null,
@@ -281,7 +281,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "ray_wavefront_diagram",
+      "kind": "schematic_diagram",
       "use": "read_only",
       "description": "Sayfa düzleminde dikdörtgen bir iletken çerçeve. Sol tarafta, sayfanın içine doğru düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle bitiyor; sınırın sağında alan yok. Çerçevenin sol kenarı alanın içinde, sağ kenarı dışında. Çerçeveye sağa doğru bir hız oku (v) çizilmiş. Akım yönleri sayfaya bakan gözlemciye göre tanımlanır. Diagram not to scale.",
       "asset_id": null,
@@ -900,7 +900,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "ray_wavefront_diagram",
+      "kind": "schematic_diagram",
       "use": "read_only",
       "description": "Yukarıdan görünüş. Dikdörtgen çerçeve (öndeki ve arkadaki kenarlar 0.20 m, harekete dik; yan kenarlar daha uzun, harekete paralel) sağa doğru 1.5 m s⁻¹ hızla hareket ediyor. Sağda, sayfanın içine doğru (yukarıdan bakana göre aşağı doğru) düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Çerçevenin öndeki kenarı alanın içinde, arkadaki kenarı dışında. Diagram not to scale.",
       "asset_id": null,
@@ -1641,7 +1641,7 @@
             {
              "marks": [],
              "type": "text",
-             "text": " equal emfs are induced in the leading and trailing sides they act in opposite senses around the loop so the net emf is zero"
+             "text": " equal emfs are induced in the leading and trailing sides ✓ they act in opposite senses around the loop so the net emf is zero ✓"
             }
            ]
           }

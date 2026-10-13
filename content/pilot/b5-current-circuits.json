@@ -911,7 +911,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "schematic_diagram",
+      "kind": "circuit_diagram",
       "use": "read_only",
       "description": "18 V bataryanın bir ucundan çıkan iletken önce 6.0 Ω dirençten geçer, sonra iki kola ayrılır: bir kolda 12 Ω, öbür kolda 4.0 Ω direnç vardır. Kollar yeniden birleşir ve bataryanın öbür ucuna döner.",
       "asset_id": null,
@@ -1121,7 +1121,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "schematic_diagram",
+      "kind": "circuit_diagram",
       "use": "read_only",
       "description": "Bataryanın (emk 6.0 V, iç direnç 1.2 Ω) uçları arasına, her biri 4.8 Ω olan iki nikrom tel birbirine paralel bağlıdır.",
       "asset_id": null,
@@ -1819,6 +1819,11 @@
              ],
              "type": "text",
              "text": "W"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ✓"
             }
            ]
           }

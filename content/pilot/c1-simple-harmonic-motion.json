@@ -2280,7 +2280,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu T²–m grafiği yer alır; grafik aynı veriden kodla üretilir. Tablodaki veriden hesaplanan değerler: T² = 0.240, 0.397, 0.548, 0.706, 0.865 s²; T² belirsizlikleri (2TΔT) 0.020–0.037 s²; en küçük kareler eğimi 1.558 s² kg⁻¹, kesim noktası 0.084 s²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 1.704 ve 1.420 s² kg⁻¹. Soruda verilen 1.56, 1.70, 1.42 ve 0.08 değerleri bunların yuvarlanmış halidir. Veri, k = 25 N m⁻¹ ve tabloya yazılmayan 0.050 kg'lık sabit ek kütle (askı) ile üretilip 0.1 s'ye yuvarlanmıştır; kesim noktası / eğim = 0.054 kg bununla tutarlıdır.",
+      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
       "asset_id": null,
       "alt_text": null
      }

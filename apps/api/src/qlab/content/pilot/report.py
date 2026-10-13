@@ -30,9 +30,13 @@ _CATEGORY_TITLES = (
     ("marks_capped", "`marks_capped = true` olan parçalar"),
 )
 _INTERPRETATIONS = (
-    '**Uyaran türü** (§3.3): "açıklamadaki ilk eşleşen anahtar sözcük" açıklama metninde en önce '
-    "geçen anahtar sözcük olarak okundu (listedeki sıra değil); büyük/küçük harf Türkçe "
-    "kurallarıyla yok sayılır, eşleşme alt dizgidir (`devre` → `devresi`).",
+    '**Uyaran türü** (§3.3): "en önce geçen anahtar sözcük" açıklama metninde en küçük konumlu '
+    "eşleşme olarak okundu (listedeki sıra değil). Eşleşme büyük/küçük harfe duyarsızdır "
+    "(Türkçe `I/ı`, `İ/i` çiftleriyle: `Işın` → `ışın`) ve sözcük başında aranır; sözcüğün "
+    "sonu serbesttir (`devre` → `devresi`). `P–V` yalnızca uzun çizgiyle yazıldığında eşleşir.",
+    "**Not içindeki `✓`** (§8): metinde kalır; kaynak karşılaştırması da `✓` atar. Bu notlar "
+    "Notlar sütununa yazılmış alternatif yollardır.",
+    "**Şekil notu** (§3.2): metni aktarılmaz; uyaran sabit açıklama ve `graph` türüyle açılır.",
     "**Yunan harfi komutu** (§4.3): komut adı Unicode harf adından alınır (`ε` → `\\epsilon`, "
     "`φ` → `\\phi`, `λ` → `\\lambda`, `µ` → `\\mu`, `Ω` → `\\Omega`); `\\varepsilon` ve `\\varphi` "
     "kullanılmaz.",
@@ -67,6 +71,38 @@ def _inline(tokens: Iterable[tuple[str, ItalicUse]]) -> str:
     return ", ".join(f"`{token}` ({use.count})" for token, use in sorted(tokens))
 
 
+def _field_sections(tally: Tally) -> list[str]:
+    """Rule-filled values to double-check, per question (section 5 of the rules)."""
+    rows = sorted(tally.question_fields)
+    out: list[str] = ["### Soru soru kuralla doldurulan değerler", ""]
+    table: list[tuple[object, ...]] = []
+    for ref, kind, option, parts in rows:
+        if kind == "mcq":
+            table.append((f"`{ref}`", "mcq", f"`option_kind = {option}`"))
+        else:
+            summary = "; ".join(f"{lab}: {term or '—'} → {atype}" for lab, term, atype in parts)
+            table.append((f"`{ref}`", "yapılandırılmış", summary))
+    out += _table(("Soru", "Tür", "Değer"), table)
+    empty = [
+        (ref, lab) for ref, kind, _, parts in rows if kind != "mcq" for lab, t, _ in parts if not t
+    ]
+    out += [
+        "",
+        f"**Komut sözcüğü boş olan parçalar ({len(empty)}):** "
+        + ", ".join(f"`{ref}` ({lab})" for ref, lab in empty)
+        + ".",
+        "",
+        "### Uyaranlar",
+        "",
+    ]
+    out += _table(
+        ("Soru", "Uyaran", "Tür", "Kaynak"),
+        ((f"`{ref}`", sid, kind, src) for ref, sid, kind, src in sorted(tally.stimuli)),
+    )
+    out += [""]
+    return out
+
+
 def render_report(tally: Tally, stems: Sequence[str]) -> str:
     out: list[str] = [
         "# Pilot soruları çeviri raporu",
@@ -90,12 +126,6 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
         ("Dosya", "Soru", "mcq", "data_based", "short_structured", "long_structured"), rows
     )
     out += [""]
-    if tally.skipped:
-        out += [
-            "**Atlanan sorular (geliştirme seçeneği `--skip`):** "
-            + ", ".join(f"`{ref}`" for ref in sorted(tally.skipped)),
-            "",
-        ]
 
     out += [
         "## 2. Kuralla doldurulan alanlar (§5)",
@@ -116,6 +146,7 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
         "(`visual_pending`).",
         "",
     ]
+    out += _field_sections(tally)
 
     imported = sorted(tally.models_imported)
     omitted = sorted(tally.models_omitted)
@@ -136,6 +167,19 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
             ((f"`{ref}`", code, f"`{detail}`" if detail else "") for ref, code, detail in omitted),
         )
         out += [""]
+    steps_total = sum(n for _, _, n in tally.step_units)
+    steps_empty = sum(e for _, e, _ in tally.step_units)
+    out += [
+        f"**Adım birimleri.** Aktarılan modellerde {steps_total} adım var; bunlardan "
+        f'**{steps_empty}** tanesinin `unit` alanı boş, çünkü `Sonuç` hücresi "sayı + birim" '
+        "değil (sayı, açıklama ya da birimsiz ifade). Soru başına (yalnızca boş birimi olanlar):",
+        "",
+    ]
+    out += _table(
+        ("Soru", "Birimsiz adım", "Adım"),
+        ((f"`{ref}`", e, n) for ref, e, n in sorted(tally.step_units) if e),
+    )
+    out += [""]
     constants = sorted(tally.constants)
     out += [
         "**`sabit` sözcüğünden sonra gelip parametre olarak aktarılan değerler "
@@ -155,7 +199,15 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
         "",
     ]
     out += _table(("Soru", "Paragraf"), ((f"`{ref}`", n) for ref, n in free))
-    out += [""]
+    notes = sorted(tally.figure_notes_skipped)
+    out += [
+        "",
+        f"**Aktarılmayan Şekil notu metni:** {len(notes)} soruda `### Şekil notu` bölümü "
+        "vardır; metni aktarılmaz (§3.2), uyaranın açıklaması sabit metindir: "
+        + ", ".join(f"`{ref}`" for ref in notes)
+        + ".",
+        "",
+    ]
 
     out += ["## 5. İtalik belirteçler (§4.2)", ""]
     by_rule: dict[str, list[tuple[str, ItalicUse]]] = {}
@@ -170,9 +222,13 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
         _inline(by_rule.get("1", [])),
         "",
         f"**Kural 2 (büyük/Yunan harfli ≤ 4 harf → değişken)** — "
-        f"{len(by_rule.get('2', []))} farklı belirteç:",
+        f"{len(by_rule.get('2', []))} farklı belirteç; yeni biri incelemede görünsün diye tek tek "
+        "listelenir:",
         "",
-        _inline(by_rule.get("2", [])),
+        *_table(
+            ("Belirteç", "Adet", "İlk kullanım"),
+            ((f"`{t}`", u.count, f"`{u.first}`") for t, u in sorted(by_rule.get("2", []))),
+        ),
         "",
         "**Kural 3 (kapalı değişken listesi → değişken)**",
         "",

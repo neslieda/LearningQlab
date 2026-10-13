@@ -2290,7 +2290,7 @@
     "stimuli": [
      {
       "id": "fig1",
-      "kind": "schematic_diagram",
+      "kind": "circuit_diagram",
       "use": "read_only",
       "description": "Düzenek şeması. Elektronik terazinin kefesinde U biçimli çelik boyunduruk; boyunduruğun iki iç yüzünde karşılıklı düz mıknatıslar (N ve S etiketli), aralarındaki alan yatay. Yatay, sert bir tel mıknatısların arasından alana dik geçer; tel iki yandan teraziye değmeyen ayrı bir sehpaya kelepçelenmiş ve bir güç kaynağı ile ampermetreye seri bağlı. Telin alan içindeki uzunluğu L (mıknatısların uzunluğu) olarak etiketli. Diagram not to scale.",
       "asset_id": null,
@@ -2300,7 +2300,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu Δm–I grafiği yer alır. Grafik aynı veriden kodla üretilir (D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 0.409 g A⁻¹ (kesim noktası 0.001 g); ilk ve son noktanın belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 0.430 ve 0.390 g A⁻¹'dir ve bu iki doğru beş noktanın tümünün belirsizlik çubuklarının içinden geçer (python ile kontrol edildi). Soruda verilen 0.41, 0.43 ve 0.39 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.",
+      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
       "asset_id": null,
       "alt_text": null
      }

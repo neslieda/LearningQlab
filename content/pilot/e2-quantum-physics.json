@@ -2175,7 +2175,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu Vs–f grafiği yer alır. Grafik aynı veriden kodla üretilir (D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.16 × 10⁻¹⁵ V s, düşey eksen kesimi −2.11 V, f-ekseni kesimi 5.08 × 10¹⁴ Hz'dir. İlk ve son noktanın belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 4.55 × 10⁻¹⁵ ve 3.75 × 10⁻¹⁵ V s'dir. Soruda verilen değerler bunlardır. Bulunan h = (6.7 ± 0.6) × 10⁻³⁴ J s kabul edilen değerle (6.63 × 10⁻³⁴ J s) tutarlıdır.",
+      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
       "asset_id": null,
       "alt_text": null
      }

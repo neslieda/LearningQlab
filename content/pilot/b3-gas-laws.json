@@ -1817,7 +1817,7 @@
             {
              "marks": [],
              "type": "text",
-             "text": " = 1.5 × 0.012 × 1.5 × 10⁶ = 2.7 × 10⁴ "
+             "text": " = 1.5 × 0.012 × 1.5 × 10⁶ ✓ = 2.7 × 10⁴ "
             },
             {
              "marks": [
@@ -1827,6 +1827,11 @@
              ],
              "type": "text",
              "text": "J"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ✓"
             }
            ]
           }
@@ -2396,7 +2401,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu P–θ grafiği yer alır; yatay eksen dış değerleme yapılabilmesi için −300 °C'ye kadar uzatılır. Grafik aynı veriden kodla üretilir (D-14). En dik doğru (30 °C; 105 kPa) ve (90 °C; 127 kPa) çubuk uçlarından, en yatık doğru (10 °C; 99 kPa) ve (90 °C; 125 kPa) çubuk uçlarından geçer; soruda verilen eğim ve kesim değerleri bunların dört anlamlı basamağa yuvarlanmış halidir. Sonuç: θ₀ = (−275 ± 19) °C ya da (−280 ± 20) °C.",
+      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
       "asset_id": null,
       "alt_text": null
      }

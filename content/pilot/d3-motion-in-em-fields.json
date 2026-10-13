@@ -1,0 +1,3401 @@
+{
+ "source_file": "docs/pilot/d3-motion-in-em-fields-pilot-questions.md",
+ "source_sha256": "a78bd32c8f4c95bd79f2855566fc4caf0794a5615e28cedd1440349c90e80786",
+ "questions": [
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Düzgün manyetik alanda çembersel hareket; periyodun hızdan bağımsızlığı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A charged particle moves at right angles to a uniform magnetic field in a vacuum. The particle moves in a circle with period "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "T"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": ". An identical particle enters the same field at right angles with "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "twice"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the speed."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the period of the motion of the second particle?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yarıçapın değişmediği sanılır; aynı çember iki kat hızla dolanılır: T/2"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yarıçapın iki katına çıktığı görülür ama hızın da arttığı unutulur (T ∝ r): 2T"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yarıçap v² ile artar sanılır (r ∝ v², mv²/r ifadesinden yanlış çıkarım) ve hız artışı unutulur: 4T"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "qvB = mv²/r → r = mv/(qB). T = 2πr/v = 2πm/(qB): periyot hızdan bağımsızdır. Hız iki katına çıkınca yarıçap da iki katına çıkar; çevre ve hız aynı oranda arttığı için periyot değişmez."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Birbirine dik elektrik ve manyetik alanlarda sapmadan geçiş (v = E/B)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A beam of electrons passes between two parallel plates that are 2.0 cm apart. The potential difference between the plates is 600 V. A uniform magnetic field of strength 1.5 mT is applied at right angles to both the electric field and the beam. The electrons pass between the plates without being deflected."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the speed of the electrons?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.0 × 10⁻⁸ m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Oran ters kurulur (v = B/E): 1.5 × 10⁻³ / 3.0 × 10⁴ = 5.0 × 10⁻⁸"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.0 × 10⁵ m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Levha aralığı metreye çevrilmez: E = 600 / 2.0 = 300; 300 / 1.5 × 10⁻³ = 2.0 × 10⁵"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4.0 × 10⁵ m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Alan şiddeti yerine potansiyel farkı kullanılır (v = V/B): 600 / 1.5 × 10⁻³ = 4.0 × 10⁵"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.0 × 10⁷ m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "E = V/d = 600 / 0.020 = 3.0 × 10⁴ V m⁻¹. Sapmama koşulu: eE = evB → v = E/B = 3.0 × 10⁴ / 1.5 × 10⁻³ = 2.0 × 10⁷ m s⁻¹."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Akım taşıyan iletkene etkiyen kuvvetin yönü (F = BIL sin θ)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A straight horizontal wire lies in the plane of the page and carries a current directed towards the right of the page. The wire is in a uniform magnetic field that is directed "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "into"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the page."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the direction of the magnetic force on the wire?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Sayfa düzleminde soldan sağa uzanan yatay bir tel; üzerinde sağa doğru akım oku (I). Telin çevresindeki bölge, sayfanın içine doğru düzgün manyetik alanı gösteren ⊗ simgeleriyle dolu. \"Sayfanın üstü\" tele dik ve sayfa düzlemindedir. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "towards the top of the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "towards the bottom of the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kural ters elle uygulanır ya da akım yönü yerine elektron akış yönü alınır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "out of the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kuvvetin alana zıt yönde olduğu sanılır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "into the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kuvvetin alan yönünde olduğu sanılır (elektrik alandaki F = qE ile karıştırma)"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Kullanılan kural: sağ el kuralı, F = IL × B (konvansiyonel akım yönü). Eksenler: x sağa, y sayfanın üstüne, z sayfadan dışarı. Akım +x, alan −z: (+x) × (−z) = +y. Kuvvet sayfanın üstüne doğrudur. (Fleming sol el kuralı da aynı sonucu verir: işaret parmağı alan = sayfanın içine, orta parmak akım = sağa, başparmak kuvvet = yukarı.)"
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Yüklü parçacığın düzgün elektrik alandaki hareketi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "An electron enters a region of uniform electric field in a vacuum. The initial velocity of the electron is at right angles to the electric field lines. There is no magnetic field."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Which describes the path of the electron in the field and the speed of the electron?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The path is a circular arc and the speed is constant."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Elektrik alan, manyetik alanla karıştırılır (kuvvet her zaman hıza dik sanılır)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The path is a circular arc and the speed increases."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yörünge manyetik alandaki gibi çember sanılır, ama alanın enerji verdiği doğru düşünülür"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The path is a parabola and the speed increases."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The path is a parabola and the speed is constant."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yörünge doğru; ancak yalnızca alana dik hız bileşeni düşünülür ya da \"kuvvet başlangıçta hıza dik, iş yapmaz\" denir"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Elektrik kuvveti büyüklük ve yön olarak sabittir (alan çizgilerine paralel, alana zıt yönde). Alana dik hız bileşeni değişmez, alan doğrultusundaki bileşen düzgün artar: yörünge paraboldür (yatay atışa benzer). Kuvvet hareket doğrultusunda bileşene sahip olduğu için iş yapar; sürat artar."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Dik alanlar; düzgün manyetik alanda çembersel yörünge; yük/kütle oranının belirlenmesi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A beam of electrons travels in a vacuum from left to right between two horizontal parallel plates. The plates are 2.5 cm apart and the potential difference between them is 460 V. The upper plate is positive. A uniform magnetic field of strength 0.80 mT is applied in the region between the plates, at right angles to the beam and to the electric field. The beam passes between the plates without being deflected."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "field_diagram",
+      "use": "read_only",
+      "description": "Sayfa düzleminde iki yatay paralel levha; üstteki \"+\", alttaki \"−\" işaretli; aralarındaki uzaklık 2.5 cm olarak etiketli. Elektron demeti levhaların ortasından soldan sağa doğru yatay bir okla gösterilmiş. Elektrik alan çizgileri üst levhadan alt levhaya (sayfanın altına doğru). Manyetik alanın yönü şekilde gösterilmemiştir; sayfa düzlemine diktir. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the speed of the electrons is about 2.3 × 10⁷ m s⁻¹."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "d"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 460 / 0.025 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 1.84 × 10⁴ V m⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "eE"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "evB"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " so"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.84 × 10⁴ / 0.80 × 10⁻³ = 2.30 × 10⁷ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The full substitution or the answer to 3 s.f. must be shown."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State the direction of the magnetic field."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "into the "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "plane of the"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " page"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The potential difference between the plates is now reduced to zero. The magnetic field is unchanged. The beam follows a circular arc of radius 0.16 m."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain why the path of the electrons in the magnetic field is circular."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "magnetic"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " force is always perpendicular to the velocity"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so the speed is constant / no work is done "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " the force "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "of constant magnitude"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " acts as a centripetal force"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the charge-to-mass ratio of the electron given by these measurements."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "a"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "evB"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "mv"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "r"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "e"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "m"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/("
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Br"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": ")"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "e"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "m"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 2.3 × 10⁷ / (0.80 × 10⁻³ × 0.16) = 1.8 × 10¹¹ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "C kg⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (a)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The potential difference of 460 V is restored. The electrons are replaced by protons that enter the region with the same velocity as the electrons."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain whether the protons are deflected."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "both the electric force and the magnetic force reverse direction "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "as the charge has opposite sign"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " both forces have the same magnitude as before "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "same "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": ", "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": ", "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " and magnitude of charge"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " are still in opposite directions"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the forces still balance / "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " does not depend on charge or mass, so the protons are not deflected"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [0] for \"not deflected\" without reasoning."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d3-motion-in-em-fields#6",
+   "number": 6,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "data_based",
+    "exam_section": "paper_1b",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "F = BIL deneyi (akım terazisi): belirsizlik, eğimden B'nin belirlenmesi, sıfır hatasının (sistematik) eğime ve kesim noktasına etkisi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A student investigates the force on a current-carrying wire in a magnetic field. Two flat magnets are fixed to a steel yoke so that there is an approximately uniform horizontal magnetic field between them. The yoke is placed on an electronic balance. A stiff straight horizontal wire is clamped so that it passes between the magnets at right angles to the field. The wire does not touch the magnets or the balance. The balance is set to zero when there is no current in the wire."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "The student varies the current "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "I"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " in the wire and records the change in the balance reading Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "m"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": ". The direction of the current is chosen so that the balance reading increases."
+        }
+       ]
+      },
+      {
+       "type": "table",
+       "content": [
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "I"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / A"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "Δ"
+              },
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "m"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / g ± 0.04 g"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "1.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.41"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "2.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.83"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "3.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "1.21"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "4.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "1.64"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "5.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "2.05"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "The uncertainty in "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "I"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " is negligible. The length of the wire in the field is "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "L"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = (5.0 ± 0.1) cm."
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Düzenek şeması. Elektronik terazinin kefesinde U biçimli çelik boyunduruk; boyunduruğun iki iç yüzünde karşılıklı düz mıknatıslar (N ve S etiketli), aralarındaki alan yatay. Yatay, sert bir tel mıknatısların arasından alana dik geçer; tel iki yandan teraziye değmeyen ayrı bir sehpaya kelepçelenmiş ve bir güç kaynağı ile ampermetreye seri bağlı. Telin alan içindeki uzunluğu L (mıknatısların uzunluğu) olarak etiketli. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     },
+     {
+      "id": "fig2",
+      "kind": "graph",
+      "use": "read_values",
+      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu Δm–I grafiği yer alır. Grafik aynı veriden kodla üretilir (D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 0.409 g A⁻¹ (kesim noktası 0.001 g); ilk ve son noktanın belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 0.430 ve 0.390 g A⁻¹'dir ve bu iki doğru beş noktanın tümünün belirsizlik çubuklarının içinden geçer (python ile kontrol edildi). Soruda verilen 0.41, 0.43 ve 0.39 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Outline why the balance reading changes when there is a current in the wire."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "outline",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the magnetic field exerts a "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "vertical"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " force on the current-carrying wire"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the wire exerts an equal and opposite force on the magnets "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "Newton's third law"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": ", which changes the force on the balance"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the percentage uncertainty in Δ"
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "m"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " for "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "I"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " = 1.0 A."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "0.04 / 0.41 × 100 ="
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 10 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "%"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept 9.8 %."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The student plots Δ"
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "m"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " against "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "I"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " with uncertainty bars. The gradient of the line of best fit is 0.41 g A⁻¹. The lines of maximum and minimum gradient have gradients of 0.43 g A⁻¹ and 0.39 g A⁻¹. Theory predicts that Δ"
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "m"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " = "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "BIL"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "/"
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "g"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": ", where "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "B"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " is the magnetic field strength between the magnets and "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "g"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " = 9.8 m s⁻²."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "B"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": ", with its absolute uncertainty."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = gradient × "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " / "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "L"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.41 × 10⁻³ × 9.8 / 0.050 = 0.080 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "T"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "fractional uncertainty = 0.02/0.41 + 0.1/5.0 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 0.049 + 0.020 = 0.069"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = (0.080 ± 0.006) "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "T"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "MP2: uncertainty in gradient is (0.43 − 0.39)/2 = 0.02 g A⁻¹."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [2] max if the gradient is not converted to kg A⁻¹ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "80 T"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The manufacturer states that the magnetic field strength between the magnets is 0.083 T. Comment on whether the result of the experiment is consistent with this value."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "c"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "consistent, as 0.083 T lies within the range 0.074 T to 0.086 T"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (c): the conclusion must follow from the candidate's own range."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Reasoning using the range is required."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "A second student repeats the experiment but does "
+          },
+          {
+           "marks": [
+            {
+             "type": "bold"
+            }
+           ],
+           "type": "text",
+           "text": "not"
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " set the balance to zero. With no current in the wire the balance reads a constant 0.15 g. This student plots the balance reading against "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "I"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " and determines "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "B"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " from the gradient of the graph. Explain the effect of this on the value of "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "B"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " obtained."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "every reading is larger by the same amount "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "0.15 g"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " / the line is shifted upwards / the intercept is no longer zero "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "systematic / zero error"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the gradient is unchanged, so the value of "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "B"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " obtained is not affected"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Do not award MP2 for \"no effect\" without reference to the gradient."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "f",
+      "label": "f",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Suggest "
+          },
+          {
+           "marks": [
+            {
+             "type": "bold"
+            }
+           ],
+           "type": "text",
+           "text": "one"
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " change to the experiment that would reduce the percentage uncertainty in "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "B"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "suggest",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "D.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "f-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "use larger currents "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " a longer length of wire in the field / longer magnets "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " several turns of wire through the field "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "so that Δ"
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "m"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " is larger"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " a balance with smaller uncertainty "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " measure "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "L"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " with a more precise instrument"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "do_not_accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Do not accept \"repeat readings\" without stating that a mean is taken."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 10,
+    "solution_model": null
+   }
+  }
+ ]
+}

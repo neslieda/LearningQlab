@@ -1,0 +1,1856 @@
+{
+ "source_file": "docs/pilot/d2-electric-magnetic-fields-pilot-questions.md",
+ "source_sha256": "4fe668910da4f9e3d839fa19ca9ebb8cce943376e30a6bafc57e1c895bbe4f7b",
+ "questions": [
+  {
+   "source_ref": "pilot/d2-electric-magnetic-fields#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.2",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Millikan deneyi: düzgün alanda yüklü damlanın dengesi; yükün kuantumlu olması",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A small oil drop carries 3 excess electrons. The drop is held stationary in a vacuum between two horizontal parallel plates when the potential difference between the plates is 600 V. The drop then gains 2 more electrons. The change in the mass of the drop is negligible."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the potential difference between the plates that holds the drop stationary now?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "200 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Gerilim, eklenen yükün ilk yüke oranı kadar azaltılır: 600 × (1 − 2/3) = 200 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "360 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "600 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Damlanın ağırlığı değişmediği için gereken gerilimin de değişmediği düşünülür"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1000 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Oran ters kurulur (V ∝ q): 600 × 5/3 = 1000 V"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Denge: qV/d = mg, yani V ∝ 1/q (m, g, d sabit). Yük 3e'den 5e'ye çıkar: V = 600 × 3/5 = 360 V."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d2-electric-magnetic-fields#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.2",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Paralel levhalar arasında alan şiddeti (E = V/d) ve yüke etkiyen kuvvet",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Two parallel metal plates are 15 mm apart in a vacuum. The potential difference between the plates is 3.0 kV. An alpha particle (charge +2"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "e"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": ") is at a point midway between the plates."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "e"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 1.60 × 10⁻¹⁹ C"
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the magnitude of the electric force on the alpha particle?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.4 × 10⁻¹⁷ N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "E = V × d alınır: 3.0 × 10³ × 0.015 = 45; F = 3.2 × 10⁻¹⁹ × 45 = 1.4 × 10⁻¹⁷ N"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "6.4 × 10⁻¹⁷ N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Uzaklık metreye çevrilmez: E = 3.0 × 10³ / 15 = 200; F = 3.2 × 10⁻¹⁹ × 200 = 6.4 × 10⁻¹⁷ N"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "3.2 × 10⁻¹⁴ N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Alfa parçacığının yükü e alınır: 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 3.2 × 10⁻¹⁴ N"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "6.4 × 10⁻¹⁴ N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "E = V/d = 3.0 × 10³ / 0.015 = 2.0 × 10⁵ V m⁻¹ (levhalar arasında her yerde aynı). F = qE = 2 × 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 6.4 × 10⁻¹⁴ N."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d2-electric-magnetic-fields#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.2",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Akım taşıyan düz telin manyetik alan deseni ve yönü",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Two long straight parallel wires X and Y are perpendicular to the page. Wire X is to the left of wire Y. The wires carry currents of equal magnitude. The current in X is directed "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "into"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the page and the current in Y is directed "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "out of"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the page. Point P is midway between the wires. The line XY is horizontal on the page."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the direction of the resultant magnetic field at P?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Sayfa düzleminde yatay bir doğru üzerinde, soldan sağa X teli, P noktası, Y teli. X, sayfaya dik ve akımı sayfanın içine doğru (⊗ simgesi); Y, sayfaya dik ve akımı sayfadan dışarı doğru (⊙ simgesi). P, X ile Y'nin tam ortasında. \"Sayfanın üstü\" ve \"sayfanın altı\" yönleri XY doğrusuna diktir. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "no direction (zero resultant field)"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "\"Zıt yönlü eşit akımların alanları birbirini götürür\" düşüncesi; P'nin tellerin zıt taraflarında olduğu göz ardı edilir"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "towards the top of the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kavrama kuralı ters uygulanır (sol el ya da dolanma yönü ters)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "towards the bottom of the page"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "towards wire Y"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Manyetik alan, elektrik alandaki \"artıdan eksiye\" gibi bir telden ötekine doğru sanılır (alanın tele dik çemberler olduğu bilinmez)"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Kullanılan kural: sağ el kavrama kuralı (başparmak akım yönünde, parmaklar alan çizgilerinin dolanma yönünde). X (akım sayfanın içine): alan çizgileri sayfaya bakan gözlemciye göre saat yönünde çemberlerdir; X'in sağındaki P'de alan sayfanın altına doğrudur. Y (akım sayfadan dışarı): alan çizgileri saat yönünün tersinedir; Y'nin solundaki P'de alan yine sayfanın altına doğrudur. İki alan aynı yönlüdür ve toplanır: bileşke sayfanın altına doğru. Vektörel kontrol (x sağa, y sayfanın üstüne, z sayfadan dışarı; B ∝ I × r): X için (−z) × (+x) = −y; Y için (+z) × (−x) = −y."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d2-electric-magnetic-fields#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.2",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Nokta yüklerin elektrik potansiyeli (skaler toplam)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Two point charges are 0.30 m apart in a vacuum. One charge is +6.0 nC and the other is −4.0 nC. Point P is on the line joining the charges, midway between them."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "k"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 8.99 × 10⁹ N m² C⁻²"
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the electric potential at P?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "120 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "600 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yükün işareti yok sayılır, büyüklükler toplanır: 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15 = 600 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "800 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Potansiyel için 1/r² kullanılır (işaretli toplam): 8.99 × 10⁹ × 2.0 × 10⁻⁹ / 0.15² = 800"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4000 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Potansiyel yerine alan şiddeti hesaplanır (alanlar aynı yönlü, toplanır): 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15² = 4000"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Potansiyel skalerdir ve işaretiyle toplanır; P her iki yüke 0.15 m uzaklıktadır. V = k(q₁ + q₂)/r = 8.99 × 10⁹ × (6.0 − 4.0) × 10⁻⁹ / 0.15 = 120 V."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d2-electric-magnetic-fields#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.2",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Potansiyel ve alan şiddeti; W = qΔV; eşpotansiyel yüzeyler",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "An isolated metal sphere of radius 0.15 m is in a vacuum. The sphere carries a charge of +2.5 μC. For points on or outside its surface, the sphere behaves as a point charge at its centre."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "k"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 8.99 × 10⁹ N m² C⁻²"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the electric potential at the surface of the sphere is about 1.5 × 10⁵ V."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.2",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "kQ"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "r"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 8.99 × 10⁹ × 2.5 × 10⁻⁶ / 0.15"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.498 × 10⁵ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "V"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 1.50 × 10⁵ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "V"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Answer must be given to at least 3 s.f. or the full substitution shown."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the electric field strength at the surface of the sphere."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.2",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "kQ"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "r"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² = 8.99 × 10⁹ × 2.5 × 10⁻⁶ / 0.15² "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "r"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.5 × 10⁵ / 0.15"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "E"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.0 × 10⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "N C⁻¹ "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              },
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " V m⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "A proton is released from rest at the surface of the sphere."
+          }
+         ]
+        },
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "charge of proton = 1.60 × 10⁻¹⁹ C mass of proton = 1.67 × 10⁻²⁷ kg"
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the speed of the proton when it is 0.45 m from the centre of the sphere."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.2",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "a"
+      ],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "potential at 0.45 m = "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "1.5 × 10⁵ / 3 ="
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 5.0 × 10⁴ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "V"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.0 × 10⁵ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "V"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "q"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = ½"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "mv"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 1.60 × 10⁻¹⁹ × 1.0 × 10⁵ = ½ × 1.67 × 10⁻²⁷ × "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 4.4 × 10⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (a)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [2] max if the potential at the surface "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "1.5 × 10⁵ V"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " is used as ΔV, giving 5.4 × 10⁶ m s⁻¹."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "A second proton is moved slowly around the sphere along a path that stays on one equipotential surface."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain why the electric field does no work on this proton."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.2",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the potential is the same at all points of the path / Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "q"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " so "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " electric force "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "field"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " is perpendicular to the equipotential surface / to the displacement so the force has no component along the displacement"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": null
+   }
+  }
+ ]
+}

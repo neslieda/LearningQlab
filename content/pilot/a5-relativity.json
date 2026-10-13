@@ -1,0 +1,2443 @@
+{
+ "source_file": "docs/pilot/a5-relativity-pilot-questions.md",
+ "source_sha256": "94b0ce1f35b22f4cdbd7426b571723df1a41cd50bf80e26ad38f85d265297b22",
+ "questions": [
+  {
+   "source_ref": "pilot/a5-relativity#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Öz zaman ve zaman genişlemesi; hangi çerçevenin öz zamanı ölçtüğü",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Two space buoys X and Y are at rest relative to each other. In the reference frame of the buoys the distance between X and Y is 9.0 × 10⁸ m. A probe travels in a straight line from X to Y at a constant speed of 0.60"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " relative to the buoys."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the time taken for the probe to travel from X to Y as measured by a clock on the probe?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "3.0 s"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Sondanın sürati yerine ışık sürati kullanılır: 9.0 × 10⁸ / 3.00 × 10⁸ = 3.0 s"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4.0 s"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.0 s"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Göreli etki uygulanmaz; şamandıra çerçevesindeki süre verilir: 5.0 s"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "6.3 s"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Öz zamanın hangi çerçevede ölçüldüğü karıştırılır; "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\gamma"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ile bölmek yerine çarpılır: 5.0 × 1.25 = 6.25 s ≈ 6.3 s"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Şamandıra çerçevesinde süre = 9.0 × 10⁸ / (0.60 × 3.00 × 10⁸) = 5.0 s. İki olay (X'ten geçiş, Y'den geçiş) sondanın bulunduğu yerde gerçekleşir; sondanın saati öz zamanı ölçer. "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\gamma"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 1/√(1 − 0.60²) = 1.25. Öz zaman = 5.0 / 1.25 = 4.0 s."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a5-relativity#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Göreli hız toplama (Galileo toplamasıyla karşılaştırma)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A spacecraft moves directly away from the Earth at a speed of 0.60"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " relative to the Earth. The spacecraft launches a probe in its direction of motion. The speed of the probe relative to the spacecraft is 0.70"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the speed of the probe relative to the Earth?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.3"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "c"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Galileo hız toplaması kullanılır: 0.60"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " + 0.70"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 1.3"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "c"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "\"Toplam "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "'yi aşıyor, o hâlde sürat "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " olur\" düşüncesi; kütleli bir cisim "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " süratine ulaşamaz"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.92"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "c"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.17"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "c"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Formül ters işaretle uygulanır (sonda geriye fırlatılmış gibi): (0.70"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " − 0.60"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": ") / (1 − 0.42) = 0.17"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "c"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Göreli hız toplama: "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "u"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = (0.60"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " + 0.70"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ") / (1 + 0.60 × 0.70) = 1.30"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " / 1.42 = 0.92"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a5-relativity#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "A.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Uzay-zaman aralığının değişmezliği",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "In an inertial reference frame S, two events are separated by a distance Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "x"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 3.0 m and by a time interval Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "t"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " such that "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "t"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 5.0 m. In another inertial reference frame S′ the two events occur at the same position."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "t"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "′, where Δ"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "t"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "′ is the time interval between the events in S′?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "8.0 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Aralık karesiz ve toplanarak hesaplanır: 5.0 + 3.0 = 8.0 m"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.8 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Aralık Öklid uzaklığı gibi artı işaretiyle hesaplanır: √(5.0² + 3.0²) = 5.8 m"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.0 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Zaman aralığının bütün çerçevelerde aynı olduğu varsayılır (Galileo görüşü): 5.0 m"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4.0 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Uzay-zaman aralığı değişmezdir: ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′)² − (Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "x"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′)² = ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ")² − (Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "x"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ")². Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "x"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′ = 0 olduğundan ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′)² = 5.0² − 3.0² = 16 m²; "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′ = 4.0 m. (S′, S'ye göre 0.60"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ile hareket eder; Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "′ öz zamandır.)"
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a5-relativity#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "easy",
+    "primary_syllabus_node": "A.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Uzay-zaman diyagramında dünya çizgisinin açısı (tan *θ* = *v*/*c*)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A spacetime diagram is drawn for an inertial reference frame S, with the "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "x"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " axis horizontal and the "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "ct"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " axis vertical. Both axes have the same scale. A particle moves along the "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "x"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " direction at a constant speed of 0.50"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " relative to S."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the angle between the worldline of the particle and the "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "ct"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " axis?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "27°"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "30°"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "tan yerine sin kullanılır: sin⁻¹(0.50) = 30°"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "45°"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Her dünya çizgisinin ışığınki gibi 45° olduğu sanılır (ışık çizgisiyle karıştırma)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "63°"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Açı "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "ct"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ekseni yerine "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "x"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ekseninden ölçülür: tan⁻¹(1 / 0.50) = 63°"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Dünya çizgisinin "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "ct"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ekseniyle yaptığı açı için tan "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\theta"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "c"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 0.50; "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\theta"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 27°."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a5-relativity#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "A.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Öz uzunluk; *γ*; öz zaman; Lorentz dönüşümü ve eşzamanlılığın göreliliği",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A long space platform has two ends, P and Q. The proper length PQ of the platform is 480 m. A shuttle moves at a constant velocity of 0.80"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "c"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " relative to the platform, parallel to PQ, in the direction from P to Q. The shuttle passes end P (event 1) and later passes end Q (event 2)."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Yatay, uzun bir platform; sol ucu P, sağ ucu Q olarak etiketli; iki uç arasında \"480 m\" ölçü oku. Platformun hemen üstünde, P'nin yakınında, sağa (P'den Q'ya) doğru \"0.80c\" etiketli hız okuyla çizilmiş mekik. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State what is meant by proper length."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the length of an object measured in the reference frame in which the object is at rest"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the Lorentz factor "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\gamma"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " for the shuttle relative to the platform is about 1.7."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\gamma"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1 / √(1 − 0.80²) = 1.67"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Substitution or an answer to at least 3 s.f. must be seen."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the time between event 1 and event 2 in the reference frame of the platform."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 480 / (0.80 × 3.00 × 10⁸)"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "= 2.0 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the time between event 1 and event 2 as measured by a clock on the shuttle."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "c"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "shuttle clock measures the proper time "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "both events occur at the shuttle"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " so Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "′ = Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " / "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\gamma"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt1",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "′ = 2.0 × 10⁻⁶ / 1.67 = 1.2 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt1",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "length of platform in shuttle frame = 480 / 1.67 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 288 m"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt2",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m4",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "′ = 288 / (0.80 × 3.00 × 10⁸) = 1.2 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt2",
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (c)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1] max for 3.3 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " (multiplying by γ)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "A lamp at P and a lamp at Q each emit one flash of light. In the reference frame of the platform the two flashes are emitted at the same time."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine, for the reference frame of the shuttle, which lamp (at P or at Q) flashes first and the time interval between the two flashes."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "use of Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "′ = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\gamma"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "(Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " − "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "x"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "c"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²) with Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0 "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "x"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 480 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "magnitude of"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "′ = 1.67 × 0.80 × 480 / (3.00 × 10⁸) = 2.1 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the lamp at Q flashes first"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept answers in the range 2.1 × 10⁻⁶ to 2.2 × 10⁻⁶ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " (use of γ = 1.7 gives 2.18 × 10⁻⁶)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award the third mark only if it is supported by the sign of Δt′ or by a simultaneity argument; do not award it for a bare statement."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept \"the lamp the shuttle is moving towards\" for \"the lamp at Q\"."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": {
+     "parameters": [
+      {
+       "name": "beta",
+       "value": "0.80",
+       "unit": ""
+      },
+      {
+       "name": "L0",
+       "value": "480",
+       "unit": "m"
+      },
+      {
+       "name": "c",
+       "value": "3.00e8",
+       "unit": "m/s"
+      }
+     ],
+     "constants": [],
+     "steps": [
+      {
+       "id": "s1",
+       "name": "gamma",
+       "expr": "1/sqrt(1 - beta**2)",
+       "unit": "",
+       "stated_value": null
+      },
+      {
+       "id": "s2",
+       "name": "dt",
+       "expr": "L0/(beta*c)",
+       "unit": "s",
+       "stated_value": null
+      },
+      {
+       "id": "s3",
+       "name": "dt_proper",
+       "expr": "dt/gamma",
+       "unit": "s",
+       "stated_value": null
+      },
+      {
+       "id": "s4",
+       "name": "L",
+       "expr": "L0/gamma",
+       "unit": "",
+       "stated_value": null
+      },
+      {
+       "id": "s5",
+       "name": "dt_flash",
+       "expr": "gamma*(0 - beta*L0/c)",
+       "unit": "",
+       "stated_value": null
+      }
+     ],
+     "answers": []
+    }
+   }
+  }
+ ]
+}

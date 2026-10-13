@@ -1,0 +1,1856 @@
+{
+ "source_file": "docs/pilot/b5-current-circuits-pilot-questions.md",
+ "source_sha256": "b5d8ee3c62e5c4e66e3c91051bf81c69c6f592de1d07f5d6c0f57b691f6cee4b",
+ "questions": [
+  {
+   "source_ref": "pilot/b5-current-circuits#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Özdirenç; direncin uzunluk ve kesit alanına bağlılığı (orantı)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A metal wire X has resistance "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "R"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": ". Wire Y is made of the same metal and is at the same temperature as X. Y has "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "twice"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the length and "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "twice"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the diameter of X."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the resistance of Y?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ⁄ 2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kesit alanı çapla doğru orantılı alınır ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "A"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ∝ "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "d"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "): 2 / 2 = 1"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Çapın etkisi yok sayılır; yalnızca uzunluk hesaba katılır: 2"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "R"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Direnç hem uzunlukla hem çapla artıyor sayılır: 2 × 2 = 4"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "R"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = ρ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "L"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "A"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ve "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "A"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ∝ "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "d"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "². Uzunluk 2 kat, kesit alanı 4 kat: direnç 2 / 4 = 1⁄2 katına iner."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b5-current-circuits#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "İç direnç; dış dirençte harcanan güç",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A battery of emf 6.0 V and internal resistance 0.50 Ω is connected to a resistor of resistance 2.5 Ω."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the power dissipated in the 2.5 Ω resistor?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.0 W"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İç dirençte harcanan güç hesaplanır: 2.0² × 0.50 = 2.0 W"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "10 W"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "12 W"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Bataryanın toplam gücü verilir: ε"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "I"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 6.0 × 2.0 = 12 W"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "14 W"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İç direnç yok sayılır: ε²/"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "R"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 36 / 2.5 = 14.4 W"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "I"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = ε / ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "R"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " + "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "r"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ") = 6.0 / 3.0 = 2.0 A. Dirençte harcanan güç = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "I"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "²"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "R"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 2.0² × 2.5 = 10 W."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b5-current-circuits#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Değişken direnç (LDR) ile gerilim bölücü",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A light-dependent resistor (LDR) and a fixed resistor of resistance 10 kΩ are connected in series with a battery of emf 9.0 V and negligible internal resistance. An ideal voltmeter is connected across the fixed resistor. In bright light the resistance of the LDR is 2.0 kΩ."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the reading on the voltmeter in bright light?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "circuit_diagram",
+      "use": "read_only",
+      "description": "Tek gözlü seri devre: 9.0 V batarya, LDR ve 10 kΩ sabit direnç art arda bağlı. Voltmetre yalnızca 10 kΩ direncin uçlarına paralel bağlı.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.5 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "LDR'nin uçlarındaki gerilim hesaplanır: 9.0 × 2.0 / 12 = 1.5 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.8 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Gerilim, dirençlerin birbirine oranıyla bulunur (toplama bölünmez): 9.0 × 2.0 / 10 = 1.8 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4.5 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Seri bağlı iki elemanın gerilimi eşit paylaştığı varsayılır: 9.0 / 2 = 4.5 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "7.5 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Gerilim bölücü: "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "V"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 9.0 × 10 / (10 + 2.0) = 7.5 V."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b5-current-circuits#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Seri ve paralel bağlama; paralel kolda akım paylaşımı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A resistor of resistance 6.0 Ω is connected in series with a parallel combination of a 12 Ω resistor and a 4.0 Ω resistor. The arrangement is connected to a battery of emf 18 V and negligible internal resistance."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the current in the 4.0 Ω resistor?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "18 V bataryanın bir ucundan çıkan iletken önce 6.0 Ω dirençten geçer, sonra iki kola ayrılır: bir kolda 12 Ω, öbür kolda 4.0 Ω direnç vardır. Kollar yeniden birleşir ve bataryanın öbür ucuna döner.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.50 A"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Akım dirençle doğru orantılı paylaştırılır (ya da 12 Ω dirençteki akım verilir): 2.0 × 4.0 / 16 = 0.50 A"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.0 A"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Akımın iki kola eşit bölündüğü varsayılır: 2.0 / 2 = 1.0 A"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.5 A"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.0 A"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Ana kol akımı verilir; kollara ayrılma hesaba katılmaz: 2.0 A"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Paralel bölüm: (12 × 4.0) / (12 + 4.0) = 3.0 Ω. Toplam direnç 9.0 Ω; ana kol akımı 18 / 9.0 = 2.0 A. Paralel bölümün gerilimi 2.0 × 3.0 = 6.0 V. 4.0 Ω dirençteki akım = 6.0 / 4.0 = 1.5 A."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b5-current-circuits#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "B.5",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Özdirenç; emk, iç direnç ve uç gerilimi; güç; paralel bağlamanın etkisinin değerlendirilmesi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A student builds a hot-wire cutter for foam. A nichrome wire of diameter 0.20 mm is connected to a battery of emf 6.0 V and internal resistance 1.2 Ω. The resistance of the wire is 4.8 Ω and can be assumed to be constant."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Resistivity of nichrome = 1.1 × 10⁻⁶ Ω m"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Bataryanın (emk 6.0 V, iç direnç 1.2 Ω) uçları arasına, her biri 4.8 Ω olan iki nikrom tel birbirine paralel bağlıdır.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the length of the wire is about 0.14 m."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "A"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = π × (0.10 × 10⁻³)² "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 3.14 × 10⁻⁸ m²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "L"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "RA"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/ρ = 4.8 × 3.14 × 10⁻⁸ / 1.1 × 10⁻⁶ = 0.137 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Answer 0.14 m is given; award the second mark only if 0.137 or the complete substitution is seen."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1 max] if the diameter is used as the radius (0.55 m)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the power dissipated in the wire."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 6.0 / (4.8 + 1.2) "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 1.0 A"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.0² × 4.8 = 4.8 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1 max] for 7.5 W (internal resistance ignored)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain why the potential difference across the terminals of the battery is less than 6.0 V when the wire is connected."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "there is a current in the battery so there is a potential difference across / energy is dissipated in the internal resistance"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "terminal pd = emf − "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Ir"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 6.0 − 1.0 × 1.2 = 4.8 V"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " less energy per unit charge is available to the external circuit"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "To cut faster, the student connects a second, identical nichrome wire in parallel with the first. The student predicts that the total power dissipated in the two wires will be double the value in (b)."
+          }
+         ]
+        },
+        {
+         "type": "figure",
+         "attrs": {
+          "stimulus_id": "fig1"
+         }
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine whether the prediction of the student is correct."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.5",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "b"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "resistance of the parallel wires = 2.4 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "Ω"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 6.0 / (2.4 + 1.2) "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 1.67 A"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "total power in the wires = 1.67² × 2.4 = 6.7 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "this is less than 2 × 4.8 = 9.6 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": ", so the prediction is not correct "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "because the larger current increases the pd across the internal resistance / the terminal pd falls to 4.0 V / the power in each wire falls to 3.3 W"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (b)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "ALTERNATIVE for the second mark:"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " terminal pd = 4.0 V, power in each wire = 4.0² / 4.8 = 3.3 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The third mark requires a numerical comparison and a conclusion."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": null
+   }
+  }
+ ]
+}

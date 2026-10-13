@@ -1,0 +1,3799 @@
+{
+ "source_file": "docs/pilot/b3-gas-laws-pilot-questions.md",
+ "source_sha256": "26ea8eb2b6c0253c6bef55735bbb8744fc4bba43099c70c5f1b00cbadb486ea6",
+ "questions": [
+  {
+   "source_ref": "pilot/b3-gas-laws#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "PV = NkT ile molekül sayısı; kelvin sıcaklığı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A sealed flask of volume 2.0 × 10⁻³ m³ contains an ideal gas at a pressure of 1.5 × 10⁵ Pa and a temperature of 27 °C."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Boltzmann constant = 1.38 × 10⁻²³ J K⁻¹"
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the number of gas molecules in the flask?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "ratio",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "7.2 × 10²²"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "6.0 × 10²³"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kapta bir mol gaz olduğu varsayılır; Avogadro sabiti cevap olarak verilir: 6.0 × 10²³"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "8.1 × 10²³"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Sıcaklık kelvine çevrilmez: 300 / (1.38 × 10⁻²³ × 27) = 8.05 × 10²³"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.2 × 10²⁵"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Sıcaklık hesaba katılmaz: "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "PV"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " / "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "k"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 300 / 1.38 × 10⁻²³ = 2.17 × 10²⁵"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "T"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 27 + 273 = 300 K. "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "N"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "PV"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " / "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "kT"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = (1.5 × 10⁵ × 2.0 × 10⁻³) / (1.38 × 10⁻²³ × 300) = 300 / 4.14 × 10⁻²¹ = 7.2 × 10²²."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b3-gas-laws#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Tek atomlu ideal gazın iç enerjisi (U = 3⁄2 PV)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A monatomic ideal gas is in a container of volume 0.040 m³ at a pressure of 2.0 × 10⁵ Pa."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the internal energy of the gas?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.3 kJ"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Çarpan ters alınır: 2⁄3 "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "PV"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 5.33 kJ"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "8.0 kJ"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İç enerji "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "PV"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "'ye eşit sayılır: 8.0 kJ"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "12 kJ"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "24 kJ"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "P"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = ⅓ρ"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "v"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "² ifadesindeki 3 çarpanı enerjiye taşınır: 3"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "PV"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 24 kJ"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "U"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 3⁄2 "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "NkT"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 3⁄2 "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "PV"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 1.5 × 2.0 × 10⁵ × 0.040 = 1.2 × 10⁴ J = 12 kJ. Sıcaklık ve madde miktarı gerekmez."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b3-gas-laws#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "easy",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "İdeal gaz yaklaşımının geçerlilik koşulları",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "The behaviour of a real gas is compared with the predictions of the ideal gas model."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Under which conditions is the ideal gas model the best approximation for a real gas?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "high pressure and high temperature"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yalnızca sıcaklık koşulu doğru; yüksek basınçta molekül hacminin ihmal edilemeyeceği gözden kaçar"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "high pressure and low temperature"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İki koşul da ters; gazın sıvılaşmaya en yakın olduğu durum \"ideal\" sanılır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "low pressure and low temperature"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yalnızca basınç koşulu doğru; düşük sıcaklıkta moleküller arası kuvvetlerin önem kazandığı gözden kaçar"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "low pressure and high temperature"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Düşük basınçta (düşük yoğunlukta) moleküller birbirinden uzaktır; molekül hacmi kabın hacmine göre ihmal edilir. Yüksek sıcaklıkta moleküllerin kinetik enerjisi, moleküller arası kuvvetlerin potansiyel enerjisine göre büyüktür. İkisi birlikte ideal gaz varsayımlarını en iyi karşılar."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 1,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b3-gas-laws#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "P = ⅓ρv² ile orantı akıl yürütmesi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Containers X and Y hold different ideal gases at the same pressure. The density of the gas in X is four times the density of the gas in Y."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the ratio (root mean square speed of the molecules in X) / (root mean square speed of the molecules in Y)?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "ratio",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1⁄4"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Karekök alınmaz ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "v"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ∝ 1/ρ): 1⁄4"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1⁄2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Orantı ters kurulur ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "v"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ∝ √ρ): 2"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Hem ters kurulur hem karekök alınmaz ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "v"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ∝ ρ): 4"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = ⅓ρ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "² → "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = √(3"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/ρ). Basınç aynı olduğundan "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ∝ 1/√ρ. Oran = 1/√4 = 1⁄2."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b3-gas-laws#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "İdeal gaz yasası, sabit hacim; kinetik kuramla basınç; iç enerji değişimi; modelin sınırı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A rigid steel cylinder of volume 0.012 m³ contains helium at a pressure of 1.5 × 10⁷ Pa and a temperature of 17 °C. Helium is a monatomic gas and is assumed to behave as an ideal gas."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Gas constant "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "R"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = 8.31 J K⁻¹ mol⁻¹"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the amount of helium in the cylinder is about 75 mol."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 290 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "K"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "n"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = (1.5 × 10⁷ × 0.012) / (8.31 × 290) = 74.7 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "mol"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Answer 75 mol is given; award the second mark only if 74.7 or the complete substitution is seen."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The cylinder is left in sunlight and the temperature of the helium rises to 46 °C."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the new pressure of the helium."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = constant "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₂ = 1.5 × 10⁷ × 319 / 290"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₂ = 1.65 × 10⁷ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "Pa"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow use of PV = nRT with n = 75 mol (gives 1.66 × 10⁷ Pa)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1 max] if Celsius temperatures are used (4.1 × 10⁷ Pa)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain, using the kinetic model of a gas, why the pressure of the helium increases."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": true,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the average speed / kinetic energy of the atoms increases"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "collisions with the walls are more frequent "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " the change in momentum in each collision is greater"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so the "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "average"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " force on the walls increases "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "and the area is unchanged"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the increase in the internal energy of the helium."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "a",
+       "b"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3⁄2 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "nR"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.5 × 75 × 8.31 × 29"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 2.7 × 10⁴ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (a) and (b)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "ALTERNATIVE:"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3⁄2 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.5 × 0.012 × 1.5 × 10⁶ = 2.7 × 10⁴ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "J"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Suggest why the ideal gas model may "
+          },
+          {
+           "marks": [
+            {
+             "type": "bold"
+            }
+           ],
+           "type": "text",
+           "text": "not"
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " be accurate for the helium in this cylinder."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "suggest",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the pressure / density is high so the volume of the atoms is not negligible "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "compared with the volume of the cylinder"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " the atoms are close together so the forces between them are not negligible"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "do_not_accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Do not accept \"helium is a real gas\" without a reason."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": {
+     "parameters": [
+      {
+       "name": "V",
+       "value": "0.012",
+       "unit": "m^3"
+      },
+      {
+       "name": "P1",
+       "value": "1.5e7",
+       "unit": "Pa"
+      },
+      {
+       "name": "T1",
+       "value": "290",
+       "unit": "K"
+      },
+      {
+       "name": "T2",
+       "value": "319",
+       "unit": "K"
+      },
+      {
+       "name": "R",
+       "value": "8.31",
+       "unit": "J/(K mol)"
+      }
+     ],
+     "constants": [],
+     "steps": [
+      {
+       "id": "s1",
+       "name": "n",
+       "expr": "P1*V/(R*T1)",
+       "unit": "mol",
+       "stated_value": null
+      },
+      {
+       "id": "s2",
+       "name": "P2",
+       "expr": "P1*T2/T1",
+       "unit": "Pa",
+       "stated_value": null
+      },
+      {
+       "id": "s3",
+       "name": "dU",
+       "expr": "1.5*n*R*(T2 - T1)",
+       "unit": "",
+       "stated_value": null
+      }
+     ],
+     "answers": []
+    }
+   }
+  },
+  {
+   "source_ref": "pilot/b3-gas-laws#6",
+   "number": 6,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "data_based",
+    "exam_section": "paper_1b",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "B.3",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Sabit hacimde basınç–sıcaklık verisi; doğrusal ile doğru orantılı ayrımı; dış değerleme; belirsizlik",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A student investigates how the pressure of a gas depends on its temperature. A sealed flask of air is connected by a short narrow tube to a pressure gauge. The flask is fully immersed in a water bath. The student changes the temperature "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "\\theta"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " of the water, waits several minutes and then records "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "\\theta"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " and the pressure "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "P"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " of the air."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "table",
+       "content": [
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "\\theta"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / °C ± 0.5 °C"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "P"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / kPa ± 1 kPa"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "10.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "98"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "30.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "106"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "50.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "112"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "70.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "119"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "90.0"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "126"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Su banyosuna tamamen batırılmış, ağzı tıpayla kapatılmış cam balon. Tıpadan çıkan kısa ve dar bir boru, su yüzeyinin üstündeki bir basınç göstergesine bağlıdır. Suda bir termometre ve bir karıştırıcı vardır. Şekil ölçekli değildir.",
+      "asset_id": null,
+      "alt_text": null
+     },
+     {
+      "id": "fig2",
+      "kind": "graph",
+      "use": "read_values",
+      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu P–θ grafiği yer alır; yatay eksen dış değerleme yapılabilmesi için −300 °C'ye kadar uzatılır. Grafik aynı veriden kodla üretilir (D-14). En dik doğru (30 °C; 105 kPa) ve (90 °C; 127 kPa) çubuk uçlarından, en yatık doğru (10 °C; 99 kPa) ve (90 °C; 125 kPa) çubuk uçlarından geçer; soruda verilen eğim ve kesim değerleri bunların dört anlamlı basamağa yuvarlanmış halidir. Sonuç: θ₀ = (−275 ± 19) °C ya da (−280 ± 20) °C.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State "
+          },
+          {
+           "marks": [
+            {
+             "type": "bold"
+            }
+           ],
+           "type": "text",
+           "text": "one"
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " quantity, other than those in the table, that must stay constant during the investigation."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "volume "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "of the air / flask"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " mass / amount / number of molecules of air"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Outline why the student waits several minutes before taking each pair of readings."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "outline",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so that the air "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "in the flask"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " reaches the temperature of the water / thermal equilibrium"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The student plots a graph of "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "P"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " against "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " with uncertainty bars for "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "P"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": ". The uncertainty bars for "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " are too small to draw. The line of best fit has a gradient of 0.345 kPa °C⁻¹ and an intercept on the "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "P"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "-axis of 95.0 kPa."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The student states that "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "P"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " is directly proportional to "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": ". Discuss, using the data, whether this statement is correct."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the line does not pass through the origin / the intercept is 95 kPa, not zero "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " is not constant, with two values calculated "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "e.g. 98 / 10 = 9.8 and 126 / 90 = 1.4"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so the statement is not correct; the relationship is linear but not directly proportional "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " is proportional to the kelvin temperature"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The first mark requires reference to the data or the intercept."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The line of best fit is extrapolated to "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "P"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " = 0. Determine the temperature "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "₀, in °C, at which the line predicts that the pressure is zero."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0 = 95.0 + 0.345 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₀ "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₀ = −95.0 / 0.345"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₀ = −275 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "°C"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1 max] if the negative sign is missing."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The lines of maximum and minimum gradient that pass through all the uncertainty bars are (values rounded to four significant figures):"
+          }
+         ]
+        },
+        {
+         "type": "table",
+         "content": [
+          {
+           "type": "table_row",
+           "content": [
+            {
+             "type": "table_header",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "Line"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_header",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "Gradient / kPa °C⁻¹"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_header",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "Intercept on "
+                },
+                {
+                 "marks": [],
+                 "type": "math_inline",
+                 "attrs": {
+                  "latex": "P"
+                 }
+                },
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "-axis / kPa"
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_row",
+           "content": [
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "maximum gradient"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "0.3667"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "94.00"
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_row",
+           "content": [
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "minimum gradient"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "0.3250"
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "type": "table_cell",
+             "attrs": {
+              "colspan": 1,
+              "rowspan": 1
+             },
+             "content": [
+              {
+               "type": "paragraph",
+               "content": [
+                {
+                 "marks": [],
+                 "type": "text",
+                 "text": "95.75"
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the absolute uncertainty in "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "₀."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₀ = −94.00 / 0.3667 = −256 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "°C"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\theta"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "₀ = −95.75 / 0.3250 = −295 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "°C"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "uncertainty = (295 − 256) / 2 = "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "±"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 19 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "°C"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept 20 °C."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept the difference between either value and the best-fit value (19 or 20 °C)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "f",
+      "label": "f",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The accepted value of absolute zero is −273 °C. Comment on whether the result of the experiment is consistent with this value."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "d",
+       "e"
+      ],
+      "mark_points": [
+       {
+        "id": "f-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "consistent, because −273 °C lies within the range of the result "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "−295 °C to −255 °C"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (d) and (e)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "A conclusion without reference to the range does not gain the mark."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "g",
+      "label": "g",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Suggest "
+          },
+          {
+           "marks": [
+            {
+             "type": "bold"
+            }
+           ],
+           "type": "text",
+           "text": "one"
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " change to the investigation that would reduce the uncertainty in "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\theta"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "₀. Give a reason for your answer."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "suggest",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "B.3",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "g-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "use a wider range of temperatures "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "e.g. include an ice bath or a freezing mixture"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt1",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "g-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so that the extrapolation is shorter / the gradient is determined more precisely"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt1",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "g-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "use a pressure gauge with a smaller uncertainty / better resolution"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt2",
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "g-m4",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "so that the uncertainty bars are smaller and the range of possible lines is narrower"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": "alt2",
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The second mark is for a reason linked to the change."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "do_not_accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Do not accept \"repeat the readings\" without a link to the uncertainty in P."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 11,
+    "solution_model": null
+   }
+  }
+ ]
+}

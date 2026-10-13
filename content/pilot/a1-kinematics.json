@@ -1,0 +1,2436 @@
+{
+ "source_file": "docs/pilot/a1-kinematics-pilot-questions.md",
+ "source_sha256": "2d5957877a9c191e2618451dd53997ae3161ee546c535e437dd0f80b5e8b8e9d",
+ "questions": [
+  {
+   "source_ref": "pilot/a1-kinematics#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "easy",
+    "primary_syllabus_node": "A.1",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Yol ile yer değiştirme farkı; ortalama hız",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A cyclist rides 600 m due east in 60 s and then 800 m due north in 140 s."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the magnitude of the average velocity of the cyclist for the whole journey?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5.0 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "7.0 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yer değiştirme yerine toplam yol kullanılır: 1400 / 200 (ortalama sürat)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "7.9 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İki bölümün süratlerinin (10 ve 5.7 m s⁻¹) aritmetik ortalaması alınır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "10 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yalnızca ilk bölümün sürati alınır"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Yer değiştirme = √(600² + 800²) = 1000 m. Toplam süre = 200 s. Ortalama hızın büyüklüğü = 1000 / 200 = 5.0 m s⁻¹."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a1-kinematics#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.1",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Aşağı açılı eğik atışın bileşenlerle çözümü",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A stone is thrown from the top of a vertical cliff with a speed of 12 m s⁻¹ at an angle of 30° "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "below"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the horizontal. The stone is released 15 m above the sea. Air resistance is negligible."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the horizontal distance from the base of the cliff to the point where the stone hits the sea?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "13 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "15 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Yatay bileşen yerine hızın tamamı kullanılır: 12 × 1.24 = 14.9 m"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "18 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Düşey ilk hız yok sayılır (yatay atış gibi çözülür): t = 1.75 s, 10.4 × 1.75 = 18.2 m"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "26 m"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Taş yukarı açıyla atılmış gibi çözülür: t = 2.47 s, 10.4 × 2.47 = 25.6 m"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Aşağı yön pozitif. Düşey ilk hız = 12 sin 30° = 6.0 m s⁻¹; yatay hız = 12 cos 30° = 10.4 m s⁻¹. 15 = 6.0t + 4.9t² → t = 1.24 s. Yatay uzaklık = 10.4 × 1.24 = 12.9 m ≈ 13 m."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a1-kinematics#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.1",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Akışkan direncinin ivmeye nitel etkisi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A ball is thrown vertically upwards. Air resistance is "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "not"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " negligible."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the magnitude of the acceleration of the ball immediately after it is released?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "zero"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "\"Atıldığı anda hızı en büyük, ivmesi yok\" düşüncesi; hız ile ivmenin karıştırılması"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "less than "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Direncin her durumda ivmeyi azalttığı varsayılır (iniş için doğru, çıkış için yanlış)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Direnç yok sayılır; serbest düşme ivmesi alınır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "greater than "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Yukarı çıkarken direnç kuvveti aşağı yönlüdür, yani ağırlıkla aynı yöndedir. Bileşke kuvvet ağırlıktan büyüktür; ivmenin büyüklüğü "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "g"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "'den büyüktür."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "sl_core",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a1-kinematics#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.1",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Yatay atış; hız bileşenleri; dirençli hareketin nitel etkisi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A drone flies horizontally at a constant speed of 18 m s⁻¹ at a height of 44 m above level ground. It releases a small package. Air resistance on the package is negligible in parts (a) to (c)."
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State the horizontal component of the velocity of the package at the instant it is released."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "18 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the time taken for the package to reach the ground."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "44 = ½ × 9.8 × "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3.0 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "s"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the magnitude and the direction of the velocity of the package as it reaches the ground."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "b"
+      ],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v_{y}"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 9.8 × 3.0 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 29 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = √(18² + 29²) = 34 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "58° below the horizontal "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 32° to the vertical"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (b)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d.i",
+      "label": "d.i",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "In practice, air resistance on the package is not negligible."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain, without calculation, the effect of air resistance on the time taken for the package to reach the ground."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d.i-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "air resistance has an upward / vertical component "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "opposing the fall"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d.i-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "vertical acceleration is less than "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " so the time is longer"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d.ii",
+      "label": "d.ii",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State how the horizontal component of the velocity of the package at the ground compares with your answer to (a)."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d.ii-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "less "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "than 18 m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": {
+     "parameters": [
+      {
+       "name": "u",
+       "value": "18",
+       "unit": "m/s"
+      },
+      {
+       "name": "H",
+       "value": "44",
+       "unit": "m"
+      },
+      {
+       "name": "g",
+       "value": "9.8",
+       "unit": "m/s^2"
+      }
+     ],
+     "constants": [],
+     "steps": [
+      {
+       "id": "s1",
+       "name": "t",
+       "expr": "sqrt(2*H/g)",
+       "unit": "s",
+       "stated_value": null
+      },
+      {
+       "id": "s2",
+       "name": "v_y",
+       "expr": "g*t",
+       "unit": "m s^-1",
+       "stated_value": null
+      },
+      {
+       "id": "s3",
+       "name": "v",
+       "expr": "sqrt(u**2 + v_y**2)",
+       "unit": "m s^-1",
+       "stated_value": null
+      },
+      {
+       "id": "s4",
+       "name": "angle",
+       "expr": "atan(v_y/u)",
+       "unit": "°",
+       "stated_value": null
+      }
+     ],
+     "answers": []
+    }
+   }
+  },
+  {
+   "source_ref": "pilot/a1-kinematics#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "data_based",
+    "exam_section": "paper_1b",
+    "levels": [
+     "sl",
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "A.1",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Serbest düşme verisinin işlenmesi; belirsizlik; sistematik hata",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A student investigates free fall. A steel ball is held by an electromagnet. When the current is switched off, a timer starts and the ball falls a height "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "h"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " onto a trapdoor switch that stops the timer. The student repeats the measurement for each height and records the mean time "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "t"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "."
+        }
+       ]
+      },
+      {
+       "type": "table",
+       "content": [
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "h"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / m"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_header",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "math_inline",
+               "attrs": {
+                "latex": "t"
+               }
+              },
+              {
+               "marks": [],
+               "type": "text",
+               "text": " / s ± 0.01 s"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.200"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.20"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.400"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.29"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.600"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.35"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.800"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.40"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "type": "table_row",
+         "content": [
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "1.000"
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "type": "table_cell",
+           "attrs": {
+            "colspan": 1,
+            "rowspan": 1
+           },
+           "content": [
+            {
+             "type": "paragraph",
+             "content": [
+              {
+               "marks": [],
+               "type": "text",
+               "text": "0.45"
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "The uncertainty in "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "h"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " is negligible."
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "graph",
+      "use": "read_values",
+      "description": "Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu h–t² grafiği yer alır. Grafik aynı veriden kodla üretilir (D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.98 m s⁻²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 5.35 ve 4.56 m s⁻²'dir; soruda verilen 5.0, 5.4 ve 4.6 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Outline why a graph of "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "h"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " against "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "t"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "² is expected to be a straight line through the origin."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "outline",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "h"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = ½"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "gt"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "as the ball starts from rest"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "h"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " is proportional to "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " gradient = ½"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " is constant"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the percentage uncertainty in "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "t"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "² for "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "h"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " = 1.000 m."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "fractional uncertainty in "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.01 / 0.45 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 0.022"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "doubled for "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "t"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²: 4.4 %"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept 4 %."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The student plots "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "h"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " against "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "t"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "² with uncertainty bars. The gradient of the line of best fit is 5.0 m s⁻². The lines of maximum and minimum gradient have gradients of 5.4 m s⁻² and 4.6 m s⁻²."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the acceleration of free fall "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "g"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " given by this experiment, with its absolute uncertainty."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 2 × gradient = 10 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "uncertainty in gradient = (5.4 − 4.6) / 2 = 0.4 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = (10.0 ± 0.8) "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept ± 1 m s⁻² if the answer is given as (10 ± 1)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The accepted value of "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "g"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " is 9.8 m s⁻². Comment on whether the result of the experiment is consistent with the accepted value."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "c"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "consistent, as 9.8 m s⁻² lies within the range 9.2–10.8 m s⁻²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (c): the conclusion must follow from the candidate's own range."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "e",
+      "label": "e",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The electromagnet takes a short, constant time to release the ball after the timer has started. Explain the effect of this on the value of "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "g"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " obtained."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": null,
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "sl_core",
+      "syllabus_node": "A.1",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "e-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "measured times are greater than the true times of fall / this is a systematic error"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "e-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the gradient is smaller so the value of "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "g"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " obtained is too small"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 10,
+    "solution_model": null
+   }
+  }
+ ]
+}

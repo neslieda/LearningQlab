@@ -1,0 +1,1722 @@
+{
+ "source_file": "docs/pilot/d4-induction-pilot-questions.md",
+ "source_sha256": "b2294f40c3887abef2e76991c22c233ffd38cbd0cc7e9c996e2ad3524e680cfb",
+ "questions": [
+  {
+   "source_ref": "pilot/d4-induction#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Alana giren dikdörtgen bobinde emk (ε = BvL, N sarım)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A rectangular coil has 20 turns and sides of length 0.10 m and 0.20 m. The coil moves at a constant speed of 0.50 m s⁻¹ into a region of uniform magnetic field of strength 0.30 T. The plane of the coil is at right angles to the field. The leading side of the coil has length 0.10 m and is at right angles to the velocity. The coil is partly inside the field."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the emf induced in the coil?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "ray_wavefront_diagram",
+      "use": "read_only",
+      "description": "Sayfa düzleminde dikdörtgen bir bobin (kısa kenar 0.10 m düşey, uzun kenar 0.20 m yatay) sağa doğru v hızıyla hareket ediyor. Sağ tarafta, sayfaya dik düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Bobinin sağdaki 0.10 m'lik kenarı alanın içinde, soldaki kenarı dışında. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.015 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Sarım sayısı unutulur: 0.30 × 0.50 × 0.10 = 0.015 V"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.12 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Emk yerine tam akı bağlantısı hesaplanır (NBA): 20 × 0.30 × 0.10 × 0.20 = 0.12"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.30 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.60 V"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Hıza dik kenar yerine hıza paralel kenar kullanılır: 20 × 0.30 × 0.50 × 0.20 = 0.60 V"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Yalnızca alan içindeki öndeki kenar akı çizgilerini keser. Her sarımda ε = BvL = 0.30 × 0.50 × 0.10 = 0.015 V; 20 sarım seri olduğundan ε = 20 × 0.015 = 0.30 V. (Eşdeğer: akı bağlantısının değişim hızı N B L v.)"
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d4-induction#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Lenz yasası: indüklenen akımın ve kuvvetin yönü",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A rectangular conducting loop lies in the plane of the page. Part of the loop is in a region of uniform magnetic field that is directed "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "into"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the page. The loop is pulled to the right, out of the field region, at constant speed."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Which describes the direction of the induced current in the loop, as seen by an observer looking at the page, and the direction of the magnetic force on the loop?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "ray_wavefront_diagram",
+      "use": "read_only",
+      "description": "Sayfa düzleminde dikdörtgen bir iletken çerçeve. Sol tarafta, sayfanın içine doğru düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle bitiyor; sınırın sağında alan yok. Çerçevenin sol kenarı alanın içinde, sağ kenarı dışında. Çerçeveye sağa doğru bir hız oku (v) çizilmiş. Akım yönleri sayfaya bakan gözlemciye göre tanımlanır. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The current is clockwise and the force is to the left."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The current is clockwise and the force is to the right."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Akım yönü doğru; ancak kuvvetin hareketi desteklediği sanılır (enerji korunumuna aykırı) ya da el kuralı ters uygulanır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The current is anticlockwise and the force is to the left."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İndüklenen alanın dış alana her zaman zıt olduğu sanılır (akının azaldığı gözden kaçar); kuvvet için \"harekete karşı\" doğru hatırlanır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The current is anticlockwise and the force is to the right."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Hem indüklenen alan dış alana zıt sanılır, hem bu akıma kural uygulanarak kuvvet bulunur: anticlockwise akım sol kenarda aşağı, (−y) × (−z) = +x, sağa"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Çerçeve alandan çıkarken sayfanın içine doğru olan akı azalır. Lenz yasası: indüklenen akım bu azalmaya karşı koyar, yani çerçevenin içinde sayfanın içine doğru alan oluşturur. Sağ el kavrama kuralı (parmaklar akım yönünde kıvrılır, başparmak halkanın içindeki alanı gösterir): sayfanın içine doğru alan için akım saat yönündedir. Kuvvet: saat yönündeki akım, alan içindeki sol kenarda sayfanın üstüne doğrudur (+y). F = IL × B = (+y) × (−z) = −x: sola doğru. Üst ve alt kenarların alan içindeki parçalarına etkiyen kuvvetler eşit ve zıttır. Kuvvet harekete karşıdır; enerji korunumuyla uyumlu."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d4-induction#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Dönen bobinde akı bağlantısı ile emk arasındaki ilişki",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A rectangular coil rotates at a constant rate in a uniform magnetic field. The axis of rotation lies in the plane of the coil and is at right angles to the field. At one instant the plane of the coil is "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "parallel"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " to the magnetic field lines."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Which describes the magnitudes of the magnetic flux linkage and of the induced emf at this instant?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The flux linkage is zero and the emf is zero."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Emk'nin akı bağlantısının kendisiyle orantılı olduğu sanılır (değişim hızıyla değil)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The flux linkage is zero and the emf is a maximum."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The flux linkage is a maximum and the emf is zero."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Bobin düzleminin alana paralel olması ile dik olması karıştırılır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The flux linkage is a maximum and the emf is a maximum."
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Hem konum karıştırılır hem emk akıyla orantılı sanılır"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Bobin düzlemi alan çizgilerine paralelken bobinden hiç alan çizgisi geçmez: akı bağlantısı sıfırdır. Aynı anda bobinin kenarları alan çizgilerini dik keser; akı bağlantısı en hızlı bu anda değişir. Faraday yasasına göre emk, akı bağlantısının değişim hızıyla orantılıdır, dolayısıyla en büyük değerindedir."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d4-induction#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "D.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Dönme frekansının sinüzoidal emk'ye etkisi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A coil rotates at a constant rate in a uniform magnetic field. The emf induced in the coil varies sinusoidally with a maximum value of 6.0 V and a period of 40 ms. The frequency of rotation of the coil is then doubled. No other change is made."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Which gives the new maximum emf and the new period?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "statement",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "3.0 V and 80 ms"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Frekans ile periyot karıştırılır (periyot iki katına çıkar) ve emk'nin de buna göre yarıya indiği düşünülür"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "6.0 V and 20 ms"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Tepe emk'nin yalnızca B, alan ve sarım sayısına bağlı olduğu sanılır; periyot doğru"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "12 V and 40 ms"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Emk'nin arttığı bilinir ama emk'nin periyodunun dönme periyoduyla birlikte değiştiği görülmez"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "12 V and 20 ms"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Frekans iki katına çıkınca periyot yarıya iner: 20 ms. Akı bağlantısının en büyük değeri değişmez ama aynı değişim yarı sürede gerçekleşir; akı bağlantısının en büyük değişim hızı, dolayısıyla tepe emk iki katına çıkar: 12 V."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/d4-induction#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "D.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Hareketli iletkende emk; indüklenen akım ve kuvvet; Lenz yasası ve enerji korunumu; Faraday yasası",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A rectangular aluminium frame is fixed flat on top of a small cart. The frame is a single loop of resistance 0.050 Ω. The cart is pulled along a horizontal track at a constant speed of 1.5 m s⁻¹. The frame enters a region of uniform magnetic field of strength 0.40 T that is directed vertically downwards. The leading side of the frame has length 0.20 m and is at right angles to the velocity. The region of field is longer than the frame."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "ray_wavefront_diagram",
+      "use": "read_only",
+      "description": "Yukarıdan görünüş. Dikdörtgen çerçeve (öndeki ve arkadaki kenarlar 0.20 m, harekete dik; yan kenarlar daha uzun, harekete paralel) sağa doğru 1.5 m s⁻¹ hızla hareket ediyor. Sağda, sayfanın içine doğru (yukarıdan bakana göre aşağı doğru) düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Çerçevenin öndeki kenarı alanın içinde, arkadaki kenarı dışında. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the emf induced in the frame while it is entering the field."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\epsilon"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "BvL"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.40 × 1.5 × 0.20"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\epsilon"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.12 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "V"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": []
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the magnitude of the force that must be applied to the cart to keep its speed constant while the frame is entering the field. Friction and air resistance are negligible."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "a"
+      ],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\epsilon"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.12 / 0.050 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 2.4 A"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "magnetic"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " force on the leading side = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "BIL"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.40 × 2.4 × 0.20"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "applied force equals the magnetic force as the speed is constant, so"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "F"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.19 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "N"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (a)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that, while the frame is entering the field, the rate at which the applied force does work and the rate at which energy is dissipated in the frame are both about 0.29 W."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "rate of work done by applied force = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Fv"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.192 × 1.5 = 0.288 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "rate of energy dissipation = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 2.4² × 0.050 = 0.288 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\epsilon I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0.12 × 2.4 = 0.288 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "W"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Both values must be calculated."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow 0.285 W "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "0.28–0.29 W"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " for Fv if the rounded F = 0.19 N is used."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow Fv = BILv = εI for MP1 if one of the two powers is evaluated as 0.29 W."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "The frame is now completely inside the region of magnetic field and is still moving at 1.5 m s⁻¹."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain why there is no current in the frame."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "D.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the magnetic flux "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "linkage"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " through the frame is constant / is not changing"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "by Faraday's law"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " the induced emf is zero, so there is no current"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " equal emfs are induced in the leading and trailing sides they act in opposite senses around the loop so the net emf is zero"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": {
+     "parameters": [
+      {
+       "name": "B",
+       "value": "0.40",
+       "unit": "T"
+      },
+      {
+       "name": "v",
+       "value": "1.5",
+       "unit": "m/s"
+      },
+      {
+       "name": "L",
+       "value": "0.20",
+       "unit": "m"
+      },
+      {
+       "name": "R",
+       "value": "0.050",
+       "unit": "ohm"
+      }
+     ],
+     "constants": [],
+     "steps": [
+      {
+       "id": "s1",
+       "name": "emf",
+       "expr": "B*v*L",
+       "unit": "V",
+       "stated_value": null
+      },
+      {
+       "id": "s2",
+       "name": "I",
+       "expr": "emf/R",
+       "unit": "A",
+       "stated_value": null
+      },
+      {
+       "id": "s3",
+       "name": "F",
+       "expr": "B*I*L",
+       "unit": "",
+       "stated_value": null
+      },
+      {
+       "id": "s4",
+       "name": "P_mech",
+       "expr": "F*v",
+       "unit": "W",
+       "stated_value": null
+      },
+      {
+       "id": "s5",
+       "name": "P_elec",
+       "expr": "I**2*R",
+       "unit": "W",
+       "stated_value": null
+      }
+     ],
+     "answers": []
+    }
+   }
+  }
+ ]
+}

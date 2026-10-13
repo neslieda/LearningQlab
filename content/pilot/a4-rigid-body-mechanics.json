@@ -1,0 +1,2173 @@
+{
+ "source_file": "docs/pilot/a4-rigid-body-mechanics-pilot-questions.md",
+ "source_sha256": "178a5ee71522afe64b5e305d79d8d9c6e5641815bd1450797878471f1dafb250",
+ "questions": [
+  {
+   "source_ref": "pilot/a4-rigid-body-mechanics#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Tork ve dönme dengesi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A uniform horizontal beam of length 3.0 m and weight 200 N is hinged to a wall at one end. The beam is held horizontal by a vertical cable attached to the beam at a distance of 2.0 m from the hinge. A lamp of weight 150 N hangs from the free end of the beam."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the tension in the cable?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Solda düşey duvar; duvara menteşeyle bağlı, sağa doğru uzanan 3.0 m'lik yatay kiriş. Menteşeden 2.0 m uzakta kirişten yukarı çıkan düşey kablo. Kirişin sağ (serbest) ucundan aşağı sarkan lamba. Diagram not to scale.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "225 N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kirişin kendi ağırlığı hesaba katılmaz: 150 × 3.0 / 2.0 = 225 N"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "350 N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Tork yerine yalnızca düşey kuvvet dengesi yazılır, menteşe kuvveti yok sayılır: 200 + 150 = 350 N"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "375 N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "525 N"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kirişin ağırlığının orta nokta yerine serbest uçtan etkidiği varsayılır: (200 × 3.0 + 150 × 3.0) / 2.0 = 525 N"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Menteşeye göre tork dengesi: "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "T"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " × 2.0 = 200 × 1.5 + 150 × 3.0 = 750 N m; "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "T"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 375 N. (Menteşe kirişe aşağı yönlü 25 N uygular; bu kuvvetin menteşeye göre torku sıfırdır.)"
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a4-rigid-body-mechanics#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "*τ* = *Iα* ve sabit açısal ivme denklemleri",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A flywheel is a uniform solid disc of mass 8.0 kg and radius 0.25 m that can rotate about a fixed frictionless axle through its centre. The moment of inertia of the disc about the axle is ½"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "MR"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "². The flywheel is at rest. A constant force of 6.0 N is then applied tangentially at the rim of the disc."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the angular speed of the flywheel after 5.0 s?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "15 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Verilen ½ çarpanı atlanır, "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "I"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "MR"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "² = 0.50 kg m² alınır: "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\alpha"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 3.0 rad s⁻², "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\omega"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 15 rad s⁻¹"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "30 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "60 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Kuvvet kolu olarak yarıçap yerine çap alınır: "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\tau"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 6.0 × 0.50 = 3.0 N m, "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\alpha"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 12 rad s⁻², "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\omega"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 60 rad s⁻¹"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "120 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Tork yerine kuvvetin kendisi kullanılır ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "\\alpha"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "F"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "/"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "I"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "): 6.0 / 0.25 = 24, × 5.0 = 120"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "I"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = ½ × 8.0 × 0.25² = 0.25 kg m². "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\tau"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "FR"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 6.0 × 0.25 = 1.5 N m. "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\alpha"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\tau"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "I"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 6.0 rad s⁻². "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\omega"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\alpha t"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 6.0 × 5.0 = 30 rad s⁻¹."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a4-rigid-body-mechanics#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "A.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Açısal momentumun korunumu; nokta kütle için *mr*²",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A horizontal turntable rotates freely about a vertical axis with an angular speed of 3.0 rad s⁻¹. The moment of inertia of the turntable about the axis is 0.80 kg m². A small lump of clay of mass 2.0 kg is dropped vertically onto the turntable and sticks to it at a distance of 0.50 m from the axis."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the angular speed of the turntable after the clay has stuck to it?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1.8 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2.4 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Açısal momentum yerine dönme kinetik enerjisinin korunduğu varsayılır: 3.0 × √(0.80 / 1.30) = 2.4 rad s⁻¹"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "3.0 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Düşey düşen kilin dönmeyi etkilemediği düşünülür; açısal sürat değişmez"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4.9 rad s⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Eylemsizlik momentlerinin oranı ters çevrilir: 3.0 × 1.30 / 0.80 = 4.9 rad s⁻¹"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Kil düşey düştüğü için eksene göre açısal momentumu yoktur; dış tork olmadığından sistemin açısal momentumu korunur. Yeni eylemsizlik momenti = 0.80 + 2.0 × 0.50² = 1.30 kg m². "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\omega"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 0.80 × 3.0 / 1.30 = 1.8 rad s⁻¹."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a4-rigid-body-mechanics#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "A.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Kaymadan yuvarlanmada öteleme ve dönme kinetik enerjisinin paylaşımı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A uniform solid sphere of mass "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "M"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " and radius "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "R"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " rolls without slipping along a horizontal surface. The moment of inertia of the sphere about an axis through its centre is ⅖"
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "MR"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "²."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the ratio (translational kinetic energy of the sphere) / (total kinetic energy of the sphere)?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "ratio",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2/7"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İstenen oran yerine dönme kinetik enerjisinin payı verilir: (1/5) / (7/10) = 2/7"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "2/5"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Eylemsizlik momentindeki katsayı doğrudan enerji oranı sanılır: 2/5"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "1/2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Enerjinin öteleme ve dönme arasında her zaman eşit paylaşıldığı varsayılır: 1/2"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "5/7"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Kaymadan yuvarlanmada "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "\\omega"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "R"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ". Dönme kinetik enerjisi = ½ × ⅖"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "MR"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "² × ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "v"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "R"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": ")² = ⅕"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Mv"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "². Öteleme kinetik enerjisi = ½"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Mv"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "². Toplam = 7/10 "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Mv"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "². Oran = (1/2) / (7/10) = 5/7."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/a4-rigid-body-mechanics#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "A.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Kaymadan yuvarlanma; enerji korunumu; açısal momentum; eylemsizlik momentinin harekete etkisi",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A thin-walled steel pipe of mass 12 kg and radius 0.15 m is released from rest at the top of a loading ramp. The pipe rolls without slipping down the ramp. The centre of the pipe falls through a vertical height of 0.90 m. The moment of inertia of the pipe about its central axis is "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "MR"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": "². Air resistance is negligible."
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "State the relationship between the linear speed "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "v"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " of the centre of the pipe and its angular speed "
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "\\omega"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": " when the pipe rolls without slipping."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 1,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "state",
+      "answer_type": "word_phrase",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\omega R"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept ω = v / R or the relation in words."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the speed of the centre of the pipe at the bottom of the ramp is about 3.0 m s⁻¹."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Mgh"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = ½"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Mv"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² + ½"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I\\omega"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "²"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "use of "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "MR"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "AND"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\omega"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "/"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "R"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " to get "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Mgh"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Mv"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "² "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = √("
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "gh"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": ")"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "v"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = √(9.8 × 0.90) = 2.97 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Third mark needs an answer to at least 3 s.f. (2.97) from a correct substitution."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "cap",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Award [1] max for v = √(2gh) = 4.2 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "m s⁻¹"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " (rotation ignored)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Calculate the angular momentum of the pipe about its central axis at the bottom of the ramp."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "calculate",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "\\omega"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3.0 / 0.15 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 20 rad s⁻¹"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "L"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "I\\omega"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "MRv"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "L"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 12 × 0.15² × 20 = 5.4 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "kg m² s⁻¹"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept answers in the range 5.3 to 5.4 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "kg m² s⁻¹"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " (use of 2.97 m s⁻¹ gives 5.35)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept the unit N m s."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "A uniform solid cylinder has the same mass and the same radius as the pipe. Its moment of inertia about its central axis is ½"
+          },
+          {
+           "marks": [],
+           "type": "math_inline",
+           "attrs": {
+            "latex": "MR"
+           }
+          },
+          {
+           "marks": [],
+           "type": "text",
+           "text": "². The cylinder is released from rest at the top of the same ramp and also rolls without slipping."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Explain, without calculation, whether the cylinder takes a longer or a shorter time than the pipe to reach the bottom of the ramp."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "explain",
+      "answer_type": "explanation",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "A.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "both lose the same gravitational potential energy / have the same total kinetic energy "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "at any given height"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the cylinder has a smaller moment of inertia so a smaller fraction of its kinetic energy is rotational / a greater fraction is translational"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "the cylinder has a greater linear speed "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "at every point on the ramp"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " so it takes a shorter time"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "owtte",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "OWTTE"
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Do not award the third mark for \"shorter time\" without a reason."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept an argument using a greater linear acceleration for the cylinder for the third mark."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept a correct algebraic comparison of the speeds."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": null
+   }
+  }
+ ]
+}

@@ -227,7 +227,7 @@ value. [1]
 | 6. | d | | 0 = 95.0 + 0.345 *θ*₀ **OR** *θ*₀ = −95.0 / 0.345 ✓<br>*θ*₀ = −275 «°C» ✓ | *Award [1 max] if the negative sign is missing.* | 2 |
 | 6. | e | | *θ*₀ = −94.00 / 0.3667 = −256 «°C» **AND** *θ*₀ = −95.75 / 0.3250 = −295 «°C» ✓<br>uncertainty = (295 − 256) / 2 = «±» 19 «°C» ✓ | *Accept 20 °C.*<br>*Accept the difference between either value and the best-fit value (19 or 20 °C).* | 2 |
 | 6. | f | | consistent, because −273 °C lies within the range of the result «−295 °C to −255 °C» ✓ | *Allow ECF from (d) and (e).*<br>*A conclusion without reference to the range does not gain the mark.* | 1 |
-| 6. | g | | use a wider range of temperatures «e.g. include an ice bath or a freezing mixture» ✓<br>so that the extrapolation is shorter / the gradient is determined more precisely ✓<br>**OR**<br>use a pressure gauge with a smaller uncertainty / better resolution ✓<br>so that the uncertainty bars are smaller and the range of possible lines is narrower ✓ | *OWTTE*<br>*The second mark is for a reason linked to the change.*<br>*Do not accept "repeat the readings" without a link to the uncertainty in P.* | 2 |
+| 6. | g | | **ALTERNATIVE 1**<br>use a wider range of temperatures «e.g. include an ice bath or a freezing mixture» ✓<br>so that the extrapolation is shorter / the gradient is determined more precisely ✓<br>**ALTERNATIVE 2**<br>use a pressure gauge with a smaller uncertainty / better resolution ✓<br>so that the uncertainty bars are smaller and the range of possible lines is narrower ✓ | *OWTTE*<br>*The second mark is for a reason linked to the change.*<br>*Do not accept "repeat the readings" without a link to the uncertainty in P.* | 2 |
 
 ### Formül zinciri (çözüm modeli)
 

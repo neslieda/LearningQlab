@@ -177,3 +177,28 @@ Ayrıca: 24 dosya, toplam 130 soru; her `source_ref` tekil; her belge şemadan, 
 - Soru `source_ref` ile tanınır. Yeniden çalıştırma yinelenen soru üretmez: içerik aynıysa atlanır; içerik değişmişse ve sürüm
   düzenlenebilir durumdaysa güncellenir; değilse (incelemede, onaylı, yayında) dokunulmaz ve raporlanır.
 - Yapan: `system:pilot_import`.
+
+## 8. Uygulamada netleşen okumalar (2026-10-13)
+
+Dönüştürücü ve bağımsız test 24 dosyaya karşı yazılırken yukarıdaki kuralların açık bıraktığı yerler şöyle bağlandı. Bunlar
+dönüştürücünün davranışıdır; çeviri raporundaki "Kural ekleri" ve "Yorumlar" başlıkları hangi soruda gerektiğini listeler.
+
+| Konu | Okuma |
+|---|---|
+| Başlık biçimi `Paper 2 (HL, 9 puan)` | Geçerli; düzey başlıktan ve tablodan okunur, başlık HL deyip tablo SL diyorsa hata |
+| Markscheme `Total` hücresinde `2 max` | Sayı parça puanına eşit olmalı; "max" ek bilgi taşımaz (kapalı parça madde sayısından anlaşılır) |
+| `Answers` hücresinde `✓` ile bitmeyen ve `ALTERNATIVE` olmayan satır | Hata. (`b3-gas-laws` soru 6 (g)'deki tek başına `**OR**` satırı kaynakta `ALTERNATIVE 1 / 2` olarak yeniden etiketlendi) |
+| Çoktan seçmelide yanılgı tablosundan sonraki serbest paragraf ("Not: …") | Aktarılmaz; raporda sayılır (yapılandırılmış sorulardaki serbest açıklamalar gibi) |
+| Komut sözcüğünden sonra noktalama (`Explain,`) | Noktalama atılır, sözcük sözlükte aranır |
+| `Allow ECF …` ile başlayan her not (`Allow ECF for the volume from (a).`) | `kind = ecf`; `ecf_from` nottaki `(x)` / `(x)(y)` göndermelerinden. Alt parçası olan bir harfe `(c)` diye gönderme: hata (kaynakta yok) |
+| `Award [n] max …`, `Award [n max] …` | `cap`. `Do not award …` ve diğer `Award …` notları `general` |
+| Not içindeki italik | Bütün italik işaretleri atılır (notlar kaynakta kısmen italik) |
+| Not içindeki `✓` ve koyu `**ALTERNATIVE:**` | `✓` atılır; `ALTERNATIVE` burada yol işareti değil, koyu metindir (not `general` kalır) |
+| `option_kind`: birimsiz tek seçenek (`0`) ya da düz metin Yunan harfi (`π/6 rad`) içeren sayısal dörtlü | Kural harfiyen uygulanır: `word_phrase` ya da `statement` olur. Eğitmen incelemesinde düzeltilecek varsayım |
+| `option_kind`: değişken içeren kısa sözel seçenekler ("less than *g*") | Kural sırası gereği `algebraic_expression` |
+| Uyaran türünde "ilk eşleşen anahtar sözcük" | Açıklama metninde en önce geçen |
+| Yunan harfi için iki komut varsa | Harfin Unicode adındaki: `ε` → `\epsilon`, `φ` → `\phi`, `θ` → `\theta` |
+| `outcome` içindeki işaretleme (`*γ*`) | Hücre olduğu gibi alınır; işaretleme çevrilmez (6 soruda yıldız karakteri kalır). Alan gösterilen içerik değil, üst veridir |
+| `secondary_syllabus_nodes`, `Note.mark_point_id` | Boş |
+| Küçük harfli çok harfli değişkenler (kapalı liste) | `ct`, `gh`, `gr`, `gt`, `hc`, `hf`, `kx`, `mc`, `mg`, `mgv`, `mv`, `mx` ve dönüştürücüdeki diğerleri |
+| İtalik sözcükler (kapalı liste) | `not`, `one`, `two`, `twice`, `into`, `on`, `out of`, `parallel`, `Accept`, `Allow`, `and`, `OWTTE` ve dönüştürücüdeki diğerleri |

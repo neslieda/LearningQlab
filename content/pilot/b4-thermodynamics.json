@@ -1,0 +1,2560 @@
+{
+ "source_file": "docs/pilot/b4-thermodynamics-pilot-questions.md",
+ "source_sha256": "27bcdaf7234a9218650f2b632ddcad5acd7b4149d451cd5450c404cdbe338a70",
+ "questions": [
+  {
+   "source_ref": "pilot/b4-thermodynamics#1",
+   "number": 1,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "easy",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Birinci yasa ve işaret kuralı (Q = ΔU + W)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Thermal energy of 500 J is supplied to a monatomic ideal gas. At the same time, the gas is compressed and 200 J of work is done "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "on"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the gas."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the change in the internal energy of the gas?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "numeric_with_unit",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "−700 J"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Büyüklük doğru, işaret ters: iki enerji girişi de iç enerjiyi azaltıyor sayılır: −700 J"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "−300 J"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Hem "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "W"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": "'nin işareti yanlış alınır hem sonuç ters çevrilir (Δ"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "U"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "W"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " − "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "Q"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 200 − 500): −300 J"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "+300 J"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Gazın üzerine yapılan iş, gazın yaptığı iş gibi alınır ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "W"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = +200 J): 500 − 200 = +300 J"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "+700 J"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Clausius işaret kuralı: "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Q"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = +500 J (sisteme verilen), "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "W"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = −200 J (iş gazın üzerine yapıldı, gazın yaptığı iş negatif). Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "U"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Q"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " − "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "W"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 500 − (−200) = +700 J."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b4-thermodynamics#2",
+   "number": 2,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Adyabatik süreç, PV^(5/3) = sabit",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A monatomic ideal gas at pressure "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "P"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " is compressed adiabatically to "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "one eighth"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " of its initial volume."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the final pressure of the gas?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "512"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Üs 5⁄3 yerine 3 alınır: 8³ = 512"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "32"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "8"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Süreç izotermal sayılır ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "PV"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = sabit): 8"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "P"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "4"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Sıcaklık oranı basınç oranı sanılır ("
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "TV^{2/3}"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = sabit): 8"
+           },
+           {
+            "marks": [
+             {
+              "type": "sup"
+             }
+            ],
+            "type": "text",
+            "text": "2/3"
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " = 4"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "B",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "PV^{5/3}"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = sabit → "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "₂ = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " × ("
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "V"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "₁/"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "V"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "₂)"
+         },
+         {
+          "marks": [
+           {
+            "type": "sup"
+           }
+          ],
+          "type": "text",
+          "text": "5/3"
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " × 8"
+         },
+         {
+          "marks": [
+           {
+            "type": "sup"
+           }
+          ],
+          "type": "text",
+          "text": "5/3"
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " × 2⁵ = 32"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "P"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b4-thermodynamics#3",
+   "number": 3,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Entropi ve mikrodurum sayısı, S = k ln Ω (basit sayma modeli)",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "Four distinguishable particles are in a box. Each particle can be in the left half or in the right half of the box. A microstate is specified by stating which half each particle is in. A macrostate is specified by stating only the number of particles in each half. The entropy of a macrostate is "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "S"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " = "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "k"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " ln Ω, where Ω is the number of microstates of that macrostate and "
+        },
+        {
+         "marks": [],
+         "type": "math_inline",
+         "attrs": {
+          "latex": "k"
+         }
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " is the Boltzmann constant."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the entropy of the macrostate with two particles in each half "
+        },
+        {
+         "marks": [
+          {
+           "type": "bold"
+          }
+         ],
+         "type": "text",
+         "text": "minus"
+        },
+        {
+         "marks": [],
+         "type": "text",
+         "text": " the entropy of the macrostate with all four particles in the left half?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "algebraic_expression",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "k"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ln 2"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Mikrodurum sayısı olarak bölme sayısı (2) alınır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "k"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ln 4"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Mikrodurum sayısı olarak parçacık sayısı (4) alınır"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "k"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ln 6"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "k"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " ln 16"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Son makrodurumun değil, tüm olası mikrodurumların sayısı alınır: 2⁴ = 16 (serbest genleşme okuması, 4"
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "k"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " ln 2; soru metni makrodurumu açıkça tanımladığı için bu okuma dışlanır)"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "C",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Başlangıç makrodurumu (4 solda) tek mikroduruma sahiptir: Ω₁ = 1, "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "S"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": "₁ = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "k"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ln 1 = 0. Son makrodurum (2 solda, 2 sağda) için soldaki iki parçacığı seçmenin yolu sayısı Ω₂ = 4! / (2! 2!) = 6. Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "S"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "k"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ln 6 − "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "k"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ln 1 = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "k"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " ln 6."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b4-thermodynamics#4",
+   "number": 4,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "easy",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "Isı makinesinin verimi; Carnot veriminden ayrımı",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "In each cycle, a heat engine absorbs 800 J of thermal energy from a hot reservoir at 500 K and transfers 600 J of thermal energy to a cold reservoir at 300 K."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the efficiency of the heat engine?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "ratio",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.25"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.33"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "İş, alınan enerji yerine atılan enerjiye oranlanır: 200 / 600 = 0.33"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.40"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Gerçek verim yerine Carnot verimi hesaplanır: 1 − 300 / 500 = 0.40"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.75"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Atılan enerjinin alınana oranı verim sanılır: 600 / 800 = 0.75"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "correct_key": "A",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "Çevrim başına yapılan iş = 800 − 600 = 200 J. Verim = yararlı iş / alınan enerji = 200 / 800 = 0.25."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 2,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b4-thermodynamics#5",
+   "number": 5,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "mcq",
+    "exam_section": "paper_1a",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "medium",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "İzotermal süreçte birinci yasa ve ΔS = ΔQ/T",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A monatomic ideal gas expands slowly (reversibly) and isothermally at a temperature of 300 K. The gas does 600 J of work during the expansion."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "What is the change in the entropy of the gas?"
+        }
+       ]
+      }
+     ]
+    },
+    "stimuli": [],
+    "mcq": {
+     "option_kind": "word_phrase",
+     "option_layout": "single_value",
+     "column_headers": [],
+     "statements": [],
+     "options": [
+      {
+       "key": "A",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "−2.0 J K⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Gaz iş yaptığı için enerji kaybettiği düşünülür; "
+           },
+           {
+            "marks": [],
+            "type": "math_inline",
+            "attrs": {
+             "latex": "Q"
+            }
+           },
+           {
+            "marks": [],
+            "type": "text",
+            "text": " negatif alınır: −600 / 300 = −2.0"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "B",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "\"Sıcaklık değişmiyor, öyleyse enerji alışverişi ve entropi değişimi yok\" düşüncesi (izotermal ile adyabatik karıştırılır)"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "C",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "+0.50 J K⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": {
+        "type": "doc",
+        "content": [
+         {
+          "type": "paragraph",
+          "content": [
+           {
+            "marks": [],
+            "type": "text",
+            "text": "Oran ters kurulur: 300 / 600 = 0.50"
+           }
+          ]
+         }
+        ]
+       }
+      },
+      {
+       "key": "D",
+       "cells": [
+        {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "+2.0 J K⁻¹"
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "rationale": null
+      }
+     ],
+     "correct_key": "D",
+     "explanation": {
+      "type": "doc",
+      "content": [
+       {
+        "type": "paragraph",
+        "content": [
+         {
+          "marks": [],
+          "type": "text",
+          "text": "İzotermal süreçte ideal gazın iç enerjisi değişmez: Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "U"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 0, bu yüzden "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Q"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "W"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = +600 J (gaza verilen). Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "S"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = Δ"
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "Q"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " / "
+         },
+         {
+          "marks": [],
+          "type": "math_inline",
+          "attrs": {
+           "latex": "T"
+          }
+         },
+         {
+          "marks": [],
+          "type": "text",
+          "text": " = 600 / 300 = +2.0 J K⁻¹."
+         }
+        ]
+       }
+      ]
+     },
+     "assessment_objective": 3,
+     "level_content": "ahl",
+     "solution_step": null
+    },
+    "parts": [],
+    "total_marks": 1,
+    "solution_model": null
+   }
+  },
+  {
+   "source_ref": "pilot/b4-thermodynamics#6",
+   "number": 6,
+   "document": {
+    "schema_version": "1.0",
+    "question_class": "short_structured",
+    "exam_section": "paper_2",
+    "levels": [
+     "hl"
+    ],
+    "language": "en",
+    "calculator": true,
+    "difficulty": "hard",
+    "primary_syllabus_node": "B.4",
+    "secondary_syllabus_nodes": [],
+    "outcome": "İzobarik, adyabatik ve izotermal adımlı çevrim; W = PΔV; birinci yasa; verim; Carnot sınırı ve ikinci yasa",
+    "stem": {
+     "type": "doc",
+     "content": [
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "A fixed mass of a monatomic ideal gas is taken through a cycle A → B → C → A."
+        }
+       ]
+      },
+      {
+       "type": "paragraph",
+       "content": [
+        {
+         "marks": [],
+         "type": "text",
+         "text": "- In state A the pressure is 1.0 × 10⁵ Pa, the volume is 2.0 × 10⁻³ m³ and the temperature is 300 K. - A → B is an isobaric expansion to a volume of 5.0 × 10⁻³ m³. The temperature at B is 750 K. - B → C is an adiabatic expansion. The temperature at C is 300 K. - C → A is an isothermal compression."
+        }
+       ]
+      },
+      {
+       "type": "figure",
+       "attrs": {
+        "stimulus_id": "fig1"
+       }
+      }
+     ]
+    },
+    "stimuli": [
+     {
+      "id": "fig1",
+      "kind": "schematic_diagram",
+      "use": "read_only",
+      "description": "Basınç–hacim (P–V) diyagramı; ölçekli değil. A'dan B'ye sağa doğru yatay doğru (sabit basınç). B'den C'ye sağa ve aşağı inen dik eğri (adyabatik). C'den A'ya sola ve yukarı çıkan, daha az dik eğri (izotermal). Çevrim saat yönünde dolaşılır.",
+      "asset_id": null,
+      "alt_text": null
+     }
+    ],
+    "mcq": null,
+    "parts": [
+     {
+      "id": "a",
+      "label": "a",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Show that the thermal energy supplied to the gas during A → B is 750 J."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 3,
+      "marks_capped": false,
+      "show_that": true,
+      "command_term": "show",
+      "answer_type": "derivation_numeric",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "B.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [],
+      "mark_points": [
+       {
+        "id": "a-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1.0 × 10⁵ × 3.0 × 10⁻³ "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 300 J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3⁄2 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "P"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "V"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 3⁄2 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "nR"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "T"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "with "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "nR"
+             }
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": " = 0.667 J K⁻¹"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 450 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "a-m3",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Q"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " + "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 450 + 300 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 750 J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "The third mark is for the explicit use of the first law."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "n = 0.080 mol if calculated."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "b",
+      "label": "b",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the work done by the gas during B → C."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "B.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "a"
+      ],
+      "mark_points": [
+       {
+        "id": "b-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "Q"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 0 so "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = −Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "b-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = −450 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "J"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "same temperature change as A → B, reversed"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " so "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "W"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "+"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 450 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept Δ"
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "U"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 3⁄2 "
+            },
+            {
+             "marks": [],
+             "type": "math_inline",
+             "attrs": {
+              "latex": "nR"
+             }
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " (300 − 750) for the second mark."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (a)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "c",
+      "label": "c",
+      "lead_in": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "During C → A, 460 J of thermal energy is transferred from the gas to the surroundings."
+          }
+         ]
+        }
+       ]
+      },
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Determine the efficiency of the cycle."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "determine",
+      "answer_type": "numeric_with_unit",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "B.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "b"
+      ],
+      "mark_points": [
+       {
+        "id": "c-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "net work = 750 − 460 "
+            },
+            {
+             "marks": [
+              {
+               "type": "bold"
+              }
+             ],
+             "type": "text",
+             "text": "OR"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " 300 + 450 − 460 "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "= 290 J"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "c-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "efficiency = 290 / 750 = 0.39"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (b)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "general",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Thermal energy is supplied only during A → B."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     },
+     {
+      "id": "d",
+      "label": "d",
+      "lead_in": null,
+      "body": {
+       "type": "doc",
+       "content": [
+        {
+         "type": "paragraph",
+         "content": [
+          {
+           "marks": [],
+           "type": "text",
+           "text": "Discuss whether your answer to (c) is consistent with the second law of thermodynamics."
+          }
+         ]
+        }
+       ]
+      },
+      "marks": 2,
+      "marks_capped": false,
+      "show_that": false,
+      "command_term": "discuss",
+      "answer_type": "extended_evaluation",
+      "assessment_objective": null,
+      "level_content": "ahl",
+      "syllabus_node": "B.4",
+      "stimulus_refs": [],
+      "depends_on": [],
+      "ecf_from": [
+       "c"
+      ],
+      "mark_points": [
+       {
+        "id": "d-m1",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Carnot efficiency "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "between 750 K and 300 K"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": " = 1 − 300 / 750 = 0.60"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       },
+       {
+        "id": "d-m2",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "0.39 is less than 0.60, so the cycle is consistent with / does not violate the second law"
+            }
+           ]
+          }
+         ]
+        },
+        "kind": "statement",
+        "alternative_group": null,
+        "route": null,
+        "accept_range": null,
+        "solution_step": null
+       }
+      ],
+      "notes": [
+       {
+        "kind": "ecf",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Allow ECF from (c)."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       },
+       {
+        "kind": "accept",
+        "content": {
+         "type": "doc",
+         "content": [
+          {
+           "type": "paragraph",
+           "content": [
+            {
+             "marks": [],
+             "type": "text",
+             "text": "Accept an argument that some thermal energy is rejected to the surroundings, so not all the energy supplied is converted to work "
+            },
+            {
+             "marks": [
+              {
+               "type": "optional"
+              }
+             ],
+             "type": "text",
+             "text": "Kelvin form"
+            },
+            {
+             "marks": [],
+             "type": "text",
+             "text": ", for the second mark only."
+            }
+           ]
+          }
+         ]
+        },
+        "mark_point_id": null
+       }
+      ]
+     }
+    ],
+    "total_marks": 9,
+    "solution_model": null
+   }
+  }
+ ]
+}

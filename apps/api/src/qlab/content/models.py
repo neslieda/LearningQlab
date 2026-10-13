@@ -54,6 +54,7 @@ class Question(Base):
         CheckConstraint(
             "syllabus_status IN ('in_syllabus', 'out_of_syllabus')", name="syllabus_status"
         ),
+        CheckConstraint("source_ref ~ '^[a-z0-9][a-z0-9/_#.-]{0,199}$'", name="source_ref"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
@@ -61,6 +62,8 @@ class Question(Base):
     rights_record_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("rights_record.id"))
     syllabus_version_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("syllabus_version.id"))
     syllabus_status: Mapped[str] = mapped_column(Text, server_default="in_syllabus")
+    # Stable key of an imported question (for example "pilot/a1-kinematics#1"); fixed at creation.
+    source_ref: Mapped[str | None] = mapped_column(Text, unique=True)
     created_by: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = created_at_column()
 

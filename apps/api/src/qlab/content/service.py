@@ -51,6 +51,7 @@ MAX_REASON_LENGTH = 500
 MAX_DOCUMENT_BYTES = 512 * 1024
 MAX_CHECK_DETAIL_BYTES = 8 * 1024
 _CHECK_CODE = re.compile(r"[a-z][a-z0-9_]{0,63}")
+_SOURCE_REF = re.compile(r"[a-z0-9][a-z0-9/_#.-]{0,199}")
 # Critical checks that must have passed on the current content before review and publishing.
 # Mirrored by the database function content_required_checks() (migration 0003); extend both
 # together.
@@ -109,6 +110,10 @@ class InvalidTransition(ContentError):
     """The version is not in a state from which this operation is allowed."""
 
 
+class DuplicateSourceRef(ContentError):
+    """A question with this source reference already exists."""
+
+
 class WorkingVersionExists(ContentError):
     """The question already has a version that is being worked on."""
 
@@ -133,6 +138,7 @@ class QuestionView:
     origin: Origin
     rights_record_id: uuid.UUID
     syllabus_version_id: uuid.UUID
+    source_ref: str | None
     created_by: str
     created_at: datetime
 
@@ -199,6 +205,7 @@ def _question_view(row: Question) -> QuestionView:
         origin=Origin(row.origin),
         rights_record_id=row.rights_record_id,
         syllabus_version_id=row.syllabus_version_id,
+        source_ref=row.source_ref,
         created_by=row.created_by,
         created_at=row.created_at,
     )
@@ -520,8 +527,13 @@ def create_question(
     rights_record_id: uuid.UUID,
     syllabus_version_id: uuid.UUID,
     origin: Origin = Origin.AUTHORED,
+    source_ref: str | None = None,
 ) -> QuestionVersionView:
     """Create a question and its first version (version 1, `draft`).
+
+    `source_ref` is the stable key of an imported question (lower-case letters, digits and
+    `/ _ # . -`, at most 200 characters; else ValueError). It cannot be changed later. A second
+    question with the same key raises DuplicateSourceRef.
 
     - `origin` other than `authored` raises OriginClosed (D-52), before anything else.
     - The rights record must permit display to everyone now, else RightsDenied.
@@ -541,19 +553,31 @@ def create_question(
     """
     if Origin(origin) is not Origin.AUTHORED:
         raise OriginClosed(f"origin {Origin(origin).value} is not accepted yet")
+    if source_ref is not None and not _SOURCE_REF.fullmatch(source_ref):
+        raise ValueError("source_ref is not a valid key")
     rights.require(session, rights_record_id, rights.Purpose.DISPLAY)
     syllabus.get_vocabulary(session, syllabus_version_id)
+    if source_ref is not None:
+        # Serialises concurrent imports of the same key; the unique constraint is the backstop.
+        session.execute(select(func.pg_advisory_xact_lock(func.hashtextextended(source_ref, 0))))
+        taken = session.scalar(select(Question.id).where(Question.source_ref == source_ref))
+        if taken is not None:
+            raise DuplicateSourceRef(source_ref)
     question = Question(
         origin=Origin.AUTHORED.value,
         rights_record_id=rights_record_id,
         syllabus_version_id=syllabus_version_id,
+        source_ref=source_ref,
         created_by=actor,
     )
     session.add(question)
     session.flush()
     version = QuestionVersion(question_id=question.id, version_no=1, created_by=actor)
     _write_content(session, version, question, document)
-    _audit(session, actor, "created", version)
+    if source_ref is None:
+        _audit(session, actor, "created", version)
+    else:
+        _audit(session, actor, "created", version, source_ref=source_ref)
     return _view(version)
 
 
@@ -861,6 +885,17 @@ def get_question(session: Session, question_id: uuid.UUID) -> QuestionView:
     question = session.get(Question, question_id)
     if question is None or not _displayable(session, question):
         raise NotFound(f"question {question_id}")
+    return _question_view(question)
+
+
+def find_question_by_source_ref(session: Session, source_ref: str) -> QuestionView | None:
+    """The question imported under this key, or None when there is none or its rights do not
+    permit display."""
+    question = session.scalars(
+        select(Question).where(Question.source_ref == source_ref)
+    ).one_or_none()
+    if question is None or not _displayable(session, question):
+        return None
     return _question_view(question)
 
 

@@ -100,18 +100,18 @@ Sorular Markdown'dan kurallı bir betikle çevrildi ([pilot/IMPORT_RULES.md](pil
     seçenekler "sözcük" sayıldı);
   - parçanın komut sözcüğü (17 parçada boş: parça bir bağlam cümlesiyle başlıyor ya da sözcük "Comment" ve sözlükte yok);
   - parçanın cevap türü (111 parçanın 6–9'u yanlış; komut sözcüğü boş olanlar "açıklama" sayıldı);
-  - şekil türü (anahtar sözcükle atanır; yanlış olabilir);
+  - şekil türü (28 şekil; tarifteki anahtar sözcükle atanır, ör. tarifinde "ampermetre" geçen bir deney düzeneği "devre şeması" sayıldı);
   - puan maddesinin türü (hepsi "ifade"), ölçme hedefi (yapılandırılmış sorularda boş).
 - **Markscheme alternatifleri yapılandırılmadı.** Madde içindeki `OR` ve `AND` koyu metin olarak durur; sistem bunları "tek puanın
   alternatifleri" olarak bilmez. `ALTERNATIVE 1 / 2` yolları yapılandırıldı. Beş soruda alternatif yol Notlar sütununa yazılmıştı;
   bunlar yol değil, içinde `✓` işaretleri duran düz nottur.
 - **Notlardaki ve çözüm açıklamalarındaki değişkenler çoğunlukla düz metindir** (yaklaşık 20 not; çoktan seçmeli çözümlerinin çoğu).
   Aynı değişken puan maddesinde matematik, notta düz harf olarak görünebilir.
-- **Unicode alt simge ve üs matematiğin dışında kalır**: kaynakta `θ₀`, `t′`, `t²` olarak yazılan yerlerde harf matematik, simge
+- **Unicode alt simge ve üs matematiğin dışında kalır** (38 yer): kaynakta `θ₀`, `t′`, `t²` olarak yazılan yerlerde harf matematik, simge
   düz metindir (`<sub>` ile yazılanlar tek matematik düğümüdür). Aynı büyüklüğün iki farklı gösterimi olabilir.
 - **Sayılar ve birimler yapılandırılmadı**: "18 m s⁻¹" düz metindir; değer–parametre eşleşmesi denetlenmez.
 - **Çözüm modeli** 29 yapılandırılmış sorunun 13'ünde var; 16'sında kaynak tablo kurallara uymadığı için boş. Var olanlarda
-  sonuç değerleri aktarılmadı, bazı adımların birimi boş, sabitler sabit tablosuna bağlı değil ve hiçbiri hesaplanarak doğrulanmadı.
+  sonuç değerleri aktarılmadı, 61 adımın 14'ünün birimi boş, sabitler sabit tablosuna bağlı değil ve hiçbiri hesaplanarak doğrulanmadı.
 - **Aktarılmayanlar**: markscheme ve formül zincirinden sonraki serbest yazar notları (12 paragraf; bazıları incelemeci için
   yararlı gerekçeler içerir) ve beş veri temelli sorudaki "Şekil notu" metni (cevabı içerebildiği için). Bunlar yalnızca Markdown'dadır.
 - **Türkçe içerik**: çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni

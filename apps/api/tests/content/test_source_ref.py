@@ -13,20 +13,22 @@ service.
 from __future__ import annotations
 
 import re
+import threading
 import uuid
+from collections.abc import Callable, Iterator
 
 import pytest
 from alembic import command
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
-from sqlalchemy import Connection, Engine, text
+from sqlalchemy import Connection, Engine, create_engine, text
 from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlalchemy.orm import Session
 
 from qlab.content import service as svc
 from qlab.content.schema import QuestionDocument
 from qlab.rights import service as rights
-from tests.conftest import alembic_config
+from tests.conftest import LOCAL_HOSTS, alembic_config
 from tests.content import samples
 from tests.content.support import (
     AUTHOR,
@@ -593,3 +595,236 @@ def test_the_restored_constraints_work_after_a_downgrade_and_upgrade(
         ):
             raw_keyed(connection, env, "Bad Key")
         transaction.rollback()
+
+
+def test_downgrade_to_0003_refuses_while_a_keyed_question_exists(engine: Engine) -> None:
+    with engine.connect() as connection:
+        transaction = connection.begin()
+        with Session(connection, join_transaction_mode="create_savepoint") as session:
+            env = make_env(session)
+            session.commit()
+        raw_keyed(connection, env, KEY)
+        raw_keyed(connection, env, None)
+
+        with pytest.raises(RuntimeError, match="source_ref"):
+            command.downgrade(alembic_config(connection), "0003")
+
+        assert column_present(connection)
+        assert {"uq_question_source_ref", "ck_question_source_ref"} <= constraint_names(connection)
+        assert stored_key(connection, raw_keyed_id(connection, KEY)) == KEY
+        transaction.rollback()
+    with engine.connect() as connection:
+        assert column_present(connection)
+
+
+def raw_keyed_id(connection: Connection, key: str) -> uuid.UUID:
+    value = connection.execute(
+        text("SELECT id FROM question WHERE source_ref = :k"), {"k": key}
+    ).scalar_one()
+    assert isinstance(value, uuid.UUID)
+    return value
+
+
+def test_downgrade_to_0003_still_removes_the_column_when_no_question_has_a_key(
+    engine: Engine,
+) -> None:
+    with engine.connect() as connection:
+        transaction = connection.begin()
+        with Session(connection, join_transaction_mode="create_savepoint") as session:
+            env = make_env(session)
+            session.commit()
+        unkeyed = raw_question(connection, env)
+        raw_keyed(connection, env, None)
+
+        command.downgrade(alembic_config(connection), "0003")
+
+        assert not column_present(connection)
+        assert not {"uq_question_source_ref", "ck_question_source_ref"} & constraint_names(
+            connection
+        )
+        still_there = connection.execute(
+            text("SELECT count(*) FROM question WHERE id = :q"), {"q": unkeyed}
+        ).scalar_one()
+        assert still_there == 1
+        transaction.rollback()
+
+
+# =============================================================================================
+# Two writers with the same key (the key is serialised before it is checked)
+# =============================================================================================
+
+WAIT_BLOCKED = 1.5
+WAIT_DONE = 20.0
+
+
+@pytest.fixture(scope="module")
+def aux_engine(engine: Engine) -> Iterator[Engine]:
+    """A database of its own with a committed environment: these tests commit."""
+    url = engine.url
+    base = url.database
+    if base is None or not re.fullmatch(r"[a-z0-9_]+_test", base) or url.host not in LOCAL_HOSTS:
+        raise RuntimeError("refusing to create a second database next to a non-test database")
+    name = f"{base}_key"
+    admin = create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    with admin.connect() as connection:
+        connection.execute(text(f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)'))
+        connection.execute(text(f'CREATE DATABASE "{name}"'))
+    aux = create_engine(url.set(database=name))
+    with aux.begin() as connection:
+        command.upgrade(alembic_config(connection), "head")
+    try:
+        yield aux
+    finally:
+        aux.dispose()
+        with admin.connect() as connection:
+            connection.execute(text(f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)'))
+        admin.dispose()
+
+
+@pytest.fixture(scope="module")
+def committed_env(aux_engine: Engine) -> Env:
+    with Session(aux_engine) as setup:
+        env = make_env(setup)
+        setup.commit()
+    return env
+
+
+class Background:
+    """Runs one call on its own session in a thread and keeps what it returned or raised."""
+
+    def __init__(self, aux: Engine, call: Callable[[Session], object]) -> None:
+        self.session = Session(aux)
+        self.result: object = None
+        self.error: BaseException | None = None
+        self._call = call
+        self.thread = threading.Thread(target=self._run, daemon=True)
+
+    def _run(self) -> None:
+        try:
+            self.session.execute(text("SET lock_timeout = '20s'"))
+            self.result = self._call(self.session)
+            self.session.commit()
+        except BaseException as error:  # noqa: BLE001  # whatever the call raises is the result
+            self.error = error
+            self.session.rollback()
+
+    def start(self) -> None:
+        self.thread.start()
+
+    def still_waiting(self) -> bool:
+        self.thread.join(timeout=WAIT_BLOCKED)
+        return self.thread.is_alive()
+
+    def finish(self) -> None:
+        self.thread.join(timeout=WAIT_DONE)
+        assert not self.thread.is_alive(), "the call never finished"
+        self.session.close()
+
+
+def create_keyed(env: Env, key: str) -> Callable[[Session], object]:
+    def call(session: Session) -> object:
+        return svc.create_question(
+            session,
+            actor="u_second",
+            document=other_document(),
+            rights_record_id=env.rights_record_id,
+            syllabus_version_id=env.syllabus_version_id,
+            source_ref=key,
+        )
+
+    return call
+
+
+def test_a_second_creator_of_the_same_key_waits_and_then_gets_duplicate_source_ref(
+    aux_engine: Engine, committed_env: Env
+) -> None:
+    key = f"lock/{uuid.uuid4().hex}"
+    first = Session(aux_engine)
+    waiting: Background | None = None
+    try:
+        svc.create_question(
+            first,
+            actor=AUTHOR,
+            document=document(),
+            rights_record_id=committed_env.rights_record_id,
+            syllabus_version_id=committed_env.syllabus_version_id,
+            source_ref=key,
+        )
+        waiting = Background(aux_engine, create_keyed(committed_env, key))
+        waiting.start()
+        assert waiting.still_waiting(), "the second creator did not wait for the first one"
+        first.commit()
+        waiting.finish()
+    finally:
+        first.rollback()
+        first.close()
+        if waiting is not None:
+            waiting.finish()
+
+    assert isinstance(waiting.error, svc.DuplicateSourceRef), repr(waiting.error)
+    assert not isinstance(waiting.error, IntegrityError)
+    with Session(aux_engine) as check:
+        found = svc.find_question_by_source_ref(check, key)
+        assert found is not None and found.created_by == AUTHOR
+        count_for_key = check.execute(
+            text("SELECT count(*) FROM question WHERE source_ref = :k"), {"k": key}
+        ).scalar_one()
+        assert count_for_key == 1
+
+
+def test_a_second_creator_succeeds_when_the_first_one_rolls_back(
+    aux_engine: Engine, committed_env: Env
+) -> None:
+    key = f"lock/{uuid.uuid4().hex}"
+    first = Session(aux_engine)
+    waiting: Background | None = None
+    try:
+        svc.create_question(
+            first,
+            actor=AUTHOR,
+            document=document(),
+            rights_record_id=committed_env.rights_record_id,
+            syllabus_version_id=committed_env.syllabus_version_id,
+            source_ref=key,
+        )
+        waiting = Background(aux_engine, create_keyed(committed_env, key))
+        waiting.start()
+        assert waiting.still_waiting(), "the second creator did not wait for the first one"
+        first.rollback()
+        waiting.finish()
+    finally:
+        first.rollback()
+        first.close()
+        if waiting is not None:
+            waiting.finish()
+
+    assert waiting.error is None, repr(waiting.error)
+    with Session(aux_engine) as check:
+        found = svc.find_question_by_source_ref(check, key)
+        assert found is not None and found.created_by == "u_second"
+
+
+def test_creators_of_different_keys_do_not_wait_for_each_other(
+    aux_engine: Engine, committed_env: Env
+) -> None:
+    first = Session(aux_engine)
+    other: Background | None = None
+    try:
+        svc.create_question(
+            first,
+            actor=AUTHOR,
+            document=document(),
+            rights_record_id=committed_env.rights_record_id,
+            syllabus_version_id=committed_env.syllabus_version_id,
+            source_ref=f"lock/{uuid.uuid4().hex}",
+        )
+        other = Background(aux_engine, create_keyed(committed_env, f"lock/{uuid.uuid4().hex}"))
+        other.start()
+        other.finish()  # a creator that had to wait would hit the 20 s limit and fail below
+    finally:
+        first.rollback()
+        first.close()
+        if other is not None:
+            other.finish()
+
+    assert other.error is None, repr(other.error)

@@ -210,12 +210,18 @@ uv run pytest                                          # veritabanı testleri ql
   ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md) §7).
 - Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
 - Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).
-- **Oturum başında denetlenecekler.** (1) Docker Desktop yeniden başlatmadan sonra kapalı gelir; veritabanı testleri ve içe aktarma
-  için önce Docker, sonra `docker compose -f infra/local/compose.yaml up -d --wait` çalıştırılır. (2) `git worktree list` ile `main`
+- **Oturum başında denetlenecekler.** (1) Docker Desktop açılışta kendiliğinden başlayacak şekilde ayarlandı (2026-10-14), ama bu
+  doğrulanmadan güvenilmez: `docker compose -f infra/local/compose.yaml ps` ile bakılır, kapalıysa önce Docker, sonra
+  `docker compose -f infra/local/compose.yaml up -d --wait` çalıştırılır. (2) `git worktree list` ile `main`
   dalının hangi klasörde açık olduğuna bakılır; bir dal aynı anda yalnızca bir klasörde açık olabilir, bu yüzden dilim dalı `main`'in
   açık olduğu klasörde ya da ondan türetilen yeni bir worktree'de açılır. (3) Matematik içeren testler için `apps/api/katex` altında
   `npm ci` yapılmış olmalıdır.
-- **Uzak depo ve CI.** Uzak depo henüz açılmadı (D-43, sahibinin kararı); `.github/workflows/ci.yml` bu yüzden **hiç çalışmadı**.
-  Yerelde aynı denetimler elle çalıştırılır: `ruff format --check .`, `ruff check .`, `mypy`, `lint-imports`,
-  `python -m qlab.content.pilot convert --check`, `pytest`. Uzak depo açıldığında ilk iş akışının sonucu ayrıca doğrulanır
-  (PostgreSQL servisi, Node 24 kurulumu ve `npm ci` adımı denenmemiştir).
+- **Uzak depo ve CI.** Uzak depo 2026-10-14'te sahibinin onayıyla açıldı (D-43): `github.com/neslieda/LearningQlab`, özel.
+  `.github/workflows/ci.yml` `main`'e her push'ta ve her pull request'te çalışır; ilk koşu geçti (PostgreSQL servisi, Node 24
+  kurulumu ve `npm ci` adımı dahil). Push öncesi yerelde aynı denetimler çalıştırılır: `ruff format --check .`, `ruff check .`,
+  `mypy`, `lint-imports`, `python -m qlab.content.pilot convert --check`, `pytest`.
+- **GitHub hesabı.** Depo `neslieda` hesabındadır. Makinede birden çok `gh` oturumu varsa etkin hesap değiştirilmez; `git push` ve
+  `git pull` depoya özel credential helper ile, `gh` komutları `GH_TOKEN=$(gh auth token --user neslieda)` ile çalıştırılır.
+- **CI'da bilinen uyarılar (hata değil, 2026-10-14).** Kullanılan action sürümleri (`actions/checkout@v4`, `actions/setup-node@v4`,
+  `astral-sh/setup-uv@v6`) Node 20 hedefliyor ve çalıştırıcıda Node 24'e zorlanıyor; `ubuntu-latest` etiketi çalıştırıcının
+  duyurusuna göre 2026-10-19'dan itibaren Ubuntu 26'ya geçecek. CI kritik alandır; sürüm değişikliği sahibinin onayını ister.

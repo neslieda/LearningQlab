@@ -84,7 +84,7 @@ M1'in tamamını ve M2'nin öğrenci önizlemesini kapsar; aşağıdaki M1 ve M2
 | 6 | Web iskeleti ve soru gösterim bileşeni; görsel regresyon |
 | 7 | Admin inceleme ve yerinde düzenleme |
 | 8 | Öğrenci önizlemesi |
-| 9 | Web'e açılış hazırlığı (barındırma, kimlik sağlayıcısı, uzak depo) — ayrı onay |
+| 9 | Web'e açılış hazırlığı (barındırma, kimlik sağlayıcısı) — ayrı onay. Uzak depo 2026-10-14'te öne alınıp açıldı (D-43) |
 
 **Kabul kriteri**
 - 130 pilot soru veritabanında; kaynak Markdown ile otomatik karşılaştırmada **görünen metinde** fark yok (karşılaştırma alan

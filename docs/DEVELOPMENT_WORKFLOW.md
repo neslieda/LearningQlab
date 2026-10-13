@@ -190,6 +190,7 @@ yapılır; ikisi karıştırılmaz. Paralel alt ajanlar abonelik kotasını hız
 
 ```
 docker compose -f infra/local/compose.yaml up -d      # PostgreSQL, 127.0.0.1:54340
+(cd apps/api/katex && npm ci --ignore-scripts)            # sabitlenmiş KaTeX; Node >= 24 gerekir
 cd apps/api
 export QLAB_DATABASE_URL=postgresql+psycopg://qlab:qlab-local-only@127.0.0.1:54340/qlab
 uv run alembic upgrade head
@@ -199,5 +200,8 @@ uv run pytest                                          # veritabanı testleri ql
 
 - Veritabanı testleri (`db` işaretli) gerçek PostgreSQL ister; sunucuya ulaşılamazsa atlanmaz, **başarısız olur**. Yalnızca saf
   testler: `uv run pytest -m "not db"`. Başka bir sunucu için `QLAB_TEST_DATABASE_URL` (veritabanı adı `_test` ile bitmelidir).
+- Matematik içeren kayıtlar Node ve `apps/api/katex/node_modules` ister; yoksa `RendererUnavailable` hatası alınır ve hiçbir şey
+  kaydedilmez. Node'suz çalıştırılabilen testler: `uv run pytest -m "not db and not node"`. Başka konumlar için `QLAB_NODE_BIN` ve
+  `QLAB_KATEX_DIR`.
 - Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
 - Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).

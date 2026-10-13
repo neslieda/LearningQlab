@@ -56,7 +56,7 @@ mimari kuralları zorlar. "Testler geçti" ifadesinin anlam taşıması için te
 | Kurum dışı hesap `source_original` göremez | Her okuma uç noktası için |
 | Kritik kontrol varken yayın olmaz | Arayüzü atlayıp doğrudan API ile denenir |
 | Sürüm değişmezliği | `draft` ve `needs_fix` dışındaki sürümün içeriğini değiştirme denemesi (servisle ve ham SQL ile) reddedilir (D-55) |
-| Her matematik düğümü render olur | Kayıt yolunda ve yayın öncesi toplu tarama |
+| Her matematik düğümü render olur | Kayıt yolunda (belge reddedilir) ve `submit` sırasında zorunlu `math_renders` kontrolüyle; saklı içeriğin toplu yeniden taraması KaTeX yükseltmesiyle birlikte yazılır |
 | Kill switch | Açıkken kaynak içerik adımları çalışmaz, kuyruktakiler iptal olur |
 | Reşit olmayan satın alması | Kural gerektiriyorsa `Consent` olmadan entitlement verilmez |
 
@@ -102,12 +102,13 @@ Setler ve ölçüler: [AI_PIPELINE.md](AI_PIPELINE.md) §13.
 
 - Sabit örnek set: her blok tipi, uzun formül, geniş tablo, çok parçalı soru, şekilli soru, MCQ.
 - Ekran görüntüleri masaüstü ve 375 px genişlikte karşılaştırılır.
-- KaTeX sürüm yükseltmesi yalnızca bu test geçerse yapılır.
+- KaTeX sürüm yükseltmesi yalnızca bu test geçerse yapılır; `KATEX_VERSION`, `package.json` ve kilit dosyası birlikte değişir ve saklı her matematik düğümü yeniden doğrulanır.
 - Native mobil (M7) aynı setle doğrulanır.
 
 ## 10. Ortamlar ve veri
 
 - Yerel: container ile PostgreSQL (`infra/local/compose.yaml`; [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) §13); sentetik veri üreten tohum betiği.
+- `node` işaretli testler Node ≥ 24 ve `apps/api/katex` içinde `npm ci` ister; veritabanı gibi, eksikse atlanmaz, başarısız olur.
 - Veritabanı testleri migration'ları boş bir veritabanına uygulayarak başlar; her test kendi transaction'ında çalışır ve geri alınır.
 - Staging: production ile aynı yapı; gerçek öğrenci verisi kopyalanmaz.
 - Test verisinde gerçek kaynak soru bulunmaz; sentetik sorular kullanılır.

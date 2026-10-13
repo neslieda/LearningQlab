@@ -30,7 +30,10 @@ packages = ["src/qlab"]
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-ra --strict-markers"
-markers = ["db: needs the PostgreSQL test database (infra/local/compose.yaml)"]
+markers = [
+    "db: needs the PostgreSQL test database (infra/local/compose.yaml)",
+    "node: needs Node.js and apps/api/katex/node_modules (npm ci)",
+]
 
 [tool.ruff]
 line-length = 100

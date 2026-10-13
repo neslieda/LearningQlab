@@ -33,6 +33,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from qlab.audit import service as audit
+from qlab.content import math
 from qlab.content.models import (
     WORKING_STATUSES,
     MarkPoint,
@@ -51,8 +52,9 @@ MAX_DOCUMENT_BYTES = 512 * 1024
 MAX_CHECK_DETAIL_BYTES = 8 * 1024
 _CHECK_CODE = re.compile(r"[a-z][a-z0-9_]{0,63}")
 # Critical checks that must have passed on the current content before review and publishing.
-# Mirrored in the database guard (migration 0002); extend both together.
-REQUIRED_CHECKS = ("schema_valid", "vocabulary_valid")
+# Mirrored by the database function content_required_checks() (migration 0003); extend both
+# together.
+REQUIRED_CHECKS = ("schema_valid", "vocabulary_valid", "math_renders")
 
 
 class Origin(StrEnum):
@@ -323,7 +325,12 @@ def _vocabulary_errors(
 
 
 def _write_content(
-    session: Session, version: QuestionVersion, question: Question, document: QuestionDocument
+    session: Session,
+    version: QuestionVersion,
+    question: Question,
+    document: QuestionDocument,
+    *,
+    check_math: bool = True,
 ) -> None:
     """Store the document on the version and rebuild every row derived from it."""
     encoded = document.model_dump_json()
@@ -333,6 +340,10 @@ def _write_content(
         raise InvalidDocument(("document contains a NUL character",))
     vocabulary = syllabus.get_vocabulary(session, question.syllabus_version_id)
     errors = _vocabulary_errors(document, vocabulary)
+    if errors:
+        raise InvalidDocument(errors)
+    # Every math node must render now, or the document is not stored (CLAUDE.md rule 6).
+    errors = math.check(document) if check_math else ()
     if errors:
         raise InvalidDocument(errors)
     nodes = (document.primary_syllabus_node, *document.secondary_syllabus_nodes)
@@ -469,11 +480,31 @@ def _check_vocabulary(
     return CheckResult("vocabulary_valid", Severity.CRITICAL, outcome, {"errors": list(errors)})
 
 
-# The checks `submit` runs itself. Later slices append to this list (KaTeX rendering) or record
-# results from outside with `record_check` (the verification pipeline).
+def _check_math(session: Session, version: QuestionVersion, question: Question) -> CheckResult:
+    try:
+        document = QuestionDocument.model_validate(version.document)
+    except ValidationError:
+        return CheckResult("math_renders", Severity.CRITICAL, Outcome.NOT_APPLICABLE, {})
+    errors = math.check(document)
+    outcome = Outcome.FAILED if errors else Outcome.PASSED
+    return CheckResult(
+        "math_renders",
+        Severity.CRITICAL,
+        outcome,
+        {
+            "errors": len(errors),
+            "nodes": sum(1 for _ in math.math_nodes(document)),
+            "katex": math.KATEX_VERSION,
+        },
+    )
+
+
+# The checks `submit` runs itself. External results (the verification pipeline) arrive through
+# `record_check`.
 _OWN_CHECKS: list[Callable[[Session, QuestionVersion, Question], CheckResult]] = [
     _check_schema,
     _check_vocabulary,
+    _check_math,
 ]
 
 
@@ -498,6 +529,9 @@ def create_question(
     - The document's exam section, command terms and syllabus nodes (leaf nodes only) must
       belong to the syllabus version, else InvalidDocument listing every problem. A document
       over 512 kB or containing a NUL character is also InvalidDocument.
+    - Every math node must use only allowed LaTeX commands and render in the pinned KaTeX
+      (`qlab.content.math`), else InvalidDocument naming each node. If the renderer cannot be
+      run, `qlab.content.math.RendererUnavailable` is raised and nothing is saved.
 
     Nothing is written when an error is raised. On success the derived rows exist (one `part`
     per part, or a single one with key "mcq" for a multiple-choice question; one `mark_point`
@@ -564,8 +598,11 @@ def record_check(
     failed critical result sends the next `submit` to `needs_fix` and blocks publishing; it
     is discarded only when the content actually changes. Audit:
     `question_version.check_recorded`. Unknown id: NotFound. ValueError when the code is not a
-    lower-case identifier of at most 64 characters or `detail` is not JSON of at most 8 kB.
+    lower-case identifier of at most 64 characters, is one of the service's own required
+    checks, or `detail` is not JSON of at most 8 kB.
     """
+    if result.code in REQUIRED_CHECKS:
+        raise ValueError(f"check {result.code} is run by submit and cannot be recorded")
     if not _CHECK_CODE.fullmatch(result.code):
         raise ValueError(f"check code {result.code[:80]!r} is not a short lower-case identifier")
     try:
@@ -594,9 +631,12 @@ def submit(session: Session, *, actor: str, version_id: uuid.UUID) -> VersionSta
     """Run the automatic checks on a `draft` version and move it on.
 
     `draft` → `auto_checking` → `in_review`, or `needs_fix` when a critical check has failed
-    or a required check (`schema_valid`, `vocabulary_valid`) has not passed. The service's own
+    or a required check (`schema_valid`, `vocabulary_valid`, `math_renders`) has not
+    passed. The service's own
     checks are run and stored; results recorded earlier with `record_check` count too.
-    Unverified visuals do not stop a review; they stop publishing. Audit:
+    Unverified visuals do not stop a review; they stop publishing. If the math renderer
+    cannot be run, `qlab.content.math.RendererUnavailable` is raised and the version stays
+    `draft`. Audit:
     `question_version.submitted`, then `question_version.checks_passed` or
     `question_version.checks_failed` (with the blocking codes). Other status:
     InvalidTransition. Rights as in `create_question`.
@@ -775,7 +815,8 @@ def start_revision(session: Session, *, actor: str, question_id: uuid.UUID) -> Q
     the latest version that was not rejected; if all were rejected, of the latest. Its number
     is the highest existing number plus one. The source version is not changed. If the
     question already has a working version (`draft`, `auto_checking`, `needs_fix`, `in_review`
-    or `approved`) WorkingVersionExists is raised. Rights as in `create_question`. Audit:
+    or `approved`) WorkingVersionExists is raised. The copy is not checked against the math
+    rules (it may predate them); `submit` checks it. Rights as in `create_question`. Audit:
     `question_version.created` with `based_on` (the source version's id). Unknown id: NotFound.
     """
     question = _lock_question(session, question_id)
@@ -798,7 +839,16 @@ def start_revision(session: Session, *, actor: str, question_id: uuid.UUID) -> Q
     version = QuestionVersion(
         question_id=question_id, version_no=versions[-1].version_no + 1, created_by=actor
     )
-    _write_content(session, version, question, QuestionDocument.model_validate(source.document))
+    # A copy is not new content: math that the current rules refuse (after the allowed list or
+    # the KaTeX version changed) is carried into the draft so that it can be corrected, and the
+    # math_renders check stops it at submit.
+    _write_content(
+        session,
+        version,
+        question,
+        QuestionDocument.model_validate(source.document),
+        check_math=False,
+    )
     _audit(session, actor, "created", version, based_on=str(source.id))
     return _view(version)
 

@@ -623,34 +623,31 @@ def test_deleting_a_required_check_in_needs_fix_blocks_review_again(
 
 # --- required checks: a missing check is not a pass (CLAUDE.md rule 8) ----------------------
 
-REQUIRED_PROBLEMS = {
-    "no_check_rows_at_all": ((), ()),
-    "only_schema_valid": (("schema_valid",), ()),
-    "only_vocabulary_valid": (("vocabulary_valid",), ()),
-    "required_as_warning": (
-        ("schema_valid",),
-        (("vocabulary_valid", "warning", "passed"),),
-    ),
-    "required_not_applicable": (
-        ("schema_valid",),
-        (("vocabulary_valid", "critical", "not_applicable"),),
-    ),
-    "required_as_warning_not_applicable": (
-        (),
-        (
-            ("schema_valid", "warning", "not_applicable"),
-            ("vocabulary_valid", "warning", "passed"),
+
+def _required_problems() -> dict[str, tuple[tuple[str, ...], tuple[tuple[str, str, str], ...]]]:
+    """Each case: required codes stored properly, and further rows stored as given."""
+    cases: dict[str, tuple[tuple[str, ...], tuple[tuple[str, str, str], ...]]] = {
+        "no_check_rows_at_all": ((), ()),
+        "other_checks_do_not_count": (
+            (),
+            (("ext_check", "critical", "passed"), ("another", "critical", "passed")),
         ),
-    ),
-    "other_checks_do_not_count": (
-        (),
-        (("ext_check", "critical", "passed"), ("another", "critical", "passed")),
-    ),
-}
+    }
+    for code in REQUIRED_CHECKS:
+        others = tuple(c for c in REQUIRED_CHECKS if c != code)
+        cases[f"{code}_missing"] = (others, ())
+        cases[f"{code}_only"] = ((code,), ())
+        cases[f"{code}_as_warning"] = (others, ((code, "warning", "passed"),))
+        cases[f"{code}_not_applicable"] = (others, ((code, "critical", "not_applicable"),))
+        cases[f"{code}_warning_not_applicable"] = (others, ((code, "warning", "not_applicable"),))
+    return cases
+
+
+REQUIRED_PROBLEMS = _required_problems()
 
 
 @pytest.mark.parametrize("case", list(REQUIRED_PROBLEMS))
-def test_a_version_cannot_enter_review_unless_both_required_checks_passed_as_critical(
+def test_a_version_cannot_enter_review_unless_every_required_check_passed_as_critical(
     connection: Connection, env: Env, case: str
 ) -> None:
     proper, other = REQUIRED_PROBLEMS[case]
@@ -672,7 +669,7 @@ def test_a_version_cannot_enter_review_unless_both_required_checks_passed_as_cri
     assert status_of(connection, version_id) == "auto_checking"
 
 
-def test_a_version_with_both_required_checks_passed_may_enter_review(
+def test_a_version_with_every_required_check_passed_may_enter_review(
     connection: Connection, env: Env
 ) -> None:
     question_id = raw_question(connection, env)
@@ -1577,8 +1574,7 @@ def test_a_temporary_check_table_does_not_hide_a_stored_failed_critical_check(
         connection,
         env,
         (
-            ("schema_valid", "critical", "passed"),
-            ("vocabulary_valid", "critical", "passed"),
+            *((code, "critical", "passed") for code in REQUIRED_CHECKS),
             ("ext_check", "critical", "failed"),
         ),
     )
@@ -1709,3 +1705,166 @@ def test_a_temporary_question_table_cannot_reopen_a_closed_origin(
         s=env.syllabus_version_id,
     )
     assert "origin generated is closed" in message
+
+
+# =============================================================================================
+# The required checks come from one SQL function (migration 0003)
+# =============================================================================================
+
+
+def test_content_required_checks_names_exactly_the_three_codes(connection: Connection) -> None:
+    codes = connection.execute(text("SELECT public.content_required_checks()")).scalar_one()
+    assert list(codes) == ["schema_valid", "vocabulary_valid", "math_renders"]
+    assert set(codes) == set(REQUIRED_CHECKS)
+    assert len(codes) == len(set(codes))
+
+
+def test_content_required_checks_pins_its_search_path(connection: Connection) -> None:
+    config = connection.execute(
+        text(
+            "SELECT p.proconfig FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
+            "WHERE n.nspname = 'public' AND p.proname = 'content_required_checks'"
+        )
+    ).scalar_one()
+    settings = [c for c in config or [] if c.startswith("search_path=")]
+    assert len(settings) == 1 and settings[0].rstrip().endswith("pg_temp")
+
+
+def test_content_required_checks_is_a_stable_function_without_side_effects(
+    connection: Connection,
+) -> None:
+    volatility = connection.execute(
+        text("SELECT provolatile::text FROM pg_proc WHERE proname = 'content_required_checks'")
+    ).scalar_one()
+    assert volatility == "i"
+
+
+def test_a_version_without_math_renders_cannot_enter_review(
+    connection: Connection, env: Env
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    raw_check(connection, version_id, "schema_valid", "critical", "passed")
+    raw_check(connection, version_id, "vocabulary_valid", "critical", "passed")
+    raw_walk(connection, version_id, "auto_checking")
+    message = rejected(
+        connection, "UPDATE question_version SET status = 'in_review' WHERE id = :v", v=version_id
+    )
+    assert "cannot move to in_review: a required check has not passed" in message
+    assert status_of(connection, version_id) == "auto_checking"
+    raw_check(connection, version_id, "math_renders", "critical", "passed")
+    connection.execute(
+        text("UPDATE question_version SET status = 'in_review' WHERE id = :v"), {"v": version_id}
+    )
+    assert status_of(connection, version_id) == "in_review"
+
+
+@pytest.mark.parametrize(
+    ("severity", "outcome"),
+    [("warning", "passed"), ("critical", "not_applicable"), ("warning", "not_applicable")],
+)
+def test_math_renders_must_be_critical_and_passed(
+    connection: Connection, env: Env, severity: str, outcome: str
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    raw_check(connection, version_id, "schema_valid", "critical", "passed")
+    raw_check(connection, version_id, "vocabulary_valid", "critical", "passed")
+    raw_check(connection, version_id, "math_renders", severity, outcome)
+    raw_walk(connection, version_id, "auto_checking")
+    message = rejected(
+        connection, "UPDATE question_version SET status = 'in_review' WHERE id = :v", v=version_id
+    )
+    assert "a required check has not passed" in message
+
+
+def test_a_failed_math_check_blocks_review_with_the_failed_critical_message(
+    connection: Connection, env: Env
+) -> None:
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    for code in ("schema_valid", "vocabulary_valid"):
+        raw_check(connection, version_id, code, "critical", "passed")
+    raw_check(connection, version_id, "math_renders", "critical", "failed")
+    raw_walk(connection, version_id, "auto_checking")
+    message = rejected(
+        connection, "UPDATE question_version SET status = 'in_review' WHERE id = :v", v=version_id
+    )
+    assert "a critical check failed" in message
+
+
+def test_no_published_version_lacks_math_renders(connection: Connection, env: Env) -> None:
+    """From every status a version can be in, publishing without the three codes is refused."""
+    question_id = raw_question(connection, env)
+    version_id = raw_version(connection, question_id)
+    raw_check(connection, version_id, "schema_valid", "critical", "passed")
+    raw_check(connection, version_id, "vocabulary_valid", "critical", "passed")
+    for status in ("auto_checking", "needs_fix", "draft", "auto_checking"):
+        connection.execute(
+            text("UPDATE question_version SET status = :s WHERE id = :v"),
+            {"s": status, "v": version_id},
+        )
+    for target in ("in_review", "approved", "published", "withdrawn"):
+        with pytest.raises(DBAPIError), connection.begin_nested():
+            connection.execute(
+                text("UPDATE question_version SET status = :s WHERE id = :v"),
+                {"s": target, "v": version_id},
+            )
+    assert status_of(connection, version_id) == "auto_checking"
+
+
+def test_the_runtime_role_cannot_replace_the_required_list(
+    connection: Connection, env: Env
+) -> None:
+    version_id = auto_checking_version_with(
+        connection,
+        env,
+        (("schema_valid", "critical", "passed"), ("vocabulary_valid", "critical", "passed")),
+    )
+    become_runtime_role(connection)
+    message = rejected(
+        connection,
+        "CREATE OR REPLACE FUNCTION public.content_required_checks() RETURNS text[] "
+        "LANGUAGE sql AS $$ SELECT ARRAY['schema_valid']::text[] $$",
+    )
+    assert "must be owner" in message or "permission denied" in message
+    assert "must be owner" in rejected(connection, "DROP FUNCTION public.content_required_checks()")
+    assert connection.execute(text("SELECT public.content_required_checks()")).scalar_one() == list(
+        REQUIRED_CHECKS
+    )
+    message = rejected(
+        connection,
+        "UPDATE public.question_version SET status = 'in_review' WHERE id = :v",
+        v=version_id,
+    )
+    assert "a required check has not passed" in message
+
+
+def test_a_temporary_function_of_the_same_name_does_not_shorten_the_required_list(
+    connection: Connection, env: Env
+) -> None:
+    version_id = auto_checking_version_with(
+        connection,
+        env,
+        (("schema_valid", "critical", "passed"), ("vocabulary_valid", "critical", "passed")),
+    )
+    become_runtime_role(connection)
+    connection.execute(
+        text(
+            "CREATE FUNCTION pg_temp.content_required_checks() RETURNS text[] LANGUAGE sql AS "
+            "$$ SELECT ARRAY['schema_valid', 'vocabulary_valid']::text[] $$"
+        )
+    )
+    # a session that tries the unqualified name, with pg_temp first, only fools itself
+    connection.execute(text("SET LOCAL search_path = pg_temp, public"))
+    message = rejected(
+        connection,
+        "UPDATE public.question_version SET status = 'in_review' WHERE id = :v",
+        v=version_id,
+    )
+    assert "a required check has not passed" in message
+    shadowed = connection.execute(text("SELECT pg_temp.content_required_checks()")).scalar_one()
+    assert shadowed == ["schema_valid", "vocabulary_valid"]
+    assert connection.execute(text("SELECT public.content_required_checks()")).scalar_one() == list(
+        REQUIRED_CHECKS
+    )

@@ -1,0 +1,12 @@
+{
+  "name": "qlab-katex-check",
+  "private": true,
+  "type": "module",
+  "description": "Renders LaTeX with the pinned KaTeX version so the backend can refuse math that does not render.",
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "katex": "0.19.0"
+  }
+}

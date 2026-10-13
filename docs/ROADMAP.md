@@ -78,7 +78,7 @@ M1'in tamamını ve M2'nin öğrenci önizlemesini kapsar; aşağıdaki M1 ve M2
 | 1 | Soru şeması v1 (Pydantic) ve testleri |
 | 2a | Temel: yerel PostgreSQL, Alembic, `audit` (yalnızca eklenen kayıt), asgari `rights` (fail-closed sorgu), asgari `syllabus` (ağaç, sınav biçimi sözlüğü) (D-51) |
 | 2b | `content` tabloları ve servisi: sürümler, durumlar, yayın koşulları, sözlük doğrulaması, audit (D-51, D-52, D-53) |
-| 3 | KaTeX kayıt kontrolü |
+| 3 | KaTeX kayıt kontrolü: kapalı komut listesi, sabit sürümlü KaTeX (Node alt süreci), zorunlu `math_renders` kontrolü (D-57) |
 | 4 | 130 pilot sorunun şemaya çevrilmesi ve içe aktarma komutu |
 | 5 | API (admin ve öğrenci önizlemesi), yetki katmanı, yerel geliştirme kimliği, üretilen istemci |
 | 6 | Web iskeleti ve soru gösterim bileşeni; görsel regresyon |

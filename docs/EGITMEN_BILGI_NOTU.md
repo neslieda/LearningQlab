@@ -1,6 +1,6 @@
 # Eğitmen bilgi notu
 
-> **Durum: TASLAK.** Tarih: 2026-10-13. Kapsam: M1-G dilim 3'ün sonu.
+> **Durum: TASLAK.** Tarih: 2026-10-13. Kapsam: M1-G dilim 4'ün sonu.
 > Okur: fizik eğitmenleri ve incelemeciler. Sistemin neye izin vermediği ayrı belgededir: [SINIRLAR.md](SINIRLAR.md).
 > Bu not üç şeyi anlatır: sizden hangi doğrulamalar bekleniyor, bir soru hangi adımlardan geçiyor, soru yazarken ve incelerken
 > nelere dikkat edilmeli. Arayüz henüz yok (dilim 6–8); §1'deki doğrulamalar belgeler üzerinden şimdi yapılabilir.
@@ -20,6 +20,8 @@ Aşağıdakilerin hepsi taslaktır ve sistem bunlara dayanarak çalışıyor. Ya
 | 7 | 130 pilot soru: fizik doğruluğu, tek doğru cevap, müfredat sınırı, düzey | [pilot sorular](pilot/) ve [inceleme raporları](pilot/review/) | Hiçbiri henüz insan onayından geçmedi |
 | 8 | Pilot Paper 2 sorularının çoğu 9 puan ve SL etiketli; SL kısa soru aralığı 4–6. Bölünsün mü, yalnız HL mi sayılsın? | müfredat analizi §2.1 | İçe aktarmadan önce karar gerekir |
 | 9 | Matematik komut listesi: fizik sorularında gereken ama listede olmayan gösterim var mı? | [SINIRLAR.md](SINIRLAR.md) §5 | Listede olmayan komutla soru kaydedilemez |
+
+| 10 | "Comment" komut sözcüğü pilot sorularda kullanılıyor (üç parça) ama komut sözcüğü listesinde yok. Listeye eklensin mi, yoksa bu parçalar başka sözcükle mi yazılsın? | müfredat analizi §2; `a1` soru 5 (d), `b3` soru 6 (f), `d3` soru 6 (d) | Listede olmayan sözcük sisteme "boş" olarak girdi |
 
 Yanıtlarınızı düğüm ya da soru numarasıyla, kısa notlar halinde iletmeniz yeterli.
 
@@ -68,6 +70,29 @@ Ayrıntılı ölçütler: [pilot soru yazım standardı](pilot/AUTHORING_STANDAR
 - **Sabitler** soruya gömülmez; sabitler tablosundaki değerler kullanılır. Tabloda olmayan bir sabit gerekiyorsa soruda verilir.
 - **Şekil gereken soru** yazılabilir: şekil metinle tarif edilir. Soru incelenir ama görsel hazır olana kadar yayınlanmaz.
 - **Çoktan seçmelide** her yanlış seçeneğin dayandığı yanılgı yazılmak zorundadır; yazılmazsa soru kaydedilmez.
+
+## 4.1 İçe aktarılan pilot sorularda önce bakılacaklar
+
+130 pilot soru sisteme otomatik bir betikle çevrildi. Metin kaynağıyla aynıdır, ama aşağıdaki alanlar **tahminle dolduruldu** ve
+incelemede ilk düzeltilecek yerlerdir ([SINIRLAR.md](SINIRLAR.md) §7.1; soru bazında liste: `content/pilot/CONVERSION_REPORT.md`):
+
+1. **Seçenek türü** (çoktan seçmeli), **komut sözcüğü** ve **cevap türü** (her parça), **şekil türü**. Yanlışsa düzeltin; boş komut
+   sözcüğünü doldurun.
+2. **Alternatifler.** Markscheme'de `OR` ile ayrılmış alternatifler sistemde düz metindir. Alternatiflerin ayrı ayrı işaretlenmesi
+   gerekiyorsa maddeyi bölüp alternatif grubu verin.
+3. **Notlar sütunundaki alternatif yollar** (beş soru: `b1`, `b3`, `b5`, `d2`, `d4` setlerinin 5. soruları) düz not olarak geldi;
+   gerçek bir çözüm yoluysa markscheme'e yol olarak taşıyın.
+4. **Değişkenler.** Notlarda ve çözüm açıklamalarında değişkenler düz harf olarak görünebilir; `θ₀`, `t′` gibi yazımlarda alt simge
+   matematiğin dışındadır. Gösterim önemliyse matematik olarak yeniden yazın.
+5. **Çözüm modeli** sorunun yarısından azında var ve hiçbiri hesaplanarak doğrulanmadı; sayısal cevabı kendiniz hesaplayın.
+6. **Yazar notları sistemde yok.** Bazı sorularda markscheme'in ardından yazılmış gerekçeler (ör. yön gerekçesi, bilerek verilmiş
+   fazladan veri, çeldirici yolların neden anahtara düşmediği) yalnızca Markdown dosyasındadır: `a5` soru 5, `c1` soru 6, `c3` soru 6,
+   `d2` soru 4, `d4` soru 5. İncelerken kaynak dosyaya da bakın.
+7. **Şekil tarifleri personel içindir.** Veri temelli sorulardaki "Şekil notu" cevabı içerebildiği için sisteme alınmadı.
+8. **Türkçe açıklamalar.** Çözüm ve çeldirici gerekçeleri Türkçedir; öğrenciye açılmadan önce İngilizceye çevrilmeleri gerekir.
+
+Bir soruyu sistemde düzelttikten sonra doğru olan sistemdeki halidir; kaynak Markdown güncellenmez ve yeniden içe aktarma
+düzeltmenizi ezmez.
 
 ## 5. Gerekçe yazarken
 

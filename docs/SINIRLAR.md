@@ -1,6 +1,6 @@
 # Sınırlar
 
-> **Durum: TASLAK.** Tarih: 2026-10-13. Kapsam: M1-G dilim 3'ün sonu (şema, veritabanı, content servisi, KaTeX kontrolü).
+> **Durum: TASLAK.** Tarih: 2026-10-13. Kapsam: M1-G dilim 4'ün sonu (şema, veritabanı, content servisi, KaTeX kontrolü, pilot soruların içe aktarılması).
 > Okur: eğitmenler ve incelemeciler. Bu belge sistemin **bugün** ne yapamadığını ve neye izin vermediğini düz bir dille anlatır.
 > Her dilim birleştiğinde güncellenir. Eğitmenlerden beklenenler ayrı belgededir: [EGITMEN_BILGI_NOTU.md](EGITMEN_BILGI_NOTU.md).
 > Teknik ayrıntı için köşeli parantez içindeki belgelere bakılır; bu belgeyle çelişirlerse onlar geçerlidir.
@@ -12,7 +12,7 @@
 | Web arayüzü (soru görüntüleme, inceleme, düzenleme) | Yok. Dilim 6–8'de gelir |
 | Giriş, hesaplar ve roller | Yok. Dilim 5'te gelir; o zamana kadar kimin neyi yapabileceği denetlenmez |
 | Öğrenci görünümü | Yok. Dilim 8'de gelir |
-| Soruların sisteme yüklenmiş hali | 130 pilot soru henüz veritabanında değil (dilim 4) |
+| Soruların sisteme yüklenmiş hali | 130 pilot soru şemaya çevrildi ve **taslak** olarak içe aktarılabiliyor (§7.1); görüntüleyecek arayüz henüz yok |
 | Şekil, grafik ve diyagram | Üretilemiyor ve yüklenemiyor |
 | Sayısal cevapların kodla doğrulanması | Yok (formül yorumlayıcısı M3'te) |
 | Deneme sınavı, otomatik puanlama, AI geri bildirimi, analitik, ödeme | Yok |
@@ -83,10 +83,49 @@
 ## 7. İçeriğin bugünkü durumu
 
 - 130 pilot soru **incelenmemiş taslaktır**; hiçbiri eğitmen onayından geçmedi. Yapay zekâ yardımıyla, müfredat analizinden yazıldı.
-- Pilot sorular düz metinle yazıldı (LaTeX kullanmıyor); sisteme alınırken matematik ve birimler §5'teki kurallara çevrilecek.
 - Müfredat düğüm listesi, komut sözcükleri, sabitler tablosu ve biçim profili taslaktır ve uzman teyidi bekliyor
   ([EGITMEN_BILGI_NOTU.md](EGITMEN_BILGI_NOTU.md) §1).
-- Bilinen uyumsuzluk: pilot Paper 2 sorularının çoğu 9 puan ve SL etiketli; örnek kâğıtlarda SL kısa sorular 4–6 puan.
+- Bilinen uyumsuzluk: pilot Paper 2 sorularının çoğu 9 puan ve SL etiketli; örnek kâğıtlarda SL kısa sorular 4–6 puan. Sorular
+  etiketlendikleri gibi aktarıldı.
+
+### 7.1 İçe aktarılan soruların sınırları
+
+Sorular Markdown'dan kurallı bir betikle çevrildi ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md)). Otomatik test, her sorunun
+**görünen metninin** kaynağıyla aynı olduğunu doğrular; aşağıdakileri **doğrulamaz**. Ayrıntılı sayılar ve soru bazında liste:
+`content/pilot/CONVERSION_REPORT.md`.
+
+- **Kuralla doldurulmuş, güvenilmemesi gereken alanlar.** Kaynakta yazmadığı halde şema zorunlu tuttuğu için sabit kurallarla
+  dolduruldu; bağımsız incelemenin kaba hata tahmini parantez içinde:
+  - çoktan seçmelide seçenek türü (101 sorunun yaklaşık 7'si kesin yanlış, 6'sı tartışmalı; ör. içinde `0` ya da `π` geçen sayısal
+    seçenekler "sözcük" sayıldı);
+  - parçanın komut sözcüğü (17 parçada boş: parça bir bağlam cümlesiyle başlıyor ya da sözcük "Comment" ve sözlükte yok);
+  - parçanın cevap türü (111 parçanın 6–9'u yanlış; komut sözcüğü boş olanlar "açıklama" sayıldı);
+  - şekil türü (anahtar sözcükle atanır; yanlış olabilir);
+  - puan maddesinin türü (hepsi "ifade"), ölçme hedefi (yapılandırılmış sorularda boş).
+- **Markscheme alternatifleri yapılandırılmadı.** Madde içindeki `OR` ve `AND` koyu metin olarak durur; sistem bunları "tek puanın
+  alternatifleri" olarak bilmez. `ALTERNATIVE 1 / 2` yolları yapılandırıldı. Beş soruda alternatif yol Notlar sütununa yazılmıştı;
+  bunlar yol değil, içinde `✓` işaretleri duran düz nottur.
+- **Notlardaki ve çözüm açıklamalarındaki değişkenler çoğunlukla düz metindir** (yaklaşık 20 not; çoktan seçmeli çözümlerinin çoğu).
+  Aynı değişken puan maddesinde matematik, notta düz harf olarak görünebilir.
+- **Unicode alt simge ve üs matematiğin dışında kalır**: kaynakta `θ₀`, `t′`, `t²` olarak yazılan yerlerde harf matematik, simge
+  düz metindir (`<sub>` ile yazılanlar tek matematik düğümüdür). Aynı büyüklüğün iki farklı gösterimi olabilir.
+- **Sayılar ve birimler yapılandırılmadı**: "18 m s⁻¹" düz metindir; değer–parametre eşleşmesi denetlenmez.
+- **Çözüm modeli** 29 yapılandırılmış sorunun 13'ünde var; 16'sında kaynak tablo kurallara uymadığı için boş. Var olanlarda
+  sonuç değerleri aktarılmadı, bazı adımların birimi boş, sabitler sabit tablosuna bağlı değil ve hiçbiri hesaplanarak doğrulanmadı.
+- **Aktarılmayanlar**: markscheme ve formül zincirinden sonraki serbest yazar notları (12 paragraf; bazıları incelemeci için
+  yararlı gerekçeler içerir) ve beş veri temelli sorudaki "Şekil notu" metni (cevabı içerebildiği için). Bunlar yalnızca Markdown'dadır.
+- **Türkçe içerik**: çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni
+  İngilizcedir. Ürün İngilizce olduğundan bunlar öğrenciye açılmadan önce çevrilmelidir.
+- **24 soru yayınlanamaz**: şekil ya da grafik gerektiriyor ve yalnızca tarifi var (§2).
+- Altı sorunun kazanım cümlesinde ham `*` işaretleri kaldı.
+
+### 7.2 Yeniden içe aktarma
+
+- İçe aktarma komutu yeniden çalıştırılabilir; var olan soruyu ikinci kez oluşturmaz.
+- **Elle düzeltilmiş bir taslağı ezmez.** Kaynak Markdown sonradan değişirse yalnızca kimsenin dokunmadığı taslaklar güncellenir;
+  düzeltilmiş, incelemeye girmiş ya da yayınlanmış sorular olduğu gibi kalır ve raporda "atlandı" olarak listelenir. Sonuç: bir soru
+  sistemde düzeltildikten sonra Markdown'daki hali ile sistemdeki hali ayrışır; doğru olan sistemdekidir.
+- Platformun kendi içerik hak kaydı iptal edilirse içe aktarma durur ve yeni kayıt açmaz; bu bir insan kararı gerektirir.
 
 ## 8. Hukuki belirsizlikler ⚖️
 

@@ -62,7 +62,7 @@ exam_format(id, syllabus_version_id, code, definition jsonb)
 Kod: `apps/api/src/qlab/content/models.py`, `service.py`; migration `0002_content.py`.
 
 ```
-question(id, origin, rights_record_id, syllabus_version_id, syllabus_status, created_by, created_at)
+question(id, origin, rights_record_id, syllabus_version_id, syllabus_status, source_ref, created_by, created_at)
 question_version(id, question_id, version_no, status, schema_version, document jsonb, content_sha256,
                  question_class, exam_section, levels[], total_marks,
                  has_unverified_visuals (veritabanı hesaplar), created_by, created_at, updated_at)
@@ -104,6 +104,9 @@ question_version_check(id, question_version_id, check_code, severity, outcome, d
 - **Köken ve rights.** Servis ve tetikleyici yalnızca `authored` kabul eder (D-52). Her işlem (kontrol kaydı dahil) rights kaydının
   şu an herkese gösterime izin vermesini ister; izin yoksa yazma reddedilir, okuma "bulunamadı" döner. Yalnızca kısıtlayan işlemler
   (geri çekme, ret, düzeltme isteme) rights iptal edilmiş olsa da çalışır ve içerik döndürmez.
+- **Kaynak anahtarı.** `source_ref` içe aktarılan sorunun kalıcı anahtarıdır (ör. `pilot/a1-kinematics#1`; migration 0004): tekil,
+  oluşturulurken verilir ve değiştirilemez. İçe aktarma soruyu bununla tanır ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md) §7).
+- **Uyaran açıklaması** (`stimuli[].description`) personel içindir; öğrenci görünümüne girmez (dilim 5).
 - **Onay.** M1-G'de tek onay yeter (D-53). Rol denetimi bu katmanda değil, yetki katmanındadır (dilim 5); servis yalnızca `actor`
   kimliğini audit'e yazar.
 

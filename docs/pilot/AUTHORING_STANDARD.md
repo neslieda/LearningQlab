@@ -71,3 +71,20 @@ Her dosya, yazarından farklı bir çözücü tarafından kontrol edilir:
 4. Bulgular `review/<düğüm>-review.md` dosyasına yazılır; uyuşmazlık varsa soru düzeltilir ya da çıkarılır.
 
 Bu, uzman incelemesinin yerine geçmez. Tüm dosyalar fizik uzmanı onayına kadar "incelenmemiş taslak"tır.
+
+## 7. Sisteme aktarım için yazım kuralları (2026-10-13)
+
+Sorular kurallı bir betikle şemaya çevrilir ([IMPORT_RULES.md](IMPORT_RULES.md)). Betik tahmin yürütmez; aşağıdakilere uyulmazsa ya
+durur ya da bilgi kaybolur.
+
+- Değişkenler italik yazılır (`*v*`); alt ve üst simge değişkenin hemen ardından `<sub>…</sub>` / `<sup>…</sup>` ile verilir
+  (`*v*<sub>y</sub>`). Unicode alt simge (`θ₀`) ve işaret (`t′`) matematiğin dışında kalır; kullanılmamalıdır.
+- İtalik içinde yalnızca değişken ya da vurgulanan sözcük bulunur; bir formülün tamamı tek italik içine alınmaz.
+- Markscheme'de her puan satırı `✓` ile biter. Birbirini dışlayan tam çözüm yolları `**ALTERNATIVE 1**` / `**ALTERNATIVE 2**`
+  satırlarıyla ayrılır; iki yol arasına tek başına `**OR**` satırı konmaz. Alternatif yol Notlar sütununa yazılmaz.
+- Notlar: `OWTTE`, `Allow ECF from (b).`, `Accept …`, `Do not accept …`, `Award [n] max …` kalıplarıyla başlar.
+- Formül zinciri tablosunda yalnızca parametre ve adım satırları bulunur; denetim ve karşılaştırma satırları tablonun altına düz
+  metin olarak yazılır (tabloda kalırlarsa çözüm modeli aktarılmaz). Her parametre ters tırnak içinde `ad = değer birim` biçimindedir.
+- "Şekil notu" yazarın çalışma notudur ve sisteme alınmaz; öğrencinin görmesi gereken her şey soru metninde olmalıdır.
+- Soru bloğunun içinde `---` çizgisi kullanılmaz.
+- Komut sözcüğü parçanın ilk sözcüğüdür ve müfredat analizindeki listeden seçilir.

@@ -195,6 +195,8 @@ cd apps/api
 export QLAB_DATABASE_URL=postgresql+psycopg://qlab:qlab-local-only@127.0.0.1:54340/qlab
 uv run alembic upgrade head
 uv run python -m qlab.syllabus ../../content/reference/dp-physics-2025-syllabus.json
+uv run python -m qlab.content.pilot convert --check       # depodaki JSON, Markdown'ın çevirisi mi (Node ister)
+uv run python -m qlab.content.pilot load --operator <hesap kimliği> --create-rights   # 130 pilot soru, taslak olarak
 uv run pytest                                          # veritabanı testleri qlab_test veritabanını silip yeniden kurar
 ```
 
@@ -203,5 +205,8 @@ uv run pytest                                          # veritabanı testleri ql
 - Matematik içeren kayıtlar Node ve `apps/api/katex/node_modules` ister; yoksa `RendererUnavailable` hatası alınır ve hiçbir şey
   kaydedilmez. Node'suz çalıştırılabilen testler: `uv run pytest -m "not db and not node"`. Başka konumlar için `QLAB_NODE_BIN` ve
   `QLAB_KATEX_DIR`.
+- Pilot Markdown değişince `convert` yeniden çalıştırılır ve JSON ile rapor birlikte commit edilir; CI `convert --check` ile denetler.
+  `load` yeniden çalıştırılabilir; `--create-rights` yalnızca ilk kez gerekir, `--dry-run` hiçbir şey yazmaz
+  ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md) §7).
 - Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
 - Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).

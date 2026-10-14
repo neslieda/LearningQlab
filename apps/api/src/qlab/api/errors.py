@@ -149,15 +149,20 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def _validation(request: Request, error: RequestValidationError) -> JSONResponse:
-        # Location and message only: the rejected input is never echoed back.
-        items = [
-            ProblemItem(
-                code=str(item.get("type", "invalid")),
-                message=str(item.get("msg", "invalid")),
-                location=".".join(str(part) for part in item.get("loc", ())) or None,
+        # Location and message only: the rejected input is never echoed back. Two kinds of
+        # error would carry it anyway (a key the caller invented, a discriminator value).
+        items = []
+        for item in error.errors():
+            kind = str(item.get("type", "invalid"))
+            location = [str(part) for part in item.get("loc", ())]
+            message = str(item.get("msg", "invalid"))
+            if kind == "extra_forbidden":
+                location = location[:-1]
+            elif kind == "union_tag_invalid":
+                message = "Unknown kind"
+            items.append(
+                ProblemItem(code=kind, message=message, location=".".join(location) or None)
             )
-            for item in error.errors()
-        ]
         return _response(
             ApiError(422, "validation_failed", "The request is not valid", errors=items)
         )

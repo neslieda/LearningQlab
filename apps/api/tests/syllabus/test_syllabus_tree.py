@@ -379,7 +379,6 @@ def test_endpoint_returns_the_tree_in_the_documented_shape(
         "subject",
         "version",
         "title",
-        "status",
         "nodes",
         "exam_sections",
         "command_terms",
@@ -387,7 +386,8 @@ def test_endpoint_returns_the_tree_in_the_documented_shape(
     out = SyllabusOut.model_validate(body)
     assert (out.program, out.subject, out.version) == ("ib_dp", "physics", "2025")
     assert out.title == loaded.syllabus_version.title
-    assert out.status == loaded.status
+    assert not hasattr(out, "status")
+    assert "status" not in body
     assert [n.code for n in out.nodes] == [n.code for n in loaded.nodes]
     assert {n.code for n in out.nodes if n.is_leaf} == leaf_codes(loaded)
     assert {n.code: n.parent for n in out.nodes} == {n.code: n.parent for n in loaded.nodes}

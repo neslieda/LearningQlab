@@ -68,6 +68,8 @@ def grant_role(session: Session, *, subject: str, role: Role) -> tuple[uuid.UUID
 def revoke_role(session: Session, *, subject: str, role: Role) -> tuple[uuid.UUID, bool]:
     """Take `role` from the account (DEV_ISSUER, subject). DevCommandRefused when there is no
     such account. Returns the account id and whether anything changed."""
+    if not subject or subject != subject.strip() or not subject.isprintable():
+        raise DevCommandRefused(f"no account {subject!r} of issuer {DEV_ISSUER}")
     account = identity.find_account(session, issuer=DEV_ISSUER, subject=subject)
     if account is None:
         raise DevCommandRefused(f"no account {subject!r} of issuer {DEV_ISSUER}")
@@ -179,10 +181,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     except RuntimeError as error:
         print(f"refused: {error}", file=sys.stderr)
         return 2
+    if engine.url.host not in ("localhost", "127.0.0.1", "::1"):
+        # Development accounts hold every role; they are never created in a shared database.
+        print("refused: the database is not on this machine", file=sys.stderr)
+        engine.dispose()
+        return 2
     try:
         with Session(engine) as session, session.begin():
             return _run(args, session, settings)
-    except (DevCommandRefused, devkey.DevKeyError) as error:
+    except (DevCommandRefused, devkey.DevKeyError, ValueError) as error:
         # Expected refusals: the transaction was rolled back. Other errors keep their traceback.
         print(f"refused: {error}", file=sys.stderr)
         return 2

@@ -10,8 +10,13 @@ the contract is the committed `openapi.json` (`python -m qlab.api.openapi`).
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, Request
 from sqlalchemy.orm import Session, sessionmaker
+from starlette.middleware.base import RequestResponseEndpoint
+from starlette.responses import Response
 
 from qlab.api import errors, policy
 from qlab.api.routers import admin, learner, system
@@ -22,6 +27,13 @@ from qlab.identity.tokens import TokenVerifier
 
 API_TITLE = "LearningQlab API"
 API_VERSION = "1.0.0"
+
+
+@asynccontextmanager
+async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
+    # Again when the server starts: a route added after `create_app` returned is caught here.
+    policy.check_routes(app)
+    yield
 
 
 def create_app(
@@ -54,12 +66,27 @@ def create_app(
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
+        # A redirect would be an answer that did not come from the policy layer.
+        redirect_slashes=False,
+        # No traces, metrics or logs leave the process until observability is designed:
+        # they would carry paths, queries and validation messages (docs/SECURITY.md section 6).
+        telemetry={"tracing": False, "metrics": False, "logs": False, "auto_configure": False},
+        lifespan=_lifespan,
         separate_input_output_schemas=False,
     )
     app.router.route_class = policy.PolicyRoute
     for module in (system, learner, admin):
         module.router.register(app)
     errors.install(app)
+
+    @app.middleware("http")
+    async def _no_store(request: Request, call_next: RequestResponseEndpoint) -> Response:
+        # Every response depends on who is asking; none may be kept by a cache. Long-lived
+        # caching of published versions comes with the CDN (docs/API_DESIGN.md section 1).
+        response = await call_next(request)
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
     policy.check_routes(app)
 
     app.state.settings = settings

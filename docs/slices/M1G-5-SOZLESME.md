@@ -36,11 +36,16 @@ Kritik alan: **evet** (yetki politikası, migration). CI + bağımsız inceleme 
 
 - `Authorization: Bearer <token>`; token EdDSA (Ed25519) imzalı JWT; zorunlu alanlar `iss`, `sub`, `aud`, `exp`, `iat`. Süre toleransı
   yok; ömür en çok 24 saat; uzunluk en çok 4096 karakter. Roller token'da **değildir**, her istekte veritabanından okunur (D-12).
-- Sıra: (1) uç nokta politika tablosunda yoksa 404; (2) `/healthz` dışında token yoksa ya da geçersizse **401** `unauthenticated`
+- Sıra: (1) yol ya da yöntem politika tablosunda yoksa 404 (bilinen bir yolun tabloda olmayan yöntemi ve sonu `/` ile biten yol da
+  böyledir; 405 ya da yönlendirme dönmez); (2) `/healthz` dışında token yoksa ya da geçersizse **401** `unauthenticated`
   (`WWW-Authenticate: Bearer`); (3) token geçerli ama `iss`+`sub` için hesap yoksa ya da hesap kapatılmışsa **401**; (4) hesabın
   uç noktanın izin verdiği rollerden hiçbiri yoksa **404** `not_found` — var olmayan bir yolun yanıtıyla bayt bayt aynı.
 - Yetki kararı gövde okunmadan ve parametreler doğrulanmadan önce verilir: yetkisiz çağıran bozuk gövde de gönderse 404 (ya da 401)
   alır, 422 almaz.
+- Yetkiden **sonra**, gövde okunmadan önce boyut denetlenir: `Content-Length` sınırı aşıyorsa **413** `payload_too_large`, gövde
+  uzunluk bildirmeden gönderiliyorsa **411** `length_required`. Sınır: cevap denetimi 64 KiB, diğer uç noktalar 1 MiB.
+- Token'ın `sub` ve `iss` alanları boş, kenarı boşluklu, 200 karakterden uzun ya da yazdırılamayan karakter içeriyorsa token geçersizdir.
+- Her yanıt `Cache-Control: no-store` taşır. Doğrulama hataları çağıranın gönderdiği değeri ya da uydurduğu alan adını geri yazmaz.
 - Hiç rolü olmayan hesap `/healthz` dışında her yerden 404 alır. Rol geri alınınca bir sonraki istekte etkisini gösterir.
 - Yanıtlar nedenini söylemez (süresi dolmuş / imza bozuk / hesap yok ayrımı yapılmaz).
 - Başlangıç denetimleri (`create_app`): politika tablosu ile yollar bire bir eşleşmezse `PolicyError`; `local` dışında geliştirme
@@ -88,6 +93,8 @@ okunur; belge `model_dump` edilip alan silinerek kurulmaz. Giren ve girmeyen ala
    kümesinden geçen farklı sözcük sayısından büyükse → `True`. İki küme kesişmez ve modülde `frozenset` olarak durur.
 5. Aksi halde `False`.
 
+Bilinen sınır: kümelerdeki kısa sözcükler İngilizce cümlelerde de geçebilir; yanlış uyarı mümkündür (YETKILER §3).
+
 Uyarı: `LanguageWarning(code="answer_not_english", message="Please write your answer in English.")`.
 
 ### 3.5 Personel uç noktaları (`routers/admin.py`, uygulanacak)
@@ -110,7 +117,9 @@ yazmaz). Yazan uç noktalar `deps.writing`, okuyanlar `deps.reading` kullanır.
 
 ### 3.6 Müfredat (`GET /v1/programs/{program}/subjects/{subject}/syllabus`)
 
-`syllabus.get_tree`; `None` → 404.
+`syllabus.get_tree`; `None` → 404. Yanıt referans dosyasının inceleme notunu (`status`) **taşımaz**: not iç kullanım içindir.
+`program`, `subject`, `version`, `exam_section`, `syllabus_node` değerleri kod biçiminde olmalıdır (`^[A-Za-z0-9][A-Za-z0-9_.]*$`);
+değilse 422. `syllabus_node` süzgeci yalnızca soruya doğrudan etiketlenmiş (yaprak) düğümle eşleşir; üst düğümle süzme yoktur.
 
 ### 3.7 Yerel geliştirme komutu (`python -m qlab.api.dev`, uygulanacak)
 
@@ -120,10 +129,10 @@ Yalnızca `QLAB_ENV=local` iken çalışır (`Settings.from_env`); başka ortamd
 |---|---|
 | `init` | Anahtar yoksa üretir (`devkey.generate`, `settings.dev_key_file`); altı rol için `dev-<rol>` hesaplarını (`issuer = qlab-local-dev`) ve rol atamalarını açar. Yeniden çalıştırılabilir. Rol → `acc_…` tablosunu basar |
 | `token <rol> [--hours N]` | O rolün geliştirme hesabı için token basar (varsayılan 8, en çok 24 saat). Yalnızca token'ı standart çıktıya yazar |
-| `accounts` | Geliştirme hesaplarını ve rollerini listeler |
+| `accounts` | Altı `dev-<rol>` hesabını ve rollerini listeler (`grant` ile açılan başka hesaplar listelenmez) |
 | `grant <subject> <rol>` / `revoke <subject> <rol>` | Geliştirme vereninin bir hesabına rol verir / alır |
 
-Her rol verme ve alma **audit kaydı** yazar: `action = role_assignment.granted | role_assignment.revoked`, `entity_type = account`,
+Komut, veritabanı bu makinede değilse (`localhost`, `127.0.0.1`, `::1` dışı) çalışmaz. Her rol verme ve alma **audit kaydı** yazar: `action = role_assignment.granted | role_assignment.revoked`, `entity_type = account`,
 `entity_id = acc_…`, `data = {"role": …}`, `actor = system:dev-cli`. Zaten var olan atama yeni kayıt yazmaz. Anahtar dosyasının
 içeriği hiçbir çıktıya yazılmaz.
 
@@ -187,7 +196,37 @@ içeriği hiçbir çıktıya yazılmaz.
 7. **Öğrenci görünümünde müfredat düğümü kodu yok.** YETKILER §4'ün "girer" listesinde olmadığı için eklenmedi; konuya göre süzme
    `syllabus_node` sorgu parametresiyle yapılır.
 8. **Geliştirme anahtarı depo dışında durur:** `~/.qlab/dev-signing-key.pem` (0600) ya da `QLAB_DEV_KEY_FILE`.
-9. **`self_approval_forbidden` 403 döner** (404 değil): çağıran kaynağı zaten görebilen personeldir; saklanacak bir şey yoktur.
+9. **`self_approval_forbidden` 403 döner** (API_DESIGN §4'teki "yetkisiz erişim her zaman 404" kuralından bilinçli sapma) (404 değil): çağıran kaynağı zaten görebilen personeldir; saklanacak bir şey yoktur.
 10. **Etkileşimli API belgesi (`/docs`) kapalı.** Her yol politika katmanından geçer; sözleşme depodaki `openapi.json`'dır.
 11. **`tests/test_package_layout.py`** modül listesine `api` eklendi (HTTP katmanı, `pipeline` gibi modüllerin üstünde durur) ve
     import-linter'a üç sözleşme eklendi (hiçbir modül `qlab.api`'yi import edemez; `identity` ve `organizations` bağımlılıkları).
+12. **Yayın reddinin biçimi.** API_DESIGN §4 örneğinde `code: "critical_checks_failed"` üst düzeydedir; uygulamada üst düzey kod
+    `not_publishable`, nedenler (`critical_checks_failed`, `unverified_visuals`, `rights_denied`) `errors[].code` içindedir: bir yayın
+    aynı anda birden çok nedenle reddedilebilir.
+13. **Yollar.** API_DESIGN §3'teki gösterim amaçlı listeden farklı olarak öğrenci soruyu `GET /v1/questions/{id}` ile okur (her zaman
+    yayınlanmış sürüm) ve geri çekme `POST /v1/admin/question-versions/{id}/withdraw`'dır (YETKILER §1, onaylı).
+14. **Önbellek.** Her yanıt `Cache-Control: no-store`. API_DESIGN §1'deki "yayınlanmış sürüm uzun süreli önbellek" kuralı CDN ile
+    birlikte (dilim 9 / M6) uygulanır.
+15. **Yeni hata kodları:** `invalid_cursor` (422), `answer_does_not_fit` (422), `payload_too_large` (413), `length_required` (411).
+
+## 9. İncelemelerden kalan açık noktalar (karar sahibinde; dilim 9'dan önce)
+
+Bağımsız inceleme ve güvenlik incelemesi yapıldı (2026-10-14); kritik ya da yüksek bulgu yok. Düzeltilenler: sondaki `/` için
+politika katmanı dışından dönen yönlendirme, gövde boyutu sınırının olmaması, token öznesinde kontrol karakteriyle 500, sorgu
+parametresinde NUL ile 500, hata yanıtına girdinin yansıması, uzun parça kimliğinde 500, "aynı içeriği yeniden kaydeden son düzenleyen
+sayılıyordu", geliştirme anahtarı dosyası denetimleri, FastAPI'nin yerleşik telemetrisi (kapatıldı), hata kayıtlarında SQL
+parametreleri (gizlendi). Açık kalanlar:
+
+1. **Görev ayrımı kuralı "son düzenleyen"e bakar, "yazar"a değil.** A yazar, B gerçek bir düzeltme yapar, A onaylar: kural buna izin
+   verir (D-59'un ifadesi böyle). Daha sıkı seçenek: sürümde içerik değiştiren her hesabın onayını engellemek. Kural bugün kapalıdır;
+   açılmadan önce (dilim 9) karar verilmelidir. Aynı kişinin iki hesabı kodla çözülemez; kimlik sağlayıcısının işidir.
+2. **Rights'ı iptal edilmiş soruda durum değişikliği.** Geri çekme, ret ve düzeltme isteme rights iptalinden sonra da çalışır ve
+   sürümün durumunu döndürür (D-56'dan beri böyle; içerik dönmez). Geri çekme için gerekli; ret ve düzeltme isteme için bilinçli karar bekliyor.
+3. **İncelemeci yeniden yayını kalıcı olarak engelleyebilir:** geri çekilmiş soruya revizyon açıp reddederse `republish` "daha yeni
+   sürüm var" diye reddedilir. Yayıncı yeni revizyonla ilerleyebilir.
+4. **`account` / `role_assignment` tablolarına uygulama rolüyle doğrudan yazan biri audit'siz rol verebilir** (§8.5'in bedeli).
+   Dilim 9: uygulama rolünün bu tablodaki yetkisi daraltılır ya da audit satırı tetikleyiciyle yazılır; yerel dışında geliştirme
+   vereninin (`qlab-local-dev`) etkin rol ataması varsa uygulama açılmaz.
+5. **Dilim 9'a devredenler:** hız sınırı; CORS, güvenlik başlıkları; token'da `kid` ve doğrulama düzeyi (personelde iki adım) denetimi;
+   sunucunun yalnızca açık anahtarı tutması; ters vekilde gövde sınırı.
+6. **Cevap kapısı semboliktir** (YETKILER §3 böyle tanımlar): boş olmayan her metin markscheme'i, her seçenek doğru cevabı döndürür.

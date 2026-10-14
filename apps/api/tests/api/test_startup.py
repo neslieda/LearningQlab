@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import stat
+import threading
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
@@ -453,6 +454,35 @@ def test_a_route_outside_the_table_that_reached_the_handler_anyway_is_refused() 
     assert ran == []
 
 
+def test_serving_checks_the_routes_again_so_a_late_route_stops_the_server() -> None:
+    """A route added after `create_app` returned is not in the table: entering the client (the
+    lifespan, i.e. the moment the application starts serving) raises PolicyError."""
+    app = a_valid_app()
+    app.add_api_route("/v1/added-late", noop, methods=["GET"])
+    with pytest.raises(policy.PolicyError), TestClient(app):
+        pass
+
+
+def test_serving_checks_a_late_method_on_a_known_path() -> None:
+    app = a_valid_app()
+    app.add_api_route("/v1/me", noop, methods=["DELETE"])
+    with pytest.raises(policy.PolicyError), TestClient(app):
+        pass
+
+
+def test_serving_checks_a_late_plain_route() -> None:
+    app = a_valid_app()
+    app.router.routes.append(Route("/late-plain", lambda request: None))
+    with pytest.raises(policy.PolicyError), TestClient(app):
+        pass
+
+
+def test_an_unchanged_application_starts_serving() -> None:
+    app = a_valid_app()
+    with TestClient(app) as client:
+        assert client.get("/healthz").status_code == 200
+
+
 # --- the development key -----------------------------------------------------------------------
 
 
@@ -534,6 +564,74 @@ def test_load_accepts_owner_only_files(tmp_path: Path, bits: int) -> None:
     path = tmp_path / "dev.pem"
     devkey.generate(path)
     path.chmod(bits)
+    assert isinstance(devkey.load(path), Ed25519PrivateKey)
+
+
+def test_load_refuses_a_symbolic_link_even_to_a_good_key(tmp_path: Path) -> None:
+    target = tmp_path / "real.pem"
+    devkey.generate(target)
+    link = tmp_path / "link.pem"
+    link.symlink_to(target)
+    assert isinstance(devkey.load(target), Ed25519PrivateKey)
+    with pytest.raises(devkey.DevKeyError):
+        devkey.load(link)
+
+
+def test_load_refuses_a_link_to_a_missing_file_and_a_dangling_link(tmp_path: Path) -> None:
+    link = tmp_path / "dangling.pem"
+    link.symlink_to(tmp_path / "nowhere.pem")
+    with pytest.raises(devkey.DevKeyError):
+        devkey.load(link)
+
+
+def test_load_refuses_a_directory(tmp_path: Path) -> None:
+    directory = tmp_path / "dev.pem"
+    directory.mkdir(mode=0o700)
+    with pytest.raises(devkey.DevKeyError):
+        devkey.load(directory)
+
+
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="no named pipes here")
+def test_load_refuses_a_named_pipe_without_blocking(tmp_path: Path) -> None:
+    pipe = tmp_path / "dev.pem"
+    os.mkfifo(pipe, 0o600)
+    outcome: list[BaseException | None] = []
+
+    def attempt() -> None:
+        try:
+            devkey.load(pipe)
+            outcome.append(None)
+        except BaseException as error:  # noqa: BLE001
+            outcome.append(error)
+
+    worker = threading.Thread(target=attempt, daemon=True)
+    worker.start()
+    worker.join(timeout=3)
+    blocked = worker.is_alive()
+    if blocked:  # release the reader so that the test run does not hang
+        writer = os.open(pipe, os.O_WRONLY)
+        os.close(writer)
+        worker.join(timeout=3)
+    assert not blocked, "load() blocks on a named pipe instead of refusing it"
+    assert len(outcome) == 1 and isinstance(outcome[0], devkey.DevKeyError)
+
+
+def test_load_refuses_a_device_file() -> None:
+    with pytest.raises(devkey.DevKeyError):
+        devkey.load(Path(os.devnull))
+
+
+def test_load_refuses_a_file_owned_by_another_user(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "dev.pem"
+    devkey.generate(path)
+    assert isinstance(devkey.load(path), Ed25519PrivateKey)
+    owner = os.getuid()
+    with monkeypatch.context() as patch:
+        patch.setattr(os, "getuid", lambda: owner + 1)
+        with pytest.raises(devkey.DevKeyError):
+            devkey.load(path)
     assert isinstance(devkey.load(path), Ed25519PrivateKey)
 
 

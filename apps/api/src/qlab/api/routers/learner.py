@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import Query, Request
+from fastapi import Path, Query, Request
 
 from qlab.api import deps, errors, ids, learner_view
 from qlab.api.deps import Caller
@@ -30,7 +30,10 @@ router = Routes(tags=["questions"], responses=AUTH_ERRORS)
 
 Cursor = Annotated[str | None, Query(max_length=200, description="`next_cursor` of the last page.")]
 Limit = Annotated[int, Query(ge=1, le=MAX_PAGE_SIZE)]
-Code = Annotated[str, Query(max_length=120)]
+# Codes of exam sections, syllabus nodes and versions: nothing else reaches a query.
+CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.]*$"
+Code = Annotated[str, Query(max_length=120, pattern=CODE_PATTERN)]
+PathCode = Annotated[str, Path(max_length=120, pattern=CODE_PATTERN)]
 
 
 @router.get(
@@ -41,8 +44,8 @@ Code = Annotated[str, Query(max_length=120)]
 def get_syllabus(
     request: Request,
     caller: Caller,
-    program: str,
-    subject: str,
+    program: PathCode,
+    subject: PathCode,
     version: Annotated[
         Code | None, Query(description="Syllabus version code. Default: the newest version.")
     ] = None,
@@ -58,7 +61,6 @@ def get_syllabus(
         subject=tree.subject,
         version=tree.version,
         title=tree.title,
-        status=tree.status,
         nodes=tuple(
             SyllabusNodeOut(
                 code=n.code,

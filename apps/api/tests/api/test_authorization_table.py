@@ -11,14 +11,18 @@ id legitimately gives 404 from a handler.
 from __future__ import annotations
 
 import uuid
-from typing import Final
+from typing import Any, Final
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import Connection, text
+from sqlalchemy.orm import Session
 
 from qlab.api import ids, policy
 from qlab.organizations.service import Role
 from tests.api.support import ApiHarness
+from tests.content import samples
+from tests.content.support import Env, bring_to, document, make_env, stored_hash
 
 R = Role
 USER_ROLES: Final = frozenset({R.STUDENT, R.TEACHER, R.ORG_ADMIN})  # one column in M1-G
@@ -266,3 +270,115 @@ def test_methods_outside_the_table_are_404_like_an_unknown_path(
         assert response.content == unknown.content, (method, template)
         assert response.headers["content-type"] == unknown.headers["content-type"]
         assert "allow" not in response.headers
+
+
+# --- with real data: every allowed cell succeeds, every denied cell is a 404 -------------------
+
+# Per endpoint number: the status the version (or question) is brought to before the call, and
+# the status code of success. An operation that cannot be applied twice is built fresh for each
+# role, so the expected answer is the success code, never a 409.
+POSITIVE: Final[dict[int, tuple[str, int]]] = {
+    1: ("published", 200),
+    2: ("published", 200),
+    3: ("published", 200),
+    4: ("published", 200),
+    5: ("published", 200),
+    6: ("published", 200),
+    7: ("published", 200),
+    8: ("published", 200),
+    9: ("draft", 200),
+    10: ("draft", 200),
+    11: ("draft", 200),
+    12: ("draft", 200),
+    13: ("in_review", 200),
+    14: ("in_review", 200),
+    15: ("in_review", 200),
+    16: ("published", 201),
+    17: ("approved", 200),
+    18: ("published", 200),
+    19: ("withdrawn", 200),
+}
+
+
+def real_request(
+    api: ApiHarness, session: Session, connection: Connection, env: Env, number: int
+) -> tuple[str, str, dict[str, Any] | None]:
+    """Method, path and JSON body of endpoint `number`, aimed at real data in the state that
+    fits its operation."""
+    _, method, template, _ = TABLE[number - 1]
+    status, _ = POSITIVE[number]
+    view = bring_to(session, connection, env, status, document(samples.plain_mcq_document()))
+    path = template.format(
+        question_id=ids.encode(ids.QUESTION, view.question_id),
+        version_id=ids.encode(ids.QUESTION_VERSION, view.id),
+        program="ib_dp",
+        subject="physics",
+    )
+    sha = stored_hash(session, view.id)
+    body: dict[str, Any] | None = None
+    if number == 6:
+        body = {"kind": "mcq", "selected_key": "A"}
+    elif number == 11:
+        body = {"document": samples.mcq_document()}
+    elif number in (13, 17):
+        body = {"expected_content_sha256": sha}
+    elif number in (14, 15, 18):
+        body = {"reason": "synthetic reason for the decision"}
+    elif number == 19:
+        body = {"expected_content_sha256": sha, "reason": "synthetic reason for the decision"}
+    return method, path, body
+
+
+@pytest.mark.db
+@pytest.mark.node
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize("role", [*Role, None], ids=[*(r.value for r in Role), "no-role"])
+def test_cell_with_real_data(
+    api: ApiHarness,
+    session: Session,
+    connection: Connection,
+    number: int,
+    method: str,
+    template: str,
+    roles: frozenset[Role] | None,
+    role: Role | None,
+) -> None:
+    env = make_env(session)
+    verb, path, body = real_request(api, session, connection, env, number)
+    assert verb == method
+    headers = api.headers(role) if role is not None else api.headers()
+    response = api.client.request(method, path, headers=headers, json=body)
+    if (roles is None) or (role is not None and allowed(roles, role)):
+        _, success = POSITIVE[number]
+        assert response.status_code == success, f"#{number} {role}: {response.text}"
+    else:
+        unknown = api.client.request(method, "/v1/no-such-endpoint", headers=headers)
+        assert response.status_code == 404, f"#{number} {role}: {response.text}"
+        assert response.content == unknown.content
+        assert response.json()["code"] == "not_found"
+
+
+@pytest.mark.db
+@pytest.mark.node
+@pytest.mark.parametrize(
+    "number", [n for n, _, _, roles in TABLE if roles is not None and roles != EVERYONE]
+)
+def test_a_denied_role_changes_nothing_on_real_data(
+    api: ApiHarness, session: Session, connection: Connection, number: int
+) -> None:
+    """The 404 for a role the table does not allow is more than an answer: the operation did
+    not run, so the version is in the same state afterwards."""
+    env = make_env(session)
+    _, method, _, roles = TABLE[number - 1]
+    assert roles is not None
+    status_before, _ = POSITIVE[number]
+    verb, path, body = real_request(api, session, connection, env, number)
+    for role in Role:
+        if role not in roles:
+            response = api.client.request(verb, path, headers=api.headers(role), json=body)
+            assert response.status_code == 404, f"#{number} {role}"
+    session.expire_all()
+    rows = connection.execute(
+        text("SELECT status FROM question_version ORDER BY created_at DESC, id DESC")
+    ).all()
+    assert [r[0] for r in rows] == [status_before]

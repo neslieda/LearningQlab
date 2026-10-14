@@ -15,6 +15,7 @@ Checked from the outside only:
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import uuid
 from typing import Any
@@ -537,10 +538,63 @@ def test_a_part_of_another_question_does_not_fit(
 
 
 def test_a_part_id_is_matched_exactly(api: ApiHarness, world: dict[str, Published]) -> None:
-    for wrong in ("p-A", "P-A", "p_a", "p-a "):
+    for wrong in ("p-A", "P-A", "p_a", "p-a ", " p-a", "p-a\n"):
         response = check(api, world["structured"].id, written_answer(wrong))
-        assert response.status_code == 422
-        assert response.json()["code"] in ("answer_does_not_fit", "validation_failed")
+        assert_problem(response, 422, "answer_does_not_fit")
+
+
+ODD_PART_IDS = [
+    "P A",
+    "ş",
+    "<script>x</script>",
+    "'; DROP TABLE part; --",
+    "p-a\u0000",
+    "\u0000",
+    "../p-a",
+    "p-a%20",
+    "\U0001f600",
+    "a" * 200,
+]
+
+
+@pytest.mark.parametrize("part_id", ODD_PART_IDS)
+def test_a_part_id_naming_no_part_is_does_not_fit_whatever_its_characters(
+    api: ApiHarness, world: dict[str, Published], part_id: str
+) -> None:
+    for name in ("structured", "mcq"):
+        response = check(api, world[name].id, written_answer(part_id))
+        assert_problem(response, 422, "answer_does_not_fit")
+
+
+@pytest.mark.parametrize("part_id", ["", "x" * 201, "x" * 5000])
+def test_an_empty_or_too_long_part_id_is_validation_failed(
+    api: ApiHarness, world: dict[str, Published], part_id: str
+) -> None:
+    for name in ("structured", "mcq"):
+        assert_problem(
+            check(api, world[name].id, written_answer(part_id)), 422, "validation_failed"
+        )
+
+
+def test_a_part_id_of_seventy_characters_can_be_published_read_and_checked(
+    api: ApiHarness, env: Env
+) -> None:
+    long_id = "p" + "-x" * 34 + "a"
+    assert len(long_id) == 70
+    source = json.loads(json.dumps(structured_without_figure()).replace('"p-a"', f'"{long_id}"'))
+    item = publish_document(api.session, env, source, tag="zzlongx")
+    assert long_id in [part.id for part in item.document.parts]
+
+    read = api.client.get(f"/v1/questions/{item.id}", headers=api.headers(Role.STUDENT))
+    assert read.status_code == 200, read.text
+    assert long_id in [part["id"] for part in read.json()["parts"]]
+
+    response = check(api, item.id, written_answer(long_id))
+    assert response.status_code == 200, response.text
+    assert response.json()["part_id"] == long_id
+    assert_part_scheme(response.json(), item, long_id)
+    # The other part is still addressed by its own id.
+    assert check(api, item.id, written_answer("p-b")).json()["part_id"] == "p-b"
 
 
 def test_a_422_for_a_misfit_leaks_no_mark_scheme(
@@ -582,7 +636,10 @@ def test_the_longest_answer_is_accepted_and_one_more_is_not(
     assert check(api, item.id, written_answer("p-a", "ş" * 5000)).status_code == 200
     over = check(api, item.id, written_answer("p-a", "x" * 5001))
     assert_problem(over, 422, "validation_failed")
-    assert check(api, item.id, written_answer("p-a", "x" * 100_000)).status_code == 422
+    # A body above the 64 KiB limit of this endpoint is refused before it is read.
+    assert_problem(
+        check(api, item.id, written_answer("p-a", "x" * 100_000)), 413, "payload_too_large"
+    )
 
 
 @pytest.mark.parametrize(
@@ -617,7 +674,7 @@ def test_unknown_fields_are_rejected(
         {"kind": "written", "part_id": "p-a"},
         {"kind": "written", "text": "3.0 s"},
         {"kind": "written", "part_id": "", "text": "3.0 s"},
-        {"kind": "written", "part_id": "P A", "text": "3.0 s"},
+        {"kind": "written", "part_id": "x" * 201, "text": "3.0 s"},
         {"kind": "written", "part_id": "p-a", "text": 5},
         {"kind": "written", "part_id": "p-a", "text": None},
         {"kind": "essay", "text": "x"},

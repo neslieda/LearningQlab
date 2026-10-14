@@ -38,6 +38,8 @@ from tests.content.support import (
     make_env,
     new_rights,
     now,
+    raw_full_version,
+    raw_walk,
     snapshot,
     status_of,
     stored_hash,
@@ -213,6 +215,22 @@ def test_a_question_goes_from_draft_to_a_corrected_published_version(
     seen = api.client.get(f"/v1/questions/{qid(question)}", headers=api.headers(Role.STUDENT))
     assert seen.status_code == 200
     assert seen.json()["version_id"] == vid(v1)
+
+    # check an answer on the published version (nothing is written, nobody is audited)
+    audit_before = len(audit_for(session, v1))
+    key = document(samples.mcq_document()).mcq
+    assert key is not None
+    checked = api.client.post(
+        f"/v1/questions/{qid(question)}/check",
+        headers=api.headers(Role.STUDENT),
+        json={"kind": "mcq", "selected_key": key.correct_key},
+    )
+    assert checked.status_code == 200
+    assert checked.json()["kind"] == "mcq"
+    assert checked.json()["version_id"] == vid(v1)
+    assert checked.json()["correct"] is True
+    assert checked.json()["correct_key"] == key.correct_key
+    assert len(audit_for(session, v1)) == audit_before
 
     # open a revision
     revision = api.client.post(f"/v1/admin/questions/{qid(question)}/revisions", headers=reviewer)
@@ -905,6 +923,208 @@ def test_with_the_rule_on_the_other_decisions_are_not_restricted(
         json={"reason": REASON},
     )
     assert back.status_code == 200
+
+
+# --- who the last editor is ------------------------------------------------------------------
+# The actor of the version's latest `created` entry, or `updated` entry that changed the content.
+# Saving identical content again does not make the account the last editor.
+
+
+@pytest.fixture(params=[False, True], ids=["rule-off", "rule-on"])
+def duty_api(
+    request: pytest.FixtureRequest, connection: Connection, session: Session
+) -> Iterator[ApiHarness]:
+    harness = make_harness(
+        connection,
+        session,
+        settings=Settings(Environment.LOCAL, forbid_self_approval=request.param),
+    )
+    with harness.client:
+        yield harness
+
+
+def put_document(
+    api: ApiHarness, role: Role, version_id: uuid.UUID, doc: dict[str, Any]
+) -> Response:
+    return api.client.put(vurl(version_id), headers=api.headers(role), json={"document": doc})
+
+
+def approve_as(api: ApiHarness, session: Session, role: Role, version_id: uuid.UUID) -> Response:
+    return api.client.post(
+        vurl(version_id, "/approve"),
+        headers=api.headers(role),
+        json={"expected_content_sha256": stored_hash(session, version_id)},
+    )
+
+
+def assert_approved_by_last_editor(session: Session, version_id: uuid.UUID, expected: bool) -> None:
+    assert approved_entry(session, version_id).data["approver_is_last_editor"] is expected
+
+
+def test_resaving_identical_content_does_not_make_the_resaver_the_last_editor(
+    duty_api: ApiHarness, session: Session, env: Env
+) -> None:
+    api = duty_api
+    view = create(
+        session, env, document(samples.plain_mcq_document()), actor=api.actor(Role.PLATFORM_ADMIN)
+    )
+    assert put_document(api, Role.REVIEWER, view.id, samples.mcq_document()).status_code == 200  # A
+    assert (
+        put_document(api, Role.CONTENT_ADMIN, view.id, samples.mcq_document()).status_code == 200
+    )  # B, same
+    assert (
+        api.client.post(
+            vurl(view.id, "/submit"), headers=api.headers(Role.CONTENT_ADMIN)
+        ).status_code
+        == 200
+    )
+
+    by_a = approve_as(api, session, Role.REVIEWER, view.id)  # A is still the last editor
+    if api.settings.forbid_self_approval:
+        assert by_a.status_code == 403
+        assert by_a.json()["code"] == "self_approval_forbidden"
+        assert status_of(session.connection(), view.id) == "in_review"
+        # B only re-saved: B may approve.
+        by_b = approve_as(api, session, Role.CONTENT_ADMIN, view.id)
+        assert by_b.status_code == 200
+        assert_approved_by_last_editor(session, view.id, False)
+    else:
+        assert by_a.status_code == 200
+        assert_approved_by_last_editor(session, view.id, True)
+
+
+def test_the_resaver_of_identical_content_is_not_the_last_editor_when_approving(
+    duty_api: ApiHarness, session: Session, env: Env
+) -> None:
+    api = duty_api
+    view = create(
+        session, env, document(samples.plain_mcq_document()), actor=api.actor(Role.PLATFORM_ADMIN)
+    )
+    put_document(api, Role.REVIEWER, view.id, samples.mcq_document())
+    put_document(api, Role.CONTENT_ADMIN, view.id, samples.mcq_document())
+    api.client.post(vurl(view.id, "/submit"), headers=api.headers(Role.PLATFORM_ADMIN))
+    response = approve_as(api, session, Role.CONTENT_ADMIN, view.id)
+    assert response.status_code == 200
+    assert_approved_by_last_editor(session, view.id, False)
+
+
+def test_a_real_change_by_another_account_makes_that_account_the_last_editor(
+    duty_api: ApiHarness, session: Session, env: Env
+) -> None:
+    api = duty_api
+    view = create(
+        session, env, document(samples.plain_mcq_document()), actor=api.actor(Role.PLATFORM_ADMIN)
+    )
+    assert put_document(api, Role.REVIEWER, view.id, samples.mcq_document()).status_code == 200  # A
+    assert (
+        put_document(
+            api, Role.CONTENT_ADMIN, view.id, samples.two_column_mcq_document()
+        ).status_code
+        == 200
+    )  # B changes the content
+    api.client.post(vurl(view.id, "/submit"), headers=api.headers(Role.PLATFORM_ADMIN))
+
+    by_a = approve_as(api, session, Role.REVIEWER, view.id)
+    assert by_a.status_code == 200, by_a.text
+    assert_approved_by_last_editor(session, view.id, False)
+
+
+def test_the_last_editor_of_that_real_change_is_refused_with_the_rule_on(
+    duty_api: ApiHarness, session: Session, env: Env
+) -> None:
+    api = duty_api
+    view = create(
+        session, env, document(samples.plain_mcq_document()), actor=api.actor(Role.PLATFORM_ADMIN)
+    )
+    put_document(api, Role.REVIEWER, view.id, samples.mcq_document())
+    put_document(api, Role.CONTENT_ADMIN, view.id, samples.two_column_mcq_document())
+    api.client.post(vurl(view.id, "/submit"), headers=api.headers(Role.PLATFORM_ADMIN))
+    by_b = approve_as(api, session, Role.CONTENT_ADMIN, view.id)
+    if api.settings.forbid_self_approval:
+        assert by_b.status_code == 403
+        assert by_b.json()["code"] == "self_approval_forbidden"
+    else:
+        assert by_b.status_code == 200
+        assert_approved_by_last_editor(session, view.id, True)
+
+
+def test_whoever_opened_an_unedited_revision_is_its_last_editor(
+    duty_api: ApiHarness, session: Session, connection: Connection, env: Env
+) -> None:
+    api = duty_api
+    published = seed(session, connection, env, "published", samples.plain_mcq_document())
+    opened = api.client.post(
+        f"/v1/admin/questions/{qid(published.question_id)}/revisions",
+        headers=api.headers(Role.REVIEWER),
+    )
+    assert opened.status_code == 201
+    v2 = ids.decode(ids.QUESTION_VERSION, opened.json()["id"])
+    submitted = api.client.post(vurl(v2, "/submit"), headers=api.headers(Role.CONTENT_ADMIN))
+    assert submitted.status_code == 200
+
+    by_opener = approve_as(api, session, Role.REVIEWER, v2)
+    if api.settings.forbid_self_approval:
+        assert by_opener.status_code == 403
+        assert by_opener.json()["code"] == "self_approval_forbidden"
+        other = approve_as(api, session, Role.PLATFORM_ADMIN, v2)
+        assert other.status_code == 200
+        assert_approved_by_last_editor(session, v2, False)
+    else:
+        assert by_opener.status_code == 200
+        assert_approved_by_last_editor(session, v2, True)
+
+
+def test_another_account_can_approve_an_unedited_revision(
+    duty_api: ApiHarness, session: Session, connection: Connection, env: Env
+) -> None:
+    api = duty_api
+    published = seed(session, connection, env, "published", samples.plain_mcq_document())
+    opened = api.client.post(
+        f"/v1/admin/questions/{qid(published.question_id)}/revisions",
+        headers=api.headers(Role.REVIEWER),
+    )
+    v2 = ids.decode(ids.QUESTION_VERSION, opened.json()["id"])
+    api.client.post(vurl(v2, "/submit"), headers=api.headers(Role.REVIEWER))
+    response = approve_as(api, session, Role.CONTENT_ADMIN, v2)
+    assert response.status_code == 200
+    assert_approved_by_last_editor(session, v2, False)
+
+
+def test_without_any_created_or_updated_entry_the_service_refuses_with_the_rule_on(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    raw = raw_full_version(connection, env)
+    raw_walk(connection, raw.version_id, "in_review")
+    assert [
+        e.action
+        for e in audit_for(session, raw.version_id)
+        if e.action.endswith(("created", "updated"))
+    ] == []
+    sha = stored_hash(session, raw.version_id)
+    with pytest.raises(svc.SelfApprovalForbidden):
+        svc.approve(
+            session,
+            actor="u_anyone",
+            version_id=raw.version_id,
+            expected_content_sha256=sha,
+            forbid_self_approval=True,
+        )
+    assert status_of(connection, raw.version_id) == "in_review"
+
+
+def test_without_any_created_or_updated_entry_the_rule_off_approves(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    raw = raw_full_version(connection, env)
+    raw_walk(connection, raw.version_id, "in_review")
+    state = svc.approve(
+        session,
+        actor="u_anyone",
+        version_id=raw.version_id,
+        expected_content_sha256=stored_hash(session, raw.version_id),
+        forbid_self_approval=False,
+    )
+    assert state.status is svc.VersionStatus.APPROVED
 
 
 # --- rights fail closed for staff too --------------------------------------------------------

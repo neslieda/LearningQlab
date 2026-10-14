@@ -198,6 +198,14 @@ uv run python -m qlab.syllabus ../../content/reference/dp-physics-2025-syllabus.
 uv run python -m qlab.content.pilot convert --check       # depodaki JSON, Markdown'ın çevirisi mi (Node ister)
 uv run python -m qlab.content.pilot load --operator <hesap kimliği> --create-rights   # 130 pilot soru, taslak olarak
 uv run pytest                                          # veritabanı testleri qlab_test veritabanını silip yeniden kurar
+
+# API (dilim 5): yerel hesaplar, token ve sunucu
+export QLAB_ENV=local
+uv run python -m qlab.api.dev init                     # geliştirme anahtarı (~/.qlab, depo dışı) + her rol için bir hesap
+uv run python -m qlab.api.dev token content_admin      # 8 saatlik token; Authorization: Bearer <token>
+uv run uvicorn --factory qlab.api.app:app_from_env --host 127.0.0.1 --port 8000
+uv run python -m qlab.api.openapi                      # sözleşme değişince: apps/api/openapi.json
+(cd ../../packages/api-client && npm ci --ignore-scripts && npm run generate)   # ve ondan üretilen istemci
 ```
 
 - Veritabanı testleri (`db` işaretli) gerçek PostgreSQL ister; sunucuya ulaşılamazsa atlanmaz, **başarısız olur**. Yalnızca saf
@@ -208,6 +216,9 @@ uv run pytest                                          # veritabanı testleri ql
 - Pilot Markdown değişince `convert` yeniden çalıştırılır ve JSON ile rapor birlikte commit edilir; CI `convert --check` ile denetler.
   `load` yeniden çalıştırılabilir; `--create-rights` yalnızca ilk kez gerekir, `--dry-run` hiçbir şey yazmaz
   ([pilot/IMPORT_RULES.md](pilot/IMPORT_RULES.md) §7).
+- **Sözleşme.** `apps/api/openapi.json` ve `packages/api-client/src/schema.d.ts` üretilir, elle düzenlenmez; ikisi de CI'da
+  üretilenle karşılaştırılır. Uç nokta eklemek üç yerde değişiklik ister: yol, `qlab/api/policy.py` içindeki politika tablosu ve
+  yetki tablosu testi; biri eksikse uygulama açılmaz ya da test kalır.
 - Compose dosyasındaki parola yalnızca yerel içindir; loopback'e bağlıdır ve gizli anahtar değildir.
 - Aynı klasörde birden çok oturum çalışıyorsa her oturum kendi worktree'sinde ve kendi test veritabanıyla çalışır (§8).
 - **Oturum başında denetlenecekler.** (1) Docker Desktop yeniden başlatmadan sonra kapalı gelir; veritabanı testleri ve içe aktarma

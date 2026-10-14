@@ -43,7 +43,8 @@ def writing(request: Request) -> Iterator[Session]:
 @contextmanager
 def reading(request: Request) -> Iterator[Session]:
     """A read-only transaction, enforced by the database and always rolled back. Every learner
-    endpoint uses it: a learner request cannot write anything, whatever the handler does."""
+    endpoint uses it: a write inside it is refused by the database. The guarantee covers this
+    one transaction; a handler must not commit and start another."""
     with _factory(request)() as session:
         session.begin()
         try:

@@ -47,7 +47,9 @@ Reason = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, max_length=MAX_REASON_LENGTH)
 ]
 OptionKey = Literal["A", "B", "C", "D"]
-PartKey = Annotated[str, StringConstraints(pattern=r"^[a-z0-9][a-z0-9_.-]{0,63}$")]
+# A part's id inside the document. Only bounded in length: an id that names no part of the
+# question is an answer that does not fit, not a malformed request.
+PartKey = Annotated[str, StringConstraints(min_length=1, max_length=200)]
 
 
 class Api(BaseModel):
@@ -92,7 +94,6 @@ class SyllabusOut(Api):
     subject: str
     version: str
     title: str
-    status: str = Field(description="Review status of the reference data, as declared by it.")
     nodes: tuple[SyllabusNodeOut, ...]
     exam_sections: tuple[ExamSectionOut, ...]
     command_terms: tuple[str, ...]
@@ -121,7 +122,7 @@ class LearnerMcq(Api):
 
 
 class LearnerPart(Api):
-    id: PartKey
+    id: str
     label: str
     lead_in: Doc | None
     body: Doc
@@ -208,7 +209,7 @@ class WrittenCheckResult(Api):
 
     kind: Literal["written"]
     version_id: QuestionVersionId
-    part_id: PartKey
+    part_id: str
     marks: int
     marks_capped: bool
     mark_points: tuple[MarkPointOut, ...]

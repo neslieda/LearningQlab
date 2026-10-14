@@ -940,7 +940,6 @@
             "title": "Command Term"
           },
           "id": {
-            "pattern": "^[a-z0-9][a-z0-9_.-]{0,63}$",
             "title": "Id",
             "type": "string"
           },
@@ -2566,11 +2565,6 @@
             "title": "Program",
             "type": "string"
           },
-          "status": {
-            "description": "Review status of the reference data, as declared by it.",
-            "title": "Status",
-            "type": "string"
-          },
           "subject": {
             "title": "Subject",
             "type": "string"
@@ -2589,7 +2583,6 @@
           "subject",
           "version",
           "title",
-          "status",
           "nodes",
           "exam_sections",
           "command_terms"
@@ -2823,7 +2816,8 @@
             "type": "string"
           },
           "part_id": {
-            "pattern": "^[a-z0-9][a-z0-9_.-]{0,63}$",
+            "maxLength": 200,
+            "minLength": 1,
             "title": "Part Id",
             "type": "string"
           },
@@ -2884,7 +2878,6 @@
             "type": "array"
           },
           "part_id": {
-            "pattern": "^[a-z0-9][a-z0-9_.-]{0,63}$",
             "title": "Part Id",
             "type": "string"
           },
@@ -2973,34 +2966,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3052,45 +3042,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3144,12 +3130,11 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
@@ -3165,34 +3150,31 @@
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3236,34 +3218,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3317,45 +3296,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3409,45 +3384,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3501,45 +3472,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3593,45 +3560,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3675,45 +3638,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3767,45 +3726,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -3850,6 +3805,7 @@
               "anyOf": [
                 {
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
                   "type": "string"
                 },
                 {
@@ -3900,6 +3856,7 @@
               "anyOf": [
                 {
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
                   "type": "string"
                 },
                 {
@@ -3971,34 +3928,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4042,34 +3996,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4113,45 +4064,41 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "409": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4184,34 +4131,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4237,6 +4181,8 @@
             "name": "program",
             "required": true,
             "schema": {
+              "maxLength": 120,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
               "title": "Program",
               "type": "string"
             }
@@ -4246,6 +4192,8 @@
             "name": "subject",
             "required": true,
             "schema": {
+              "maxLength": 120,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
               "title": "Subject",
               "type": "string"
             }
@@ -4259,6 +4207,7 @@
               "anyOf": [
                 {
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
                   "type": "string"
                 },
                 {
@@ -4283,34 +4232,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4339,6 +4285,7 @@
               "anyOf": [
                 {
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
                   "type": "string"
                 },
                 {
@@ -4389,6 +4336,7 @@
               "anyOf": [
                 {
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
                   "type": "string"
                 },
                 {
@@ -4444,34 +4392,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4515,34 +4460,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }
@@ -4626,34 +4568,31 @@
           },
           "401": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No acceptable token (`unauthenticated`)."
           },
           "404": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "No such resource, or the caller may not know of it (`not_found`)."
           },
           "422": {
             "content": {
-              "application/json": {
+              "application/problem+json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
-              },
-              "application/problem+json": {}
+              }
             },
             "description": "The request is not valid (`validation_failed`)."
           }

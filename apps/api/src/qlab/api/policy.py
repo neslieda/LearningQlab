@@ -139,6 +139,25 @@ async def authorize(request: Request, access: Access | None) -> Principal | None
     return principal
 
 
+MAX_BODY_BYTES: Final = 1024 * 1024
+# Tighter limits for endpoints whose body is small by nature.
+BODY_LIMITS: Final[Mapping[tuple[str, str], int]] = MappingProxyType(
+    {("POST", "/v1/questions/{question_id}/check"): 64 * 1024}
+)
+
+
+def check_body_size(request: Request, limit: int) -> None:
+    """Refuse a body that is too large before any of it is read. A body must announce its
+    length: 411 without `Content-Length` when one is being sent, 413 above the limit."""
+    declared = request.headers.get("content-length")
+    if declared is None:
+        if "transfer-encoding" in request.headers:
+            raise errors.ApiError(411, "length_required", "Content-Length is required")
+        return
+    if not declared.isascii() or not declared.isdigit() or int(declared) > limit:
+        raise errors.ApiError(413, "payload_too_large", "The request body is too large")
+
+
 class PolicyRoute(APIRoute):
     """A route that is authorized before its handler, its parameters or its body are touched."""
 
@@ -150,6 +169,10 @@ class PolicyRoute(APIRoute):
 
         async def authorized(request: Request) -> Response:
             request.state.principal = await authorize(request, self.access(request.method))
+            # Only after the caller is known to be allowed, and still before the body is read.
+            check_body_size(
+                request, BODY_LIMITS.get((request.method, self.path_format), MAX_BODY_BYTES)
+            )
             return await handler(request)
 
         return authorized

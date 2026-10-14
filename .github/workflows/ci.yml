@@ -47,4 +47,21 @@ jobs:
       - run: uv run lint-imports
       # The committed pilot JSON must be what the converter produces from the Markdown.
       - run: uv run python -m qlab.content.pilot convert --check
+      # The committed OpenAPI document must be what the application produces.
+      - run: uv run python -m qlab.api.openapi --check
       - run: uv run pytest
+
+  api-client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/api-client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      # The generated client must match apps/api/openapi.json (docs/API_DESIGN.md section 6).
+      - run: npm run check
+      - run: npm run typecheck

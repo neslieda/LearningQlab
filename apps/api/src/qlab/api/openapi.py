@@ -18,6 +18,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from qlab.api.app import create_app
+from qlab.api.errors import PROBLEM_MEDIA_TYPE
 from qlab.api.settings import Environment, Settings
 from qlab.identity.tokens import DEV_AUDIENCE, DEV_ISSUER, TokenVerifier
 
@@ -44,6 +45,11 @@ def document() -> dict[str, Any]:
     for path, operations in schema["paths"].items():
         for operation in operations.values():
             operation["security"] = [] if path == "/healthz" else [{"bearer": []}]
+            # Errors are served as application/problem+json only; say so, with the schema.
+            for response in operation["responses"].values():
+                content = response.get("content", {})
+                if PROBLEM_MEDIA_TYPE in content and "application/json" in content:
+                    content[PROBLEM_MEDIA_TYPE] = content.pop("application/json")
     return schema
 
 

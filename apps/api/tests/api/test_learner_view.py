@@ -1267,3 +1267,29 @@ def test_a_staff_status_filter_cannot_be_used_to_see_drafts(
     response = list_questions(api, Role.PLATFORM_ADMIN, status="draft", limit=50)
 
     assert qid(draft) not in response.text
+
+
+# --- part ids are plain strings -----------------------------------------------------------------
+
+
+def test_a_part_id_of_seventy_characters_is_read_by_a_learner(api: ApiHarness, env: Env) -> None:
+    long_id = "p" + "-x" * 34 + "a"
+    assert len(long_id) == 70
+    source = json.loads(json.dumps(structured_without_figure()).replace('"p-a"', f'"{long_id}"'))
+    item = publish_document(api.session, env, source, tag="zzlongv")
+
+    read = api.client.get(f"/v1/questions/{item.id}", headers=api.headers(Role.STUDENT))
+
+    assert read.status_code == 200, read.text
+    body = LearnerQuestion.model_validate(read.json())
+    assert [p.id for p in body.parts] == [p.id for p in item.document.parts]
+    assert long_id in [p.id for p in body.parts]
+    listing = api.client.get("/v1/questions", headers=api.headers(Role.STUDENT))
+    assert listing.status_code == 200
+    assert item.id in [i["id"] for i in listing.json()["items"]]
+
+
+def test_the_learner_part_type_takes_an_id_of_any_text() -> None:
+    fields = api_schemas.LearnerPart.model_fields
+    assert fields["id"].annotation is str
+    assert api_schemas.WrittenCheckResult.model_fields["part_id"].annotation is str

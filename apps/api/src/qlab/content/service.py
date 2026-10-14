@@ -751,10 +751,16 @@ def request_changes(
 
 
 def _last_editor(session: Session, version_id: uuid.UUID) -> str | None:
-    """Actor of the latest entry that wrote the version's content (`created` or `updated`)."""
-    writes = {"question_version.created", "question_version.updated"}
-    entries = audit.entries_for(session, "question_version", str(version_id))
-    return next((e.actor for e in reversed(entries) if e.action in writes), None)
+    """Actor of the latest entry that wrote the version's content: `created`, or an `updated`
+    that changed it. Saving the same content again does not make someone the editor."""
+    for entry in reversed(audit.entries_for(session, "question_version", str(version_id))):
+        if entry.action == "question_version.created":
+            return entry.actor
+        if entry.action == "question_version.updated" and entry.data.get(
+            "previous_content_sha256"
+        ) != entry.data.get("content_sha256"):
+            return entry.actor
+    return None
 
 
 @_atomic
@@ -774,7 +780,8 @@ def approve(
     InvalidTransition. Rights as in `create_question`.
 
     Separation of duties (D-59): the audit entry carries `approver_is_last_editor`, true when
-    `actor` is the actor of the version's latest `created` or `updated` entry. With
+    `actor` is the actor of the version's latest `created` entry or `updated` entry that
+    changed the content (re-saving identical content does not count). With
     `forbid_self_approval` such an approval raises SelfApprovalForbidden instead, after the
     status and content checks; an approval whose last editor cannot be determined is refused
     too.

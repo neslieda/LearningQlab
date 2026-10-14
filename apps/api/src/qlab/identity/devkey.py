@@ -46,16 +46,29 @@ def generate(path: Path) -> Ed25519PrivateKey:
 
 
 def load(path: Path) -> Ed25519PrivateKey:
-    """The key stored at `path`. DevKeyError when the file is missing, is readable by anyone
-    but its owner, or does not hold an Ed25519 private key."""
+    """The key stored at `path`. DevKeyError when the file is missing, is a symbolic link or
+    not a regular file, belongs to another user, is accessible to anyone but its owner, or
+    does not hold an Ed25519 private key."""
     try:
-        mode = path.stat().st_mode
+        # Non-blocking, so that a named pipe put in its place cannot hang the caller.
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     except FileNotFoundError:
         raise DevKeyError(f"{path} does not exist") from None
-    if mode & (stat.S_IRWXG | stat.S_IRWXO):
-        raise DevKeyError(f"{path} is accessible to other users; expected mode 0600")
+    except OSError:
+        raise DevKeyError(f"{path} cannot be opened (a symbolic link is refused)") from None
+    # Checked on the open descriptor, so what is checked is what is read.
+    status = os.fstat(descriptor)
+    if not stat.S_ISREG(status.st_mode):
+        os.close(descriptor)
+        raise DevKeyError(f"{path} is not a regular file")
+    with os.fdopen(descriptor, "rb") as file:
+        if status.st_uid != os.getuid():
+            raise DevKeyError(f"{path} belongs to another user")
+        if status.st_mode & (stat.S_IRWXG | stat.S_IRWXO):
+            raise DevKeyError(f"{path} is accessible to other users; expected mode 0600")
+        encoded = file.read(16 * 1024)
     try:
-        key = serialization.load_pem_private_key(path.read_bytes(), password=None)
+        key = serialization.load_pem_private_key(encoded, password=None)
     except ValueError, TypeError:
         raise DevKeyError(f"{path} does not hold a private key") from None
     if not isinstance(key, Ed25519PrivateKey):

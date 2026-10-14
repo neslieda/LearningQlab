@@ -571,6 +571,107 @@ def test_an_unknown_role_is_refused_and_writes_nothing(
     assert cli.count("role_assignment") == assignments
 
 
+# --- a database that is not on this machine --------------------------------------------------
+
+
+def with_host(url: str, host: str) -> str:
+    return make_url(url).set(host=host).render_as_string(hide_password=False)
+
+
+@pytest.mark.parametrize(
+    "host",
+    [
+        "db.example.invalid",
+        "10.0.0.5",
+        "192.168.1.20",
+        "127.0.0.2",
+        "localhost.example.invalid",
+        "127.0.0.1.example.invalid",
+        "0.0.0.0",  # noqa: S104
+        "::2",
+    ],
+)
+@pytest.mark.parametrize("argv", COMMANDS, ids=lambda a: a[0])
+def test_a_database_on_another_host_is_refused_and_nothing_is_written(
+    cli: Cli,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    host: str,
+    argv: list[str],
+) -> None:
+    monkeypatch.setenv("QLAB_DATABASE_URL", with_host(cli.url, host))
+    result = run(capsys, *argv)
+    assert result.raised is None, result.raised
+    assert result.code == 2
+    assert not JWT.search(result.out)
+    assert not cli.key_file.exists()
+    assert not cli.key_file.parent.exists()
+    assert not (cli.home / ".qlab").exists()
+    assert cli.count("account") == 0
+    assert cli.count("role_assignment") == 0
+    assert cli.count("audit_log") == 0
+
+
+def test_the_refusal_for_a_foreign_host_does_not_print_the_password(
+    cli: Cli, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    foreign = with_host(cli.url, "db.example.invalid")
+    monkeypatch.setenv("QLAB_DATABASE_URL", foreign)
+    result = run(capsys, "init")
+    assert result.code == 2
+    password = make_url(cli.url).password
+    assert password
+    assert password not in result.out + result.err
+
+
+@pytest.mark.parametrize("host", ["127.0.0.1", "localhost"])
+def test_a_database_on_this_machine_is_accepted(
+    cli: Cli, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch, host: str
+) -> None:
+    monkeypatch.setenv("QLAB_DATABASE_URL", with_host(cli.url, host))
+    result = run(capsys, "init")
+    assert result.code == 0, result.err
+    assert cli.count("account") == len(ROLES)
+
+
+# --- refusals are ordinary: exit code 2, "refused:" on stderr, no traceback -------------------
+
+ODD_SUBJECTS = [
+    " dev-student",
+    "dev-student ",
+    " dev-student ",
+    "dev-student\n",
+    "\tdev-student",
+    "dev\x00student",
+    "dev\x07student",
+    "dev\x1bstudent",
+    "dev\x7fstudent",
+    "\u00a0dev-student",
+    "dev-student\u200b",
+    "dev\u2028student",
+    "",
+    " ",
+]
+
+
+@pytest.mark.parametrize("subject", ODD_SUBJECTS)
+@pytest.mark.parametrize("command", ["grant", "revoke"])
+def test_a_padded_or_non_printable_subject_is_an_ordinary_refusal(
+    cli: Cli, capsys: pytest.CaptureFixture[str], command: str, subject: str
+) -> None:
+    assert run(capsys, "init").code == 0
+    audit_before, assignments = cli.audit(), cli.count("role_assignment")
+    accounts = cli.count("account")
+    result = run(capsys, command, subject, "reviewer")
+    assert result.raised is None, result.raised
+    assert result.code == 2
+    assert "refused:" in result.err
+    assert "Traceback" not in result.err + result.out
+    assert cli.audit() == audit_before
+    assert cli.count("role_assignment") == assignments
+    assert cli.count("account") == accounts
+
+
 # --- key material ----------------------------------------------------------------------------
 
 

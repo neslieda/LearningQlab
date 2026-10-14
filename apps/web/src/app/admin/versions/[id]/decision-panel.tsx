@@ -11,7 +11,22 @@ import { ProblemView } from "../../problem-view";
 
 const NEEDS_REASON: readonly DecisionAction[] = ["request_changes", "reject", "withdraw", "republish"];
 
-export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: AdminVersion; roles: readonly string[]; hasWorkingVersion: boolean }) {
+export interface DecisionPanelProps {
+  /** Status and ids from the latest read; `content_sha256` is the PINNED digest of the content on screen. */
+  version: AdminVersion;
+  roles: readonly string[];
+  hasWorkingVersion: boolean;
+  /** False until the question query has succeeded: "Open revision" is not offered before that. */
+  questionLoaded: boolean;
+  /** True when the content on screen is no longer the current content: every decision is locked. */
+  stale: boolean;
+  onReload: () => void;
+  /** Called before the queries are invalidated after the user's own decision, and after they settled. */
+  onDecisionStart: () => void;
+  onDecisionEnd: () => void;
+}
+
+export function DecisionPanel({ version, roles, hasWorkingVersion, questionLoaded, stale, onReload, onDecisionStart, onDecisionEnd }: DecisionPanelProps) {
   const api = useApi();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -21,7 +36,7 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
 
   const id = version.id;
   const sha = version.content_sha256;
-  const actions = availableActions(version.status, roles, hasWorkingVersion);
+  const actions = availableActions(version.status, roles, hasWorkingVersion).filter((a) => a.id !== "open_revision" || questionLoaded);
 
   const run = useMutation({
     mutationFn: async ({ action, reason: text }: { action: DecisionAction; reason?: string }) => {
@@ -51,7 +66,13 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
     onSuccess: async (result, vars) => {
       setError(null);
       setReason("");
-      await queryClient.invalidateQueries({ queryKey: ["admin"] });
+      onDecisionStart();
+      try {
+        await queryClient.invalidateQueries({ queryKey: ["admin"] });
+      } finally {
+        onDecisionEnd();
+      }
+      if (vars.action === "reject") document.getElementById("version-status-heading")?.focus();
       if (vars.action === "open_revision" && result && "document" in result) router.push(`/admin/versions/${result.id}`);
     },
     onError: setError,
@@ -62,7 +83,8 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
   const uid = useId();
   const trimmed = reason.trim();
   const reasonValid = trimmed.length >= 1 && trimmed.length <= 500;
-  const showReason = actions.some((a) => NEEDS_REASON.includes(a.id));
+  const reasonActions = actions.filter((a) => NEEDS_REASON.includes(a.id)).map((a) => a.label);
+  const showReason = reasonActions.length > 0;
 
   function start(action: DecisionAction) {
     if (locked.current) return; // a second click before React has re-rendered the disabled button
@@ -86,7 +108,7 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
 
   function reload() {
     setError(null);
-    void queryClient.invalidateQueries({ queryKey: ["admin"] });
+    onReload();
   }
 
   const status = version.status;
@@ -101,13 +123,14 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
       {showReason ? (
         <div>
           <label htmlFor={`${uid}-reason`} className="block font-medium">
-            Reason
+            Reason (for {reasonActions.join(", ")})
           </label>
           <textarea
             id={`${uid}-reason`}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             rows={3}
+            maxLength={500}
             aria-describedby={`${uid}-warning ${uid}-count`}
             aria-invalid={reason.length > 0 && !reasonValid ? true : undefined}
             className="w-full rounded border border-[var(--page-border)] bg-transparent p-2"
@@ -120,6 +143,14 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
           </p>
         </div>
       ) : null}
+      {stale ? (
+        <div role="alert" className="space-y-2 rounded border border-red-700 p-3">
+          <p>This version changed since you opened it. Reload to see the current content.</p>
+          <button type="button" onClick={reload} className="rounded border border-[var(--page-border)] px-3 py-1.5">
+            Reload
+          </button>
+        </div>
+      ) : null}
       {actions.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {actions.map((a) => (
@@ -127,7 +158,7 @@ export function DecisionPanel({ version, roles, hasWorkingVersion }: { version: 
               key={a.id}
               type="button"
               onClick={() => start(a.id)}
-              disabled={run.isPending || (NEEDS_REASON.includes(a.id) && !reasonValid)}
+              disabled={stale || run.isPending || (NEEDS_REASON.includes(a.id) && !reasonValid)}
               className="rounded border border-[var(--page-border)] px-3 py-1.5 disabled:opacity-50"
             >
               {a.label}
@@ -150,8 +181,13 @@ function ConfirmDialog({ pending, onCancel, onConfirm }: { pending: boolean; onC
 
   useEffect(() => {
     const opener = document.activeElement as HTMLElement | null;
+    const box = root.current;
     cancelRef.current?.focus();
-    return () => opener?.focus?.();
+    return () => {
+      // Restore focus only if nothing else took it (a successful reject moves it to the status heading).
+      const active = document.activeElement;
+      if (!active || active === document.body || box?.contains(active)) opener?.focus?.();
+    };
   }, []);
 
   function onKeyDown(e: React.KeyboardEvent) {

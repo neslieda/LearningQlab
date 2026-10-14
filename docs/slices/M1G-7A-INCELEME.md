@@ -59,12 +59,19 @@ Hepsi istemci bileşeni; veri `useApi()` + TanStack Query ile. Personel rolü (`
 | `published`, `withdrawn`, `rejected` (çalışılan sürüm yoksa) | Open revision | personel | `POST …/questions/{id}/revisions` |
 
 - `auto_checking` ve `needs_fix` durumunda karar yoktur (`needs_fix` düzeltme 7b'de; panel "Waiting for changes" der).
-- **Gerekçe alanı:** 1–500 karakter, kırpılmış; alanın yanında sabit uyarı: "Describe the content, not a person. Do not paste
+- **Gerekçe alanı:** yalnızca gerekçe isteyen eylem varken görünür ve "Reason (for …)" diye o eylemleri adlandırır; 1–500 karakter
+  (`maxLength` 500), kırpılmış; alanın yanında sabit uyarı: "Describe the content, not a person. Do not paste
   question text. Reasons are kept permanently." (DATA_ARCHITECTURE §2.2 devreden 8, ⚖️).
+- **Görülen içerik sabitlenir.** Sürüm sayfası açıldığında gösterilen içeriğin özeti o sayfa için sabitlenir. Sonraki bir okuma
+  (yeniden bağlanma, başka bir sorgunun geçersiz kılınması) farklı bir özet getirirse ekrandaki içerik **değişmez**; panel
+  "This version changed since you opened it. Reload to see the current content." der, kararları kilitler ve "Reload" düğmesi verir.
+  Yeniden yükleme yeni içeriği gösterir ve yeni özeti sabitler. Kullanıcının kendi kararından sonraki yenileme bu uyarıyı vermez.
 - Onay ve yayın, kullanıcının **gördüğü** sürümün özetini gönderir; sürüm arada değiştiyse API 409 `stale_content` döner ve panel
   "This version changed since you opened it. Reload to see the current content." der, yeniden yükleme düğmesi verir.
 - Her karardan sonra sürüm, soru, liste ve geçmiş sorguları geçersiz kılınır; panel yeni durumu gösterir. Düğme istek sürerken kilitli
   (çift gönderim yok).
+- Sayfa sorgularının hataları da karar hataları gibi gösterilir (`role="alert"` içinde, aynı bağlantı ve düğmelerle).
+- Soru bilgisi yüklenmeden "Open revision" gösterilmez. Ret başarılı olunca odak sürümün durum başlığına taşınır.
 - Hata eşlemesi (problem `code` → metin): `not_publishable` → nedenlerin listesi (`critical_checks_failed` → "A required check has
   not passed", `unverified_visuals` → "Figures are not verified yet", `rights_denied` → "Rights do not permit display");
   `self_approval_forbidden` → "You edited this version last, so someone else must approve it"; `invalid_transition` → "This action is

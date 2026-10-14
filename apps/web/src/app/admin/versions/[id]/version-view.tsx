@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { AdminVersion } from "@qlab/api-client";
 import { useQuery } from "@tanstack/react-query";
 import { QuestionDocumentView } from "@qlab/question-renderer";
-import { ApiError, formatTime, unwrap } from "@/lib/admin";
+import { formatTime, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
-import { isWorkingStatus, problemMessage } from "@/lib/decisions";
+import { isWorkingStatus } from "@/lib/decisions";
+import { ProblemView } from "../../problem-view";
 import { StaffGate } from "../../staff-gate";
 import { ScrollBox, StatusBadge } from "../../status-badge";
 import { DecisionPanel } from "./decision-panel";
@@ -18,6 +20,10 @@ export function VersionView({ id }: { id: string }) {
 function Inner({ id, roles, accountId }: { id: string; roles: readonly string[]; accountId: string }) {
   const api = useApi();
   const [showAnswers, setShowAnswers] = useState(true);
+  // The content the user is looking at, pinned at first display (per version id). A later read with another digest
+  // never replaces it; the user must press Reload. Decisions always carry the pinned digest.
+  const [pin, setPin] = useState<AdminVersion | null>(null);
+  const [settling, setSettling] = useState(false);
 
   const version = useQuery({
     queryKey: ["admin", "version", id],
@@ -34,11 +40,24 @@ function Inner({ id, roles, accountId }: { id: string; roles: readonly string[];
     queryFn: async () => unwrap(await api.GET("/v1/admin/questions/{question_id}", { params: { path: { question_id: questionId ?? "" } } })),
   });
 
+  if (version.data && (pin === null || pin.id !== version.data.id)) setPin(version.data);
+
   if (version.isPending) return <p>Loading...</p>;
-  if (version.isError) {
-    return <p role="alert">{version.error instanceof ApiError ? problemMessage(version.error.problem).message : "Something went wrong"}</p>;
+  if (version.isError && !version.data) {
+    return <ProblemView error={version.error} onReload={() => void version.refetch()} />;
   }
-  const v = version.data;
+  const latest = version.data;
+  if (!latest || !pin) return <p>Loading...</p>;
+  const stale = !settling && latest.content_sha256 !== pin.content_sha256;
+  // Status and checks come from the latest read; the document and its digest stay pinned.
+  const v: AdminVersion = { ...latest, content_sha256: pin.content_sha256, document: pin.document };
+  const reload = () => {
+    // Pin what the server returns now. Clearing the pin first would re-pin the cached, older read.
+    void history.refetch();
+    void version.refetch().then((result) => {
+      if (result.data) setPin(result.data);
+    });
+  };
   const hasWorking = (question.data?.versions ?? []).some((x) => isWorkingStatus(x.status));
 
   return (
@@ -50,10 +69,11 @@ function Inner({ id, roles, accountId }: { id: string; roles: readonly string[];
       </p>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold">Version {v.version_no}</h1>
-        <p className="flex flex-wrap items-center gap-2">
+        <h2 id="version-status-heading" tabIndex={-1} className="flex flex-wrap items-center gap-2 text-base font-normal">
+          <span className="sr-only">Status</span>
           <StatusBadge status={v.status} />
           <span className="font-mono text-sm">Content {v.content_sha256.slice(0, 12)}</span>
-        </p>
+        </h2>
       </header>
 
       {v.has_unverified_visuals ? (
@@ -116,7 +136,7 @@ function Inner({ id, roles, accountId }: { id: string; roles: readonly string[];
           History
         </h2>
         {history.isPending ? <p>Loading...</p> : null}
-        {history.isError ? <p role="alert">{history.error instanceof ApiError ? problemMessage(history.error.problem).message : "Something went wrong"}</p> : null}
+        {history.isError ? <ProblemView error={history.error} onReload={() => void history.refetch()} /> : null}
         {history.data ? (
           <ScrollBox label="History table">
             <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
@@ -151,7 +171,19 @@ function Inner({ id, roles, accountId }: { id: string; roles: readonly string[];
         ) : null}
       </section>
 
-      <DecisionPanel version={v} roles={roles} hasWorkingVersion={hasWorking} />
+      <DecisionPanel
+        version={v}
+        roles={roles}
+        hasWorkingVersion={hasWorking}
+        questionLoaded={question.isSuccess}
+        stale={stale}
+        onReload={reload}
+        onDecisionStart={() => setSettling(true)}
+        onDecisionEnd={() => {
+          setPin(null);
+          setSettling(false);
+        }}
+      />
     </div>
   );
 }

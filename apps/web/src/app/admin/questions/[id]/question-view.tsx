@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ApiError, formatTime, shortId, unwrap } from "@/lib/admin";
+import { formatTime, shortId, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
-import { availableActions, isWorkingStatus, problemMessage } from "@/lib/decisions";
+import { availableActions, isWorkingStatus } from "@/lib/decisions";
 import { ProblemView } from "../../problem-view";
 import { StaffGate } from "../../staff-gate";
 import { ScrollBox, StatusBadge } from "../../status-badge";
@@ -37,7 +37,7 @@ function Inner({ id, roles }: { id: string; roles: readonly string[] }) {
 
   if (query.isPending) return <p>Loading...</p>;
   if (query.isError) {
-    return <p role="alert">{query.error instanceof ApiError ? problemMessage(query.error.problem).message : "Something went wrong"}</p>;
+    return <ProblemView error={query.error} onReload={() => void query.refetch()} />;
   }
   const q = query.data;
   const hasWorking = q.versions.some((v) => isWorkingStatus(v.status));

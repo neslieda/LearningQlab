@@ -135,12 +135,9 @@ async function mockApi(page: Page, roles: S["Role"][] | null, handler: (r: Req) 
   return log;
 }
 
-// Sign in through the development page: paste a fake token while GET /v1/me is mocked.
+// Signed in = the development token is in sessionStorage (key qlab.dev.token); GET /v1/me is mocked.
 async function signIn(page: Page) {
-  await page.goto("/dev/sign-in");
-  await page.getByRole("textbox").first().fill("fake.dev.token");
-  await page.getByRole("button", { name: /sign in|save|verify|use|submit|continue/i }).first().click();
-  await expect(page.getByText(ME).first()).toBeVisible();
+  await page.addInitScript(() => sessionStorage.setItem("qlab.dev.token", "fake.dev.token"));
 }
 
 const adminRequests = (log: Req[]) => log.filter((r) => r.path.startsWith("/admin/"));
@@ -170,6 +167,11 @@ function versionServer(initial: S["AdminVersion"], extra?: (r: Req) => Reply | u
 const statusRe = (s: string) => new RegExp(s.replace("_", "[ _]"), "i");
 const REASON_WARNING = "Describe the content, not a person. Do not paste question text. Reasons are kept permanently.";
 
+// Next's dev server adds its own empty role="alert" route announcer; only the app's alerts count.
+function alerts(page: Page) {
+  return page.locator('[role="alert"]:not(#__next-route-announcer__)');
+}
+
 test.describe("access", () => {
   test("a role without a staff role sends no admin request and sees the staff notice", async ({ page }) => {
     const log = await mockApi(page, ["student", "teacher"], () => undefined);
@@ -194,7 +196,7 @@ test.describe("access", () => {
     await mockApi(page, ["reviewer"], (r) => (r.path.startsWith("/admin/") ? { problem: { status: 401, code: "unauthenticated" } } : undefined));
     await signIn(page);
     await page.goto("/admin/questions");
-    await expect(page.locator('a[href="/dev/sign-in"]').first()).toBeVisible();
+    await expect(alerts(page).locator('a[href="/dev/sign-in"]')).toBeVisible();
   });
 });
 
@@ -307,7 +309,27 @@ test.describe("question page", () => {
     await signIn(page);
     await page.goto(`/admin/questions/${qid("a")}`);
     await page.getByRole("button", { name: "Open revision" }).click();
-    await expect(page.getByText("A version is already being worked on")).toBeVisible();
+    const alert = alerts(page);
+    await expect(alert).toContainText("A version is already being worked on");
+    await expect(alert.locator(`a[href="/admin/questions/${qid("a")}"]`)).toBeVisible();
+  });
+
+  test("Open revision is absent while the question request is pending and when it fails", async ({ page }) => {
+    const qpath = `/admin/questions/${qid("a")}`;
+    await mockApi(page, ["reviewer"], (r) => (r.path === qpath ? { delayMs: 3000, json: questionBody([published]) } : undefined));
+    await signIn(page);
+    await page.goto(qpath);
+    await page.waitForTimeout(800);
+    await expect(page.getByRole("button", { name: "Open revision" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Open revision" })).toBeVisible({ timeout: 10000 });
+  });
+
+  test("Open revision is absent when the question request fails", async ({ page }) => {
+    await mockApi(page, ["reviewer"], (r) => (r.path === `/admin/questions/${qid("a")}` ? { problem: { status: 500, code: "boom_test" } } : undefined));
+    await signIn(page);
+    await page.goto(`/admin/questions/${qid("a")}`);
+    await expect(alerts(page)).toContainText("boom_test");
+    await expect(page.getByRole("button", { name: "Open revision" })).toHaveCount(0);
   });
 });
 
@@ -347,8 +369,13 @@ test.describe("version page", () => {
     await expect(page.getByText("Marks reconcile with the scheme")).toBeVisible();
     await expect(page.getByText("submitted").first()).toBeVisible();
     await expect(page.getByText("approved").first()).toBeVisible();
-    const hist = await page.content();
-    expect(hist.indexOf("submitted")).toBeLessThan(hist.indexOf("Marks reconcile with the scheme")); // oldest first
+    const entries = page.getByRole("listitem").or(page.getByRole("row")).filter({ hasText: /submitted|approved|publish.refused/i });
+    const texts = await entries.allTextContents();
+    // How an action name is displayed (raw or humanised) is not specified.
+    const at = (w: string) => texts.findIndex((t) => new RegExp(w.replace("_", "."), "i").test(t));
+    expect(at("submitted")).toBeGreaterThanOrEqual(0);
+    expect(at("submitted")).toBeLessThan(at("Marks reconcile with the scheme")); // oldest first
+    expect(at("Marks reconcile with the scheme")).toBeLessThan(at("publish_refused"));
   });
 
   test("with no checks it says so; the figures note is absent", async ({ page }) => {
@@ -557,25 +584,152 @@ test.describe("reasons", () => {
     expect((log.find((r) => r.path.endsWith("/request-changes"))?.body as { reason: string }).reason).toHaveLength(500);
   });
 
-  test("Reject asks for confirmation ('cannot be undone') and sends the reason only after it", async ({ page }) => {
-    const { log } = await open(page);
-    const messages: string[] = [];
+  test("Reject asks for confirmation in an ARIA dialog ('cannot be undone'), sends the reason after it, and focuses the status heading", async ({ page }) => {
+    const { v, log } = await open(page);
+    let native = 0;
     page.on("dialog", async (d) => {
-      messages.push(d.message());
-      await d.accept();
+      native++;
+      await d.dismiss();
     });
     await page.getByRole("textbox", { name: /reason/i }).fill("Stem is ambiguous");
     await page.getByRole("button", { name: "Reject" }).click();
     const dialog = page.getByRole("dialog");
-    if (await dialog.isVisible().catch(() => false)) {
-      await expect(dialog).toContainText("cannot be undone");
-      expect(log.some((r) => r.path.endsWith("/reject"))).toBe(false);
-      await dialog.getByRole("button", { name: /confirm|reject|yes|ok/i }).last().click();
-    } else {
-      expect(messages.join(" ")).toContain("cannot be undone");
-    }
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText("cannot be undone");
+    expect(log.some((r) => r.path.endsWith("/reject"))).toBe(false);
+    await dialog.getByRole("button", { name: /confirm|reject|yes/i }).last().click();
     await expect.poll(() => log.some((r) => r.path.endsWith("/reject"))).toBe(true);
     expect(log.find((r) => r.path.endsWith("/reject"))?.body).toEqual({ reason: "Stem is ambiguous" });
+    expect(native).toBe(0);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    // focus moves to the version's status heading
+    await expect.poll(() => page.evaluate(() => document.activeElement?.tagName ?? "")).toMatch(/^H[1-6]$/);
+    await expect(page.locator(":focus")).toContainText(/rejected/i);
+    void v;
+  });
+
+  test("Cancelling the Reject dialog sends nothing", async ({ page }) => {
+    const { log } = await open(page);
+    await page.getByRole("textbox", { name: /reason/i }).fill("Stem is ambiguous");
+    await page.getByRole("button", { name: "Reject" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: /cancel|close|no/i }).first().click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await page.waitForTimeout(300);
+    expect(log.some((r) => r.path.endsWith("/reject"))).toBe(false);
+  });
+
+  test("the reason field has maxLength 500", async ({ page }) => {
+    await open(page);
+    await expect(page.getByRole("textbox", { name: /reason/i })).toHaveAttribute("maxlength", "500");
+  });
+
+  test("the reason field exists only where an action needs a reason", async ({ page }) => {
+    const reasonBox = () => page.getByRole("textbox", { name: /reason/i });
+    // draft: only Submit -> no reason field
+    const draft = version({ status: "draft" });
+    await mockApi(page, ["reviewer"], versionServer(draft).handler);
+    await signIn(page);
+    await page.goto(`/admin/versions/${draft.id}`);
+    await expect(page.getByRole("button", { name: "Submit for review" })).toBeVisible();
+    await expect(reasonBox()).toHaveCount(0);
+    await expect(page.getByText(REASON_WARNING)).toHaveCount(0);
+  });
+
+  test("approved: a reviewer has Request changes so the field shows; published: a reviewer has no reason action so it does not", async ({ page }) => {
+    const approved = version({ status: "approved" });
+    await mockApi(page, ["reviewer"], versionServer(approved).handler);
+    await signIn(page);
+    await page.goto(`/admin/versions/${approved.id}`);
+    await expect(page.getByRole("textbox", { name: /reason/i })).toBeVisible();
+    await page.unrouteAll({ behavior: "ignoreErrors" });
+    const published = version({ id: vid("d"), status: "published" });
+    await mockApi(page, ["reviewer"], versionServer(published).handler);
+    await page.goto(`/admin/versions/${published.id}`);
+    await expect(page.getByRole("button", { name: "Withdraw" })).toHaveCount(0);
+    await expect(page.getByRole("textbox", { name: /reason/i })).toHaveCount(0);
+  });
+});
+
+test.describe("pinned content", () => {
+  const DOC_B = {
+    ...DOCUMENT,
+    stem: { type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: "Replacement stem for the changed synthetic version." }] }] },
+  } as unknown as S["QuestionDocument"];
+
+  async function openPinned(page: Page, roles: S["Role"][] = ["reviewer"]) {
+    const v = version({ status: "in_review", content_sha256: SHA });
+    const server = versionServer(v);
+    const log = await mockApi(page, roles, server.handler);
+    await signIn(page);
+    await page.goto(`/admin/versions/${v.id}`);
+    await expect(page.getByRole("button", { name: "Approve" })).toBeEnabled();
+    return { v, server, log };
+  }
+  const refetch = async (page: Page) => {
+    await page.context().setOffline(true);
+    await page.context().setOffline(false);
+    await page.evaluate(() => window.dispatchEvent(new Event("online")));
+    await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+  };
+  const NOTICE = "This version changed since you opened it. Reload to see the current content.";
+
+  test("a later read with another digest does not change the screen; it warns and locks decisions until Reload", async ({ page }) => {
+    const { v, server, log } = await openPinned(page);
+    if (STEM_TEXT) await expect(page.getByText(STEM_TEXT, { exact: false }).first()).toBeVisible();
+    server.state.v = { ...v, content_sha256: SHA2, document: DOC_B };
+    await refetch(page);
+    await expect(page.getByText(NOTICE)).toBeVisible();
+    // still content A
+    if (STEM_TEXT) await expect(page.getByText(STEM_TEXT, { exact: false }).first()).toBeVisible();
+    await expect(page.getByText("Replacement stem for the changed synthetic version.")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Approve" })).toBeDisabled();
+    await page.getByRole("button", { name: "Reload" }).click();
+    await expect(page.getByText("Replacement stem for the changed synthetic version.")).toBeVisible();
+    await expect(page.getByText(NOTICE)).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Approve" })).toBeEnabled();
+    await page.getByRole("button", { name: "Approve" }).click();
+    await expect.poll(() => log.some((r) => r.path.endsWith("/approve"))).toBe(true);
+    expect(log.find((r) => r.path.endsWith("/approve"))?.body).toEqual({ expected_content_sha256: SHA2 });
+  });
+
+  test("no notice after the user's own successful approve or submit", async ({ page }) => {
+    const { server, log } = await openPinned(page, ["content_admin"]);
+    await page.getByRole("button", { name: "Approve" }).click();
+    await expect(page.getByRole("button", { name: "Publish" })).toBeVisible();
+    await refetch(page);
+    await page.waitForTimeout(500);
+    await expect(page.getByText(NOTICE)).toHaveCount(0);
+    expect(log.filter((r) => r.path.endsWith("/approve"))).toHaveLength(1);
+    void server;
+  });
+
+  test("no notice after the user's own successful submit", async ({ page }) => {
+    const v = version({ status: "draft" });
+    await mockApi(page, ["reviewer"], versionServer(v).handler);
+    await signIn(page);
+    await page.goto(`/admin/versions/${v.id}`);
+    await page.getByRole("button", { name: "Submit for review" }).click();
+    await expect(page.getByRole("button", { name: "Approve" })).toBeVisible();
+    await refetch(page);
+    await page.waitForTimeout(500);
+    await expect(page.getByText(NOTICE)).toHaveCount(0);
+  });
+});
+
+test.describe("filters", () => {
+  test("an invalid exam section shows an inline message and sends no list request", async ({ page }) => {
+    const log = await mockApi(page, ["reviewer"], (r) => (r.path === "/admin/questions" ? { json: { items: [], next_cursor: null } } : undefined));
+    await signIn(page);
+    await page.goto("/admin/questions");
+    await expect.poll(() => log.filter((r) => r.path === "/admin/questions").length).toBeGreaterThan(0);
+    const before = log.filter((r) => r.path === "/admin/questions").length;
+    const box = page.getByLabel(/exam section/i);
+    await box.fill("bad value!");
+    await box.press("Enter");
+    await page.waitForTimeout(600);
+    await expect(page.getByText(/invalid|not valid|letters|only/i).first()).toBeVisible();
+    expect(log.filter((r) => r.path === "/admin/questions" && (r.query.get("exam_section") ?? "").includes("bad")).length).toBe(0);
+    expect(log.filter((r) => r.path === "/admin/questions").length).toBe(before);
   });
 });
 

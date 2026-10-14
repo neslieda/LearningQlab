@@ -5,9 +5,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { AdminQuestionPage } from "@qlab/api-client";
-import { ApiError, shortId, unwrap } from "@/lib/admin";
-import { problemMessage } from "@/lib/decisions";
+import { shortId, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
+import { ProblemView } from "../problem-view";
 import { ScrollBox, StatusBadge } from "../status-badge";
 import { StaffGate } from "../staff-gate";
 
@@ -17,6 +17,8 @@ const LEVELS = ["sl", "hl"] as const;
 type Status = (typeof STATUSES)[number];
 type QClass = (typeof CLASSES)[number];
 type Level = (typeof LEVELS)[number];
+
+const SECTION_RE = /^[A-Za-z0-9][A-Za-z0-9_.]*$/;
 
 function pick<T extends string>(value: string | null, allowed: readonly T[]): T | undefined {
   return allowed.find((a) => a === value);
@@ -35,12 +37,14 @@ function Inner() {
   const status = pick(params.get("status"), STATUSES);
   const questionClass = pick(params.get("question_class"), CLASSES);
   const level = pick(params.get("level"), LEVELS);
-  const examSection = params.get("exam_section") ?? "";
+  const rawSection = params.get("exam_section") ?? "";
+  const examSection = SECTION_RE.test(rawSection) && rawSection.length <= 120 ? rawSection : "";
   const awaitingVisuals = params.get("has_unverified_visuals") === "true";
 
   // null: the field follows the URL (so the back button updates it); a string: the user is typing.
   const [typed, setTyped] = useState<string | null>(null);
-  const sectionDraft = typed ?? examSection;
+  const sectionDraft = typed ?? rawSection;
+  const sectionInvalid = sectionDraft.trim() !== "" && !(SECTION_RE.test(sectionDraft.trim()) && sectionDraft.trim().length <= 120);
 
   function setParam(key: string, value: string | null) {
     const next = new URLSearchParams(params.toString());
@@ -51,8 +55,9 @@ function Inner() {
   }
   function commitSection() {
     const v = sectionDraft.trim();
+    if (v !== "" && !(SECTION_RE.test(v) && v.length <= 120)) return; // shown inline; never sent
     setTyped(null);
-    if (v !== examSection) setParam("exam_section", v || null);
+    if (v !== rawSection) setParam("exam_section", v || null);
   }
 
   const query = useInfiniteQuery({
@@ -109,8 +114,15 @@ function Inner() {
             onChange={(e) => setTyped(e.target.value)}
             onBlur={commitSection}
             maxLength={120}
+            aria-invalid={sectionInvalid ? true : undefined}
+            aria-describedby={sectionInvalid ? "section-error" : undefined}
             className="w-40 rounded border border-[var(--page-border)] bg-transparent p-1.5"
           />
+          {sectionInvalid ? (
+            <span id="section-error" role="alert" className="block text-red-700 dark:text-red-300">
+              Use letters, digits, dots and underscores, starting with a letter or digit.
+            </span>
+          ) : null}
         </label>
         <label className="block text-sm">
           <span className="block font-medium">Question class</span>
@@ -141,11 +153,7 @@ function Inner() {
       </form>
 
       {query.isPending ? <p>Loading...</p> : null}
-      {query.isError ? (
-        <p role="alert">
-          {query.error instanceof ApiError ? problemMessage(query.error.problem).message : "Something went wrong"}
-        </p>
-      ) : null}
+      {query.isError ? <ProblemView error={query.error} onReload={() => void query.refetch()} /> : null}
       {query.isSuccess && items.length === 0 ? <p>No questions match these filters.</p> : null}
       {items.length > 0 ? (
         <ScrollBox label="Questions table">

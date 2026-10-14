@@ -63,7 +63,7 @@ jobs:
       # The generated client must match apps/api/openapi.json (docs/API_DESIGN.md section 6).
       - run: npm run check -w @qlab/api-client
       - run: npm run typecheck -w @qlab/api-client -w @qlab/question-renderer -w @qlab/web
-      - run: npm test -w @qlab/question-renderer
+      - run: npm test -w @qlab/question-renderer -w @qlab/web
       - run: npm run lint -w @qlab/web
       - run: npm run build -w @qlab/web
       # Screenshots of the renderer gallery at 1280 and 375 px, inside the pinned Playwright image.

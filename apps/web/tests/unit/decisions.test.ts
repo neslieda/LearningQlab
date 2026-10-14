@@ -163,54 +163,51 @@ describe("availableActions: invariants", () => {
 });
 
 describe("problemMessage", () => {
-  const msg = problemMessage as unknown as (p: unknown) => unknown;
-  const problem = (code: string, status: number, errors: { code: string; message: string }[] = []) => ({
-    type: `https://example.test/problems/${code}`,
-    title: code,
-    status,
-    code,
-    detail: null,
-    errors,
-  });
-  const text = (p: unknown) => collectStrings(msg(p)).join("\n");
+  // Shape (exported type ProblemMessage): { message, reasons, followUp }.
+  const pm = (code: string | undefined, status: number, errors: { code: string }[] = []) =>
+    problemMessage({ code, status, errors });
 
-  it("not_publishable lists each reason in words", () => {
-    const t = text(
-      problem("not_publishable", 409, [
-        { code: "critical_checks_failed", message: "x" },
-        { code: "unverified_visuals", message: "x" },
-        { code: "rights_denied", message: "x" },
-      ]),
-    );
-    expect(t).toContain("A required check has not passed");
-    expect(t).toContain("Figures are not verified yet");
-    expect(t).toContain("Rights do not permit display");
+  it("not_publishable: message plus the reasons in words, in the order given, no follow-up", () => {
+    const r = pm("not_publishable", 409, [{ code: "critical_checks_failed" }, { code: "unverified_visuals" }, { code: "rights_denied" }]);
+    expect(r.reasons).toEqual(["A required check has not passed", "Figures are not verified yet", "Rights do not permit display"]);
+    expect(r.message.length).toBeGreaterThan(0);
+    expect(r.followUp).toBeNull();
   });
 
   it("not_publishable lists only the reasons present", () => {
-    const t = text(problem("not_publishable", 409, [{ code: "unverified_visuals", message: "x" }]));
-    expect(t).toContain("Figures are not verified yet");
-    expect(t).not.toContain("A required check has not passed");
-    expect(t).not.toContain("Rights do not permit display");
+    expect(pm("not_publishable", 409, [{ code: "unverified_visuals" }]).reasons).toEqual(["Figures are not verified yet"]);
+    expect(pm("not_publishable", 409, []).reasons).toEqual([]);
   });
 
   it.each([
-    ["self_approval_forbidden", 403, "You edited this version last, so someone else must approve it"],
-    ["invalid_transition", 409, "This action is not possible in the current state"],
-    ["working_version_exists", 409, "A version is already being worked on"],
-    ["not_found", 404, "Not found or not visible to you"],
-    ["stale_content", 409, "This version changed since you opened it. Reload to see the current content."],
-  ])("%s", (code, status, expectedText) => {
-    expect(text(problem(code, status))).toContain(expectedText);
+    ["self_approval_forbidden", 403, "You edited this version last, so someone else must approve it", null],
+    ["invalid_transition", 409, "This action is not possible in the current state", "reload"],
+    ["working_version_exists", 409, "A version is already being worked on", "question"],
+    ["not_found", 404, "Not found or not visible to you", null],
+    ["stale_content", 409, "This version changed since you opened it. Reload to see the current content.", "reload"],
+  ])("%s", (code, status, text, followUp) => {
+    const r = pm(code, status);
+    expect(r.message).toBe(text);
+    expect(r.reasons).toEqual([]);
+    expect(r.followUp).toBe(followUp);
+  });
+
+  it("status 401 and code unauthenticated lead to sign-in", () => {
+    for (const r of [pm("unauthenticated", 401), pm(undefined, 401), pm("whatever", 401), pm("unauthenticated", 500)]) {
+      expect(r.followUp).toBe("sign-in");
+      expect(r.message.length).toBeGreaterThan(0);
+      expect(r.reasons).toEqual([]);
+    }
   });
 
   it.each([
     ["unknown_thing", 500],
     ["invalid_cursor", 422],
-    ["", 500],
-  ])("unknown code %j falls back to 'Something went wrong' plus the code", (code, status) => {
-    const t = text(problem(code, status));
-    expect(t).toContain("Something went wrong");
-    if (code) expect(t).toContain(code);
+  ])("unknown code %j: 'Something went wrong' plus the code, no follow-up", (code, status) => {
+    const r = pm(code, status);
+    expect(r.message).toContain("Something went wrong");
+    expect(r.message).toContain(code);
+    expect(r.followUp).toBeNull();
+    expect(r.reasons).toEqual([]);
   });
 });

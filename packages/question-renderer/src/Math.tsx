@@ -1,7 +1,8 @@
 import katex from "katex";
 import { useMemo } from "react";
 
-/** The server's KaTeX settings (apps/api/katex/render.mjs). They are part of the rendering contract. */
+/** The server's KaTeX settings (apps/api/katex/render.mjs). They are part of the rendering contract.
+ * `trust` is replaced below by a function that always refuses and records that it did. */
 const OPTIONS = {
   throwOnError: true,
   strict: "error",
@@ -20,9 +21,16 @@ export interface MathProps {
 }
 
 function renderLatex(latex: string, display: boolean): string | null {
+  // With trust off, KaTeX does not throw for \href, \url or \includegraphics: it prints the
+  // command in red. Asking through a trust function lets us notice and show the fallback instead.
+  let untrusted = false;
+  const trust = () => {
+    untrusted = true;
+    return false;
+  };
   try {
-    const html = katex.renderToString(latex, { ...OPTIONS, displayMode: display });
-    return html.length > MAX_OUTPUT_CHARS ? null : html;
+    const html = katex.renderToString(latex, { ...OPTIONS, trust, displayMode: display });
+    return untrusted || html.length > MAX_OUTPUT_CHARS ? null : html;
   } catch {
     return null;
   }

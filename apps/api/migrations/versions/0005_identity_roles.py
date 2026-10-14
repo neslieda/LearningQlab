@@ -40,7 +40,9 @@ def upgrade() -> None:
             name=op.f("ck_account_subject"),
         ),
     )
-    # Roles are data in the application (D-12). A revoked assignment stays as a row.
+    # Roles are data in the application (D-12). The service revokes instead of deleting; the
+    # lasting record of grants and revocations is the audit log, so these tables carry no
+    # delete guard and an account can still be erased on request (docs/SECURITY.md 5.4).
     op.create_table(
         "role_assignment",
         sa.Column("id", sa.Uuid(), nullable=False),
@@ -73,49 +75,12 @@ def upgrade() -> None:
         unique=True,
         postgresql_where=sa.text("revoked_at IS NULL"),
     )
-    # Assignments are history: who held which role when. They are revoked, never removed.
-    op.execute(
-        """
-        CREATE FUNCTION role_assignment_guard() RETURNS trigger
-        LANGUAGE plpgsql SET search_path = pg_catalog, public, pg_temp AS $$
-        BEGIN
-            IF TG_OP = 'DELETE' OR TG_OP = 'TRUNCATE' THEN
-                RAISE EXCEPTION 'role_assignment rows are never deleted; revoke instead';
-            END IF;
-            IF OLD.revoked_at IS NOT NULL THEN
-                RAISE EXCEPTION 'a revoked role assignment cannot be changed';
-            END IF;
-            IF NEW.id IS DISTINCT FROM OLD.id
-                OR NEW.account_id IS DISTINCT FROM OLD.account_id
-                OR NEW.role IS DISTINCT FROM OLD.role
-                OR NEW.granted_by IS DISTINCT FROM OLD.granted_by
-                OR NEW.created_at IS DISTINCT FROM OLD.created_at THEN
-                RAISE EXCEPTION 'a role assignment can only be revoked';
-            END IF;
-            RETURN NEW;
-        END
-        $$
-        """
-    )
-    op.execute(
-        "CREATE TRIGGER role_assignment_guard_row BEFORE UPDATE OR DELETE ON role_assignment "
-        "FOR EACH ROW EXECUTE FUNCTION role_assignment_guard()"
-    )
-    op.execute(
-        "CREATE TRIGGER role_assignment_guard_truncate BEFORE TRUNCATE ON role_assignment "
-        "FOR EACH STATEMENT EXECUTE FUNCTION role_assignment_guard()"
-    )
-    op.execute("ALTER TABLE role_assignment ENABLE ALWAYS TRIGGER role_assignment_guard_row")
-    op.execute("ALTER TABLE role_assignment ENABLE ALWAYS TRIGGER role_assignment_guard_truncate")
 
 
 def downgrade() -> None:
     # Dropping the tables would erase who held which role.
     if op.get_bind().exec_driver_sql("SELECT 1 FROM role_assignment LIMIT 1").first():
         raise RuntimeError("refusing to downgrade: role assignments exist")
-    op.execute("DROP TRIGGER role_assignment_guard_truncate ON role_assignment")
-    op.execute("DROP TRIGGER role_assignment_guard_row ON role_assignment")
     op.drop_index("uq_role_assignment_one_active", table_name="role_assignment")
     op.drop_table("role_assignment")
-    op.execute("DROP FUNCTION role_assignment_guard()")
     op.drop_table("account")

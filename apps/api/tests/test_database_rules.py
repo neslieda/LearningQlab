@@ -78,6 +78,10 @@ def test_guard_triggers_fire_even_in_replica_mode(connection: Connection) -> Non
         "syllabus_version",
         "syllabus_node",
         "exam_format",
+        # Erased with the account on request (docs/SECURITY.md section 5.4); their history is
+        # in the audit log.
+        "account",
+        "role_assignment",
     }
     # Every guarded table refuses TRUNCATE.
     assert {r.table for r in rows if r.tgname.endswith("truncate")} == guarded

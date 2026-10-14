@@ -21,8 +21,9 @@ _ACTOR_CHECK = r"~ '^[A-Za-z0-9_.:|-]{1,200}$'"
 
 
 class RoleAssignment(Base):
-    """One role held by one account. Never deleted: a role that is taken away is revoked, and
-    granting it again is a new row."""
+    """One role held by one account. A role that is taken away is revoked, and granting it
+    again is a new row. The lasting record is the audit log: rows here go when the account is
+    erased (docs/SECURITY.md section 5.4)."""
 
     __tablename__ = "role_assignment"
     __table_args__ = (

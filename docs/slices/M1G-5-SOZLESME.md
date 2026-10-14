@@ -179,7 +179,9 @@ içeriği hiçbir çıktıya yazılmaz.
    cümlesi "altı rolden birini taşıyan her hesap" olarak uygulandı.
 4. **Rol ataması kurum kapsamı taşımıyor.** M1-G'de kurum tablosu yok; `role_assignment` platform genelindedir. Kurum kapsamı M2'de
    kurum tablosuyla birlikte eklenir (migration gerekir).
-5. **Rol atamaları silinmez, geri alınır** (tetikleyici); `granted_by` / `revoked_by` saklanır.
+5. **Rol ataması servis tarafından silinmez, geri alınır**; `granted_by` / `revoked_by` saklanır. `account` ve `role_assignment`
+   tablolarında silme engeli (tetikleyici) **yoktur**: hesap silme hakkı (SECURITY §5.4) bu satırların silinebilmesini ister; kalıcı
+   kayıt audit log'dadır.
 6. **`Idempotency-Key` bu dilimde yok.** API_DESIGN §1 yayın için öngörüyor. Durum geçişleri durum ve içerik özeti denetimi sayesinde
    yinelenen istekte zaten 409 döner (çift yayın olmaz); anahtar tablosu cevap kaydıyla (M2) birlikte yazılır.
 7. **Öğrenci görünümünde müfredat düğümü kodu yok.** YETKILER §4'ün "girer" listesinde olmadığı için eklenmedi; konuya göre süzme

@@ -222,4 +222,40 @@ def get_tree(
     Without `version`: the subject's newest version, which is the one with the greatest id
     (identifiers are time-ordered).
     """
-    raise NotImplementedError
+    query = (
+        select(SyllabusVersion)
+        .join(Subject, Subject.id == SyllabusVersion.subject_id)
+        .join(Program, Program.id == Subject.program_id)
+        .where(Program.code == program, Subject.code == subject)
+    )
+    if version is not None:
+        query = query.where(SyllabusVersion.code == version)
+    row = session.scalars(query.order_by(SyllabusVersion.id.desc()).limit(1)).first()
+    if row is None:
+        return None
+    exam_format = _exam_format(session, row.id)
+    if exam_format is None:
+        return None
+    definition = ExamFormatDefinition.model_validate(exam_format.definition)
+    nodes = _nodes(session, row.id)
+    codes = {n.id: n.code for n in nodes}
+    parents = {n.parent_id for n in nodes}
+    return SyllabusTree(
+        program=program,
+        subject=subject,
+        version=row.code,
+        title=row.title,
+        status=row.status,
+        nodes=tuple(
+            TreeNode(
+                code=n.code,
+                title=n.title,
+                parent=codes[n.parent_id] if n.parent_id is not None else None,
+                is_leaf=n.id not in parents,
+                attributes=dict(n.attributes),
+            )
+            for n in nodes
+        ),
+        exam_sections=tuple((s.code, s.title) for s in definition.sections),
+        command_terms=tuple(definition.command_terms),
+    )

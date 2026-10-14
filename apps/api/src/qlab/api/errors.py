@@ -164,10 +164,10 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(StarletteHTTPException)
     async def _http(request: Request, error: StarletteHTTPException) -> JSONResponse:
-        if error.status_code == 404:
+        # A method the policy table does not list for a path is not an endpoint: default deny,
+        # the same answer as for a path that does not exist.
+        if error.status_code in (404, 405):
             return _response(not_found())
-        if error.status_code == 405:
-            return _response(ApiError(405, "method_not_allowed", "Method not allowed"))
         return _response(ApiError(error.status_code, "http_error", "Request failed"))
 
     async def _service(request: Request, error: Exception) -> JSONResponse:

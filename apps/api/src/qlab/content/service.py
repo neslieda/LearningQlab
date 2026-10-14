@@ -30,7 +30,7 @@ from typing import Any
 
 from pydantic import ValidationError
 from sqlalchemy import delete, func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from qlab.audit import service as audit
 from qlab.content import math
@@ -224,7 +224,8 @@ class ListFilter:
     has_unverified_visuals: bool | None = None
 
 
-MAX_LIST_LIMIT = 100
+# One more than the largest API page: a caller asks for a page plus one to learn whether more exist.
+MAX_LIST_LIMIT = 101
 
 
 def content_sha256(document: QuestionDocument) -> str:
@@ -1059,6 +1060,108 @@ def summarize(view: QuestionVersionView) -> VersionSummary:
     )
 
 
+def _summary(row: QuestionVersion) -> VersionSummary:
+    return VersionSummary(
+        id=row.id,
+        question_id=row.question_id,
+        version_no=row.version_no,
+        status=VersionStatus(row.status),
+        content_sha256=row.content_sha256,
+        question_class=QuestionClass(row.question_class),
+        exam_section=row.exam_section,
+        levels=tuple(Level(level) for level in row.levels),
+        total_marks=row.total_marks,
+        has_unverified_visuals=row.has_unverified_visuals,
+        created_by=row.created_by,
+        created_at=row.created_at,
+        updated_at=row.updated_at,
+    )
+
+
+def _check_limit(limit: int) -> None:
+    if not 1 <= limit <= MAX_LIST_LIMIT:
+        raise ValueError(f"limit must be 1 to {MAX_LIST_LIMIT}")
+
+
+def _listing(
+    session: Session,
+    filter: ListFilter | None,
+    after: uuid.UUID | None,
+    limit: int,
+    *,
+    published_only: bool,
+) -> list[tuple[Question, QuestionVersion]]:
+    """Questions with the version a list is about (the latest one, or the published one),
+    in question id order. Rights are decided per distinct record and applied in the query,
+    before the limit."""
+    _check_limit(limit)
+    filter = filter or ListFilter()
+    record_ids = session.scalars(select(Question.rights_record_id).distinct()).all()
+    permitted = [
+        record_id
+        for record_id in record_ids
+        if rights.is_permitted(session, record_id, rights.Purpose.DISPLAY)
+    ]
+    if not permitted:
+        return []
+    statement = (
+        select(Question, QuestionVersion)
+        .join(QuestionVersion, QuestionVersion.question_id == Question.id)
+        .where(Question.rights_record_id.in_(permitted))
+        .order_by(Question.id)
+        .limit(limit)
+        .execution_options(populate_existing=True)
+    )
+    if published_only:
+        statement = statement.where(QuestionVersion.status == VersionStatus.PUBLISHED.value)
+    else:
+        other = aliased(QuestionVersion)
+        latest = (
+            select(func.max(other.version_no))
+            .where(other.question_id == Question.id)
+            .scalar_subquery()
+        )
+        statement = statement.where(QuestionVersion.version_no == latest)
+    if after is not None:
+        statement = statement.where(Question.id > after)
+    if filter.status is not None:
+        statement = statement.where(QuestionVersion.status == filter.status.value)
+    if filter.exam_section is not None:
+        statement = statement.where(QuestionVersion.exam_section == filter.exam_section)
+    if filter.level is not None:
+        statement = statement.where(QuestionVersion.levels.contains([filter.level.value]))
+    if filter.question_class is not None:
+        statement = statement.where(QuestionVersion.question_class == filter.question_class.value)
+    if filter.has_unverified_visuals is not None:
+        statement = statement.where(
+            QuestionVersion.has_unverified_visuals == filter.has_unverified_visuals
+        )
+    if filter.syllabus_node is not None:
+        # Codes are unique inside one syllabus version only: resolve them per version.
+        node_ids: list[uuid.UUID] = []
+        for syllabus_version_id in session.scalars(
+            select(Question.syllabus_version_id).distinct()
+        ).all():
+            try:
+                found = syllabus.node_ids(
+                    session, syllabus_version_id, frozenset({filter.syllabus_node})
+                )
+            except LookupError:
+                continue
+            node_ids.extend(found.values())
+        if not node_ids:
+            return []
+        statement = statement.where(
+            select(QuestionVersionSyllabus.question_version_id)
+            .where(
+                QuestionVersionSyllabus.question_version_id == QuestionVersion.id,
+                QuestionVersionSyllabus.syllabus_node_id.in_(node_ids),
+            )
+            .exists()
+        )
+    return [(question, version) for question, version in session.execute(statement).all()]
+
+
 def list_questions(
     session: Session,
     *,
@@ -1079,7 +1182,34 @@ def list_questions(
     (once per distinct rights record, not once per question). Filtering by rights happens
     before the limit is applied, so a page is short only at the end of the list.
     """
-    raise NotImplementedError
+    items = _listing(session, filter, after, limit, published_only=False)
+    if not items:
+        return []
+    ids = [question.id for question, _ in items]
+    published: dict[uuid.UUID, uuid.UUID] = {}
+    working: dict[uuid.UUID, uuid.UUID] = {}
+    rows = session.execute(
+        select(QuestionVersion.question_id, QuestionVersion.id, QuestionVersion.status).where(
+            QuestionVersion.question_id.in_(ids),
+            QuestionVersion.status.in_(
+                (VersionStatus.PUBLISHED.value, *(s for s in WORKING_STATUSES))
+            ),
+        )
+    )
+    for question_id, version_id, status in rows:
+        if status == VersionStatus.PUBLISHED.value:
+            published[question_id] = version_id
+        else:
+            working[question_id] = version_id
+    return [
+        QuestionListItem(
+            question=_question_view(question),
+            latest=_summary(version),
+            published_version_id=published.get(question.id),
+            working_version_id=working.get(question.id),
+        )
+        for question, version in items
+    ]
 
 
 def list_published(
@@ -1096,10 +1226,19 @@ def list_published(
     `filter` applies to the published version; `filter.status` must be None (ValueError). No
     version in another status is ever returned. Rights as in `list_questions`.
     """
-    raise NotImplementedError
+    if filter is not None and filter.status is not None:
+        raise ValueError("list_published takes no status filter")
+    return [
+        _summary(version)
+        for _, version in _listing(session, filter, after, limit, published_only=True)
+    ]
 
 
 def get_history(session: Session, version_id: uuid.UUID) -> list[audit.AuditEntry]:
     """The audit entries about one version (entity type `question_version`), oldest first.
     NotFound as in `get_version`."""
-    raise NotImplementedError
+    version = session.get(QuestionVersion, version_id)
+    question = None if version is None else session.get(Question, version.question_id)
+    if version is None or question is None or not _displayable(session, question):
+        raise NotFound(f"question version {version_id}")
+    return audit.entries_for(session, "question_version", str(version_id))

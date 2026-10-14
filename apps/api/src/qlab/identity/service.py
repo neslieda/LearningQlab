@@ -55,13 +55,13 @@ def get_account(session: Session, account_id: uuid.UUID) -> AccountView | None:
 
 def ensure_account(session: Session, *, issuer: str, subject: str) -> AccountView:
     """The account for this issuer and subject, created if it does not exist. Runs inside the
-    caller's transaction. Blank, padded or over-long values raise ValueError."""
+    caller's transaction. Blank, padded, over-long or non-printable values raise ValueError."""
     for name, value, limit in (
         ("issuer", issuer, MAX_ISSUER_LENGTH),
         ("subject", subject, MAX_SUBJECT_LENGTH),
     ):
-        if not value or value != value.strip() or len(value) > limit:
-            raise ValueError(f"identity: {name} is blank, padded or too long")
+        if not value or value != value.strip() or len(value) > limit or not value.isprintable():
+            raise ValueError(f"identity: {name} is blank, padded, too long or not printable")
     row = _find(session, issuer, subject)
     if row is None:
         row = Account(issuer=issuer, subject=subject)

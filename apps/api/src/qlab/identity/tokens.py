@@ -23,6 +23,7 @@ DEV_ISSUER = "qlab-local-dev"
 DEV_AUDIENCE = "qlab-api-local"
 MAX_TOKEN_LENGTH = 4096
 MAX_LIFETIME = timedelta(hours=24)
+MAX_NAME_LENGTH = 200
 _REQUIRED_CLAIMS = ("iss", "sub", "aud", "exp", "iat")
 
 
@@ -60,8 +61,9 @@ class TokenVerifier:
 
         Refused: anything not signed with EdDSA by one of the keys (including unsigned tokens);
         a missing `iss`, `sub`, `aud`, `exp` or `iat`; another issuer or audience; an expired
-        token; one issued in the future; a lifetime over 24 hours; a blank subject; a token
-        longer than 4096 characters.
+        token; one issued in the future; a lifetime over 24 hours; a subject or issuer that
+        is blank, padded, longer than 200 characters or contains a non-printable character; a
+        token longer than 4096 characters.
         """
         if not token or len(token) > MAX_TOKEN_LENGTH:
             raise InvalidToken("token is empty or too long")
@@ -89,10 +91,17 @@ class TokenVerifier:
     def _claims(payload: dict[str, object]) -> Claims:
         subject, issuer = payload.get("sub"), payload.get("iss")
         expires, issued = payload.get("exp"), payload.get("iat")
-        if not isinstance(subject, str) or not subject.strip() or subject != subject.strip():
-            raise InvalidToken("blank subject")
-        if not isinstance(issuer, str):
-            raise InvalidToken("issuer is not text")
+        for name, value in (("subject", subject), ("issuer", issuer)):
+            # Printable, unpadded, bounded: what the account table can hold and look up.
+            if (
+                not isinstance(value, str)
+                or not value
+                or value != value.strip()
+                or len(value) > MAX_NAME_LENGTH
+                or not value.isprintable()
+            ):
+                raise InvalidToken(f"unusable {name}")
+        assert isinstance(subject, str) and isinstance(issuer, str)  # noqa: S101 - checked above
         if isinstance(expires, bool) or not isinstance(expires, int | float):
             raise InvalidToken("exp is not a number")
         if isinstance(issued, bool) or not isinstance(issued, int | float):

@@ -16,9 +16,9 @@ _ALPHABET = "0123456789abcdefghjkmnpqrstvwxyz"
 _VALUES = {character: value for value, character in enumerate(_ALPHABET)}
 _LENGTH = 26
 
-QUESTION_ID_PATTERN = rf"^{QUESTION}_[{_ALPHABET}]{{{_LENGTH}}}$"
-QUESTION_VERSION_ID_PATTERN = rf"^{QUESTION_VERSION}_[{_ALPHABET}]{{{_LENGTH}}}$"
-ACCOUNT_ID_PATTERN = rf"^{ACCOUNT}_[{_ALPHABET}]{{{_LENGTH}}}$"
+QUESTION_ID_PATTERN = rf"^{QUESTION}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
+QUESTION_VERSION_ID_PATTERN = rf"^{QUESTION_VERSION}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
+ACCOUNT_ID_PATTERN = rf"^{ACCOUNT}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
 
 
 def encode(prefix: str, value: uuid.UUID) -> str:

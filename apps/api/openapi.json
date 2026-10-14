@@ -41,7 +41,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -117,7 +117,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -130,7 +130,7 @@
           "published_version_id": {
             "anyOf": [
               {
-                "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
                 "type": "string"
               },
               {
@@ -153,7 +153,7 @@
           "working_version_id": {
             "anyOf": [
               {
-                "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
                 "type": "string"
               },
               {
@@ -212,7 +212,7 @@
             "type": "boolean"
           },
           "id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -227,7 +227,7 @@
             "$ref": "#/components/schemas/QuestionClass"
           },
           "question_id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Question Id",
             "type": "string"
           },
@@ -294,7 +294,7 @@
             "type": "boolean"
           },
           "id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -309,7 +309,7 @@
             "$ref": "#/components/schemas/QuestionClass"
           },
           "question_id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Question Id",
             "type": "string"
           },
@@ -691,7 +691,7 @@
           "based_on": {
             "anyOf": [
               {
-                "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
                 "type": "string"
               },
               {
@@ -805,7 +805,7 @@
           "superseded_by": {
             "anyOf": [
               {
-                "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
                 "type": "string"
               },
               {
@@ -991,7 +991,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -1037,7 +1037,7 @@
             "type": "integer"
           },
           "version_id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Version Id",
             "type": "string"
           }
@@ -1094,7 +1094,7 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
@@ -1113,7 +1113,7 @@
             "type": "integer"
           },
           "version_id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Version Id",
             "type": "string"
           }
@@ -1554,7 +1554,7 @@
             "type": "string"
           },
           "version_id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Version Id",
             "type": "string"
           }
@@ -1613,7 +1613,7 @@
         "description": "The caller. M1-G has no profile, entitlement or quota yet.",
         "properties": {
           "account_id": {
-            "pattern": "^acc_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^acc_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Account Id",
             "type": "string"
           },
@@ -2773,12 +2773,12 @@
             "type": "string"
           },
           "id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Id",
             "type": "string"
           },
           "question_id": {
-            "pattern": "^q_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Question Id",
             "type": "string"
           },
@@ -2889,7 +2889,7 @@
             "type": "string"
           },
           "version_id": {
-            "pattern": "^qv_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Version Id",
             "type": "string"
           }

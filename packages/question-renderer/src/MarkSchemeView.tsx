@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { DocView } from "./DocView";
 import type { MarkPointOut, NoteOut } from "./types";

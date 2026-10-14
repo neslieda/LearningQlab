@@ -1,3 +1,5 @@
+"use client";
+
 import { Fragment, useContext, type ReactNode } from "react";
 import type { Doc } from "@qlab/api-client";
 import { StimuliContext } from "./context";

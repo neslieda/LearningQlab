@@ -1,3 +1,5 @@
+"use client";
+
 import type { LearnerQuestion, McqCheckResult } from "@qlab/api-client";
 import { toLayout } from "./LearnerQuestionView";
 import { McqBlock } from "./QuestionLayout";

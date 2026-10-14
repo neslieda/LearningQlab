@@ -141,4 +141,9 @@ değişirse elle yinelenir; otomatik hale getirmek dilim 7'nin işi (editör ayn
    ayrıştırıcısı gerekir ve o formül yorumlayıcısıyla (M3) gelir. O zamana kadar birim yazıldığı gibi gösterilir.
 4. **API vekili Next rewrites ile;** API'ye CORS eklenmez.
 5. **Yerel giriş token yapıştırarak,** `sessionStorage`'da; production derlemesinde yok.
-6. **Görsel regresyon Docker'daki Linux imajında;** macOS'ta alınan görüntüler kullanılmaz.
+6. **Görsel regresyon Docker'daki Linux imajında** (`mcr.microsoft.com/playwright:v1.64.0-noble`, `linux/amd64`, CI çalıştırıcısıyla
+   aynı); macOS'ta alınan görüntüler kullanılmaz. Apple Silicon'da emülasyonla çalışır, yavaştır (bir koşu ~1 dk).
+7. **ESLint 9.39.5** (10 değil): `eslint-config-next` 16.4 eklentileri 9'a bağlı; npm 9'u "desteklenmiyor" olarak işaretliyor.
+   Next'in yapılandırması 10'u desteklediğinde yükseltilir.
+8. **Gösterim bileşeni istemci bileşenidir** (`"use client"`): KaTeX ve React bağlamı tarayıcıda çalışır. Sunucuda üretilen açık
+   sayfalar (M6) için yeniden değerlendirilir.

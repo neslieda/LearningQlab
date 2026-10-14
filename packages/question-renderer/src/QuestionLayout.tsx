@@ -1,3 +1,5 @@
+"use client";
+
 import { useId, useMemo, type ReactNode } from "react";
 import type { Doc } from "@qlab/api-client";
 import { StimuliContext } from "./context";

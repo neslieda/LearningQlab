@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@import "@qlab/question-renderer/styles.css";
+
+:root {
+  --page-bg: #ffffff;
+  --page-fg: #111827;
+  --page-muted: #4b5563;
+  --page-border: #d1d5db;
+  --page-focus: #1d4ed8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: #0b0f17;
+    --page-fg: #f3f4f6;
+    --page-muted: #a1a8b3;
+    --page-border: #374151;
+    --page-focus: #93b4ff;
+  }
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--page-fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--page-focus);
+  outline-offset: 2px;
+}

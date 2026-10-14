@@ -51,17 +51,20 @@ jobs:
       - run: uv run python -m qlab.api.openapi --check
       - run: uv run pytest
 
-  api-client:
+  web:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/api-client
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      # One npm workspace at the repository root: apps/web and packages/*.
       - run: npm ci --ignore-scripts --no-audit --no-fund
       # The generated client must match apps/api/openapi.json (docs/API_DESIGN.md section 6).
-      - run: npm run check
-      - run: npm run typecheck
+      - run: npm run check -w @qlab/api-client
+      - run: npm run typecheck -w @qlab/api-client -w @qlab/question-renderer -w @qlab/web
+      - run: npm test -w @qlab/question-renderer
+      - run: npm run lint -w @qlab/web
+      - run: npm run build -w @qlab/web
+      # Screenshots of the renderer gallery at 1280 and 375 px, inside the pinned Playwright image.
+      - run: npm run test:visual

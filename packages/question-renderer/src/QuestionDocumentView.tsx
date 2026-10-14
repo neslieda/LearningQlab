@@ -1,3 +1,5 @@
+"use client";
+
 import type { QuestionDocument } from "@qlab/api-client";
 import { DocView } from "./DocView";
 import { MarkSchemeView } from "./MarkSchemeView";

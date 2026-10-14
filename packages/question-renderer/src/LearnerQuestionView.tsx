@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { LearnerQuestion } from "@qlab/api-client";
 import { QuestionLayout, type LayoutQuestion } from "./QuestionLayout";

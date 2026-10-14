@@ -116,8 +116,9 @@ yazılmış. TESTING_STRATEGY §9: her blok tipi, uzun formül, geniş tablo, ç
 8. Markscheme: alternatif grup, iki rota, `accept_range`, her not türü, maddeye bağlı not, `marksCapped`
 9. Personel görünümü: aynı yapılandırılmış soru, `showAnswers` açık ve kapalı; şekil tarifi görünür
 
-Örneklerdeki her LaTeX, sunucunun kapalı komut listesinden geçmelidir: bir test fikstürlerdeki tüm LaTeX'i `apps/api` içindeki
-`qlab.content.math.check` ile denetler (Python tarafında; `node` işaretli).
+Örneklerdeki her LaTeX sunucunun kapalı komut listesinden geçer (2026-10-14'te `qlab.content.math.disallowed` ile elle
+denetlendi: 27 kaynak, hepsi geçti). **Bilinen sınır:** bu denetim otomatik değil; fikstürler TypeScript, liste Python'da. Örnek set
+değişirse elle yinelenir; otomatik hale getirmek dilim 7'nin işi (editör aynı listeyi istemcide de isteyecek).
 
 ## 6. Testler
 

@@ -1,0 +1,8 @@
+{
+  "name": "qlab",
+  "version": "0.0.0",
+  "private": true,
+  "description": "npm workspace root: apps/web and packages/*. Not published.",
+  "engines": { "node": ">=24" },
+  "workspaces": ["apps/web", "packages/*"]
+}

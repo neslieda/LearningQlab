@@ -77,23 +77,37 @@ describe("marks (3.1)", () => {
     }
   });
 
-  it("optional wraps the words in parentheses", () => {
+  it("optional wraps the words in \u00ab \u00bb (not parentheses)", () => {
     const { container } = render(<DocView doc={doc(para(text("the "), text("extra", ["optional"])))} />);
-    expect(container.querySelector("p")?.textContent).toBe("the (extra)");
+    expect(container.querySelector("p")?.textContent).toBe("the \u00abextra\u00bb");
+    expect(container.textContent).not.toContain("(");
   });
 
   it("essential is underlined (an element, class or inline style marks it) and keeps the words", () => {
     const { container } = render(<DocView doc={doc(para(text("must", ["essential"])))} />);
     const p = container.querySelector("p")!;
-    expect(p.textContent).toBe("must");
-    const inner = p.firstElementChild as HTMLElement | null;
-    const marked =
-      inner !== null &&
-      (inner.tagName === "U" ||
-        inner.className !== "" ||
-        /underline/.test(inner.getAttribute("style") ?? "") ||
-        inner.getAttribute("data-mark") !== null);
+    expect(p.textContent).toContain("must");
+    const marked = Array.from(p.querySelectorAll("*")).some(
+      (e) =>
+        e.tagName === "U" ||
+        e.className !== "" ||
+        /underline/.test(e.getAttribute("style") ?? "") ||
+        e.getAttribute("data-mark") !== null,
+    );
     expect(marked).toBe(true);
+  });
+
+  it("essential is announced as 'essential' to assistive technology (text or aria-label)", () => {
+    const { container } = render(<DocView doc={doc(para(text("must", ["essential"])))} />);
+    const announced =
+      /essential/i.test(container.textContent ?? "") ||
+      Array.from(container.querySelectorAll("[aria-label]")).some((e) => /essential/i.test(e.getAttribute("aria-label")!));
+    expect(announced).toBe(true);
+  });
+
+  it("text without essential is not announced as essential", () => {
+    const { container } = render(<DocView doc={doc(para(text("plain")))} />);
+    expect(container.textContent).not.toMatch(/essential/i);
   });
 
   it("optional + bold in either order give identical text", () => {
@@ -104,7 +118,61 @@ describe("marks (3.1)", () => {
     const b = render(<DocView doc={doc(para(text("w", ["bold", "optional"])))} />);
     expect(b.container.textContent).toBe(textA);
     expect(b.container.querySelector("strong")).not.toBeNull();
-    expect(textA).toBe("(w)");
+    expect(textA).toBe("\u00abw\u00bb");
+  });
+
+  const count = (t: string, ch: string) => t.split(ch).length - 1;
+
+  it("a run of adjacent optional nodes (text, bold text, math, quantity) gets exactly one pair", () => {
+    const { container } = render(
+      <DocView
+        doc={doc(
+          para(
+            text("before "),
+            text("one ", ["optional"]),
+            text("two", ["optional", "bold"]),
+            mathInline("x^2", ["optional"]),
+            quantity("3.0", "s", null, ["optional"]),
+            text(" after"),
+          ),
+        )}
+      />,
+    );
+    const t = container.querySelector("p")!.textContent!;
+    expect(count(t, "\u00ab")).toBe(1);
+    expect(count(t, "\u00bb")).toBe(1);
+    expect(t.indexOf("\u00ab")).toBeLessThan(t.indexOf("one"));
+    expect(t.indexOf("\u00bb")).toBeGreaterThan(t.indexOf("3.0"));
+    expect(t.indexOf("\u00bb")).toBeLessThan(t.indexOf("after"));
+    expect(t.indexOf("before")).toBeLessThan(t.indexOf("\u00ab"));
+  });
+
+  it("two optional runs separated by a non-optional node get two pairs", () => {
+    const { container } = render(
+      <DocView
+        doc={doc(para(text("a", ["optional"]), text(" and ", ["bold"]), text("b", ["optional"])))}
+      />,
+    );
+    const t = container.querySelector("p")!.textContent!;
+    expect(count(t, "\u00ab")).toBe(2);
+    expect(count(t, "\u00bb")).toBe(2);
+    expect(t).toBe("\u00aba\u00bb and \u00abb\u00bb");
+  });
+
+  it("a non-optional math node splits a run too", () => {
+    const { container } = render(
+      <DocView doc={doc(para(text("a", ["optional"]), mathInline("z"), text("b", ["optional"])))} />,
+    );
+    const t = container.querySelector("p")!.textContent!;
+    expect(count(t, "\u00ab")).toBe(2);
+    expect(count(t, "\u00bb")).toBe(2);
+  });
+
+  it("optional runs are counted per paragraph", () => {
+    const { container } = render(
+      <DocView doc={doc(para(text("a", ["optional"])), para(text("b", ["optional"])))} />,
+    );
+    expect(count(container.textContent!, "\u00ab")).toBe(2);
   });
 
   it("marks apply to math_inline and quantity too", () => {
@@ -112,7 +180,7 @@ describe("marks (3.1)", () => {
       <DocView doc={doc(para(mathInline("x", ["bold"]), quantity("3.0", "s", null, ["optional"])))} />,
     );
     expect(container.querySelector("strong")).not.toBeNull();
-    expect(container.textContent).toContain("(3.0\u2009s)");
+    expect(container.textContent).toContain("\u00ab3.0\u2009s\u00bb");
   });
 });
 
@@ -184,7 +252,7 @@ describe("math (3.1)", () => {
   });
 
   it("a valid formula shows no fallback", () => {
-    const { container } = render(<MathView latex="\\sqrt{2}" display={false} />);
+    const { container } = render(<MathView latex={"\\sqrt{2}"} display={false} />);
     expect(container.textContent).not.toMatch(FALLBACK);
   });
 });
@@ -297,6 +365,69 @@ describe("tables (3.1)", () => {
     expect(ths[1]!.getAttribute("scope")).toBe("col");
     expect(ths[2]!.getAttribute("scope")).toBe("row");
     expect(container.querySelectorAll("td")).toHaveLength(1);
+  });
+
+  it("a header-only row that is the second row (two-row header) also gets scope=col", () => {
+    const { container } = render(
+      <DocView
+        doc={doc(
+          table(
+            row(header(para(text("Group")), 1, 1), header(para(text("Group 2")), 1, 1)),
+            row(header(para(text("Sub 1"))), header(para(text("Sub 2")))),
+            row(cell(para(text("1"))), cell(para(text("2")))),
+          ),
+        )}
+      />,
+    );
+    const ths = Array.from(container.querySelectorAll("th"));
+    expect(ths).toHaveLength(4);
+    for (const th of ths) expect(th.getAttribute("scope")).toBe("col");
+  });
+
+  it("a header cell spanning several columns in a header-only row gets scope=colgroup", () => {
+    const { container } = render(
+      <DocView
+        doc={doc(
+          table(
+            row(header(para(text("Span")), 2, 1), header(para(text("Single")))),
+            row(header(para(text("a"))), header(para(text("b"))), header(para(text("c")))),
+            row(cell(para(text("1"))), cell(para(text("2"))), cell(para(text("3")))),
+          ),
+        )}
+      />,
+    );
+    const ths = Array.from(container.querySelectorAll("th"));
+    expect(ths[0]!.getAttribute("scope")).toBe("colgroup");
+    expect(ths[1]!.getAttribute("scope")).toBe("col");
+    for (const th of ths.slice(2)) expect(th.getAttribute("scope")).toBe("col");
+  });
+
+  it("a table_header in a row with data cells gets scope=row, wherever the row is", () => {
+    const { container } = render(
+      <DocView
+        doc={doc(
+          table(
+            row(header(para(text("H1"))), header(para(text("H2")))),
+            row(header(para(text("r1"))), cell(para(text("1")))),
+            row(header(para(text("r2"))), cell(para(text("2")))),
+          ),
+        )}
+      />,
+    );
+    const ths = Array.from(container.querySelectorAll("th"));
+    expect(ths.map((t) => t.getAttribute("scope"))).toEqual(["col", "col", "row", "row"]);
+  });
+
+  it("a single-cell header row gets scope=col", () => {
+    const { container } = render(
+      <DocView doc={doc(table(row(header(para(text("only")))), row(cell(para(text("x"))))))} />,
+    );
+    expect(container.querySelector("th")!.getAttribute("scope")).toBe("col");
+  });
+
+  it("lists are real ul/ol lists (markers are covered by the visual regression, not here)", () => {
+    render(<DocView doc={doc(bulletList(para(text("a"))), orderedList(para(text("b"))))} />);
+    expect(screen.getAllByRole("list")).toHaveLength(2);
   });
 
   it("passes colspan and rowspan through", () => {

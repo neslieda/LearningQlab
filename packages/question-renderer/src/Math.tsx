@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 /** The server's KaTeX settings (apps/api/katex/render.mjs). They are part of the rendering contract.
  * `trust` is replaced below by a function that always refuses and records that it did. */
-const OPTIONS = {
+export const KATEX_OPTIONS = {
   throwOnError: true,
   strict: "error",
   trust: false,
@@ -31,7 +31,7 @@ function renderLatex(latex: string, display: boolean): string | null {
     return false;
   };
   try {
-    const html = katex.renderToString(latex, { ...OPTIONS, trust, displayMode: display });
+    const html = katex.renderToString(latex, { ...KATEX_OPTIONS, trust, displayMode: display });
     return untrusted || html.length > MAX_OUTPUT_CHARS ? null : html;
   } catch {
     return null;

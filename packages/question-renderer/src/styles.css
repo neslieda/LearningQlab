@@ -47,7 +47,10 @@
 /* Documents */
 .qr-doc > * + * { margin-top: 0.5rem; }
 .qr-doc p { margin: 0; }
-.qr-doc ul, .qr-doc ol { margin: 0; padding-left: 1.5rem; }
+.qr-doc ul, .qr-doc ol { margin: 0; padding-left: 1.5rem; list-style-position: outside; }
+.qr-doc ul { list-style-type: disc; }
+.qr-doc ol { list-style-type: decimal; }
+.qr-doc li { display: list-item; }
 .qr-quantity { white-space: nowrap; }
 .qr-essential { text-decoration: underline; }
 
@@ -106,18 +109,16 @@
 /* Question layout */
 .qr-question { display: flex; flex-direction: column; gap: var(--qr-gap); }
 .qr-question-title {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.75rem;
-  align-items: baseline;
+  display: flow-root; /* inline children keep real spaces between them in the accessible name */
   margin: 0;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--qr-border);
   font-size: 1rem;
   font-weight: 600;
 }
-.qr-level { padding: 0 0.375rem; border: 1px solid var(--qr-border); border-radius: 0.25rem; font-size: 0.875em; }
-.qr-total { margin-left: auto; }
+.qr-level { display: inline-block; margin-right: 0.25rem; padding: 0 0.375rem; border: 1px solid var(--qr-border); border-radius: 0.25rem; font-size: 0.875em; }
+.qr-total { float: right; }
+.qr-section { margin-right: 0.25rem; }
 .qr-stimuli { display: flex; flex-direction: column; gap: var(--qr-gap); }
 
 .qr-part, .qr-part-group { display: flex; flex-direction: column; gap: 0.5rem; }

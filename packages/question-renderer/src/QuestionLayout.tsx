@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, type ReactNode } from "react";
+import { Fragment, useId, useMemo, type ReactNode } from "react";
 import type { Doc } from "@qlab/api-client";
 import { StimuliContext } from "./context";
 import { DocView } from "./DocView";
@@ -268,13 +268,16 @@ export function QuestionLayout({
     <StimuliContext.Provider value={context}>
       <article className="qr qr-question" aria-labelledby={titleId}>
         <h2 id={titleId} className="qr-question-title">
-          <span className="qr-section">{question.examSection}</span>
+          <span className="qr-section">{question.examSection}</span>{" "}
           {question.levels.map((level) => (
-            <span key={level} className="qr-level">
-              {level.toUpperCase()}
-            </span>
+            <Fragment key={level}>
+              <span className="qr-level">{level.toUpperCase()}</span>{" "}
+            </Fragment>
           ))}
-          <span className="qr-total">{marksText(question.totalMarks)}</span>
+          <span className="qr-total">
+            <span aria-hidden="true">{marksText(question.totalMarks)}</span>
+            <span className="qr-sr-only">{question.totalMarks === 1 ? "1 mark" : `${question.totalMarks} marks`}</span>
+          </span>
         </h2>
 
         <div className="qr-stem">

@@ -104,7 +104,7 @@ const staffMcq = (): QuestionDocument => ({
 });
 
 describe("QuestionDocumentView, structured (3.1, staff view)", () => {
-  it("showAnswers=false: question content visible, no mark point, note or description", () => {
+  it("showAnswers=false: question content visible, no mark point or note", () => {
     const { container } = render(<QuestionDocumentView document={staffStructured()} showAnswers={false} />);
     const t = container.textContent!;
     expect(t).toContain("STEM-TEXT");
@@ -126,8 +126,8 @@ describe("QuestionDocumentView, structured (3.1, staff view)", () => {
     expect(t).toContain("[2]");
   });
 
-  it("showAnswers=true: the stimulus description is inside the placeholder under 'Description (staff only)'", () => {
-    render(<QuestionDocumentView document={staffStructured()} showAnswers />);
+  it.each([true, false])("showAnswers=%s: the stimulus description is inside the placeholder under 'Description (staff only)'", (showAnswers) => {
+    render(<QuestionDocumentView document={staffStructured()} showAnswers={showAnswers} />);
     const img = screen.getByRole("img");
     expect(img.textContent).toContain("Description (staff only)");
     expect(img.textContent).toContain("STIMULUS-DESCRIPTION-XYZ");

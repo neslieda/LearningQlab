@@ -408,7 +408,20 @@ const markScheme: Fixture = {
       mkPoint("ms-3", line("use of ", m("F = k x")), { route: "r1", kind: "method" }),
       mkPoint("ms-4", line(q("12", "N")), { route: "r1", kind: "answer", accept_range: { minimum: "11.5", maximum: "12.5", unit: "N" } }),
       mkPoint("ms-5", line("use of ", m("W = \\frac{1}{2} k x^2")), { route: "r2", kind: "method" }),
-      mkPoint("ms-6", line(q("12", "N")), { route: "r2", kind: "answer" }),
+      mkPoint(
+        "ms-6",
+        line(
+          q("12", "N"),
+          " ",
+          t("applied to the spring at ", "optional"),
+          t("extension", "optional", "bold"),
+          t(" ", "optional"),
+          m("x", "optional"),
+          t(" ", "optional"),
+          q("0.060", "m", undefined, "optional"),
+        ),
+        { route: "r2", kind: "answer" },
+      ),
     ],
     notes: [
       { kind: "general", content: line("Award marks for the clearly labelled working."), mark_point_id: null },

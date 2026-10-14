@@ -15,7 +15,7 @@ export function readableKind(kind: string): string {
 }
 
 /** Wraps in a fixed order, so the order of `marks` in the data never changes the output. */
-function applyMarks(node: ReactNode, marks: readonly Mark[] | undefined): ReactNode {
+function applyMarks(node: ReactNode, marks: readonly Mark[] | undefined, skipOptional = false): ReactNode {
   if (!marks || marks.length === 0) return node;
   const types = new Set(marks.map((mark) => mark.type));
   let out = node;
@@ -23,24 +23,40 @@ function applyMarks(node: ReactNode, marks: readonly Mark[] | undefined): ReactN
   if (types.has("bold")) out = <strong>{out}</strong>;
   if (types.has("sub")) out = <sub>{out}</sub>;
   if (types.has("sup")) out = <sup>{out}</sup>;
-  if (types.has("essential")) out = <u className="qr-essential">{out}</u>;
-  if (types.has("optional")) out = <span className="qr-optional">({out})</span>;
+  if (types.has("essential")) {
+    out = (
+      <u className="qr-essential">
+        {out}
+        <span className="qr-sr-only"> essential</span>
+      </u>
+    );
+  }
+  // Normally ParagraphView wraps a whole run of optional nodes in one pair of guillemets.
+  if (types.has("optional") && !skipOptional) {
+    out = (
+      <span className="qr-optional">
+        {"\u00ab"}
+        {out}
+        {"\u00bb"}
+      </span>
+    );
+  }
   return out;
 }
 
-function InlineView({ node }: { node: InlineNode }) {
+function InlineView({ node, skipOptional = false }: { node: InlineNode; skipOptional?: boolean }) {
   switch (node.type) {
     case "text":
       // A text node is text: no HTML, no math scanning.
-      return <>{applyMarks(node.text, node.marks)}</>;
+      return <>{applyMarks(node.text, node.marks, skipOptional)}</>;
     case "math_inline":
-      return <>{applyMarks(<Math latex={node.attrs.latex} display={false} />, node.marks)}</>;
+      return <>{applyMarks(<Math latex={node.attrs.latex} display={false} />, node.marks, skipOptional)}</>;
     case "quantity": {
       const { value, unit, uncertainty } = node.attrs;
       let text = value;
       if (uncertainty) text += ` ± ${uncertainty}`;
       if (unit) text += `${THIN_SPACE}${unit}`;
-      return <>{applyMarks(<span className="qr-quantity">{text}</span>, node.marks)}</>;
+      return <>{applyMarks(<span className="qr-quantity">{text}</span>, node.marks, skipOptional)}</>;
     }
     case "hard_break":
       return <br />;
@@ -49,14 +65,34 @@ function InlineView({ node }: { node: InlineNode }) {
   }
 }
 
+const isOptional = (node: InlineNode): boolean =>
+  "marks" in node && (node.marks ?? []).some((mark) => mark.type === "optional");
+
 function ParagraphView({ node }: { node: Paragraph }) {
-  return (
-    <p>
-      {node.content.map((child, index) => (
-        <InlineView key={index} node={child} />
-      ))}
-    </p>
-  );
+  // Maximal runs of adjacent optional nodes share one pair of guillemets.
+  const children: ReactNode[] = [];
+  let index = 0;
+  while (index < node.content.length) {
+    const current = node.content[index]!;
+    if (isOptional(current)) {
+      let end = index;
+      while (end < node.content.length && isOptional(node.content[end]!)) end += 1;
+      children.push(
+        <span key={index} className="qr-optional">
+          {"\u00ab"}
+          {node.content.slice(index, end).map((child, i) => (
+            <InlineView key={i} node={child} skipOptional />
+          ))}
+          {"\u00bb"}
+        </span>,
+      );
+      index = end;
+    } else {
+      children.push(<InlineView key={index} node={current} />);
+      index += 1;
+    }
+  }
+  return <p>{children}</p>;
 }
 
 function ScrollBox({ label, children }: { label: string; children: ReactNode }) {
@@ -112,13 +148,19 @@ function BlockView({ node }: { node: DocBlock }) {
         <ScrollBox label="Table">
           <table className="qr-table">
             <tbody>
-              {node.content.map((row, rowIndex) => (
+              {node.content.map((row, rowIndex) => {
+                const headerRow = row.content.every((cell) => cell.type === "table_header");
+                return (
                 <tr key={rowIndex}>
                   {row.content.map((cell, cellIndex) => {
                     const span = { colSpan: cell.attrs.colspan, rowSpan: cell.attrs.rowspan };
                     const children = cell.content.map((paragraph, i) => <ParagraphView key={i} node={paragraph} />);
                     return cell.type === "table_header" ? (
-                      <th key={cellIndex} scope={rowIndex === 0 ? "col" : "row"} {...span}>
+                      <th
+                        key={cellIndex}
+                        scope={headerRow ? (cell.attrs.colspan > 1 ? "colgroup" : "col") : "row"}
+                        {...span}
+                      >
                         {children}
                       </th>
                     ) : (
@@ -128,7 +170,8 @@ function BlockView({ node }: { node: DocBlock }) {
                     );
                   })}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </ScrollBox>

@@ -68,3 +68,8 @@ jobs:
       - run: npm run build -w @qlab/web
       # Screenshots of the renderer gallery at 1280 and 375 px, inside the pinned Playwright image.
       - run: npm run test:visual
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-test-results
+          path: apps/web/test-results

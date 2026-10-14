@@ -3,6 +3,6 @@ export { LearnerQuestionView, type LearnerQuestionViewProps } from "./LearnerQue
 export { MarkSchemeView, type MarkSchemeViewProps } from "./MarkSchemeView";
 export { McqResultView, type McqResultViewProps } from "./McqResultView";
 export { QuestionDocumentView, type QuestionDocumentViewProps } from "./QuestionDocumentView";
-export { Math, type MathProps } from "./Math";
+export { Math, KATEX_OPTIONS, type MathProps } from "./Math";
 export type { LearnerPart, MarkPointOut, NoteOut } from "./types";
 export { fixtures, type Fixture } from "../fixtures";

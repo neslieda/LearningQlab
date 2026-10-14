@@ -44,9 +44,10 @@ Tipler `@qlab/api-client`'tan gelir; bileşen kendi içerik tipini tanımlamaz.
 
 - **Metin güvenliği.** `text` düğümü metin olarak çizilir; HTML olarak yorumlanmaz (`dangerouslySetInnerHTML` yalnızca KaTeX
   çıktısı için ve yalnızca `Math` içinde). Metinde matematik taraması yapılmaz (`$…$` düz metindir).
-- İşaretler: `bold` → `<strong>`, `italic` → `<em>`, `sub` / `sup` → `<sub>` / `<sup>`, `optional` → sözcükler parantez içinde
-  (puan için gerekmeyen sözcükler; markscheme geleneği), `essential` → altı çizili (puan için zorunlu sözcükler). İşaretler iç içe
-  geçebilir; sıra çıktıyı değiştirmez.
+- İşaretler: `bold` → `<strong>`, `italic` → `<em>`, `sub` / `sup` → `<sub>` / `<sup>`, `optional` → « » içinde (puan için gerekmeyen sözcükler;
+  DATA_ARCHITECTURE §3.5). Ardışık satır içi düğümlerin hepsi `optional` taşıyorsa (ör. içinde kalın bir sözcük, matematik ya da
+  `quantity` olan bir ifade) **tek** bir « » çifti bütün diziyi sarar. `essential` → altı çizili (puan için zorunlu sözcükler) ve ekran
+  okuyucuya "essential" diye bildirilir. İşaretler iç içe geçebilir; sıra çıktıyı değiştirmez.
 - `math_inline` / `math_block` → `Math`. KaTeX **0.19.0** (sunucuyla aynı sürüm), sunucuyla aynı ayarlar: `throwOnError: true`,
   `strict: "error"`, `trust: false`, `maxExpand: 1000`, `maxSize: 20`, `output: "htmlAndMathml"`, paylaşılan makro yok. Render hatası
   (kayıt kontrolünden geçmiş içerikte beklenmez) sayfayı düşürmez: kaynak LaTeX düz metin olarak, `role="alert"` olmadan, görünür bir
@@ -56,14 +57,18 @@ Tipler `@qlab/api-client`'tan gelir; bileşen kendi içerik tipini tanımlamaz.
 - `quantity` → değer + ince boşluk (U+2009) + birim, yazıldığı gibi; `uncertainty` varsa `value ± uncertainty unit`. Birim dönüştürülmez
   ve yeniden yazılmaz (`m/s` olduğu gibi kalır; §7.3). Değer anlamlı basamağıyla, metin olarak yazılır.
 - `hard_break` → `<br>`. `paragraph` → `<p>`. `bullet_list` / `ordered_list` / `list_item` → `<ul>` / `<ol>` / `<li>`.
-- `table` → `<table>`; `table_header` → `<th scope="col">` (ilk satırdaysa) ya da `<th scope="row">`; `colspan` / `rowspan` aynen.
+- `table` → `<table>`. Yalnızca `table_header` hücrelerinden oluşan her satır bir **başlık satırıdır**: hücreleri `<th scope="col">`
+  (birden çok sütunu kapsıyorsa `scope="colgroup"`). Başka hücrelerle aynı satırdaki `table_header` → `<th scope="row">`.
+  `colspan` / `rowspan` aynen. Listeler (`<ul>`, `<ol>`) madde işaretini ve numarasını her ortamda gösterir (sayfanın CSS
+  sıfırlamasına karşı).
 - `figure` → şekil yer tutucusu: kesikli çerçeve, "Figure" ve uyaran türü (`kind`, okunur biçimde: `graph` → "Graph"). Öğrenci
   görünümünde tarif yoktur; personel görünümünde (`QuestionDocumentView`) tarif yer tutucunun içinde, "Description (staff only)"
   başlığıyla gösterilir. Yer tutucuya `role="img"` ve `aria-label` verilir.
 
 ### 3.2 Sınav düzeni (`LearnerQuestionView`)
 
-- Üst satır: sınav bölümü kodu, düzey(ler) (`SL`, `HL`), toplam puan ("[n marks]"; 1 ise "[1 mark]").
+- Üst satır: sınav bölümü kodu, düzey(ler) (`SL`, `HL`), toplam puan ("[n marks]"; 1 ise "[1 mark]"). Erişilebilir adda bu parçalar
+  boşlukla ayrılır ("paper_2 SL HL 9 marks" gibi okunur, bitişik değil).
 - Kök metin (`stem`), ardından uyaranlar (yer tutucu).
 - **Çoktan seçmeli:**
   - `single_value`: dört satır, "A" … "D" etiketi + hücre.
@@ -100,6 +105,8 @@ Tipler `@qlab/api-client`'tan gelir; bileşen kendi içerik tipini tanımlamaz.
 - Arayüz metinleri İngilizcedir (içerik İngilizce, D-59).
 - Güvenlik başlıkları (CSP dahil) bu dilimde yazılmaz; dilim 9 (SOZLESME 5 §9.5). KaTeX inline style kullandığı için CSP o zaman
   buna göre yazılır.
+- `QLAB_API_URL` **derleme anında** okunur (Next `rewrites` derlemeye girer); başka bir API adresi yeni derleme ister. Dilim 9'da
+  çalışma anı ayarına çevrilir. `next dev` yalnızca `127.0.0.1`'i dinler.
 
 ## 5. Örnek set (görsel regresyon)
 
@@ -116,6 +123,9 @@ yazılmış. TESTING_STRATEGY §9: her blok tipi, uzun formül, geniş tablo, ç
 8. Markscheme: alternatif grup, iki rota, `accept_range`, her not türü, maddeye bağlı not, `marksCapped`
 9. Personel görünümü: aynı yapılandırılmış soru, `showAnswers` açık ve kapalı; şekil tarifi görünür
 
+KaTeX sürümü ve ayarları sunucununkiyle (`apps/api/katex/package.json`, `render.mjs`) bir testle eşit tutulur; KaTeX yükseltmesi
+artık dört yeri birlikte değiştirir: `KATEX_VERSION`, `apps/api/katex` paketi ve kilidi, `packages/question-renderer` paketi ve kök kilit.
+
 Örneklerdeki her LaTeX sunucunun kapalı komut listesinden geçer (2026-10-14'te `qlab.content.math.disallowed` ile elle
 denetlendi: 27 kaynak, hepsi geçti). **Bilinen sınır:** bu denetim otomatik değil; fikstürler TypeScript, liste Python'da. Örnek set
 değişirse elle yinelenir; otomatik hale getirmek dilim 7'nin işi (editör aynı listeyi istemcide de isteyecek).
@@ -128,6 +138,9 @@ değişirse elle yinelenir; otomatik hale getirmek dilim 7'nin işi (editör ayn
 - **Görsel regresyon** (Playwright, Chromium): galeri, 1280 px ve 375 px genişlikte, örnek başına ekran görüntüsü. 375 px'de
   `document.documentElement.scrollWidth <= 375`. Ekran görüntüleri işletim sistemine bağlıdır: temel görüntüler ve karşılaştırma,
   Playwright'ın resmi Linux Docker imajında, aynı sürümle alınır (`npm run test:visual`; yerelde Docker ile, CI'da aynı imajla).
+- **Bilinen sınır:** Playwright imajındaki varsayılan yazı tipinin kalın biçimi yok; temel görüntülerde kalın metin normal görünür, yani
+  görsel regresyon kalınlık hatasını yakalayamaz (bileşen testleri `<strong>` çıktısını denetler). Uygulamanın kendi yazı tipi
+  paketlendiğinde (dilim 7–8) düzelir.
 - **Tip ve lint:** `tsc --noEmit` (strict), ESLint (Next varsayılanı), `next build`.
 - **CI** (kritik alan, sahibinin onayıyla): `web` işi — `npm ci`, istemci denetimi, tip, lint, bileşen testleri, `next build`,
   görsel regresyon.

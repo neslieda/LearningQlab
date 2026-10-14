@@ -40,6 +40,20 @@ describe("header line (3.2)", () => {
   });
 });
 
+describe("article accessible name (3.2)", () => {
+  it("contains exam section, levels and marks separated by whitespace", () => {
+    render(<LearnerQuestionView question={learnerQuestion({ total_marks: 9 })} />);
+    expect(screen.getByRole("article")).toHaveAccessibleName(/paper_2\s+SL\s+HL\s+9 marks/);
+  });
+
+  it("reads '1 mark' for a one-mark question and a single level separately", () => {
+    render(
+      <LearnerQuestionView question={mcqQuestion("single_value", { levels: ["hl"], exam_section: "paper_1a" })} />,
+    );
+    expect(screen.getByRole("article")).toHaveAccessibleName(/paper_1a\s+HL\s+1 mark/);
+  });
+});
+
 describe("semantic structure (3.2)", () => {
   it("the question is an article", () => {
     render(<LearnerQuestionView question={learnerQuestion({ parts: [learnerPart("a", "x", 1)] })} />);
@@ -311,6 +325,18 @@ describe("stimuli in the learner view (3.1, 3.2)", () => {
     const { container } = render(<LearnerQuestionView question={withFigure()} />);
     expect(container.textContent).not.toMatch(/Description/i);
     expect(container.textContent).not.toMatch(/staff only/i);
+  });
+
+  it("a stimulus carrying an extra runtime description property still does not show it", () => {
+    const question = withFigure();
+    question.stimuli = [
+      { id: "s1", kind: "graph", description: "LEAKED-DESCRIPTION-QQ" } as unknown as (typeof question.stimuli)[number],
+    ];
+    const { container } = render(<LearnerQuestionView question={question} />);
+    expect(container.textContent).not.toContain("LEAKED-DESCRIPTION-QQ");
+    for (const e of container.querySelectorAll("*")) {
+      for (const a of Array.from(e.attributes)) expect(a.value).not.toContain("LEAKED-DESCRIPTION-QQ");
+    }
   });
 
   it("a stimulus placed in the stem appears there, before the parts", () => {

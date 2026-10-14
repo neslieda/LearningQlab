@@ -218,7 +218,7 @@ editör şeması ve TypeScript tipleri ondan üretilir (D-21).
 - `submit` aynı kontrolü zorunlu kritik kontrol `math_renders` olarak kaydeder (§2.2). Revizyon, kaynak sürümün belgesini matematik
   kontrolünden geçirmeden kopyalar: liste ya da KaTeX sürümü değiştiğinde eski içerik düzeltilebilir kalır; geçmeyen matematik
   `submit` aşamasında durur ve yeniden kaydedilemez.
-- MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürüm yükseltmesi üç yerdeki sabiti birlikte değiştirir, görsel regresyon
+- MathML saklanmaz; KaTeX çıktısından türetilir. KaTeX sürüm yükseltmesi sunucudaki üç yeri ve web gösterim bileşeninin paketini (dilim 6; ayarlarla birlikte testle eşit tutulur) birlikte değiştirir, görsel regresyon
   testinden geçer ve saklı tüm düğümlerin yeniden doğrulanmasını gerektirir.
 - **Kapsam dışı:** `quantity` düğümlerinin gösterimi (birim alanları `µ` ve `Ω` karakterlerine izin verir; nasıl dizileceği gösterim
   bileşeniyle belirlenir, dilim 6), `text` düğümleri (istemci bunlarda otomatik matematik taraması yapmaz), boş matematik düğümü.

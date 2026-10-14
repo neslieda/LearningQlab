@@ -3,9 +3,11 @@ import pkgutil
 
 import qlab
 
-# Module list from docs/API_DESIGN.md section 2, plus the pipeline orchestration layer.
+# Module list from docs/API_DESIGN.md section 2, plus the two layers above the modules: the
+# pipeline orchestration and the HTTP layer (`api`).
 EXPECTED_MODULES = {
     "analytics",
+    "api",
     "attempts",
     "audit",
     "content",

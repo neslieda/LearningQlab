@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { isStaff } from "@/lib/decisions";
 import { useMe } from "@/lib/use-me";
 
 export default function HomePage() {
@@ -21,7 +22,15 @@ export default function HomePage() {
       </p>
       <section aria-labelledby="staff-heading" className="rounded border border-[var(--page-border)] p-4">
         <h2 id="staff-heading" className="text-lg font-medium">Staff area</h2>
-        <p className="text-[var(--page-muted)]">Question review and editing will appear here (slice 7).</p>
+        {me && isStaff(me.roles) ? (
+          <p>
+            <Link href="/admin/questions" className="underline">
+              Review questions
+            </Link>
+          </p>
+        ) : (
+          <p className="text-[var(--page-muted)]">Question review is available to staff accounts.</p>
+        )}
       </section>
       <section aria-labelledby="learner-heading" className="rounded border border-[var(--page-border)] p-4">
         <h2 id="learner-heading" className="text-lg font-medium">Learner preview</h2>

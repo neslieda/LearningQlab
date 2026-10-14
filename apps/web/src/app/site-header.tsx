@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { isStaff } from "@/lib/decisions";
 import { useMe } from "@/lib/use-me";
 
 export function SiteHeader() {
@@ -11,7 +12,12 @@ export function SiteHeader() {
         <Link href="/" className="text-lg font-semibold">
           Qlab
         </Link>
-        <nav aria-label="Account" className="text-sm">
+        <nav aria-label="Account" className="flex flex-wrap items-center gap-4 text-sm">
+          {me && isStaff(me.roles) ? (
+            <Link href="/admin/questions" className="underline">
+              Questions
+            </Link>
+          ) : null}
           {me ? (
             <span>Signed in: {me.roles.join(", ") || "no roles"}</span>
           ) : enabled ? (

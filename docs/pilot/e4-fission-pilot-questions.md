@@ -1,43 +1,43 @@
-# Pilot soru seti: E.4 Fisyon
+# Pilot question set: E.4 Fission
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Yazım ölçütleri: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Yapı örneği: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> Authoring criteria: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Structure example: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü E.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve genel
-> fizik. Hiçbir sınav kâğıdı, markscheme, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; senaryolar özgün kurgudur.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` ile ayrı bir hesapla yeniden üretildi. Kullanılan
-> sabitler: 1 u = 1.661 × 10⁻²⁷ kg = 931.5 MeV c⁻², e = 1.60 × 10⁻¹⁹ C (veri kitapçığı değerleri uzmanca teyit edilmeli). Soru 5'teki
-> tepkimede nükleon sayısı (1 + 235 = 140 + 94 + 2) ve yük (92 = 54 + 38) korunumu elle kontrol edildi.
-> **Doğrulanmayan:**
-> - Bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi (bkz. sondaki "Bağımsız kontrol"). Bilinen bir sınav sorusuna benzerlik
->   açısından uzman gözüyle bakılmadı.
-> - **Bellekten yazılan çekirdek verileri (kaynaktan teyit edilmeli):** atom kütleleri uranyum-235 235.04393 u, ksenon-140 139.92165 u,
->   stronsiyum-94 93.91536 u, nötron 1.008665 u; Z değerleri (U 92, Xe 54, Sr 38) (Soru 5). Bu kütlelerle bulunan 185 MeV, fisyon başına
->   tipik değerle (yaklaşık 200 MeV, ürünlerin sonraki bozunmaları dahil) uyumludur; ancak tek tek kütleler teyit edilmedi.
->   U-235 + n → Xe-140 + Sr-94 + 2n gerçek bir fisyon kanalıdır ve ders kitaplarında sık geçen bir örnektir; soru metni ve bağlam özgündür.
-> - Soru 1'deki nükleon başına bağlanma enerjileri (7.6 ve 8.5 MeV) bağlanma enerjisi eğrisinden bellekle alınmış yuvarlak, gerçekçi
->   değerlerdir; belirli bir çekirdeğe atfedilmedi.
-> - Soru 3'teki "fisyon başına ortalama 2.5 nötron" değeri U-235 için bellekten gelen yaklaşık değerdir.
-> - Soru 5 (c): tepkime başına 185 MeV yalnızca tek bir fisyon kanalına aittir; gerçek reaktörde ortalama farklıdır. Soru bunu
->   "assume" ile varsayım olarak verir.
+> **Source:** only syllabus node E.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and general
+> physics. No exam paper, markscheme, textbook or internet question was used as input; the scenarios are original inventions.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced with a separate `python3` calculation. Constants
+> used: 1 u = 1.661 × 10⁻²⁷ kg = 931.5 MeV c⁻², e = 1.60 × 10⁻¹⁹ C (data booklet values must be confirmed by an expert). In the reaction in Question 5,
+> conservation of nucleon number (1 + 235 = 140 + 94 + 2) and charge (92 = 54 + 38) was checked by hand.
+> **Not verified:**
+> - Passed an independent blind solver; has not passed expert review (see "Independent check" at the end). It was not examined by an
+>   expert for resemblance to any known exam question.
+> - **Nuclear data written from memory (to be confirmed from a source):** atomic masses uranium-235 235.04393 u, xenon-140 139.92165 u,
+>   strontium-94 93.91536 u, neutron 1.008665 u; Z values (U 92, Xe 54, Sr 38) (Question 5). The 185 MeV found with these masses is consistent with the
+>   typical value per fission (about 200 MeV, including the later decays of the products); however, the individual masses were not confirmed.
+>   U-235 + n → Xe-140 + Sr-94 + 2n is a real fission channel and a frequently used textbook example; the question text and context are original.
+> - The binding energies per nucleon in Question 1 (7.6 and 8.5 MeV) are round, realistic values taken from memory from the binding energy curve;
+>   they are not attributed to a specific nucleus.
+> - The value "2.5 neutrons per fission on average" in Question 3 is an approximate value for U-235 from memory.
+> - Question 5 (c): 185 MeV per reaction belongs to a single fission channel only; in a real reactor the average is different. The question gives this
+>   as an assumption using "assume".
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (E.4) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (E.4) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Fisyonda açığa çıkan enerjinin nükleon başına bağlanma enerjisinden hesabı | AO2 | — | 1 | Orta |
-| 2 | Paper 1A | SL | Yavaşlatıcının işlevi; kontrol çubuğu, ısı değiştirici ve zırhlamadan ayrımı | AO2 | — | 1 | Kolay |
-| 3 | Paper 1A | SL | Zincirleme tepkime; sabit güçte çalışma koşulu | AO3 | — | 1 | Orta |
-| 4 | Paper 1A | SL | Fisyon ürünlerinin yönetimi | AO2 | — | 1 | Kolay |
-| 5 | Paper 2 | SL | Nötronla uyarılmış fisyon; kütle farkından enerji; güç–yakıt tüketimi; yavaşlatmanın gerekçesi | AO1–AO3 | State, Show, Determine, Explain | 9 | Orta–zor |
+| 1 | Paper 1A | SL | Energy released in fission from binding energy per nucleon | AO2 | — | 1 | Medium |
+| 2 | Paper 1A | SL | Function of the moderator; distinguishing it from the control rod, heat exchanger and shielding | AO2 | — | 1 | Easy |
+| 3 | Paper 1A | SL | Chain reaction; condition for operation at constant power | AO3 | — | 1 | Medium |
+| 4 | Paper 1A | SL | Management of fission products | AO2 | — | 1 | Easy |
+| 5 | Paper 2 | SL | Neutron-induced fission; energy from mass difference; power–fuel consumption; reason for slowing neutrons | AO1–AO3 | State, Show, Determine, Explain | 9 | Medium–hard |
 
-Bu set E.4'ün tamamını kapsamaz. Eksik kalanlar: kendiliğinden fisyon, kontrol çubuklarının güç ayarındaki rolünün ayrıntısı, ısı
-değiştiricinin işlevi, zırhlamanın gerekçesi, fisyon ürünlerinin uzun süreli depolanması ve yarı ömürle ilişkisi, kritik kütle kavramı
-(müfredat analizinde açıkça geçmediği için bilerek dışarıda bırakıldı).
+This set does not cover all of E.4. What is missing: spontaneous fission, detail of the role of control rods in adjusting power, the function of the heat
+exchanger, the reason for shielding, long-term storage of fission products and its relation to half-life, the concept of critical mass
+(deliberately left out because it does not appear explicitly in the syllabus analysis).
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A nucleus of nucleon number 240 has a binding energy per nucleon of 7.6 MeV. It undergoes fission into two nuclei, each of nucleon
 number 120 and binding energy per nucleon 8.5 MeV. No neutrons are released.
@@ -49,20 +49,20 @@ B. 216 MeV
 C. 108 MeV
 D. 0.90 MeV
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Ürünlerin toplam bağlanma enerjisi = 2 × 120 × 8.5 = 2040 MeV. Başlangıç çekirdeğinin = 240 × 7.6 = 1824 MeV.
-Açığa çıkan enerji = 2040 − 1824 = 216 MeV (= 240 × 0.90).
+**Solution.** Total binding energy of the products = 2 × 120 × 8.5 = 2040 MeV. That of the initial nucleus = 240 × 7.6 = 1824 MeV.
+Energy released = 2040 − 1824 = 216 MeV (= 240 × 0.90).
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Ürünlerin toplam bağlanma enerjisi, açığa çıkan enerji sanılır: 240 × 8.5 = 2040 MeV |
-| C | Yalnızca bir ürün çekirdek hesaba katılır: 120 × 0.90 = 108 MeV |
-| D | Nükleon başına fark verilir; nükleon sayısıyla çarpılmaz: 8.5 − 7.6 = 0.90 MeV |
+| A | Takes the total binding energy of the products to be the energy released: 240 × 8.5 = 2040 MeV |
+| C | Only one product nucleus is taken into account: 120 × 0.90 = 108 MeV |
+| D | Gives the difference per nucleon; does not multiply by the number of nucleons: 8.5 − 7.6 = 0.90 MeV |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 An engineer is choosing a material for the moderator of a thermal fission reactor.
 
@@ -73,20 +73,20 @@ B. It has a high thermal conductivity so that energy is transferred quickly to t
 C. It has a high density so that gamma radiation is absorbed.
 D. Its nuclei have a small mass and slow neutrons down without absorbing them.
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Yavaşlatıcının işi, fisyondan çıkan hızlı nötronları çarpışmalarla yavaşlatmaktır. Çarpışma başına enerji aktarımı,
-hedef çekirdeğin kütlesi nötronunkine yakın olduğunda en büyüktür; nötronların soğurulmaması da gerekir.
+**Solution.** The job of the moderator is to slow down the fast neutrons from fission by collisions. The energy transferred per collision
+is greatest when the mass of the target nucleus is close to that of the neutron; the neutrons must also not be absorbed.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Yavaşlatıcı ile kontrol çubuğu karıştırılır; nötron soğurmak kontrol çubuğunun işidir |
-| B | Yavaşlatıcı ile ısı değiştirici / soğutucu karıştırılır |
-| C | Yavaşlatıcı ile zırhlama karıştırılır |
+| A | Confuses the moderator with the control rod; absorbing neutrons is the job of the control rod |
+| B | Confuses the moderator with the heat exchanger / coolant |
+| C | Confuses the moderator with the shielding |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 In a fission reactor, each fission of a uranium-235 nucleus releases 2.5 neutrons on average. The reactor operates at a constant
 power output.
@@ -98,20 +98,20 @@ B. 1.5
 C. 1
 D. 0
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Güç sabitse saniyedeki fisyon sayısı sabittir; bunun için her fisyon ortalama tam bir yeni fisyona yol açmalıdır. Kalan
-ortalama 1.5 nötron kontrol çubuklarında ve başka çekirdeklerde soğurulur ya da reaktörden kaçar.
+**Solution.** If the power is constant the number of fissions per second is constant; for this, each fission must lead on average to exactly one new fission. The remaining
+1.5 neutrons on average are absorbed in the control rods and in other nuclei or escape from the reactor.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Çıkan nötronların hepsinin yeni fisyon başlattığı düşünülür; bu durumda tepkime hızı üstel artar |
-| B | Soğurulan ya da kaçan nötron sayısı (2.5 − 1) sorulanla karıştırılır |
-| D | "Sabit güç" ifadesi zincirleme tepkimenin durduğu biçiminde yorumlanır |
+| A | Thinks all the neutrons released start a new fission; in that case the reaction rate would increase exponentially |
+| B | Confuses the number of neutrons absorbed or escaping (2.5 − 1) with what is asked |
+| D | Interprets "constant power" as meaning that the chain reaction has stopped |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 Fuel rods removed from a fission reactor are stored under several metres of water for a number of years.
 
@@ -122,20 +122,20 @@ B. To slow down neutrons and to keep the chain reaction going in the rods
 C. To absorb neutrons and to make the fission products stable
 D. To dissolve the fission products and to dilute them
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Kullanılmış yakıttaki fisyon ürünleri radyoaktiftir; bozunmaları hem ısı üretir hem de iyonlaştırıcı ışınım yayar. Su,
-ısıyı uzaklaştırır ve ışınımı soğurarak zırh görevi yapar.
+**Solution.** The fission products in spent fuel are radioactive; their decays both produce heat and emit ionizing radiation. The water
+removes the heat and acts as a shield by absorbing the radiation.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Havuzdaki su reaktördeki yavaşlatıcıyla karıştırılır; depolamada amaç tepkimeyi sürdürmek değildir |
-| C | Radyoaktif bozunmanın dış etkiyle (nötron soğurarak) durdurulabileceği düşünülür |
-| D | Katı yakıt çubukları içindeki ürünlerin suda çözülerek uzaklaştırıldığı düşünülür |
+| B | Confuses the water in the pool with the moderator in the reactor; the aim of storage is not to keep the reaction going |
+| C | Thinks radioactive decay can be stopped by an external influence (by absorbing neutrons) |
+| D | Thinks the products inside the solid fuel rods are removed by dissolving in the water |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 One possible fission reaction in a nuclear reactor is
 
@@ -173,11 +173,11 @@ chain reaction to be sustained. [2]
 | 5. | c | | energy per fission = 185 × 10⁶ × 1.60 × 10⁻¹⁹ «= 2.96 × 10⁻¹¹ J» ✓<br>fissions per day = 2.4 × 10⁹ × 86 400 / 2.96 × 10⁻¹¹ «= 7.0 × 10²⁴» ✓<br>mass = 7.0 × 10²⁴ × 235 × 1.661 × 10⁻²⁷ = 2.7 «kg» ✓ | *Allow ECF from (b) if a value other than 185 MeV is used.* | 3 |
 | 5. | d | | the probability of a neutron causing fission of uranium-235 is much greater for slow / thermal neutrons ✓<br>«without slowing» too few neutrons cause further fissions / fewer than one neutron per fission causes another fission «so the reaction dies away» ✓ | *OWTTE*<br>*Accept "fast neutrons are more likely to escape or be absorbed without causing fission" for MP2.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `m_U = 235.04393`, `m_Xe = 139.92165`, `m_Sr = 93.91536`, `m_n = 1.008665` (u); `P = 2.4e9 W`; `E_f = 185 MeV`; sabitler `u_MeV = 931.5`, `e = 1.60e-19`, `u_kg = 1.661e-27` | |
+| Parameters | `m_U = 235.04393`, `m_Xe = 139.92165`, `m_Sr = 93.91536`, `m_n = 1.008665` (u); `P = 2.4e9 W`; `E_f = 185 MeV`; constants `u_MeV = 931.5`, `e = 1.60e-19`, `u_kg = 1.661e-27` | |
 | `dm` | `m_U + m_n - m_Xe - m_Sr - 2*m_n` | 0.198255 u |
 | `E` | `dm*u_MeV` | 184.7 MeV |
 | `E_J` | `E_f*1e6*e` | 2.96 × 10⁻¹¹ J |
@@ -187,31 +187,31 @@ chain reaction to be sustained. [2]
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?" / "Which …?") + alt alta A–D | Soru 1–4 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1 ve 3 uygun (azalan); Soru 2 ve 4 cümle biçiminde seçenek (profilde azınlık biçim); Soru 4'te dört seçenek de iki ögeli ("To … and to …") |
-| 1A: doğru cevap konumu dengeli | B, D, C, A |
-| Kapsam: E.4 için açık sınır yok | Sorular "ölçülen çekirdek" maddeleriyle sınırlı tutuldu; kritik kütle ve zenginleştirme sorulmadı |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (1, 3, 3, 2; toplam 9). **Çekince:** 9 puan SL kısa sorusu için uzundur (SL örnek kâğıdında 4–6 puan gözlendi). SL havuzu için (a)+(b) [4] ve (c)+(d) [5] olarak ikiye bölme seçeneği uzman kararına bırakıldı |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | (b) Show that, (c) Determine, (d) Explain; (c) verilen yaklaşık değeri kullanır |
-| Markscheme: dört sütunlu tablo, ✓, « », ECF, OWTTE | Soru 5 uygun |
-| Tablo başlığı "büyüklük / birim" | Soru 5 kütle tablosu uygun ("Mass / u"); kütlelerin atom kütlesi olduğu tablonun üstünde yazılı |
-| Değer–birim yazımı, 2 anlamlı basamak | Uygun; kütleler kütle farkı için gereken basamak sayısıyla verildi |
-| Düzey etiketi | Tüm sorular SL |
+| 1A: context + separate single question sentence ("What is …?" / "Which …?") + A–D listed vertically | Questions 1–4 conform |
+| 1A: four options of the same type, in the same unit, in order of magnitude | Questions 1 and 3 conform (descending); Questions 2 and 4 have options in sentence form (a minority form in the profile); in Question 4 all four options have two parts ("To … and to …") |
+| 1A: balanced position of the correct answer | B, D, C, A |
+| Scope: no explicit limit for E.4 | Questions were kept to the "assessed core" statements of the syllabus analysis; critical mass and enrichment were not asked |
+| Paper 2: sub-part at most 3 marks; short question 4–9 marks | Question 5 conforms (1, 3, 3, 2; total 9). **Caveat:** 9 marks is long for an SL short question (4–6 marks were observed in the SL sample paper). The option of splitting it in two for the SL pool as (a)+(b) [4] and (c)+(d) [5] was left to the expert's decision |
+| Paper 2: at least one AO3 part; "Show that" pattern | (b) Show that, (c) Determine, (d) Explain; (c) uses the given approximate value |
+| Markscheme: four-column table, ✓, « », ECF, OWTTE | Question 5 conforms |
+| Table heading "quantity / unit" | The mass table in Question 5 conforms ("Mass / u"); that the masses are atomic masses is stated above the table |
+| Value–unit notation, 2 significant figures | Conforms; the masses are given to the number of figures needed for the mass difference |
+| Level label | All questions SL |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Yazardan farklı bir kör çözücü soruları cevapları görmeden çözdü; tüm cevap anahtarlarını bağımsız olarak yeniden
-üretti, çekirdek denklemlerini (nükleon sayısı ve yük korunumu) ve Paper 1B eğimlerini yeniden hesapladı. Bulgular:
-[review/e4-review.md](review/e4-review.md). KRİTİK bulgu yok. Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. A blind solver other than the author solved the questions without seeing the answers; it independently reproduced all
+answer keys and recalculated the nuclear equations (conservation of nucleon number and charge) and the Paper 1B gradients. Findings:
+[review/e4-review.md](review/e4-review.md). No CRITICAL findings. This check does not replace expert review.
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile yeniden hesaplandı):
+Changes made in response to the findings (every changed number was recalculated with `python3`):
 
-- **Soru 5 veri tablosu (DÜŞÜK):** tablonun üstüne "The masses given for uranium, xenon and strontium are atomic masses." eklendi. Başlık "Mass / u" olarak kaldı, çünkü tabloda nötron da var. Sayılar değişmedi (Δm = 0.198255 u, 184.7 MeV, 2.73 kg yeniden hesaplandı).
-- **Soru 5 uzunluğu (DÜŞÜK):** "Biçim uyumu" tablosundaki not güçlendirildi: 9 puan SL kısa sorusu için uzun; (a)+(b) [4] ve (c)+(d) [5] bölme seçeneği yazıldı. Soru bölünmedi; uzman kararı bekliyor.
-- **Soru 4 (DÜŞÜK):** B, C ve D seçenekleri A gibi iki ögeli biçime getirildi ("so that" → "and to"); yapı farkı artık doğru cevabı ele vermiyor. Cevap A ve çeldirici yanılgıları değişmedi.
+- **Question 5 data table (LOW):** "The masses given for uranium, xenon and strontium are atomic masses." was added above the table. The heading stayed "Mass / u" because the table also contains the neutron. The numbers did not change (Δm = 0.198255 u, 184.7 MeV, 2.73 kg recalculated).
+- **Question 5 length (LOW):** the note in the "Format conformance" table was strengthened: 9 marks is long for an SL short question; the option of splitting as (a)+(b) [4] and (c)+(d) [5] was written down. The question was not split; the expert's decision is pending.
+- **Question 4 (LOW):** options B, C and D were brought into the same two-part form as A ("so that" → "and to"); the structural difference no longer gives away the correct answer. Answer A and the distractor misconceptions did not change.

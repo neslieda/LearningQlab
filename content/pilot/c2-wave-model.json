@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/c2-wave-model-pilot-questions.md",
- "source_sha256": "1a343b3ef5e4eec9afc6c6ae14ffe57eab5a87a4e5ce95bc34a39c6ad7f5a2da",
+ "source_sha256": "08324db95ae7833a11e855b5cacafe9fb63044260befce9ae61d91ff90c24a82",
  "questions": [
   {
    "source_ref": "pilot/c2-wave-model#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "v = fλ; ses dalgasının hızı ortama bağlıdır",
+    "outcome": "v = fλ; the speed of a sound wave depends on the medium",
     "stem": {
      "type": "doc",
      "content": [
@@ -100,7 +100,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "kHz öneki çevrilmez: 1500 / 150 = 10 m"
+            "text": "Does not convert the kHz prefix: 1500 / 150 = 10 m"
            }
           ]
          }
@@ -135,7 +135,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur (f / v): 150 000 / 1500 = 100"
+            "text": "Inverts the ratio (f / v): 150 000 / 1500 = 100"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ses dalgası elektromanyetik dalga gibi düşünülür, ışık hızı kullanılır: 3.00 × 10⁸ / (150 × 10³) = 2000 m"
+            "text": "Treats the sound wave like an electromagnetic wave and uses the speed of light: 3.00 × 10⁸ / (150 × 10³) = 2000 m"
            }
           ]
          }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Enine dalgada ortam parçacığının hareket yönü (konuma göre yer değiştirme)",
+    "outcome": "Direction of motion of a medium particle in a transverse wave (displacement against position)",
     "stem": {
      "type": "doc",
      "content": [
@@ -256,7 +256,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Yatay ipte sağa doğru ilerleyen sinüs biçimli dalganın bir anlık görüntüsü. P noktası denge çizgisinin üzerinde; solunda 0.10 m uzakta bir tepe, sağında 0.10 m uzakta bir çukur. Dalganın ilerleme yönü sağa dönük bir okla gösterilir. Soru, metindeki bilgiyle şekil olmadan çözülebilir.",
+      "description": "A snapshot of a sinusoidal wave travelling to the right along a horizontal rope. Point P is on the equilibrium line; to its left, 0.10 m away, is a crest and to its right, 0.10 m away, is a trough. The direction of travel of the wave is shown by an arrow pointing right. The question can be solved from the information in the text without the figure.",
       "asset_id": null,
       "alt_text": null
      }
@@ -295,7 +295,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Parçacığın yaklaşan tepeye doğru (dalganın geldiği yöne) çekildiği düşünülür"
+            "text": "Assumes the particle is pulled towards the approaching crest (the direction the wave comes from)"
            }
           ]
          }
@@ -330,7 +330,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ortam parçacıklarının dalgayla birlikte ilerlediği sanılır"
+            "text": "Assumes the medium particles travel along with the wave"
            }
           ]
          }
@@ -365,7 +365,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Anlık görüntü bir \"yamaç\" gibi okunur: ip tepeden çukura doğru indiği için P'nin de aşağı indiği düşünülür (dalga sola ilerleseydi doğru olurdu)"
+            "text": "Reads the snapshot like a \"slope\": because the rope descends from the crest to the trough, P is assumed to move down too (this would be correct if the wave travelled to the left)"
            }
           ]
          }
@@ -404,7 +404,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Dalga sağa ilerler; P'nin solundaki tepe kısa süre sonra P'ye ulaşır. Bu yüzden P yukarı doğru hareket etmektedir. Enine dalgada parçacık yalnızca ilerleme yönüne dik doğrultuda hareket eder."
+          "text": "The wave travels to the right; the crest to the left of P reaches P shortly afterwards. So P is moving upwards. In a transverse wave a particle moves only perpendicular to the direction of travel."
          }
         ]
        }
@@ -435,7 +435,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Boyuna dalga; zamana göre yer değiştirmeden periyot; sıkışma–seyrelme aralığı",
+    "outcome": "Longitudinal wave; period from displacement against time; compression–rarefaction separation",
     "stem": {
      "type": "doc",
      "content": [
@@ -496,7 +496,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "2.0 ms tam periyot sanılır: λ = 340 × 2.0 × 10⁻³ = 0.68 m; yarısı 0.34 m"
+            "text": "Takes 2.0 ms to be the full period: λ = 340 × 2.0 × 10⁻³ = 0.68 m; half of this is 0.34 m"
            }
           ]
          }
@@ -552,7 +552,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıkışma–seyrelme aralığı tam dalga boyu alınır: 1.36 ≈ 1.4 m"
+            "text": "Takes the compression–rarefaction separation to be a full wavelength: 1.36 ≈ 1.4 m"
            }
           ]
          }
@@ -587,7 +587,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "2.0 ms çeyrek periyot sanılır (T = 8.0 ms → λ = 340 × 8.0 × 10⁻³ = 2.72 m) ve sıkışma–seyrelme aralığı tam dalga boyu alınır: 2.7 m"
+            "text": "Takes 2.0 ms to be a quarter of the period (T = 8.0 ms → λ = 340 × 8.0 × 10⁻³ = 2.72 m) and takes the compression–rarefaction separation to be a full wavelength: 2.7 m"
            }
           ]
          }
@@ -605,7 +605,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Art arda iki sıfır geçişi yarım periyottur: T = 4.0 ms. λ = vT = 340 × 4.0 × 10⁻³ = 1.36 m. Bir sıkışmanın merkezi ile en yakın seyrelmenin merkezi arası yarım dalga boyudur: 0.68 m."
+          "text": "Two successive zero crossings are half a period apart: T = 4.0 ms. λ = vT = 340 × 4.0 × 10⁻³ = 1.36 m. The distance between the centre of a compression and the centre of the nearest rarefaction is half a wavelength: 0.68 m."
          }
         ]
        }
@@ -636,7 +636,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Elektromanyetik dalganın doğası; v = fλ, önekler",
+    "outcome": "Nature of an electromagnetic wave; v = fλ, prefixes",
     "stem": {
      "type": "doc",
      "content": [
@@ -697,7 +697,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Elektromanyetik dalga için ses hızı kullanılır: 340 / (2.5 × 10⁹) = 1.4 × 10⁻⁷ m"
+            "text": "Uses the speed of sound for an electromagnetic wave: 340 / (2.5 × 10⁹) = 1.4 × 10⁻⁷ m"
            }
           ]
          }
@@ -732,7 +732,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "G öneki 10¹² alınır: 3.00 × 10⁸ / (2.5 × 10¹²) = 1.2 × 10⁻⁴ m"
+            "text": "Takes the G prefix to be 10¹²: 3.00 × 10⁸ / (2.5 × 10¹²) = 1.2 × 10⁻⁴ m"
            }
           ]
          }
@@ -788,7 +788,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur (f / c): 2.5 × 10⁹ / (3.00 × 10⁸) = 8.3"
+            "text": "Inverts the ratio (f / c): 2.5 × 10⁹ / (3.00 × 10⁸) = 8.3"
            }
           ]
          }
@@ -806,7 +806,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Elektromanyetik dalga havada yaklaşık c hızıyla ilerler. λ = c / f = 3.00 × 10⁸ / (2.5 × 10⁹) = 0.12 m."
+          "text": "An electromagnetic wave travels in air at approximately speed c. λ = c / f = 3.00 × 10⁸ / (2.5 × 10⁹) = 0.12 m."
          }
         ]
        }
@@ -837,7 +837,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Enine dalga tanımı; v = fλ; konuma göre parçacık hareketi; dalganın enerji taşıması",
+    "outcome": "Definition of a transverse wave; v = fλ; particle motion with position; energy transfer by a wave",
     "stem": {
      "type": "doc",
      "content": [

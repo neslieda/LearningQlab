@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/d1-gravitational-fields-pilot-questions.md",
- "source_sha256": "c6642805cd5b10138bd1fe90856fe70d7220c491700a031503bd5d971db69641",
+ "source_sha256": "165fdf28df1261ad327405cd399e3612ee6e9b89fb7c1ea82f11e0850547b7c4",
  "questions": [
   {
    "source_ref": "pilot/d1-gravitational-fields#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Alan şiddetinin merkezden uzaklıkla ters kare değişimi; yükseklik–uzaklık ayrımı",
+    "outcome": "Inverse-square variation of field strength with distance from the centre; height vs distance",
     "stem": {
      "type": "doc",
      "content": [
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yükseklik merkezden uzaklık sanılır (r = 2R): 3.7 / 2² = 0.93 N kg⁻¹"
+            "text": "Takes the height to be the distance from the centre (r = 2R): 3.7 / 2² = 0.93 N kg⁻¹"
            }
           ]
          }
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Doğru uzaklık (3R) alınır ama alan 1/r ile değişir sanılır: 3.7 / 3 = 1.2 N kg⁻¹"
+            "text": "Uses the correct distance (3R) but assumes the field varies as 1/r: 3.7 / 3 = 1.2 N kg⁻¹"
            }
           ]
          }
@@ -184,7 +184,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hem yükseklik uzaklık sanılır hem 1/r kullanılır: 3.7 / 2 = 1.9 N kg⁻¹"
+            "text": "Takes the height as the distance and also uses 1/r: 3.7 / 2 = 1.9 N kg⁻¹"
            }
           ]
          }
@@ -202,7 +202,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Merkezden uzaklık r = R + h = 3.4 × 10⁶ + 6.8 × 10⁶ = 1.02 × 10⁷ m = 3R. Alan şiddeti 1/r² ile değişir: g = 3.7 / 3² = 0.41 N kg⁻¹."
+          "text": "Distance from the centre r = R + h = 3.4 × 10⁶ + 6.8 × 10⁶ = 1.02 × 10⁷ m = 3R. Field strength varies as 1/r²: g = 3.7 / 3² = 0.41 N kg⁻¹."
          }
         ]
        }
@@ -233,7 +233,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kepler'in üçüncü yasası (çembersel yörünge)",
+    "outcome": "Kepler's third law (circular orbit)",
     "stem": {
      "type": "doc",
      "content": [
@@ -318,7 +318,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "T ∝ √r alınır: 4.0 × 4^(1/2) = 8.0 gün"
+            "text": "Takes T ∝ √r: 4.0 × 4^(1/2) = 8.0 days"
            }
           ]
          }
@@ -353,7 +353,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Üsler ters çevrilir (T³ ∝ r²): 4.0 × 4^(2/3) = 10.1 ≈ 10 gün"
+            "text": "Inverts the powers (T³ ∝ r²): 4.0 × 4^(2/3) = 10.1 ≈ 10 days"
            }
           ]
          }
@@ -388,7 +388,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "T ∝ r alınır: 4.0 × 4 = 16 gün"
+            "text": "Takes T ∝ r: 4.0 × 4 = 16 days"
            }
           ]
          }
@@ -427,7 +427,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kepler'in üçüncü yasası: T² ∝ r³, yani T ∝ r^(3/2). T"
+          "text": "Kepler's third law: T² ∝ r³, so T ∝ r^(3/2). T"
          },
          {
           "marks": [
@@ -441,7 +441,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 4.0 × 4^(3/2) = 4.0 × 8 = 32 gün."
+          "text": " = 4.0 × 4^(3/2) = 4.0 × 8 = 32 days."
          }
         ]
        }
@@ -472,7 +472,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "İki cismi birleştiren doğru üzerinde bileşke alan şiddeti",
+    "outcome": "Resultant field strength on the line joining two bodies",
     "stem": {
      "type": "doc",
      "content": [
@@ -543,7 +543,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Alanlar çıkarılır ama uzaklık olarak yıldızlar arası uzaklığın tamamı alınır: 6.67 × 10⁻¹¹ × 4.0 × 10³⁰ / (4.0 × 10¹¹)² = 1.7 × 10⁻³"
+            "text": "Subtracts the fields but uses the whole distance between the stars as the distance: 6.67 × 10⁻¹¹ × 4.0 × 10³⁰ / (4.0 × 10¹¹)² = 1.7 × 10⁻³"
            }
           ]
          }
@@ -578,7 +578,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Alanlar toplanır ve uzaklık olarak tamamı alınır: 6.67 × 10⁻¹¹ × 8.0 × 10³⁰ / (4.0 × 10¹¹)² = 3.3 × 10⁻³"
+            "text": "Adds the fields and uses the whole distance: 6.67 × 10⁻¹¹ × 8.0 × 10³⁰ / (4.0 × 10¹¹)² = 3.3 × 10⁻³"
            }
           ]
          }
@@ -634,7 +634,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Uzaklık doğru, ama alanların zıt yönlü olduğu görülmez ve büyüklükler toplanır: 6.67 × 10⁻¹¹ × 8.0 × 10³⁰ / (2.0 × 10¹¹)² = 1.3 × 10⁻²"
+            "text": "Distance correct, but does not see that the fields are in opposite directions and adds the magnitudes: 6.67 × 10⁻¹¹ × 8.0 × 10³⁰ / (2.0 × 10¹¹)² = 1.3 × 10⁻²"
            }
           ]
          }
@@ -652,7 +652,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Z'nin her iki yıldıza uzaklığı 2.0 × 10¹¹ m. Alanlar zıt yönlüdür (her biri kendi yıldızına doğru), bu yüzden büyüklükler çıkarılır: g = G(M"
+          "text": "The distance from Z to each star is 2.0 × 10¹¹ m. The fields are in opposite directions (each towards its own star), so the magnitudes are subtracted: g = G(M"
          },
          {
           "marks": [
@@ -680,7 +680,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": ") / r² = 6.67 × 10⁻¹¹ × 4.0 × 10³⁰ / (2.0 × 10¹¹)² = 6.7 × 10⁻³ N kg⁻¹, Q'ya doğru."
+          "text": ") / r² = 6.67 × 10⁻¹¹ × 4.0 × 10³⁰ / (2.0 × 10¹¹)² = 6.7 × 10⁻³ N kg⁻¹, towards Q."
          }
         ]
        }
@@ -710,7 +710,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kütle çekim potansiyeli (sonsuzda sıfır); W = mΔV",
+    "outcome": "Gravitational potential (zero at infinity); W = mΔV",
     "stem": {
      "type": "doc",
      "content": [
@@ -809,7 +809,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Potansiyel farkı yerine son noktadaki potansiyelin büyüklüğü kullanılır: 160 × 0.70 × 10⁶ = 1.12 × 10⁸ ≈ 1.1 × 10⁸ J"
+            "text": "Uses the magnitude of the potential at the final point instead of the potential difference: 160 × 0.70 × 10⁶ = 1.12 × 10⁸ ≈ 1.1 × 10⁸ J"
            }
           ]
          }
@@ -865,7 +865,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Potansiyel 1/r² ile değişir sanılır: V = −2.8 / 16 = −0.175; 160 × 2.625 × 10⁶ = 4.2 × 10⁸ J"
+            "text": "Assumes potential varies as 1/r²: V = −2.8 / 16 = −0.175; 160 × 2.625 × 10⁶ = 4.2 × 10⁸ J"
            }
           ]
          }
@@ -900,7 +900,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yüzeydeki potansiyelin tamamı alınır (sonsuza götürme enerjisi): 160 × 2.8 × 10⁶ = 4.48 × 10⁸ ≈ 4.5 × 10⁸ J"
+            "text": "Uses the whole surface potential (energy to take the probe to infinity): 160 × 2.8 × 10⁶ = 4.48 × 10⁸ ≈ 4.5 × 10⁸ J"
            }
           ]
          }
@@ -918,7 +918,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Potansiyel 1/r ile değişir: 4R'de V = −2.8 / 4 = −0.70 MJ kg⁻¹. ΔV = −0.70 − (−2.8) = +2.1 MJ kg⁻¹. W = mΔV = 160 × 2.1 × 10⁶ = 3.36 × 10⁸ ≈ 3.4 × 10⁸ J."
+          "text": "Potential varies as 1/r: at 4R, V = −2.8 / 4 = −0.70 MJ kg⁻¹. ΔV = −0.70 − (−2.8) = +2.1 MJ kg⁻¹. W = mΔV = 160 × 2.1 × 10⁶ = 3.36 × 10⁸ ≈ 3.4 × 10⁸ J."
          }
         ]
        }
@@ -948,7 +948,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yörünge hızı; periyot; yörünge enerjisi ve kaçış; atmosfer sürüklemesinin nitel etkisi",
+    "outcome": "Orbital speed; period; orbital energy and escape; qualitative effect of atmospheric drag",
     "stem": {
      "type": "doc",
      "content": [

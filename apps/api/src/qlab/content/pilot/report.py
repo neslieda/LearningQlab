@@ -25,7 +25,7 @@ _CATEGORY_TITLES = (
     ("command_term", "`part.command_term` (boş: ilk sözcük sözlükte yok)"),
     ("answer_type", "`part.answer_type`"),
     ("mark_point_kind", "`MarkPoint.kind`"),
-    ("stimulus_kind", "Uyaran `kind` (Şekil bloğu ve Şekil notu)"),
+    ("stimulus_kind", "Uyaran `kind` (Figure block ve Figure note)"),
     ("note_kind", "`Note.kind` (§3.2 kuralı; kaynakta yazmaz)"),
     ("marks_capped", "`marks_capped = true` olan parçalar"),
 )
@@ -36,7 +36,7 @@ _INTERPRETATIONS = (
     "sonu serbesttir (`devre` → `devresi`). `P–V` yalnızca uzun çizgiyle yazıldığında eşleşir.",
     "**Not içindeki `✓`** (§8): metinde kalır; kaynak karşılaştırması da `✓` atar. Bu notlar "
     "Notlar sütununa yazılmış alternatif yollardır.",
-    "**Şekil notu** (§3.2): metni aktarılmaz; uyaran sabit açıklama ve `graph` türüyle açılır.",
+    "**Figure note** (§3.2): metni aktarılmaz; uyaran sabit açıklama ve `graph` türüyle açılır.",
     "**Yunan harfi komutu** (§4.3): komut adı Unicode harf adından alınır (`ε` → `\\epsilon`, "
     "`φ` → `\\phi`, `λ` → `\\lambda`, `µ` → `\\mu`, `Ω` → `\\Omega`); `\\varepsilon` ve `\\varphi` "
     "kullanılmaz.",
@@ -51,9 +51,9 @@ _INTERPRETATIONS = (
     "**Parametre birimi**: ters tırnak içinde değerden sonra gelen metin birimdir; ters tırnağın "
     'dışındaki açıklama (`(s² kg⁻¹)`) "ters tırnaksız parametre" sayılır ve modeli düşürür.',
     "**Adım adı**: ilk sütundaki ilk ters tırnaklı tanımlayıcıdır; ardından gelen ters tırnaksız "
-    "metin (`(denetim)`) yok sayılır, ikinci bir ters tırnaklı ad modeli düşürür.",
+    "metin (`(check)`) yok sayılır, ikinci bir ters tırnaklı ad modeli düşürür.",
     "**Sonuç sütunu birimi**: sayıdan sonra kalan metin yalnızca birim sözcüklerinden "
-    "oluşuyorsa `unit` olur; açıklama içeren sonuçlar (`180 s (tam)`) birimsiz bırakılır.",
+    "oluşuyorsa `unit` olur; açıklama içeren sonuçlar (`180 s (exact)`) birimsiz bırakılır.",
 )
 
 
@@ -182,7 +182,7 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
     out += [""]
     constants = sorted(tally.constants)
     out += [
-        "**`sabit` sözcüğünden sonra gelip parametre olarak aktarılan değerler "
+        "**`constant` sözcüğünden sonra gelip parametre olarak aktarılan değerler "
         f"({len(constants)}).** Sabit tablosuna bağ kurulmaz:",
         "",
         ", ".join(f"`{ref}` `{name}`" for ref, name in constants) or "yok",
@@ -202,7 +202,7 @@ def render_report(tally: Tally, stems: Sequence[str]) -> str:
     notes = sorted(tally.figure_notes_skipped)
     out += [
         "",
-        f"**Aktarılmayan Şekil notu metni:** {len(notes)} soruda `### Şekil notu` bölümü "
+        f"**Aktarılmayan Figure note metni:** {len(notes)} soruda `### Figure note` bölümü "
         "vardır; metni aktarılmaz (§3.2), uyaranın açıklaması sabit metindir: "
         + ", ".join(f"`{ref}`" for ref in notes)
         + ".",

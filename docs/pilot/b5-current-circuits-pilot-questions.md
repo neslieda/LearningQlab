@@ -1,37 +1,37 @@
-# Pilot soru seti: B.5 Akım ve devreler
+# Pilot question set: B.5 Current and circuits
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written following the [authoring standard](AUTHORING_STANDARD.md), with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü B.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı; PDF açılmadı.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile ayrı bir hesapla
-> yeniden üretildi ve dosyadaki değerlerle eşleşti. Nikrom özdirenci 1.1 × 10⁻⁶ Ω m alındı ve soruda verildi.
-> **Doğrulanmayan:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; nitel maddeler (Soru 5c, 5d'nin gerekçesi) kodla
-> denetlenemez; nikrom özdirenci ve LDR direnç değerleri genel bilgiden alındı, bir kaynaktan teyit edilmedi; Soru 5'te telin
-> direncinin sıcaklıkla değişmediği varsayıldı (soruda yazılı) — gerçek bir ısıtma telinde bu yaklaşık olarak geçerlidir; devre
-> şemaları çizilmedi, yalnızca sözle tarif edildi; bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle bakılmadı.
+> **Source:** only syllabus node B.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook question or internet source was used as input; no PDF was opened.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced by a separate calculation in `python3` (standard library only)
+> and matched the values in the file. The resistivity of nichrome, 1.1 × 10⁻⁶ Ω m, was used and is given in the question.
+> **Not verified:** passed an independent blind solver; has not passed expert review; qualitative points (Question 5c, the reasoning in 5d) cannot be checked by
+> code; the resistivity of nichrome and the resistance values of the LDR were taken from general knowledge and not confirmed against a source; in Question 5 the resistance of the
+> wire was assumed not to change with temperature (stated in the question) — for a real heating wire this holds only approximately; the circuit
+> diagrams were not drawn, only described in words; no expert check was made for resemblance to a known exam question.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (B.5) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (B.5) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Özdirenç; direncin uzunluk ve kesit alanına bağlılığı (orantı) | AO2 | — | 1 | Orta |
-| 2 | Paper 1A | SL | İç direnç; dış dirençte harcanan güç | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Değişken direnç (LDR) ile gerilim bölücü | AO3 | — | 1 | Orta |
-| 4 | Paper 1A | SL | Seri ve paralel bağlama; paralel kolda akım paylaşımı | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | SL | Özdirenç; emk, iç direnç ve uç gerilimi; güç; paralel bağlamanın etkisinin değerlendirilmesi | AO2–AO3 | Show that, Calculate, Explain, Determine | 9 | Orta–zor |
+| 1 | Paper 1A | SL | Resistivity; dependence of resistance on length and cross-sectional area (proportion) | AO2 | — | 1 | Medium |
+| 2 | Paper 1A | SL | Internal resistance; power dissipated in the external resistor | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Potential divider with a variable resistor (LDR) | AO3 | — | 1 | Medium |
+| 4 | Paper 1A | SL | Series and parallel connection; sharing of current in parallel branches | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | SL | Resistivity; emf, internal resistance and terminal pd; power; evaluating the effect of connecting in parallel | AO2–AO3 | Show that, Calculate, Explain, Determine | 9 | Medium–hard |
 
-Bu set B.5'in tamamını kapsamaz. Eksik kalanlar: emk kaynağı olarak kimyasal pil ve güneş pilinin karşılaştırılması; devre şeması
-çizimi ve sembolleri; akımın yük akış hızı olarak tanımı (I = Δq/Δt); Ohm yasası ve ohmik olmayan davranış (I–V karakteristiği);
-termistör ve potansiyometre; ideal olmayan ölçü aleti içeren devre; emk ve iç direncin grafikten belirlenmesi.
+This set does not cover all of B.5. Not covered: comparison of a chemical cell and a solar cell as sources of emf; drawing circuit diagrams
+and their symbols; definition of current as the rate of flow of charge (I = Δq/Δt); Ohm's law and non-ohmic behaviour (I–V characteristic);
+thermistor and potentiometer; circuits containing non-ideal meters; determining emf and internal resistance from a graph.
 
-Kapsam sınırı kontrolü: yalnızca doğru akım devreleri; tüm ölçü aletleri ideal ve bu soruda yazılı (Soru 3); kullanılan tek değişken
-direnç LDR (izinli listede). Türev ya da integral yok.
+Scope boundary check: direct current circuits only; all meters are ideal and this is stated in the question (Question 3); the only variable
+resistor used is the LDR (on the permitted list). No derivatives or integrals.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A metal wire X has resistance *R*. Wire Y is made of the same metal and is at the same temperature as X. Y has **twice** the length
 and **twice** the diameter of X.
@@ -43,19 +43,19 @@ B. *R*
 C. 2*R*
 D. 4*R*
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** *R* = ρ*L*/*A* ve *A* ∝ *d*². Uzunluk 2 kat, kesit alanı 4 kat: direnç 2 / 4 = 1⁄2 katına iner.
+**Solution.** *R* = ρ*L*/*A* and *A* ∝ *d*². The length is doubled and the cross-sectional area is quadrupled: the resistance falls to 2 / 4 = 1⁄2 of its value.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Kesit alanı çapla doğru orantılı alınır (*A* ∝ *d*): 2 / 2 = 1 |
-| C | Çapın etkisi yok sayılır; yalnızca uzunluk hesaba katılır: 2*R* |
-| D | Direnç hem uzunlukla hem çapla artıyor sayılır: 2 × 2 = 4 |
+| B | Cross-sectional area is taken as directly proportional to the diameter (*A* ∝ *d*): 2 / 2 = 1 |
+| C | The effect of the diameter is ignored; only the length is taken into account: 2*R* |
+| D | Resistance is taken to increase with both length and diameter: 2 × 2 = 4 |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A battery of emf 6.0 V and internal resistance 0.50 Ω is connected to a resistor of resistance 2.5 Ω.
 
@@ -66,26 +66,26 @@ B. 10 W
 C. 12 W
 D. 14 W
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** *I* = ε / (*R* + *r*) = 6.0 / 3.0 = 2.0 A. Dirençte harcanan güç = *I*²*R* = 2.0² × 2.5 = 10 W.
+**Solution.** *I* = ε / (*R* + *r*) = 6.0 / 3.0 = 2.0 A. Power dissipated in the resistor = *I*²*R* = 2.0² × 2.5 = 10 W.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | İç dirençte harcanan güç hesaplanır: 2.0² × 0.50 = 2.0 W |
-| C | Bataryanın toplam gücü verilir: ε*I* = 6.0 × 2.0 = 12 W |
-| D | İç direnç yok sayılır: ε²/*R* = 36 / 2.5 = 14.4 W |
+| A | The power dissipated in the internal resistance is calculated: 2.0² × 0.50 = 2.0 W |
+| C | The total power of the battery is given: ε*I* = 6.0 × 2.0 = 12 W |
+| D | The internal resistance is ignored: ε²/*R* = 36 / 2.5 = 14.4 W |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A light-dependent resistor (LDR) and a fixed resistor of resistance 10 kΩ are connected in series with a battery of emf 9.0 V and
 negligible internal resistance. An ideal voltmeter is connected across the fixed resistor. In bright light the resistance of the
 LDR is 2.0 kΩ.
 
-> **Şekil:** Tek gözlü seri devre: 9.0 V batarya, LDR ve 10 kΩ sabit direnç art arda bağlı. Voltmetre yalnızca 10 kΩ direncin
-> uçlarına paralel bağlı.
+> **Figure:** Single-loop series circuit: a 9.0 V battery, an LDR and a 10 kΩ fixed resistor connected one after another. The voltmeter is connected only
+> in parallel across the 10 kΩ resistor.
 
 What is the reading on the voltmeter in bright light?
 
@@ -94,25 +94,25 @@ B. 1.8 V
 C. 4.5 V
 D. 7.5 V
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Gerilim bölücü: *V* = 9.0 × 10 / (10 + 2.0) = 7.5 V.
+**Solution.** Potential divider: *V* = 9.0 × 10 / (10 + 2.0) = 7.5 V.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | LDR'nin uçlarındaki gerilim hesaplanır: 9.0 × 2.0 / 12 = 1.5 V |
-| B | Gerilim, dirençlerin birbirine oranıyla bulunur (toplama bölünmez): 9.0 × 2.0 / 10 = 1.8 V |
-| C | Seri bağlı iki elemanın gerilimi eşit paylaştığı varsayılır: 9.0 / 2 = 4.5 V |
+| A | The pd across the LDR is calculated: 9.0 × 2.0 / 12 = 1.5 V |
+| B | The pd is found from the ratio of the resistances to each other (not divided by the sum): 9.0 × 2.0 / 10 = 1.8 V |
+| C | Two components in series are assumed to share the pd equally: 9.0 / 2 = 4.5 V |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 A resistor of resistance 6.0 Ω is connected in series with a parallel combination of a 12 Ω resistor and a 4.0 Ω resistor. The
 arrangement is connected to a battery of emf 18 V and negligible internal resistance.
 
-> **Şekil:** 18 V bataryanın bir ucundan çıkan iletken önce 6.0 Ω dirençten geçer, sonra iki kola ayrılır: bir kolda 12 Ω, öbür kolda
-> 4.0 Ω direnç vardır. Kollar yeniden birleşir ve bataryanın öbür ucuna döner.
+> **Figure:** The conductor leaving one terminal of the 18 V battery first passes through the 6.0 Ω resistor and then splits into two branches: one branch has a 12 Ω resistor, the other has a
+> 4.0 Ω resistor. The branches rejoin and return to the other terminal of the battery.
 
 What is the current in the 4.0 Ω resistor?
 
@@ -121,20 +121,20 @@ B. 1.0 A
 C. 1.5 A
 D. 2.0 A
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Paralel bölüm: (12 × 4.0) / (12 + 4.0) = 3.0 Ω. Toplam direnç 9.0 Ω; ana kol akımı 18 / 9.0 = 2.0 A. Paralel bölümün
-gerilimi 2.0 × 3.0 = 6.0 V. 4.0 Ω dirençteki akım = 6.0 / 4.0 = 1.5 A.
+**Solution.** Parallel section: (12 × 4.0) / (12 + 4.0) = 3.0 Ω. Total resistance 9.0 Ω; current in the main branch 18 / 9.0 = 2.0 A. The pd across the parallel
+section is 2.0 × 3.0 = 6.0 V. Current in the 4.0 Ω resistor = 6.0 / 4.0 = 1.5 A.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Akım dirençle doğru orantılı paylaştırılır (ya da 12 Ω dirençteki akım verilir): 2.0 × 4.0 / 16 = 0.50 A |
-| B | Akımın iki kola eşit bölündüğü varsayılır: 2.0 / 2 = 1.0 A |
-| D | Ana kol akımı verilir; kollara ayrılma hesaba katılmaz: 2.0 A |
+| A | The current is shared in direct proportion to resistance (or the current in the 12 Ω resistor is given): 2.0 × 4.0 / 16 = 0.50 A |
+| B | The current is assumed to split equally between the two branches: 2.0 / 2 = 1.0 A |
+| D | The current in the main branch is given; the split into branches is not taken into account: 2.0 A |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A student builds a hot-wire cutter for foam. A nichrome wire of diameter 0.20 mm is connected to a battery of emf 6.0 V and internal
 resistance 1.2 Ω. The resistance of the wire is 4.8 Ω and can be assumed to be constant.
@@ -150,7 +150,7 @@ Resistivity of nichrome = 1.1 × 10⁻⁶ Ω m
 To cut faster, the student connects a second, identical nichrome wire in parallel with the first. The student predicts that the
 total power dissipated in the two wires will be double the value in (b).
 
-> **Şekil:** Bataryanın (emk 6.0 V, iç direnç 1.2 Ω) uçları arasına, her biri 4.8 Ω olan iki nikrom tel birbirine paralel bağlıdır.
+> **Figure:** Two nichrome wires, each of 4.8 Ω, are connected in parallel with each other across the terminals of the battery (emf 6.0 V, internal resistance 1.2 Ω).
 
 **(d)** Determine whether the prediction of the student is correct. [3]
 
@@ -163,11 +163,11 @@ total power dissipated in the two wires will be double the value in (b).
 | 5. | c | | there is a current in the battery so there is a potential difference across / energy is dissipated in the internal resistance ✓<br>terminal pd = emf − *Ir* «= 6.0 − 1.0 × 1.2 = 4.8 V» **OR** less energy per unit charge is available to the external circuit ✓ | *OWTTE* | 2 |
 | 5. | d | | resistance of the parallel wires = 2.4 «Ω» **AND** *I* = 6.0 / (2.4 + 1.2) «= 1.67 A» ✓<br>total power in the wires = 1.67² × 2.4 = 6.7 «W» ✓<br>this is less than 2 × 4.8 = 9.6 «W», so the prediction is not correct «because the larger current increases the pd across the internal resistance / the terminal pd falls to 4.0 V / the power in each wire falls to 3.3 W» ✓ | *Allow ECF from (b).*<br>**ALTERNATIVE for the second mark:** terminal pd = 4.0 V, power in each wire = 4.0² / 4.8 = 3.3 «W» ✓<br>*The third mark requires a numerical comparison and a conclusion.* | 3 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `d = 0.20e-3 m`, `R = 4.8 ohm`, `emf = 6.0 V`, `r = 1.2 ohm`; sabit `rho = 1.1e-6 ohm m` | |
+| Parameters | `d = 0.20e-3 m`, `R = 4.8 ohm`, `emf = 6.0 V`, `r = 1.2 ohm`; constant `rho = 1.1e-6 ohm m` | |
 | `A` | `pi*(d/2)**2` | 3.14 × 10⁻⁸ m² |
 | `L` | `R*A/rho` | 0.137 m |
 | `I1` | `emf/(R + r)` | 1.00 A |
@@ -177,40 +177,40 @@ total power dissipated in the two wires will be double the value in (b).
 | `I2` | `emf/(R_par + r)` | 1.67 A |
 | `P2` | `I2**2*R_par` | 6.67 W |
 | `V_term2` | `emf - I2*r` | 4.00 V |
-| Karşılaştırma | `P2 < 2*P1` | 6.67 W < 9.60 W → öngörü yanlış |
+| Comparison | `P2 < 2*P1` | 6.67 W < 9.60 W → prediction wrong |
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + (şekil) + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–4 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–4 uygun (artan) |
-| 1A: olumsuzluk / kritik sözcük koyu | Soru 1 ("twice") uygun; olumsuz kök yok |
-| 1A: doğru cevap konumu dengeli | A, B, D, C |
-| 1A: şekil olmadan çözülebilir | Soru 3 ve 4'te devre, soru metninde tam olarak sözle tanımlı; `> **Şekil:**` tarifi yalnızca yardımcı. Devre şemaları çizilmedi |
-| 1A: yuvarlak, temiz sayılar | Soru 1–4 uygun; Soru 2'de D çeldiricisi 14.4 → 14 W yuvarlandı |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 2, 2, 3; toplam 9) |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | Soru 5 uygun: (a) Show that, (c) Explain, (d) Determine |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, AND, ECF, OWTTE, ALTERNATIVE | Soru 5 uygun |
-| Değer–birim yazımı (Ω m), 2 anlamlı basamak | Uygun |
-| Ölçü aletleri ideal, aksi belirtilmedikçe | Soru 3'te "ideal voltmeter" açıkça yazılı |
-| Paper 2: cevap kutusu, noktalı satırlar | Bu taslakta yok; yayın şablonunda eklenecek |
+| 1A: context + (figure) + a separate single question sentence ("What is …?") + A–D listed one under another | Questions 1–4 conform |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 1–4 conform (ascending) |
+| 1A: negation / key word in bold | Question 1 ("twice") conforms; no negative stem |
+| 1A: position of the correct answer balanced | A, B, D, C |
+| 1A: solvable without a figure | In Questions 3 and 4 the circuit is fully described in words in the question text; the `> **Figure:**` description is only supplementary. Circuit diagrams were not drawn |
+| 1A: round, clean numbers | Questions 1–4 conform; in Question 2 the D distractor was rounded 14.4 → 14 W |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 2, 2, 3; total 9) |
+| Paper 2: at least one AO3 part; "Show that" pattern | Question 5 conforms: (a) Show that, (c) Explain, (d) Determine |
+| Markscheme: four-column table, ✓, « », OR, AND, ECF, OWTTE, ALTERNATIVE | Question 5 conforms |
+| Value–unit notation (Ω m), 2 significant figures | Conforms |
+| Meters ideal unless stated otherwise | In Question 3 "ideal voltmeter" is stated explicitly |
+| Paper 2: answer box, dotted lines | Not in this draft; will be added in the publication template |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, yazarından bağımsız bir kör çözücü tarafından cevaplar görülmeden çözüldü (devreler yalnızca sözlü
-tariften); tüm cevap anahtarları ve markscheme sonuçları bağımsız olarak yeniden üretildi (KRİTİK ve ORTA bulgu yok). Ayrıntı:
-[review/b5-review.md](review/b5-review.md). Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by a blind solver independent of its author, without seeing the answers (circuits from the verbal
+description only); all answer keys and markscheme results were reproduced independently (no CRITICAL or MEDIUM findings). Detail:
+[review/b5-review.md](review/b5-review.md). This check does not replace expert review.
 
-İnceleme sonucu yapılan değişiklikler (sayısal değer değişmedi; anahtarlar aynı):
+Changes made as a result of the review (no numerical value changed; the keys are the same):
 
-- **Soru 2, DÜŞÜK-1:** "A cell of emf 6.0 V" → "A battery of emf 6.0 V" (tek bir kimyasal pil için 6.0 V alışılmadık). Cevap B
-  (10 W) ve çeldiriciler değişmedi.
-- **Soru 5 (d), DÜŞÜK-2:** markscheme'in üçüncü maddesine kabul edilen gerekçe olarak "the power in each wire falls to 3.3 W"
-  eklendi (4.0² / 4.8 = 3.33 W).
-- **DÜŞÜK-3 (SL kısa soruda 9 puan) ve DÜŞÜK-4 (devre şemalarının çizilmemesi):** değişiklik yapılmadı; ilki uzman teyidi bekleyen
-  kayıt, ikincisi şekil üretimi gelene kadar çözülemez ve "Biçim uyumu"nda zaten işaretli.
+- **Question 2, LOW-1:** "A cell of emf 6.0 V" → "A battery of emf 6.0 V" (6.0 V is unusual for a single chemical cell). The answer B
+  (10 W) and the distractors did not change.
+- **Question 5 (d), LOW-2:** "the power in each wire falls to 3.3 W" was added to the third markscheme point as an accepted reason
+  (4.0² / 4.8 = 3.33 W).
+- **LOW-3 (9 marks in an SL short question) and LOW-4 (circuit diagrams not drawn):** no change made; the first is a record awaiting expert
+  confirmation, the second cannot be resolved until figure generation is available and is already flagged in "Format conformance".

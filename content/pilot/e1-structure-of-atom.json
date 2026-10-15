@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/e1-structure-of-atom-pilot-questions.md",
- "source_sha256": "bf44d13431beb9def9432d02be179f0bcef8652a29483c196d565cbd5a467aff",
+ "source_sha256": "389475e0818026be211b8b1965e0e06caac3d037cfe47cc9edf72554a1beb9b5",
  "questions": [
   {
    "source_ref": "pilot/e1-structure-of-atom#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Geiger–Marsden–Rutherford deneyinin nitel yorumu",
+    "outcome": "Qualitative interpretation of the Geiger–Marsden–Rutherford experiment",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Deneyin öbür gözlemiyle (parçacıkların çoğunun sapmadan geçmesi) karıştırılır; boşluk büyük açılı sapmayı açıklamaz"
+            "text": "Confused with the other observation of the experiment (most particles pass through undeflected); empty space does not explain large-angle deflection"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düzgün dağılmış yük modeli (çekirdek öncesi model) alınır; bu model yalnızca çok küçük sapmalar verir"
+            "text": "Uses the uniformly distributed charge model (the pre-nucleus model); this model gives only very small deflections"
            }
           ]
          }
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Tayf kanıtı ile saçılma kanıtı karıştırılır; enerji düzeyleri saçılma deneyinin sonucu değildir"
+            "text": "Confuses the evidence from spectra with the evidence from scattering; energy levels are not a result of the scattering experiment"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Bir alfa parçacığının geri saçılabilmesi için çok büyük bir itme kuvveti gerekir. Bu, ancak pozitif yükün küçük bir bölgede toplanmasıyla (yakın geçişte çok güçlü alan) ve bu bölgenin alfa parçacığından çok daha büyük kütleli olmasıyla açıklanır."
+          "text": "A very large repulsive force is needed for an alpha particle to be scattered backwards. This can be explained only if the positive charge is concentrated in a small region (a very strong field at close approach) and this region has a much greater mass than the alpha particle."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kesikli enerji düzeyleri; foton enerjisi E = hf = hc/λ",
+    "outcome": "Discrete energy levels; photon energy E = hf = hc/λ",
     "stem": {
      "type": "doc",
      "content": [
@@ -266,7 +266,7 @@
       "id": "fig1",
       "kind": "energy_level_diagram",
       "use": "read_only",
-      "description": "Üç yatay çizgiden oluşan enerji düzeyi diyagramı. En alttaki çizgi −5.80 eV, ortadaki −3.30 eV, en üstteki −1.20 eV olarak etiketlidir. Diyagram ölçekli değildir. (Soru, metinde verilen bu üç değerle şekil olmadan çözülebilir.)",
+      "description": "An energy level diagram made of three horizontal lines. The lowest line is labelled −5.80 eV, the middle one −3.30 eV and the top one −1.20 eV. The diagram is not to scale. (The question can be solved without the figure, using these three values given in the text.)",
       "asset_id": null,
       "alt_text": null
      }
@@ -305,7 +305,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "En uzun dalga boyu için en büyük enerji farkı seçilir: 4.60 eV → 270 nm (λ ile E'nin ters orantısı gözden kaçar)"
+            "text": "Chooses the largest energy difference for the longest wavelength: 4.60 eV → 270 nm (misses that λ and E are inversely proportional)"
            }
           ]
          }
@@ -340,7 +340,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca en alttaki iki düzey arasındaki geçiş düşünülür: 2.50 eV → 497 nm"
+            "text": "Considers only the transition between the lowest two levels: 2.50 eV → 497 nm"
            }
           ]
          }
@@ -396,7 +396,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Enerji farkı yerine en üst düzeyin enerjisinin büyüklüğü kullanılır: 1.20 eV → 1036 nm ≈ 1040 nm"
+            "text": "Uses the magnitude of the energy of the top level instead of an energy difference: 1.20 eV → 1036 nm ≈ 1040 nm"
            }
           ]
          }
@@ -414,7 +414,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "En uzun dalga boyu en küçük enerji farkına karşılık gelir. Farklar: 2.50 eV, 2.10 eV, 4.60 eV. En küçüğü 2.10 eV. λ = hc / E = (6.63 × 10⁻³⁴ × 3.00 × 10⁸) / (2.10 × 1.60 × 10⁻¹⁹) = 5.92 × 10⁻⁷ m = 592 nm."
+          "text": "The longest wavelength corresponds to the smallest energy difference. The differences are 2.50 eV, 2.10 eV, 4.60 eV. The smallest is 2.10 eV. λ = hc / E = (6.63 × 10⁻³⁴ × 3.00 × 10⁸) / (2.10 × 1.60 × 10⁻¹⁹) = 5.92 × 10⁻⁷ m = 592 nm."
          }
         ]
        }
@@ -445,7 +445,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Soğurma tayfının oluşumu; tayftan bileşim",
+    "outcome": "Formation of an absorption spectrum; composition from a spectrum",
     "stem": {
      "type": "doc",
      "content": [
@@ -527,7 +527,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Soğurma tayfı ile yayma tayfı karıştırılır; bu görüntü sıcak buharın tek başına verdiği tayftır"
+            "text": "Confuses an absorption spectrum with an emission spectrum; this picture is the spectrum given by hot vapour on its own"
            }
           ]
          }
@@ -562,7 +562,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düşük basınçlı gazın ışığa tümüyle saydam olduğu, fotonlarla etkileşmediği düşünülür"
+            "text": "Thinks a low-pressure gas is completely transparent to light and does not interact with photons"
            }
           ]
          }
@@ -597,7 +597,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Buharın, geçen ışığa kendi çizgilerini \"eklediği\" düşünülür; yeniden yayımın her yöne olduğu gözden kaçar"
+            "text": "Thinks the vapour \"adds\" its own lines to the transmitted light; misses that re-emission is in all directions"
            }
           ]
          }
@@ -615,7 +615,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Buhardaki atomlar yalnızca enerji düzeyi farklarına eşit enerjili fotonları soğurur; bunlar atomun yayabildiği dalga boyları arasındadır (soğuk buharda yalnızca temel düzeyden başlayan geçişler). Soğurulan enerji her yöne yeniden yayıldığı için gözlem doğrultusunda bu dalga boylarında şiddet azalır: sürekli tayf üzerinde karanlık çizgiler (soğurma tayfı)."
+          "text": "The atoms in the vapour absorb only photons whose energy equals the differences between energy levels; these are among the wavelengths the atom can emit (in a cool vapour only transitions starting from the ground level). Because the absorbed energy is re-emitted in all directions, the intensity at these wavelengths is reduced in the direction of observation: dark lines on a continuous spectrum (an absorption spectrum)."
          }
         ]
        }
@@ -645,7 +645,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "R = R₀A^(1/3); çekirdek yoğunluğunun A'dan bağımsızlığı",
+    "outcome": "R = R₀A^(1/3); nuclear density independent of A",
     "stem": {
      "type": "doc",
      "content": [
@@ -706,7 +706,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "R ∝ A alınır: kütle oranı 8, hacim oranı 8³ = 512; 8 / 512 = 1/64"
+            "text": "Takes R ∝ A: mass ratio 8, volume ratio 8³ = 512; 8 / 512 = 1/64"
            }
           ]
          }
@@ -762,7 +762,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hacim yerine yüzey alanına bölünür: yarıçap oranı 2, alan oranı 4; 8 / 4 = 2"
+            "text": "Divides by surface area instead of volume: radius ratio 2, area ratio 4; 8 / 4 = 2"
            }
           ]
          }
@@ -797,7 +797,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki çekirdeğin hacmi eşit sayılır; yalnızca kütle oranı alınır: 216 / 27 = 8"
+            "text": "Treats the volumes of the two nuclei as equal; takes only the mass ratio: 216 / 27 = 8"
            }
           ]
          }
@@ -815,7 +815,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "R = R₀A^(1/3) olduğundan hacim ∝ R³ ∝ A. Kütle de ∝ A. Yoğunluk = kütle / hacim, A'dan bağımsızdır; oran 1."
+          "text": "Since R = R₀A^(1/3), volume ∝ R³ ∝ A. Mass is also ∝ A. Density = mass / volume is independent of A; the ratio is 1."
          }
         ]
        }
@@ -845,7 +845,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Bohr modeli: E = −13.6/n² eV; geçiş enerjileri",
+    "outcome": "Bohr model: E = −13.6/n² eV; transition energies",
     "stem": {
      "type": "doc",
      "content": [
@@ -999,7 +999,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düzey enerjisi 1/n ile orantılı alınır: (1/2 − 1/3) / (1 − 1/2) = 1/3"
+            "text": "Takes the level energy as proportional to 1/n: (1/2 − 1/3) / (1 − 1/2) = 1/3"
            }
           ]
          }
@@ -1034,7 +1034,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Foton enerjileri yerine düzey enerjilerinin oranı alınır: E₃ / E₂ = (1/9) / (1/4) = 4/9"
+            "text": "Takes the ratio of level energies instead of photon energies: E₃ / E₂ = (1/9) / (1/4) = 4/9"
            }
           ]
          }
@@ -1069,7 +1069,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düzeylerin eşit aralıklı olduğu düşünülür; ardışık iki geçiş aynı enerjiyi verir"
+            "text": "Thinks the levels are equally spaced; two successive transitions give the same energy"
            }
           ]
          }
@@ -1115,7 +1115,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 13.6 (1 − 1/4) = 13.6 × 3/4 = 10.2 eV. Oran = (5/36) / (3/4) = 5/27 ≈ 0.19."
+          "text": " = 13.6 (1 − 1/4) = 13.6 × 3/4 = 10.2 eV. Ratio = (5/36) / (3/4) = 5/27 ≈ 0.19."
          }
         ]
        }
@@ -1145,7 +1145,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "E.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "En yakın yaklaşma uzaklığı; çekirdek yarıçapı; yüksek enerjide Rutherford saçılmasından sapma",
+    "outcome": "Distance of closest approach; nuclear radius; deviation from Rutherford scattering at high energy",
     "stem": {
      "type": "doc",
      "content": [

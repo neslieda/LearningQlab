@@ -1,45 +1,45 @@
-# Pilot soru seti: E.5 Füzyon ve yıldızlar
+# Pilot question set: E.5 Fusion and stars
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Yazım ölçütleri: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Yapı örneği: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> Authoring criteria: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Structure example: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü E.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve genel
-> fizik. Hiçbir sınav kâğıdı, markscheme, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; yıldızlar ve senaryolar kurgusaldır.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` ile ayrı bir hesapla yeniden üretildi. Kullanılan
-> sabitler: σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴, Güneş'in ışınım gücü L☉ = 3.83 × 10²⁶ W, 1 pc = 3.26 ly, 1 ly = 9.46 × 10¹⁵ m (veri kitapçığı
-> değerleri uzmanca teyit edilmeli).
-> **Doğrulanmayan:**
-> - Bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi (bkz. sondaki "Bağımsız kontrol"). Bilinen bir sınav sorusuna benzerlik
->   açısından uzman gözüyle bakılmadı.
-> - Bellekten gelen astrofizik bilgileri: 20 000 K sıcaklıkta bir ana kol yıldızının ışınım gücünün Güneş'inkinin binlerce katı olduğu
->   (Soru 3'te tek doğru cevabın dayanağı); 1.2 Güneş kütleli bir yıldızın kırmızı dev → gezegenimsi bulutsu → beyaz cüce yolunu
->   izlediği (Soru 6 (d)); Soru 6'daki kurgusal yıldızın (M = 1.2 M☉, L ≈ 1.9 L☉, T = 6200 K, R ≈ 1.2 R☉) ana kol için gerçekçi olduğu
->   (L ∝ M^3.5 yaklaşık ilişkisi ve R☉ = 6.96 × 10⁸ m bellekten; soruda kullanılmaz).
-> - Soru 6'da görünür parlaklık ve b = L/4πd² ilişkisi müfredatta B.1 altında geçer; E.5'in "yıldız yarıçapının belirlenmesi" kazanımı
->   için gerekli olduğu varsayılarak kullanıldı ve kapsam tablosunda ikincil düğüm olarak yazıldı.
-> - Soru 5 yalnızca basınç–kütle çekimi dengesini ölçer; büzülen çekirdeğin ısınması (müfredat analizinde açıkça yazmıyor) sorulmaz.
->   Füzyon hızı azalınca dışa doğru basıncın azaldığı bilgisi kökte verilir.
-> - Soru 6 (d): yıldız kütlesi için sayısal eşiklerin (süpernova sınırı vb.) kapsamda olup olmadığı teyit edilmedi; kütle, bu eşiklerden
->   uzak olacak biçimde seçildi.
+> **Source:** only syllabus node E.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and general
+> physics. No exam paper, markscheme, textbook or internet question was used as input; the stars and scenarios are fictional.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced with a separate `python3` calculation. Constants
+> used: σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴, luminosity of the Sun L☉ = 3.83 × 10²⁶ W, 1 pc = 3.26 ly, 1 ly = 9.46 × 10¹⁵ m (data booklet
+> values must be confirmed by an expert).
+> **Not verified:**
+> - Passed an independent blind solver; has not passed expert review (see "Independent check" at the end). It was not examined by an
+>   expert for resemblance to any known exam question.
+> - Astrophysics facts from memory: that the luminosity of a main-sequence star at a temperature of 20 000 K is thousands of times that of the Sun
+>   (the basis for the single correct answer in Question 3); that a star of 1.2 solar masses follows the red giant → planetary nebula → white dwarf path
+>   (Question 6 (d)); that the fictional star in Question 6 (M = 1.2 M☉, L ≈ 1.9 L☉, T = 6200 K, R ≈ 1.2 R☉) is realistic for the main sequence
+>   (the approximate relation L ∝ M^3.5 and R☉ = 6.96 × 10⁸ m are from memory; they are not used in the question).
+> - In Question 6 the apparent brightness and the relation b = L/4πd² appear in the syllabus under B.1; they were used on the assumption that they are needed
+>   for the E.5 outcome "determining stellar radius" and were recorded as a secondary node in the scope table.
+> - Question 5 tests only the balance of pressure and gravity; heating of the contracting core (not explicitly stated in the syllabus analysis) is not asked.
+>   That the outward pressure decreases when the rate of fusion decreases is given in the stem.
+> - Question 6 (d): it was not confirmed whether numerical thresholds for stellar mass (supernova limit, etc.) are in scope; the mass was chosen to be
+>   far from these thresholds.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (E.5) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (E.5) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Iraklık açısıyla uzaklık; parsek–ışık yılı dönüşümü | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Yıldız yarıçapının ışınım gücü ve sıcaklıktan belirlenmesi (oran) | AO3 | — | 1 | Orta |
-| 3 | Paper 1A | SL | HR diyagramının bölgeleri | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | SL | Füzyon koşulları: yüksek sıcaklığın gerekçesi | AO2 | — | 1 | Kolay |
-| 5 | Paper 1A | SL | Yıldız dengesi: ışınım basıncı ve kütle çekimi | AO3 | — | 1 | Orta |
-| 6 | Paper 2 | SL | Iraklık → uzaklık; birim dönüşümü; ışınım gücü (ikincil düğüm: B.1, b = L/4πd²); yarıçap; kütlenin evrime etkisi | AO2–AO3 | Show, Calculate, Determine, Outline | 9 | Orta |
+| 1 | Paper 1A | SL | Distance from parallax angle; parsec–light year conversion | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Determining stellar radius from luminosity and temperature (ratio) | AO3 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Regions of the HR diagram | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | SL | Conditions for fusion: reason for high temperature | AO2 | — | 1 | Easy |
+| 5 | Paper 1A | SL | Stellar equilibrium: radiation pressure and gravity | AO3 | — | 1 | Medium |
+| 6 | Paper 2 | SL | Parallax → distance; unit conversion; luminosity (secondary node: B.1, b = L/4πd²); radius; effect of mass on evolution | AO2–AO3 | Show, Calculate, Determine, Outline | 9 | Medium |
 
-Bu set E.5'in tamamını kapsamaz. Eksik kalanlar: füzyonda açığa çıkan enerjinin kütle farkından hesabı, yüksek yoğunluk (basınç)
-koşulu, büyük kütleli yıldızların evrimi (süperdev, süpernova, nötron yıldızı, kara delik), HR diyagramında evrim yolunun çizimi,
-AU dönüşümü, ıraklık yönteminin sınırı (yalnızca yakın yıldızlar).
+This set does not cover all of E.5. What is missing: calculation of the energy released in fusion from the mass difference, the high density (pressure)
+condition, evolution of massive stars (supergiant, supernova, neutron star, black hole), drawing the evolutionary path on the HR diagram,
+AU conversion, the limit of the parallax method (nearby stars only).
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 The parallax angle of a star measured from Earth is 0.040 arc-seconds. 1 pc = 3.26 ly.
 
@@ -50,19 +50,19 @@ B. 7.7 ly
 C. 25 ly
 D. 82 ly
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** d (pc) = 1 / p (yay saniyesi) = 1 / 0.040 = 25 pc. 25 × 3.26 = 81.5 ≈ 82 ly.
+**Solution.** d (pc) = 1 / p (arc-seconds) = 1 / 0.040 = 25 pc. 25 × 3.26 = 81.5 ≈ 82 ly.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Uzaklık ıraklık açısıyla doğru orantılı alınır: 0.040 × 3.26 = 0.13 |
-| B | Dönüşüm ters yapılır: 25 / 3.26 = 7.7 |
-| C | Parsek cinsinden bulunan değer ışık yılına çevrilmez: 25 |
+| A | Takes the distance as directly proportional to the parallax angle: 0.040 × 3.26 = 0.13 |
+| B | Does the conversion the wrong way round: 25 / 3.26 = 7.7 |
+| C | Does not convert the value found in parsecs to light years: 25 |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 Star X has four times the luminosity of the Sun. The surface temperature of star X is half the surface temperature of the Sun.
 Both stars radiate as black bodies.
@@ -74,26 +74,26 @@ B. 4
 C. 8
 D. 64
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** L = σ(4πR²)T⁴ → R² ∝ L / T⁴. R² oranı = 4 / (½)⁴ = 64. Yarıçap oranı = √64 = 8.
+**Solution.** L = σ(4πR²)T⁴ → R² ∝ L / T⁴. Ratio of R² = 4 / (½)⁴ = 64. Ratio of radii = √64 = 8.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Sıcaklık oranı ters çevrilmez: R² = 4 × (½)⁴ = 0.25 → 0.5 |
-| B | Sıcaklığın üssü yanlış alınır (R ∝ √L / T): 2 / 0.5 = 4 |
-| D | Karekök alınmaz; R² oranı verilir: 64 |
+| A | Does not invert the temperature ratio: R² = 4 × (½)⁴ = 0.25 → 0.5 |
+| B | Uses the wrong power of temperature (R ∝ √L / T): 2 / 0.5 = 4 |
+| D | Does not take the square root; gives the ratio of R²: 64 |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 On a Hertzsprung–Russell (HR) diagram, luminosity is plotted on the vertical axis and surface temperature on the horizontal axis.
 A star has a surface temperature of 20 000 K and a luminosity of 0.01 *L*☉, where *L*☉ is the luminosity of the Sun.
 
-> **Şekil:** HR diyagramı. Düşey eksen: ışınım gücü / L☉, logaritmik ölçek, 10⁻⁴ ile 10⁶ arası. Yatay eksen: yüzey sıcaklığı / K,
-> soldan sağa azalan (40 000 K'den 2500 K'e). Ana kol sol üstten sağ alta uzanan bant; kırmızı devler ve süperdevler sağ üstte;
-> beyaz cüceler sol altta. Bölgeler şekilde etiketlenmemiştir. (Soru şekil olmadan çözülebilir.)
+> **Figure:** HR diagram. Vertical axis: luminosity / L☉, logarithmic scale, from 10⁻⁴ to 10⁶. Horizontal axis: surface temperature / K,
+> decreasing from left to right (from 40 000 K to 2500 K). The main sequence is a band running from upper left to lower right; red giants and supergiants are at upper right;
+> white dwarfs are at lower left. The regions are not labelled in the figure. (The question can be solved without the figure.)
 
 Which type of star is this?
 
@@ -102,20 +102,20 @@ B. Main-sequence star
 C. Red giant
 D. Supergiant
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Yıldız Güneş'ten çok daha sıcak ama çok daha sönüktür; diyagramın sol alt bölgesindedir. Yüksek sıcaklıkta düşük ışınım
-gücü çok küçük bir yüzey alanı gerektirir: beyaz cüce.
+**Solution.** The star is much hotter than the Sun but much dimmer; it is in the lower left region of the diagram. A low luminosity
+at a high temperature requires a very small surface area: a white dwarf.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Ana kolun diyagramın her yerinden geçtiği düşünülür; bu sıcaklıktaki ana kol yıldızı Güneş'ten çok daha parlaktır |
-| C | Düşük ışınım gücü "soğuk ve büyük" yıldızla ilişkilendirilir; kırmızı devler soğuk ve Güneş'ten parlaktır |
-| D | Yüksek sıcaklık tek başına "çok büyük yıldız" olarak yorumlanır; süperdevlerin ışınım gücü çok yüksektir |
+| B | Thinks the main sequence passes through every part of the diagram; a main-sequence star at this temperature is much brighter than the Sun |
+| C | Associates low luminosity with a "cool and large" star; red giants are cool and brighter than the Sun |
+| D | Interprets high temperature alone as a "very large star"; supergiants have a very high luminosity |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 Nuclear fusion of hydrogen takes place in the core of a main-sequence star, where the temperature is very high.
 
@@ -126,20 +126,20 @@ B. To give nuclei enough kinetic energy to overcome their electric repulsion
 C. To increase the binding energy per nucleon of the hydrogen nuclei
 D. To produce enough radiation pressure to balance gravity
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Çekirdekler pozitif yüklüdür ve birbirini iter. Güçlü çekirdek kuvvetinin etkili olacağı kadar yaklaşabilmeleri için
-kinetik enerjilerinin, yani sıcaklığın çok yüksek olması gerekir.
+**Solution.** Nuclei are positively charged and repel each other. For them to approach close enough for the strong nuclear force to take effect,
+their kinetic energy, that is the temperature, must be very high.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | İyonlaşma ile füzyon koşulu karıştırılır; iyonlaşma çok daha düşük sıcaklıklarda gerçekleşir |
-| C | Bağlanma enerjisinin sıcaklıkla değiştiği düşünülür; bu, çekirdeğin sıcaklıktan bağımsız bir özelliğidir |
-| D | Füzyonun sonucu (ışınım basıncı) füzyonun koşuluyla karıştırılır |
+| A | Confuses ionization with the condition for fusion; ionization takes place at much lower temperatures |
+| C | Thinks binding energy changes with temperature; it is a property of the nucleus independent of temperature |
+| D | Confuses the result of fusion (radiation pressure) with the condition for fusion |
 
 ---
 
-## Soru 5 — Paper 1A
+## Question 5 — Paper 1A
 
 A main-sequence star is in equilibrium. The rate of fusion in the core of the star then decreases, so that the outward force due to
 radiation pressure in the core decreases.
@@ -151,20 +151,20 @@ B. It expands, because the gravitational force is now less than the outward forc
 C. It stays the same size, because the gravitational force does not depend on the rate of fusion.
 D. It expands, because a lower rate of fusion reduces the gravitational force on the core.
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Dengede içe doğru kütle çekimi ile dışa doğru basınç kuvveti eşittir. Füzyon hızı azalınca dışa doğru kuvvet azalır, kütle
-çekimi değişmez; bileşke kuvvet içe doğrudur ve çekirdek büzülür.
+**Solution.** At equilibrium the inward gravitational force and the outward force due to pressure are equal. When the rate of fusion decreases the outward force decreases, the gravitational
+force does not change; the resultant force is inward and the core contracts.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Kuvvet dengesi ters kurulur: azalan basıncın genleşmeye yol açtığı düşünülür |
-| C | Kütle çekiminin değişmemesinden dengenin de değişmediği sonucu çıkarılır; denge iki etkinin eşitliğidir |
-| D | Kütle çekiminin füzyondan kaynaklandığı ya da füzyon hızıyla değiştiği düşünülür; kütle çekimi yıldızın kütlesine bağlıdır |
+| B | Sets up the force balance the wrong way round: thinks decreasing pressure leads to expansion |
+| C | Concludes from the gravitational force not changing that the equilibrium does not change either; equilibrium is the equality of two effects |
+| D | Thinks gravity is caused by fusion or changes with the rate of fusion; gravity depends on the mass of the star |
 
 ---
 
-## Soru 6 — Paper 2 (9 puan)
+## Question 6 — Paper 2 (9 marks)
 
 Star K is a main-sequence star. Observations of star K from Earth give the following data.
 
@@ -191,60 +191,60 @@ Star K is a main-sequence star. Observations of star K from Earth give the follo
 | 6. | c | | *L* = *σ*(4π*R*²)*T*⁴ rearranged **OR** *R* = √(*L* / 4π*σT*⁴) ✓<br>correct substitution: *R*² = 7.3 × 10²⁶ / (4π × 5.67 × 10⁻⁸ × 6200⁴) ✓<br>*R* = 8.3 × 10⁸ «m» ✓ | *Allow ECF from (b).*<br>*Accept answers in the range 8.2–8.5 × 10⁸ m.* | 3 |
 | 6. | d | | «when hydrogen in the core is used up» it expands to become a red giant ✓<br>it ejects its outer layers / forms a planetary nebula AND the core remains as a white dwarf ✓ | *Do not accept supernova, neutron star or black hole.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `p = 0.125 arcsec`, `b = 9.5e-10 W/m^2`, `T = 6200 K`, sabitler `pc_ly = 3.26`, `ly_m = 9.46e15`, `sigma = 5.67e-8` | |
+| Parameters | `p = 0.125 arcsec`, `b = 9.5e-10 W/m^2`, `T = 6200 K`, constants `pc_ly = 3.26`, `ly_m = 9.46e15`, `sigma = 5.67e-8` | |
 | `d_pc` | `1/p` | 8.00 pc |
 | `d` | `d_pc*pc_ly*ly_m` | 2.467 × 10¹⁷ m |
 | `L` | `4*pi*d**2*b` | 7.27 × 10²⁶ W (1.9 L☉) |
 | `R` | `sqrt(L/(4*pi*sigma*T**4))` | 8.31 × 10⁸ m |
-| Kontrol | `d = 2.5e17` ile | L = 7.46 × 10²⁶ W, R = 8.42 × 10⁸ m |
-| Kontrol | (b)'nin yuvarlanmış değerleri `L = 7.3e26` ve `L = 7.5e26` ile | R = 8.33 × 10⁸ m ve 8.44 × 10⁸ m (ikisi de kabul aralığında) |
+| Check | with `d = 2.5e17` | L = 7.46 × 10²⁶ W, R = 8.42 × 10⁸ m |
+| Check | with the rounded values of (b), `L = 7.3e26` and `L = 7.5e26` | R = 8.33 × 10⁸ m and 8.44 × 10⁸ m (both within the acceptance range) |
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?" / "Which …?" / "Why …?") + alt alta A–D | Soru 1–5 uygun; Soru 4 "Why …?" kökü kullanır (profilde gözlenen iki kalıbın dışında, uzman teyidi gerekir) |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–2 uygun (artan); Soru 3 tek sözcüklü sınıf adları; Soru 4–5 cümle biçiminde seçenek; Soru 5'te dört seçenek de "sonuç, because gerekçe" yapısında |
-| 1A: doğru cevap konumu dengeli | D, C, A, B, A |
-| 1A: şekil olmadan çözülebilirlik | Soru 3'te HR diyagramı tarif edildi; soru yalnızca metindeki değerlerle çözülür |
-| Kapsam sınırı: Sefe değişenleri yok | Hiçbir soruda geçmez; uzaklık yalnızca ıraklıkla |
-| Kapsam sınırı: HR diyagramında düşey eksen ışınım gücü, yatay eksen sıcaklık | Soru 3 kökünde ve şekil tarifinde bu eksenler kullanıldı |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 6 uygun (2, 2, 3, 2; toplam 9). **Çekince:** 9 puan SL kısa sorusu için uzundur (SL örnek kâğıdında 4–6 puan gözlendi); SL için bölünmesi gerekebilir |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | (a) Show that, (c) Determine |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, AND, ECF, kabul aralığı | Soru 6 uygun |
-| Tablo başlığı "büyüklük / birim" | Soru 6 veri tablosu uygun: her sütun "büyüklük / birim" başlıklı, hücrelerde yalnızca sayı |
-| Değer–birim yazımı, 2 anlamlı basamak | Uygun |
-| Düzey etiketi | Tüm sorular SL |
+| 1A: context + separate single question sentence ("What is …?" / "Which …?" / "Why …?") + A–D listed vertically | Questions 1–5 conform; Question 4 uses a "Why …?" stem (outside the two patterns observed in the profile, expert confirmation needed) |
+| 1A: four options of the same type, in the same unit, in order of magnitude | Questions 1–2 conform (ascending); Question 3 has single-word class names; Questions 4–5 have options in sentence form; in Question 5 all four options have the "result, because reason" structure |
+| 1A: balanced position of the correct answer | D, C, A, B, A |
+| 1A: solvable without the figure | In Question 3 the HR diagram is described; the question is solved using only the values in the text |
+| Scope limit: no Cepheid variables | Do not appear in any question; distance only by parallax |
+| Scope limit: on the HR diagram the vertical axis is luminosity, the horizontal axis is temperature | These axes are used in the Question 3 stem and in the figure description |
+| Paper 2: sub-part at most 3 marks; short question 4–9 marks | Question 6 conforms (2, 2, 3, 2; total 9). **Caveat:** 9 marks is long for an SL short question (4–6 marks were observed in the SL sample paper); it may need to be split for SL |
+| Paper 2: at least one AO3 part; "Show that" pattern | (a) Show that, (c) Determine |
+| Markscheme: four-column table, ✓, « », OR, AND, ECF, acceptance range | Question 6 conforms |
+| Table heading "quantity / unit" | The Question 6 data table conforms: each column has a "quantity / unit" heading, only numbers in the cells |
+| Value–unit notation, 2 significant figures | Conforms |
+| Level label | All questions SL |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Yazardan farklı bir kör çözücü soruları cevapları görmeden çözdü; tüm cevap anahtarlarını bağımsız olarak yeniden
-üretti, çekirdek denklemlerini (nükleon sayısı ve yük korunumu) ve Paper 1B eğimlerini yeniden hesapladı (bu dosyada çekirdek denklemi
-ve 1B sorusu yok; kontrol, sayısal cevaplar ve çeldiricilerle sınırlıdır). Bulgular: [review/e5-review.md](review/e5-review.md).
-KRİTİK bulgu yok. Bu kontrol uzman incelemesinin yerine geçmez. Aşağıdaki değişikliklerden sonra Soru 5 ve Soru 6 ikinci bir kör çözücüden geçti; cevaplar uyuştu
+Date: 2026-10-11. A blind solver other than the author solved the questions without seeing the answers; it independently reproduced all
+answer keys and recalculated the nuclear equations (conservation of nucleon number and charge) and the Paper 1B gradients (this file has no nuclear equation
+and no 1B question; the check is limited to the numerical answers and distractors). Findings: [review/e5-review.md](review/e5-review.md).
+No CRITICAL findings. This check does not replace expert review. After the changes below, Question 5 and Question 6 passed a second blind solver; the answers agreed
 ([review/recheck-2026-10-11.md](review/recheck-2026-10-11.md)).
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile yeniden hesaplandı):
+Changes made in response to the findings (every changed number was recalculated with `python3`):
 
-- **Soru 5 (ORTA):** soru yeniden yazıldı. Sıcaklık seçeneklerden çıkarıldı; kökteki "immediately afterwards" kaldırıldı ve füzyon hızı
-  azalınca dışa doğru basınç kuvvetinin azaldığı kökte verildi. Seçenekler artık yalnızca büzülme / genleşme / değişmeme ekseninde ve
-  dördü de "sonuç, because gerekçe" yapısında. Cevap A (büzülür) değişmedi; eski C seçeneği ("büzülür ve soğur") kaldırıldı.
-- **Soru 6 (d) (ORTA):** yıldız kütlesi 1.5 M☉ → 1.2 M☉ (1.4 M☉ değerinin altında; sınırı yanlışlıkla yıldızın toplam kütlesine uygulayan
-  öğrenci de beyaz cüceye varır). Yıldızın ana kolda gerçekçi kalması için veriler birlikte değiştirildi: görünür parlaklık
-  2.0 × 10⁻⁹ → 9.5 × 10⁻¹⁰ W m⁻², sıcaklık 6900 → 6200 K. Buna bağlı sonuçlar: L 1.5 × 10²⁷ → 7.3 × 10²⁶ W (2.5 × 10¹⁷ m ile
-  1.6 × 10²⁷ → 7.5 × 10²⁶ W), R 9.7 × 10⁸ → 8.3 × 10⁸ m. (a) parçası değişmedi.
-- **Soru 6 (c) (ORTA):** kabul aralığı, (b)'nin markscheme'deki yuvarlanmış değerlerini (7.3 ve 7.5 × 10²⁶ W → 8.33 ve 8.44 × 10⁸ m)
-  kapsayacak biçimde 8.2–8.5 × 10⁸ m olarak belirlendi. Önerilen 9.6–10.0 × 10⁸ m aralığı eski veriye aitti; aynı ölçüt yeni veriye
-  uygulandı.
-- **Soru 6 sabitler (DÜŞÜK):** σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴ soruya eklendi.
-- **Soru 6 veri tablosu (DÜŞÜK):** "Quantity / Value" → her sütunu "büyüklük / birim" başlıklı tek satırlı tablo.
-- **Soru 6 (b) (DÜŞÜK):** kapsam tablosunda B.1 ikincil düğüm olarak yazıldı.
-- **Soru 6 uzunluğu (DÜŞÜK):** "9 puan SL kısa sorusu için uzun" çekincesi "Biçim uyumu" tablosunda vurgulandı; soru bölünmedi.
+- **Question 5 (MEDIUM):** the question was rewritten. Temperature was removed from the options; "immediately afterwards" was removed from the stem and the fact that the outward pressure force
+  decreases when the rate of fusion decreases was given in the stem. The options are now only along the contracts / expands / stays the same axis and
+  all four have the "result, because reason" structure. Answer A (contracts) did not change; the old option C ("contracts and cools") was removed.
+- **Question 6 (d) (MEDIUM):** stellar mass 1.5 M☉ → 1.2 M☉ (below the value of 1.4 M☉; a student who mistakenly applies the limit to the star's total mass
+  also arrives at the white dwarf). To keep the star realistic for the main sequence the data were changed together: apparent brightness
+  2.0 × 10⁻⁹ → 9.5 × 10⁻¹⁰ W m⁻², temperature 6900 → 6200 K. Resulting values: L 1.5 × 10²⁷ → 7.3 × 10²⁶ W (with 2.5 × 10¹⁷ m,
+  1.6 × 10²⁷ → 7.5 × 10²⁶ W), R 9.7 × 10⁸ → 8.3 × 10⁸ m. Part (a) did not change.
+- **Question 6 (c) (MEDIUM):** the acceptance range was set to 8.2–8.5 × 10⁸ m so as to cover the rounded values of (b) in the markscheme
+  (7.3 and 7.5 × 10²⁶ W → 8.33 and 8.44 × 10⁸ m). The suggested range 9.6–10.0 × 10⁸ m belonged to the old data; the same criterion was
+  applied to the new data.
+- **Question 6 constants (LOW):** σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴ was added to the question.
+- **Question 6 data table (LOW):** "Quantity / Value" → a one-row table with each column headed "quantity / unit".
+- **Question 6 (b) (LOW):** B.1 was recorded as a secondary node in the scope table.
+- **Question 6 length (LOW):** the caveat "9 marks is long for an SL short question" was emphasised in the "Format conformance" table; the question was not split.

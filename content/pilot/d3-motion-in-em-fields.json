@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/d3-motion-in-em-fields-pilot-questions.md",
- "source_sha256": "a78bd32c8f4c95bd79f2855566fc4caf0794a5615e28cedd1440349c90e80786",
+ "source_sha256": "b98b58657e355dc9f1d96b94ec537fab87906f566952ce32521ee749a6f8a2ae",
  "questions": [
   {
    "source_ref": "pilot/d3-motion-in-em-fields#1",
@@ -18,7 +18,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Düzgün manyetik alanda çembersel hareket; periyodun hızdan bağımsızlığı",
+    "outcome": "Circular motion in a uniform magnetic field; period independent of speed",
     "stem": {
      "type": "doc",
      "content": [
@@ -112,7 +112,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yarıçapın değişmediği sanılır; aynı çember iki kat hızla dolanılır: T/2"
+            "text": "Thinks the radius does not change; the same circle is traversed at twice the speed: T/2"
            }
           ]
          }
@@ -177,7 +177,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yarıçapın iki katına çıktığı görülür ama hızın da arttığı unutulur (T ∝ r): 2T"
+            "text": "Sees that the radius doubles but forgets that the speed also increases (T ∝ r): 2T"
            }
           ]
          }
@@ -219,7 +219,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yarıçap v² ile artar sanılır (r ∝ v², mv²/r ifadesinden yanlış çıkarım) ve hız artışı unutulur: 4T"
+            "text": "Thinks the radius increases as v² (r ∝ v², a wrong deduction from the expression mv²/r) and forgets the increase in speed: 4T"
            }
           ]
          }
@@ -237,7 +237,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "qvB = mv²/r → r = mv/(qB). T = 2πr/v = 2πm/(qB): periyot hızdan bağımsızdır. Hız iki katına çıkınca yarıçap da iki katına çıkar; çevre ve hız aynı oranda arttığı için periyot değişmez."
+          "text": "qvB = mv²/r → r = mv/(qB). T = 2πr/v = 2πm/(qB): the period is independent of speed. When the speed doubles the radius also doubles; the circumference and the speed increase in the same proportion, so the period does not change."
          }
         ]
        }
@@ -268,7 +268,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Birbirine dik elektrik ve manyetik alanlarda sapmadan geçiş (v = E/B)",
+    "outcome": "Undeflected passage through perpendicular electric and magnetic fields (v = E/B)",
     "stem": {
      "type": "doc",
      "content": [
@@ -329,7 +329,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur (v = B/E): 1.5 × 10⁻³ / 3.0 × 10⁴ = 5.0 × 10⁻⁸"
+            "text": "Inverts the ratio (v = B/E): 1.5 × 10⁻³ / 3.0 × 10⁴ = 5.0 × 10⁻⁸"
            }
           ]
          }
@@ -364,7 +364,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Levha aralığı metreye çevrilmez: E = 600 / 2.0 = 300; 300 / 1.5 × 10⁻³ = 2.0 × 10⁵"
+            "text": "Does not convert the plate separation to metres: E = 600 / 2.0 = 300; 300 / 1.5 × 10⁻³ = 2.0 × 10⁵"
            }
           ]
          }
@@ -399,7 +399,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Alan şiddeti yerine potansiyel farkı kullanılır (v = V/B): 600 / 1.5 × 10⁻³ = 4.0 × 10⁵"
+            "text": "Uses the potential difference instead of the field strength (v = V/B): 600 / 1.5 × 10⁻³ = 4.0 × 10⁵"
            }
           ]
          }
@@ -438,7 +438,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "E = V/d = 600 / 0.020 = 3.0 × 10⁴ V m⁻¹. Sapmama koşulu: eE = evB → v = E/B = 3.0 × 10⁴ / 1.5 × 10⁻³ = 2.0 × 10⁷ m s⁻¹."
+          "text": "E = V/d = 600 / 0.020 = 3.0 × 10⁴ V m⁻¹. No-deflection condition: eE = evB → v = E/B = 3.0 × 10⁴ / 1.5 × 10⁻³ = 2.0 × 10⁷ m s⁻¹."
          }
         ]
        }
@@ -469,7 +469,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Akım taşıyan iletkene etkiyen kuvvetin yönü (F = BIL sin θ)",
+    "outcome": "Direction of the force on a current-carrying conductor (F = BIL sin θ)",
     "stem": {
      "type": "doc",
      "content": [
@@ -520,7 +520,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Sayfa düzleminde soldan sağa uzanan yatay bir tel; üzerinde sağa doğru akım oku (I). Telin çevresindeki bölge, sayfanın içine doğru düzgün manyetik alanı gösteren ⊗ simgeleriyle dolu. \"Sayfanın üstü\" tele dik ve sayfa düzlemindedir. Diagram not to scale.",
+      "description": "A horizontal wire in the plane of the page, running from left to right, with a current arrow (I) pointing right along it. The region around the wire is filled with ⊗ symbols showing a uniform magnetic field into the page. The \"top of the page\" is perpendicular to the wire and in the plane of the page. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -580,7 +580,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kural ters elle uygulanır ya da akım yönü yerine elektron akış yönü alınır"
+            "text": "Applies the rule with the wrong hand, or takes the direction of electron flow instead of the current direction"
            }
           ]
          }
@@ -615,7 +615,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kuvvetin alana zıt yönde olduğu sanılır"
+            "text": "Thinks the force is in the direction opposite to the field"
            }
           ]
          }
@@ -650,7 +650,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kuvvetin alan yönünde olduğu sanılır (elektrik alandaki F = qE ile karıştırma)"
+            "text": "Thinks the force is in the direction of the field (confusion with F = qE in an electric field)"
            }
           ]
          }
@@ -668,7 +668,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kullanılan kural: sağ el kuralı, F = IL × B (konvansiyonel akım yönü). Eksenler: x sağa, y sayfanın üstüne, z sayfadan dışarı. Akım +x, alan −z: (+x) × (−z) = +y. Kuvvet sayfanın üstüne doğrudur. (Fleming sol el kuralı da aynı sonucu verir: işaret parmağı alan = sayfanın içine, orta parmak akım = sağa, başparmak kuvvet = yukarı.)"
+          "text": "Rule used: the right-hand rule, F = IL × B (conventional current direction). Axes: x to the right, y to the top of the page, z out of the page. Current +x, field −z: (+x) × (−z) = +y. The force is towards the top of the page. (Fleming's left-hand rule gives the same result: forefinger = field = into the page, middle finger = current = to the right, thumb = force = up.)"
          }
         ]
        }
@@ -699,7 +699,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yüklü parçacığın düzgün elektrik alandaki hareketi",
+    "outcome": "Motion of a charged particle in a uniform electric field",
     "stem": {
      "type": "doc",
      "content": [
@@ -760,7 +760,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Elektrik alan, manyetik alanla karıştırılır (kuvvet her zaman hıza dik sanılır)"
+            "text": "Confuses the electric field with a magnetic field (thinks the force is always perpendicular to the velocity)"
            }
           ]
          }
@@ -795,7 +795,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yörünge manyetik alandaki gibi çember sanılır, ama alanın enerji verdiği doğru düşünülür"
+            "text": "Thinks the path is a circle as in a magnetic field, but correctly thinks that the field transfers energy"
            }
           ]
          }
@@ -851,7 +851,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yörünge doğru; ancak yalnızca alana dik hız bileşeni düşünülür ya da \"kuvvet başlangıçta hıza dik, iş yapmaz\" denir"
+            "text": "Path correct; but considers only the velocity component perpendicular to the field, or says \"the force is initially perpendicular to the velocity, so it does no work\""
            }
           ]
          }
@@ -869,7 +869,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Elektrik kuvveti büyüklük ve yön olarak sabittir (alan çizgilerine paralel, alana zıt yönde). Alana dik hız bileşeni değişmez, alan doğrultusundaki bileşen düzgün artar: yörünge paraboldür (yatay atışa benzer). Kuvvet hareket doğrultusunda bileşene sahip olduğu için iş yapar; sürat artar."
+          "text": "The electric force is constant in magnitude and direction (parallel to the field lines, opposite to the field). The velocity component perpendicular to the field is unchanged and the component along the field increases uniformly: the path is a parabola (like horizontal projectile motion). The force has a component along the direction of motion, so it does work; the speed increases."
          }
         ]
        }
@@ -900,7 +900,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Dik alanlar; düzgün manyetik alanda çembersel yörünge; yük/kütle oranının belirlenmesi",
+    "outcome": "Perpendicular fields; circular path in a uniform magnetic field; determining the charge-to-mass ratio",
     "stem": {
      "type": "doc",
      "content": [
@@ -927,7 +927,7 @@
       "id": "fig1",
       "kind": "field_diagram",
       "use": "read_only",
-      "description": "Sayfa düzleminde iki yatay paralel levha; üstteki \"+\", alttaki \"−\" işaretli; aralarındaki uzaklık 2.5 cm olarak etiketli. Elektron demeti levhaların ortasından soldan sağa doğru yatay bir okla gösterilmiş. Elektrik alan çizgileri üst levhadan alt levhaya (sayfanın altına doğru). Manyetik alanın yönü şekilde gösterilmemiştir; sayfa düzlemine diktir. Diagram not to scale.",
+      "description": "Two horizontal parallel plates in the plane of the page; the upper one is marked \"+\" and the lower one \"−\"; the separation between them is labelled 2.5 cm. The electron beam is shown by a horizontal arrow midway between the plates, from left to right. Electric field lines run from the upper plate to the lower plate (towards the bottom of the page). The direction of the magnetic field is not shown in the figure; it is perpendicular to the plane of the page. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -1915,7 +1915,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "F = BIL deneyi (akım terazisi): belirsizlik, eğimden B'nin belirlenmesi, sıfır hatasının (sistematik) eğime ve kesim noktasına etkisi",
+    "outcome": "F = BIL experiment (current balance): uncertainty, determining B from the gradient, effect of a (systematic) zero error on the gradient and intercept",
     "stem": {
      "type": "doc",
      "content": [
@@ -2292,7 +2292,7 @@
       "id": "fig1",
       "kind": "circuit_diagram",
       "use": "read_only",
-      "description": "Düzenek şeması. Elektronik terazinin kefesinde U biçimli çelik boyunduruk; boyunduruğun iki iç yüzünde karşılıklı düz mıknatıslar (N ve S etiketli), aralarındaki alan yatay. Yatay, sert bir tel mıknatısların arasından alana dik geçer; tel iki yandan teraziye değmeyen ayrı bir sehpaya kelepçelenmiş ve bir güç kaynağı ile ampermetreye seri bağlı. Telin alan içindeki uzunluğu L (mıknatısların uzunluğu) olarak etiketli. Diagram not to scale.",
+      "description": "Apparatus diagram. A U-shaped steel yoke on the pan of an electronic balance; on the two inner faces of the yoke, facing each other, flat magnets (labelled N and S), with a horizontal field between them. A stiff horizontal wire passes between the magnets at right angles to the field; the wire is clamped at both sides to a separate stand that does not touch the balance and is connected in series with a power supply and an ammeter. The length of the wire in the field is labelled L (the length of the magnets). Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      },
@@ -2300,7 +2300,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
+      "description": "Graph to be generated from data; details in the Figure note of the source file.",
       "asset_id": null,
       "alt_text": null
      }

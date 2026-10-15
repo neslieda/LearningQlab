@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/c4-standing-waves-resonance-pilot-questions.md",
- "source_sha256": "1f449210522b32c2fcb21ddfcd9c4943e9428e548d84ec845f98269ddec02549",
+ "source_sha256": "2fcd0dc22c1654b8b5b259fbe32929cb57f5e079b6eff60353d204a675032884",
  "questions": [
   {
    "source_ref": "pilot/c4-standing-waves-resonance#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "İki ucu sabit telde n. harmoniğin dalga boyu ve frekansı",
+    "outcome": "Wavelength and frequency of the nth harmonic on a string fixed at both ends",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Birinci harmoniğin frekansı verilir: λ = 2L = 1.5 m → 120 / 1.5 = 80 Hz"
+            "text": "Gives the frequency of the first harmonic: λ = 2L = 1.5 m → 120 / 1.5 = 80 Hz"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Dalga boyu telin uzunluğuna eşit alınır (ikinci harmonik): 120 / 0.75 = 160 Hz"
+            "text": "Takes the wavelength to be equal to the length of the string (second harmonic): 120 / 0.75 = 160 Hz"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Üçüncü harmonikte λ = L / 3 alınır (yarım dalga boyu ile tam dalga boyu karıştırılır): 120 / 0.25 = 480 Hz"
+            "text": "Takes λ = L / 3 in the third harmonic (confuses half a wavelength with a full wavelength): 120 / 0.25 = 480 Hz"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Üçüncü harmonikte tel üzerinde üç yarım dalga boyu vardır: λ = 2L / 3 = 0.50 m. f = v / λ = 120 / 0.50 = 240 Hz."
+          "text": "In the third harmonic there are three half-wavelengths on the string: λ = 2L / 3 = 0.50 m. f = v / λ = 120 / 0.50 = 240 Hz."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Bir ucu kapalı boruda izinli duran dalga desenleri",
+    "outcome": "Allowed standing wave patterns in a pipe closed at one end",
     "stem": {
      "type": "doc",
      "content": [
@@ -280,7 +280,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bir ucu kapalı boruda da birinci harmoniğin tüm tam katlarının oluştuğu sanılır: 2 × 500 = 1000 Hz (bu desen kapalı uçta düğüm koşulunu sağlamaz)"
+            "text": "Assumes that all whole-number multiples of the first harmonic also occur in a pipe closed at one end: 2 × 500 = 1000 Hz (this pattern does not satisfy the node condition at the closed end)"
            }
           ]
          }
@@ -336,7 +336,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bir izinli desen atlanır (L = 5λ/4): 5 × 500 = 2500 Hz; bu frekansta duran dalga oluşur ama \"bir sonraki\" değildir"
+            "text": "Skips an allowed pattern (L = 5λ/4): 5 × 500 = 2500 Hz; a standing wave forms at this frequency but it is not the \"next\" one"
            }
           ]
          }
@@ -371,7 +371,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki ucu açık boru bağıntısı üçüncü harmonik için kullanılır: 3 × 340 / (2 × 0.17) = 3000 Hz"
+            "text": "Uses the relation for a pipe open at both ends for the third harmonic: 3 × 340 / (2 × 0.17) = 3000 Hz"
            }
           ]
          }
@@ -389,7 +389,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kapalı uçta yer değiştirme düğümü, açık uçta karın vardır. Birinci harmonik: L = λ/4 → f₁ = 340 / (4 × 0.17) = 500 Hz. Bir sonraki izinli desen: L = 3λ/4 → λ = 0.227 m → f = 3 × 500 = 1500 Hz."
+          "text": "There is a displacement node at the closed end and an antinode at the open end. First harmonic: L = λ/4 → f₁ = 340 / (4 × 0.17) = 500 Hz. The next allowed pattern: L = 3λ/4 → λ = 0.227 m → f = 3 × 500 = 1500 Hz."
          }
         ]
        }
@@ -420,7 +420,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Duran dalgada faz: düğümün iki yanındaki noktalar",
+    "outcome": "Phase in a standing wave: points on either side of a node",
     "stem": {
      "type": "doc",
      "content": [
@@ -481,7 +481,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Duran dalgadaki tüm noktaların eş fazlı olduğu düşünülür (yalnızca aynı ilmek için doğru)"
+            "text": "Assumes all points in a standing wave are in phase (true only within the same loop)"
            }
           ]
          }
@@ -516,7 +516,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İlerleyen dalga bağıntısı bir noktanın düğüme uzaklığıyla kullanılır: 2π × 0.10 / 0.80 = π/4"
+            "text": "Uses the travelling-wave relation with the distance of one point from the node: 2π × 0.10 / 0.80 = π/4"
            }
           ]
          }
@@ -551,7 +551,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İlerleyen dalga bağıntısı X–Y uzaklığıyla kullanılır: 2π × 0.20 / 0.80 = π/2"
+            "text": "Uses the travelling-wave relation with the distance X–Y: 2π × 0.20 / 0.80 = π/2"
            }
           ]
          }
@@ -590,7 +590,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Komşu düğümler arası λ/2 = 0.40 m'dir; X ve Y aynı düğümün iki yanındaki komşu ilmeklerdedir. Duran dalgada bir ilmek içindeki tüm noktalar eş fazlıdır; komşu ilmekteki noktalar zıt fazlıdır. Faz farkı π rad."
+          "text": "The separation of adjacent nodes is λ/2 = 0.40 m; X and Y are in neighbouring loops on either side of the same node. In a standing wave all the points within one loop are in phase; points in the neighbouring loop are in antiphase. The phase difference is π rad."
          }
         ]
        }
@@ -621,7 +621,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Sönümün en büyük genliğe ve rezonans frekansına nitel etkisi",
+    "outcome": "Qualitative effect of damping on the maximum amplitude and the resonant frequency",
     "stem": {
      "type": "doc",
      "content": [
@@ -703,7 +703,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Genlik etkisi doğru, frekans kayması ters yönde düşünülür (\"sönüm sistemi sertleştirir\")"
+            "text": "Gets the amplitude effect right but takes the frequency shift to be in the opposite direction (\"damping stiffens the system\")"
            }
           ]
          }
@@ -738,7 +738,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Frekans etkisi doğru; sönümün rezonans tepesini \"keskinleştirip yükselttiği\" sanılır"
+            "text": "Gets the frequency effect right; assumes damping \"sharpens and raises\" the resonance peak"
            }
           ]
          }
@@ -773,7 +773,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Her iki etki de ters düşünülür"
+            "text": "Takes both effects to be the other way round"
            }
           ]
          }
@@ -791,7 +791,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Sönüm arttıkça sistem her salınımda daha çok enerji kaybeder; rezonanstaki en büyük genlik küçülür ve rezonans eğrisi genişler. En büyük genliğin görüldüğü frekans doğal frekansın biraz altına kayar."
+          "text": "As damping increases, the system loses more energy in each oscillation; the maximum amplitude at resonance decreases and the resonance curve broadens. The frequency at which the maximum amplitude occurs shifts slightly below the natural frequency."
          }
         ]
        }
@@ -822,7 +822,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Duran dalganın oluşumu; birinci harmonik; düğüm–karın deseni; rezonans; sönüm",
+    "outcome": "Formation of a standing wave; first harmonic; node–antinode pattern; resonance; damping",
     "stem": {
      "type": "doc",
      "content": [
@@ -849,7 +849,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Bir tezgâh üzerinde iki sabit destek arasına gerilmiş yatay tel; destekler arası 0.65 m olarak işaretli; sol desteğin hemen yanında tele bağlı titreştirici ve ona bağlı sinyal üreteci. \"diagram not to scale\". Soru şekil olmadan çözülebilir.",
+      "description": "A horizontal wire stretched between two fixed supports on a bench; the distance between the supports is marked as 0.65 m; close to the left support is a vibrator attached to the wire, connected to a signal generator. \"diagram not to scale\". The question can be solved without the figure.",
       "asset_id": null,
       "alt_text": null
      }

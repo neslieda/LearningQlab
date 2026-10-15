@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/b2-greenhouse-effect-pilot-questions.md",
- "source_sha256": "334ae79b014b4b93f65cf5067aedf08d2ca634cbbd1273593501d457ea389f3c",
+ "source_sha256": "b76f92a0a6c4acd993da2aafdefe1eb9b92a9b21c5de03d7b8c61177265bf770",
  "questions": [
   {
    "source_ref": "pilot/b2-greenhouse-effect#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Güneş sabiti, S/4 ortalaması ve albedo ile soğurulan ortalama şiddet",
+    "outcome": "Solar constant, the S/4 average and albedo; mean absorbed intensity",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Albedo soğurulan kesir sanılır (yansıyan kısım hesaplanır): 600 × 0.30 / 4 = 45"
+            "text": "Albedo is taken to be the absorbed fraction (the reflected part is calculated): 600 × 0.30 / 4 = 45"
            }
           ]
          }
@@ -135,7 +135,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Albedo hesaba katılmaz: 600 / 4 = 150"
+            "text": "Albedo is not taken into account: 600 / 4 = 150"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yüzey üzerinde ortalama alınmaz (4'e bölünmez): 600 × 0.70 = 420"
+            "text": "The average over the surface is not taken (no division by 4): 600 × 0.70 = 420"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Gezegen ışınımı π"
+          "text": "The planet intercepts the radiation over a cross-section π"
          },
          {
           "marks": [],
@@ -200,7 +200,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "² kesitiyle yakalar, enerji 4π"
+          "text": "², and the energy is spread over a surface 4π"
          },
          {
           "marks": [],
@@ -212,7 +212,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "² yüzeye dağılır: ortalama gelen şiddet 600 / 4 = 150 W m⁻². Soğurulan kesir 1 − 0.30 = 0.70. Soğurulan ortalama şiddet = 150 × 0.70 = 105 W m⁻²."
+          "text": "²: the mean incident intensity is 600 / 4 = 150 W m⁻². The absorbed fraction is 1 − 0.30 = 0.70. Mean absorbed intensity = 150 × 0.70 = 105 W m⁻²."
          }
         ]
        }
@@ -243,7 +243,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Denge sıcaklığı için enerji dengesi; orantı akıl yürütmesi",
+    "outcome": "Energy balance for the equilibrium temperature; proportional reasoning",
     "stem": {
      "type": "doc",
      "content": [
@@ -337,7 +337,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık şiddetle doğru orantılı alınır ("
+            "text": "Temperature is taken as directly proportional to intensity ("
            },
            {
             "marks": [],
@@ -415,7 +415,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık uzaklıkla ters orantılı alınır ("
+            "text": "Temperature is taken as inversely proportional to distance ("
            },
            {
             "marks": [],
@@ -521,7 +521,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Şiddet uzaklığın karesiyle değil kendisiyle ters orantılı alınır ("
+            "text": "Intensity is taken as inversely proportional to the distance rather than the distance squared ("
            },
            {
             "marks": [],
@@ -596,7 +596,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yıldız ışınımının şiddeti uzaklığın karesiyle ters orantılıdır: yeni şiddet "
+          "text": "The intensity of the star's radiation is inversely proportional to the square of the distance: the new intensity is "
          },
          {
           "marks": [],
@@ -608,7 +608,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "/4. Enerji dengesi: (1 − α)"
+          "text": "/4. Energy balance: (1 − α)"
          },
          {
           "marks": [],
@@ -632,7 +632,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "⁴, yani "
+          "text": "⁴, so "
          },
          {
           "marks": [],
@@ -656,7 +656,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": ". Yeni sıcaklık = "
+          "text": ". New temperature = "
          },
          {
           "marks": [],
@@ -737,7 +737,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "B.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Sera gazlarının kızılötesi soğurması (rezonans modeli)",
+    "outcome": "Infrared absorption by greenhouse gases (resonance model)",
     "stem": {
      "type": "doc",
      "content": [
@@ -819,7 +819,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Soğurma iyonlaşmayla karıştırılır; kızılötesi fotonun enerjisi iyonlaşma için çok küçüktür"
+            "text": "Absorption is confused with ionization; the energy of an infrared photon is far too small for ionization"
            }
           ]
          }
@@ -854,7 +854,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kızılötesi ile görünür ışığın foton enerjileri ters sıralanır (kızılötesinin frekansı daha düşüktür)"
+            "text": "The photon energies of infrared and visible light are put in the wrong order (the frequency of infrared is lower)"
            }
           ]
          }
@@ -889,7 +889,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "\"Sera gazları ısıyı yansıtır\" yanılgısı; süreç yansıma değil, soğurma ve her yöne yeniden yaymadır"
+            "text": "The \"greenhouse gases reflect heat\" misconception; the process is absorption and re-emission in all directions, not reflection"
            }
           ]
          }
@@ -907,7 +907,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Rezonans modeli: kızılötesi ışınımın frekansı molekülün doğal titreşim frekansına yakın olduğunda enerji aktarımı en büyüktür; molekül ışınımı soğurur ve sonra her yöne yeniden yayar."
+          "text": "Resonance model: the energy transfer is greatest when the frequency of the infrared radiation is close to the natural vibration frequency of the molecule; the molecule absorbs the radiation and then re-emits it in all directions."
          }
         ]
        }
@@ -938,7 +938,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Albedonun enerji dengesinden belirlenmesi",
+    "outcome": "Determining albedo from the energy balance",
     "stem": {
      "type": "doc",
      "content": [
@@ -999,7 +999,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yansıyan güç, gelen ile yayılan şiddetlerin toplamına oranlanır: 102 / (340 + 238) = 0.18"
+            "text": "The reflected power is divided by the sum of the incident and emitted intensities: 102 / (340 + 238) = 0.18"
            }
           ]
          }
@@ -1055,7 +1055,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yansıyan güç gelen yerine soğurulan güce oranlanır: 102 / 238 = 0.43"
+            "text": "The reflected power is divided by the absorbed power instead of the incident power: 102 / 238 = 0.43"
            }
           ]
          }
@@ -1090,7 +1090,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Soğurulan kesir albedo sanılır: 238 / 340 = 0.70"
+            "text": "The absorbed fraction is taken to be the albedo: 238 / 340 = 0.70"
            }
           ]
          }
@@ -1108,7 +1108,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Dengede soğurulan şiddet yayılana eşittir: 238 W m⁻². Yansıyan (saçılan) şiddet = 340 − 238 = 102 W m⁻². Albedo = yansıyan / gelen = 102 / 340 = 0.30."
+          "text": "In equilibrium the absorbed intensity equals the emitted intensity: 238 W m⁻². Reflected (scattered) intensity = 340 − 238 = 102 W m⁻². Albedo = reflected / incident = 102 / 340 = 0.30."
          }
         ]
        }
@@ -1139,7 +1139,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "S/4 ortalaması; denge sıcaklığı; sera etkisi mekanizması; yayıcılık",
+    "outcome": "The S/4 average; equilibrium temperature; mechanism of the greenhouse effect; emissivity",
     "stem": {
      "type": "doc",
      "content": [

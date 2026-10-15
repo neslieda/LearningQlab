@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/e4-fission-pilot-questions.md",
- "source_sha256": "05cbb5ff52f1b9d2060e6a71e4e294dcf50e4e94298e6a639d7093d8f4783a20",
+ "source_sha256": "2850ffdcfe3cda26a070a85bf2e51d618bb003f3ee6c16a67139968391c9b8a6",
  "questions": [
   {
    "source_ref": "pilot/e4-fission#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Fisyonda açığa çıkan enerjinin nükleon başına bağlanma enerjisinden hesabı",
+    "outcome": "Energy released in fission from binding energy per nucleon",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ürünlerin toplam bağlanma enerjisi, açığa çıkan enerji sanılır: 240 × 8.5 = 2040 MeV"
+            "text": "Takes the total binding energy of the products to be the energy released: 240 × 8.5 = 2040 MeV"
            }
           ]
          }
@@ -135,7 +135,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca bir ürün çekirdek hesaba katılır: 120 × 0.90 = 108 MeV"
+            "text": "Only one product nucleus is taken into account: 120 × 0.90 = 108 MeV"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Nükleon başına fark verilir; nükleon sayısıyla çarpılmaz: 8.5 − 7.6 = 0.90 MeV"
+            "text": "Gives the difference per nucleon; does not multiply by the number of nucleons: 8.5 − 7.6 = 0.90 MeV"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Ürünlerin toplam bağlanma enerjisi = 2 × 120 × 8.5 = 2040 MeV. Başlangıç çekirdeğinin = 240 × 7.6 = 1824 MeV. Açığa çıkan enerji = 2040 − 1824 = 216 MeV (= 240 × 0.90)."
+          "text": "Total binding energy of the products = 2 × 120 × 8.5 = 2040 MeV. That of the initial nucleus = 240 × 7.6 = 1824 MeV. Energy released = 2040 − 1824 = 216 MeV (= 240 × 0.90)."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yavaşlatıcının işlevi; kontrol çubuğu, ısı değiştirici ve zırhlamadan ayrımı",
+    "outcome": "Function of the moderator; distinguishing it from the control rod, heat exchanger and shielding",
     "stem": {
      "type": "doc",
      "content": [
@@ -280,7 +280,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yavaşlatıcı ile kontrol çubuğu karıştırılır; nötron soğurmak kontrol çubuğunun işidir"
+            "text": "Confuses the moderator with the control rod; absorbing neutrons is the job of the control rod"
            }
           ]
          }
@@ -315,7 +315,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yavaşlatıcı ile ısı değiştirici / soğutucu karıştırılır"
+            "text": "Confuses the moderator with the heat exchanger / coolant"
            }
           ]
          }
@@ -350,7 +350,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yavaşlatıcı ile zırhlama karıştırılır"
+            "text": "Confuses the moderator with the shielding"
            }
           ]
          }
@@ -389,7 +389,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yavaşlatıcının işi, fisyondan çıkan hızlı nötronları çarpışmalarla yavaşlatmaktır. Çarpışma başına enerji aktarımı, hedef çekirdeğin kütlesi nötronunkine yakın olduğunda en büyüktür; nötronların soğurulmaması da gerekir."
+          "text": "The job of the moderator is to slow down the fast neutrons from fission by collisions. The energy transferred per collision is greatest when the mass of the target nucleus is close to that of the neutron; the neutrons must also not be absorbed."
          }
         ]
        }
@@ -420,7 +420,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Zincirleme tepkime; sabit güçte çalışma koşulu",
+    "outcome": "Chain reaction; condition for operation at constant power",
     "stem": {
      "type": "doc",
      "content": [
@@ -481,7 +481,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Çıkan nötronların hepsinin yeni fisyon başlattığı düşünülür; bu durumda tepkime hızı üstel artar"
+            "text": "Thinks all the neutrons released start a new fission; in that case the reaction rate would increase exponentially"
            }
           ]
          }
@@ -516,7 +516,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Soğurulan ya da kaçan nötron sayısı (2.5 − 1) sorulanla karıştırılır"
+            "text": "Confuses the number of neutrons absorbed or escaping (2.5 − 1) with what is asked"
            }
           ]
          }
@@ -572,7 +572,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "\"Sabit güç\" ifadesi zincirleme tepkimenin durduğu biçiminde yorumlanır"
+            "text": "Interprets \"constant power\" as meaning that the chain reaction has stopped"
            }
           ]
          }
@@ -590,7 +590,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Güç sabitse saniyedeki fisyon sayısı sabittir; bunun için her fisyon ortalama tam bir yeni fisyona yol açmalıdır. Kalan ortalama 1.5 nötron kontrol çubuklarında ve başka çekirdeklerde soğurulur ya da reaktörden kaçar."
+          "text": "If the power is constant the number of fissions per second is constant; for this, each fission must lead on average to exactly one new fission. The remaining 1.5 neutrons on average are absorbed in the control rods and in other nuclei or escape from the reactor."
          }
         ]
        }
@@ -621,7 +621,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Fisyon ürünlerinin yönetimi",
+    "outcome": "Management of fission products",
     "stem": {
      "type": "doc",
      "content": [
@@ -703,7 +703,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Havuzdaki su reaktördeki yavaşlatıcıyla karıştırılır; depolamada amaç tepkimeyi sürdürmek değildir"
+            "text": "Confuses the water in the pool with the moderator in the reactor; the aim of storage is not to keep the reaction going"
            }
           ]
          }
@@ -738,7 +738,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Radyoaktif bozunmanın dış etkiyle (nötron soğurarak) durdurulabileceği düşünülür"
+            "text": "Thinks radioactive decay can be stopped by an external influence (by absorbing neutrons)"
            }
           ]
          }
@@ -773,7 +773,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Katı yakıt çubukları içindeki ürünlerin suda çözülerek uzaklaştırıldığı düşünülür"
+            "text": "Thinks the products inside the solid fuel rods are removed by dissolving in the water"
            }
           ]
          }
@@ -791,7 +791,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kullanılmış yakıttaki fisyon ürünleri radyoaktiftir; bozunmaları hem ısı üretir hem de iyonlaştırıcı ışınım yayar. Su, ısıyı uzaklaştırır ve ışınımı soğurarak zırh görevi yapar."
+          "text": "The fission products in spent fuel are radioactive; their decays both produce heat and emit ionizing radiation. The water removes the heat and acts as a shield by absorbing the radiation."
          }
         ]
        }
@@ -822,7 +822,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "E.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Nötronla uyarılmış fisyon; kütle farkından enerji; güç–yakıt tüketimi; yavaşlatmanın gerekçesi",
+    "outcome": "Neutron-induced fission; energy from mass difference; power–fuel consumption; reason for slowing neutrons",
     "stem": {
      "type": "doc",
      "content": [

@@ -1,34 +1,34 @@
-# Pilot soru seti: A.3 İş, enerji ve güç
+# Pilot question set: A.3 Work, energy and power
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set, [yazım standardına](AUTHORING_STANDARD.md) göre ve [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla elle yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written by hand according to the [authoring standard](AUTHORING_STANDARD.md) and with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü A.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav sorusu, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` ile ayrı bir hesapla yeniden üretildi
-> (g = 9.8 m s⁻²; veri kitapçığı değeri uzmanca teyit edilmeli). Soru 5'teki dizel enerji yoğunluğu soruda verildi.
-> **Doğrulanmayan:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle
-> bakılmadı; dizel yakıtın enerji yoğunluğu (3.6 × 10¹⁰ J m⁻³) ve pompanın toplam verimi (%12) genel bilgiye dayalı makul değerlerdir,
-> bir kaynaktan teyit edilmedi; rehberin "enerji yoğunluğu"nu hacim başına mı (J m⁻³) kütle başına mı (J kg⁻¹) tanımladığı kontrol
-> edilmedi.
+> **Source:** only syllabus node A.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam question, textbook question or internet source was used as input.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced with a separate calculation in `python3`
+> (g = 9.8 m s⁻²; the data booklet value must be confirmed by an expert). The energy density of diesel in Question 5 is given in the question.
+> **Not verified:** it passed an independent blind solver; it has not passed expert review; it has not been checked by an expert for resemblance
+> to any known exam question; the energy density of diesel fuel (3.6 × 10¹⁰ J m⁻³) and the overall efficiency of the pump (12 %) are plausible values based on general knowledge,
+> not confirmed from a source; it was not checked whether the guide defines "energy density" per volume (J m⁻³) or
+> per mass (J kg⁻¹).
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (A.3) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (A.3) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | İş = *Fs* cos *θ*; bir kuvvetin işi ile net işin ayrımı | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Güç = *Fv*; verim | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Mekanik enerji ve korunumsuz kuvvetin (sürtünme) işi | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | SL | Esneklik potansiyel enerjisinin uzamaya bağlılığı | AO3 | — | 1 | Orta–zor |
-| 5 | Paper 2 | SL | Güç, kinetik ve yerçekimi potansiyel enerjisi; verim; enerji yoğunluğu; Sankey diyagramı | AO1–AO3 | Show that, Determine, State, Explain | 9 | Orta |
+| 1 | Paper 1A | SL | Work = *Fs* cos *θ*; work done by one force vs net work | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Power = *Fv*; efficiency | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Mechanical energy and the work done by a non-conservative force (friction) | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | SL | Dependence of elastic potential energy on extension | AO3 | — | 1 | Medium–hard |
+| 5 | Paper 2 | SL | Power, kinetic and gravitational potential energy; efficiency; energy density; Sankey diagram | AO1–AO3 | Show that, Determine, State, Explain | 9 | Medium |
 
-Bu set A.3'ün tamamını kapsamaz. Eksik kalanlar: iş–kinetik enerji teoreminin doğrudan uygulanması, kuvvet–yer değiştirme grafiğinin
-altındaki alan, mekanik enerjinin korunduğu (sürtünmesiz) durumlar, Sankey diyagramının çizimi ya da okunması, farklı yakıtların
-enerji yoğunluklarının karşılaştırılması.
+This set does not cover all of A.3. Missing: direct application of the work–kinetic energy theorem, area under a force–displacement graph,
+cases where mechanical energy is conserved (frictionless), drawing or reading a Sankey diagram, comparing the
+energy densities of different fuels.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A traveller pulls a wheeled suitcase at constant speed along a level platform. The strap makes an angle of 60° with the horizontal and
 the traveller exerts a force of 25 N along the strap. The suitcase moves a distance of 40 m.
@@ -40,19 +40,19 @@ B. 500 J
 C. 870 J
 D. 1000 J
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** *W* = *Fs* cos *θ* = 25 × 40 × cos 60° = 500 J.
+**Solution.** *W* = *Fs* cos *θ* = 25 × 40 × cos 60° = 500 J.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | "Sabit sürat, o hâlde iş yapılmaz" düşüncesi; net iş (sıfır) ile tek bir kuvvetin işi karıştırılır |
-| C | Yer değiştirmeye dik bileşen kullanılır: 25 × 40 × sin 60° = 866 J ≈ 870 J |
-| D | Açı göz ardı edilir: 25 × 40 = 1000 J |
+| A | Thinks "constant speed, so no work is done"; confuses net work (zero) with the work done by a single force |
+| C | Uses the component perpendicular to the displacement: 25 × 40 × sin 60° = 866 J ≈ 870 J |
+| D | Ignores the angle: 25 × 40 = 1000 J |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 An electric winch raises a load of mass 150 kg vertically at a constant speed of 0.40 m s⁻¹. The electrical power supplied to the
 winch is 840 W.
@@ -64,19 +64,19 @@ B. 30 %
 C. 43 %
 D. 70 %
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Yararlı güç = *Fv* = *mgv* = 150 × 9.8 × 0.40 = 588 W. Verim = 588 / 840 = 0.70 = %70.
+**Solution.** Useful power = *Fv* = *mgv* = 150 × 9.8 × 0.40 = 588 W. Efficiency = 588 / 840 = 0.70 = 70 %.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Kuvvet yerine kütle kullanılır (*g* unutulur): 150 × 0.40 / 840 = 0.071 |
-| B | Yararlı kesir yerine kaybedilen kesir verilir: (840 − 588) / 840 = 0.30 |
-| C | Verim, kaybedilen gücün yararlı güce oranı sanılır: 252 / 588 = 0.43 |
+| A | Uses mass instead of force (forgets *g*): 150 × 0.40 / 840 = 0.071 |
+| B | Gives the fraction lost instead of the useful fraction: (840 − 588) / 840 = 0.30 |
+| C | Takes efficiency to be the ratio of wasted power to useful power: 252 / 588 = 0.43 |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A parcel of mass 2.0 kg is released from rest at the top of a delivery chute. The chute is 5.0 m long and its top is 1.5 m vertically
 above its bottom. The parcel reaches the bottom of the chute with a speed of 4.0 m s⁻¹.
@@ -88,20 +88,20 @@ B. 3.2 N
 C. 5.9 N
 D. 8.9 N
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Kaybedilen potansiyel enerji = 2.0 × 9.8 × 1.5 = 29.4 J. Kazanılan kinetik enerji = ½ × 2.0 × 4.0² = 16.0 J.
-Sürtünmeye karşı yapılan iş = 29.4 − 16.0 = 13.4 J. Sürtünme oluk boyunca (5.0 m) etkir: *f* = 13.4 / 5.0 = 2.7 N.
+**Solution.** Potential energy lost = 2.0 × 9.8 × 1.5 = 29.4 J. Kinetic energy gained = ½ × 2.0 × 4.0² = 16.0 J.
+Work done against friction = 29.4 − 16.0 = 13.4 J. Friction acts along the chute (5.0 m): *f* = 13.4 / 5.0 = 2.7 N.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Kinetik enerjinin tamamı sürtünme işi sanılır: 16.0 / 5.0 = 3.2 N |
-| C | Potansiyel enerjinin tamamının sürtünmeye gittiği varsayılır: 29.4 / 5.0 = 5.9 N |
-| D | Enerji kaybı doğru bulunur ama yol yerine düşey yükseklik kullanılır: 13.4 / 1.5 = 8.9 N |
+| B | Takes all of the kinetic energy to be the work done against friction: 16.0 / 5.0 = 3.2 N |
+| C | Assumes all of the potential energy goes to friction: 29.4 / 5.0 = 5.9 N |
+| D | Finds the energy loss correctly but uses the vertical height instead of the distance along the chute: 13.4 / 1.5 = 8.9 N |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 A spring obeys Hooke's law. When the extension of the spring is *x*, the elastic potential energy stored in the spring is *E*. The
 extension is then increased from *x* to 3*x*.
@@ -113,19 +113,19 @@ B. 3*E*
 C. 8*E*
 D. 9*E*
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** *E*<sub>p</sub> = ½*kx*² olduğundan 3*x* uzamada depolanan enerji 9*E*'dir. Ek iş = 9*E* − *E* = 8*E*.
+**Solution.** Since *E*<sub>p</sub> = ½*kx*², the energy stored at extension 3*x* is 9*E*. Additional work = 9*E* − *E* = 8*E*.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Enerjinin uzamayla doğru orantılı olduğu sanılır ve ek uzama (2*x*) alınır: 2*E* |
-| B | Enerjinin uzamayla doğru orantılı olduğu sanılır ve son değer verilir: 3*E* |
-| D | Karesel bağıntı doğru kullanılır ama ek iş yerine son durumdaki toplam enerji verilir: 9*E* |
+| A | Thinks energy is directly proportional to extension and takes the additional extension (2*x*): 2*E* |
+| B | Thinks energy is directly proportional to extension and gives the final value: 3*E* |
+| D | Uses the quadratic relation correctly but gives the total energy in the final state instead of the additional work: 9*E* |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A diesel-powered pump raises water from a river to an irrigation tank. The water is raised through a vertical height of 18 m at a
 rate of 2.5 kg s⁻¹ and leaves the outlet pipe at the top with a speed of 4.0 m s⁻¹. The speed of the water in the river is negligible.
@@ -155,11 +155,11 @@ and the height are unchanged.
 | 5. | c | | 0.12 **OR** 12 : 100 **OR** 3/25 ✓ | | 1 |
 | 5. | d | | each kilogram of water now gains more «kinetic» energy / more energy is transferred per unit mass ✓<br>power is unchanged, so less mass is delivered per second ✓ | *OWTTE*<br>*Do not award the second mark for "less" without reference to constant power or energy per second.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `mdot = 2.5 kg/s`, `H = 18 m`, `v = 4.0 m/s`, `eff = 0.12`, `rho_E = 3.6e10 J/m^3`, `t = 3600 s`, sabit `g = 9.8 m/s^2` | |
+| Parameters | `mdot = 2.5 kg/s`, `H = 18 m`, `v = 4.0 m/s`, `eff = 0.12`, `rho_E = 3.6e10 J/m^3`, `t = 3600 s`, constant `g = 9.8 m/s^2` | |
 | `P_g` | `mdot*g*H` | 441 W |
 | `P_k` | `0.5*mdot*v**2` | 20 W |
 | `P_out` | `P_g + P_k` | 461 W |
@@ -167,36 +167,36 @@ and the height are unchanged.
 | `E_in` | `P_in*t` | 1.38 × 10⁷ J |
 | `V_fuel` | `E_in/rho_E` | 3.84 × 10⁻⁴ m³ |
 
-"Show that" değeriyle (460 W) aynı zincir: `P_in` = 3.83 × 10³ W, `V_fuel` = 3.83 × 10⁻⁴ m³; iki anlamlı basamakta sonuç aynıdır
+The same chain with the "Show that" value (460 W): `P_in` = 3.83 × 10³ W, `V_fuel` = 3.83 × 10⁻⁴ m³; to two significant figures the result is the same
 (3.8 × 10⁻⁴ m³).
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+Questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–4 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–3 uygun (artan; J, %, N); Soru 4 cebirsel (*E*'nin katları), artan |
-| 1A: doğru cevap konumu dengeli | B, D, A, C |
-| 1A: vurgulanan kritik sözcük koyu | Soru 4 ("additional") uygun |
-| 1A: bir ya da iki adımlı hesap | Soru 1–2 bir–iki adım; Soru 3 üç kısa adım (profildeki "bir ya da iki adım" gözleminin üst sınırında) |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (3, 3, 1, 2; toplam 9). Not: SL örnek kâğıdında kısa sorular 4–6 puan gözlendi; 9 puan HL aralığının üst ucu, SL için uzman teyidi gerekir |
-| Paper 2: "Show that" kalıbı; sonraki parça verilen değeri kullanır | Soru 5 (a) → (b) uygun |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, OWTTE | Soru 5 uygun |
-| Değer–birim yazımı (m s⁻¹, kg s⁻¹, J m⁻³), 2 anlamlı basamak | Uygun |
-| Şekil | Hiçbir soru şekil gerektirmiyor; Soru 5 (c) Sankey diyagramını çizdirmez, yalnızca oran sorar (çizim cevap türü henüz yok) |
-| Kapsam sınırları (A.3) | Yerçekimi potansiyel enerjisi yalnızca *mg*Δ*h*; türev/integral yok |
+| 1A: context + separate single question sentence ("What is …?") + A–D one below the other | Questions 1–4 conform |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 1–3 conform (ascending; J, %, N); Question 4 is algebraic (multiples of *E*), ascending |
+| 1A: balanced position of the correct answer | B, D, A, C |
+| 1A: emphasised key word in bold | Question 4 ("additional") conforms |
+| 1A: one- or two-step calculation | Questions 1–2 one to two steps; Question 3 three short steps (at the upper limit of the profile's "one or two steps" observation) |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (3, 3, 1, 2; total 9). Note: in the SL sample paper short questions of 4–6 marks were observed; 9 marks is the upper end of the HL range, expert confirmation is needed for SL |
+| Paper 2: "Show that" pattern; a later part uses the given value | Question 5 (a) → (b) conforms |
+| Markscheme: four-column table, ✓, « », OR, OWTTE | Question 5 conforms |
+| Value–unit notation (m s⁻¹, kg s⁻¹, J m⁻³), 2 significant figures | Conforms |
+| Figure | No question needs a figure; Question 5 (c) does not ask for a Sankey diagram to be drawn, only for the ratio (the drawing answer type does not exist yet) |
+| Scope limits (A.3) | Gravitational potential energy only as *mg*Δ*h*; no derivatives/integrals |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Kör çözücü, cevapları görmeden soruları çözdü ve tüm cevap anahtarlarını ve markscheme sonuçlarını bağımsız olarak yeniden üretti; KRİTİK ya da ORTA bulgu yok.
-Ayrıntı: [review/a3-review.md](review/a3-review.md). Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. The blind solver solved the questions without seeing the answers and independently reproduced all answer keys and markscheme results; no CRITICAL or MEDIUM findings.
+Details: [review/a3-review.md](review/a3-review.md). This check does not replace expert review.
 
-Bulgular üzerine yapılan değişiklikler:
+Changes made in response to the findings:
 
-- Soru 5 (a): "useful power output" yerine "the rate at which the pump transfers energy to the water" yazıldı ve bunun pompanın yararlı güç çıkışı olduğu ayrı bir cümleyle tanımlandı; böylece çıkıştaki kinetik enerjinin yararlı çıkışa dahil olduğu açık. Sayılar değişmedi (441 + 20 = 461 W).
-- Soru 5 (c) markscheme: "about 1/8" (0.125) kaldırıldı, yerine tam eşdeğer "3/25" yazıldı.
-- Soru 5'in 9 puan olması: dosyada zaten not edilmişti; ek değişiklik yapılmadı.
+- Question 5 (a): "the rate at which the pump transfers energy to the water" was written in place of "useful power output", and the fact that this is the useful power output of the pump was defined in a separate sentence; so it is clear that the kinetic energy at the outlet is included in the useful output. The numbers did not change (441 + 20 = 461 W).
+- Question 5 (c) markscheme: "about 1/8" (0.125) was removed and the exactly equivalent "3/25" was written instead.
+- The 9 marks of Question 5: already noted in the file; no further change was made.

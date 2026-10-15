@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/e5-fusion-stars-pilot-questions.md",
- "source_sha256": "ef70391c3dcfb7905d0297f4d95131ea99e9af56a0ed280dd8a15c84002be2b8",
+ "source_sha256": "45d9dabbcaab9148d6acd11b75ee22c706a77759527bdfd15c813a279263288f",
  "questions": [
   {
    "source_ref": "pilot/e5-fusion-stars#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Iraklık açısıyla uzaklık; parsek–ışık yılı dönüşümü",
+    "outcome": "Distance from parallax angle; parsec–light year conversion",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Uzaklık ıraklık açısıyla doğru orantılı alınır: 0.040 × 3.26 = 0.13"
+            "text": "Takes the distance as directly proportional to the parallax angle: 0.040 × 3.26 = 0.13"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Dönüşüm ters yapılır: 25 / 3.26 = 7.7"
+            "text": "Does the conversion the wrong way round: 25 / 3.26 = 7.7"
            }
           ]
          }
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Parsek cinsinden bulunan değer ışık yılına çevrilmez: 25"
+            "text": "Does not convert the value found in parsecs to light years: 25"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "d (pc) = 1 / p (yay saniyesi) = 1 / 0.040 = 25 pc. 25 × 3.26 = 81.5 ≈ 82 ly."
+          "text": "d (pc) = 1 / p (arc-seconds) = 1 / 0.040 = 25 pc. 25 × 3.26 = 81.5 ≈ 82 ly."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yıldız yarıçapının ışınım gücü ve sıcaklıktan belirlenmesi (oran)",
+    "outcome": "Determining stellar radius from luminosity and temperature (ratio)",
     "stem": {
      "type": "doc",
      "content": [
@@ -280,7 +280,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık oranı ters çevrilmez: R² = 4 × (½)⁴ = 0.25 → 0.5"
+            "text": "Does not invert the temperature ratio: R² = 4 × (½)⁴ = 0.25 → 0.5"
            }
           ]
          }
@@ -315,7 +315,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklığın üssü yanlış alınır (R ∝ √L / T): 2 / 0.5 = 4"
+            "text": "Uses the wrong power of temperature (R ∝ √L / T): 2 / 0.5 = 4"
            }
           ]
          }
@@ -371,7 +371,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Karekök alınmaz; R² oranı verilir: 64"
+            "text": "Does not take the square root; gives the ratio of R²: 64"
            }
           ]
          }
@@ -389,7 +389,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "L = σ(4πR²)T⁴ → R² ∝ L / T⁴. R² oranı = 4 / (½)⁴ = 64. Yarıçap oranı = √64 = 8."
+          "text": "L = σ(4πR²)T⁴ → R² ∝ L / T⁴. Ratio of R² = 4 / (½)⁴ = 64. Ratio of radii = √64 = 8."
          }
         ]
        }
@@ -420,7 +420,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "HR diyagramının bölgeleri",
+    "outcome": "Regions of the HR diagram",
     "stem": {
      "type": "doc",
      "content": [
@@ -481,7 +481,7 @@
       "id": "fig1",
       "kind": "graph",
       "use": "read_only",
-      "description": "HR diyagramı. Düşey eksen: ışınım gücü / L☉, logaritmik ölçek, 10⁻⁴ ile 10⁶ arası. Yatay eksen: yüzey sıcaklığı / K, soldan sağa azalan (40 000 K'den 2500 K'e). Ana kol sol üstten sağ alta uzanan bant; kırmızı devler ve süperdevler sağ üstte; beyaz cüceler sol altta. Bölgeler şekilde etiketlenmemiştir. (Soru şekil olmadan çözülebilir.)",
+      "description": "HR diagram. Vertical axis: luminosity / L☉, logarithmic scale, from 10⁻⁴ to 10⁶. Horizontal axis: surface temperature / K, decreasing from left to right (from 40 000 K to 2500 K). The main sequence is a band running from upper left to lower right; red giants and supergiants are at upper right; white dwarfs are at lower left. The regions are not labelled in the figure. (The question can be solved without the figure.)",
       "asset_id": null,
       "alt_text": null
      }
@@ -541,7 +541,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ana kolun diyagramın her yerinden geçtiği düşünülür; bu sıcaklıktaki ana kol yıldızı Güneş'ten çok daha parlaktır"
+            "text": "Thinks the main sequence passes through every part of the diagram; a main-sequence star at this temperature is much brighter than the Sun"
            }
           ]
          }
@@ -576,7 +576,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düşük ışınım gücü \"soğuk ve büyük\" yıldızla ilişkilendirilir; kırmızı devler soğuk ve Güneş'ten parlaktır"
+            "text": "Associates low luminosity with a \"cool and large\" star; red giants are cool and brighter than the Sun"
            }
           ]
          }
@@ -611,7 +611,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yüksek sıcaklık tek başına \"çok büyük yıldız\" olarak yorumlanır; süperdevlerin ışınım gücü çok yüksektir"
+            "text": "Interprets high temperature alone as a \"very large star\"; supergiants have a very high luminosity"
            }
           ]
          }
@@ -629,7 +629,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yıldız Güneş'ten çok daha sıcak ama çok daha sönüktür; diyagramın sol alt bölgesindedir. Yüksek sıcaklıkta düşük ışınım gücü çok küçük bir yüzey alanı gerektirir: beyaz cüce."
+          "text": "The star is much hotter than the Sun but much dimmer; it is in the lower left region of the diagram. A low luminosity at a high temperature requires a very small surface area: a white dwarf."
          }
         ]
        }
@@ -660,7 +660,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Füzyon koşulları: yüksek sıcaklığın gerekçesi",
+    "outcome": "Conditions for fusion: reason for high temperature",
     "stem": {
      "type": "doc",
      "content": [
@@ -721,7 +721,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İyonlaşma ile füzyon koşulu karıştırılır; iyonlaşma çok daha düşük sıcaklıklarda gerçekleşir"
+            "text": "Confuses ionization with the condition for fusion; ionization takes place at much lower temperatures"
            }
           ]
          }
@@ -777,7 +777,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bağlanma enerjisinin sıcaklıkla değiştiği düşünülür; bu, çekirdeğin sıcaklıktan bağımsız bir özelliğidir"
+            "text": "Thinks binding energy changes with temperature; it is a property of the nucleus independent of temperature"
            }
           ]
          }
@@ -812,7 +812,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Füzyonun sonucu (ışınım basıncı) füzyonun koşuluyla karıştırılır"
+            "text": "Confuses the result of fusion (radiation pressure) with the condition for fusion"
            }
           ]
          }
@@ -830,7 +830,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Çekirdekler pozitif yüklüdür ve birbirini iter. Güçlü çekirdek kuvvetinin etkili olacağı kadar yaklaşabilmeleri için kinetik enerjilerinin, yani sıcaklığın çok yüksek olması gerekir."
+          "text": "Nuclei are positively charged and repel each other. For them to approach close enough for the strong nuclear force to take effect, their kinetic energy, that is the temperature, must be very high."
          }
         ]
        }
@@ -861,7 +861,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yıldız dengesi: ışınım basıncı ve kütle çekimi",
+    "outcome": "Stellar equilibrium: radiation pressure and gravity",
     "stem": {
      "type": "doc",
      "content": [
@@ -943,7 +943,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kuvvet dengesi ters kurulur: azalan basıncın genleşmeye yol açtığı düşünülür"
+            "text": "Sets up the force balance the wrong way round: thinks decreasing pressure leads to expansion"
            }
           ]
          }
@@ -978,7 +978,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kütle çekiminin değişmemesinden dengenin de değişmediği sonucu çıkarılır; denge iki etkinin eşitliğidir"
+            "text": "Concludes from the gravitational force not changing that the equilibrium does not change either; equilibrium is the equality of two effects"
            }
           ]
          }
@@ -1013,7 +1013,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kütle çekiminin füzyondan kaynaklandığı ya da füzyon hızıyla değiştiği düşünülür; kütle çekimi yıldızın kütlesine bağlıdır"
+            "text": "Thinks gravity is caused by fusion or changes with the rate of fusion; gravity depends on the mass of the star"
            }
           ]
          }
@@ -1031,7 +1031,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Dengede içe doğru kütle çekimi ile dışa doğru basınç kuvveti eşittir. Füzyon hızı azalınca dışa doğru kuvvet azalır, kütle çekimi değişmez; bileşke kuvvet içe doğrudur ve çekirdek büzülür."
+          "text": "At equilibrium the inward gravitational force and the outward force due to pressure are equal. When the rate of fusion decreases the outward force decreases, the gravitational force does not change; the resultant force is inward and the core contracts."
          }
         ]
        }
@@ -1062,7 +1062,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Iraklık → uzaklık; birim dönüşümü; ışınım gücü (ikincil düğüm: B.1, b = L/4πd²); yarıçap; kütlenin evrime etkisi",
+    "outcome": "Parallax → distance; unit conversion; luminosity (secondary node: B.1, b = L/4πd²); radius; effect of mass on evolution",
     "stem": {
      "type": "doc",
      "content": [

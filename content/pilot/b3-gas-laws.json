@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/b3-gas-laws-pilot-questions.md",
- "source_sha256": "26ea8eb2b6c0253c6bef55735bbb8744fc4bba43099c70c5f1b00cbadb486ea6",
+ "source_sha256": "15c22c0d4b2b34452f612bfbf4833a29691ddedf7944d71eab676194bd353d38",
  "questions": [
   {
    "source_ref": "pilot/b3-gas-laws#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "PV = NkT ile molekül sayısı; kelvin sıcaklığı",
+    "outcome": "Number of molecules using PV = NkT; kelvin temperature",
     "stem": {
      "type": "doc",
      "content": [
@@ -110,7 +110,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kapta bir mol gaz olduğu varsayılır; Avogadro sabiti cevap olarak verilir: 6.0 × 10²³"
+            "text": "The flask is assumed to contain one mole of gas; the Avogadro constant is given as the answer: 6.0 × 10²³"
            }
           ]
          }
@@ -145,7 +145,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık kelvine çevrilmez: 300 / (1.38 × 10⁻²³ × 27) = 8.05 × 10²³"
+            "text": "The temperature is not converted to kelvin: 300 / (1.38 × 10⁻²³ × 27) = 8.05 × 10²³"
            }
           ]
          }
@@ -180,7 +180,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık hesaba katılmaz: "
+            "text": "The temperature is not taken into account: "
            },
            {
             "marks": [],
@@ -296,7 +296,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Tek atomlu ideal gazın iç enerjisi (U = 3⁄2 PV)",
+    "outcome": "Internal energy of a monatomic ideal gas (U = 3⁄2 PV)",
     "stem": {
      "type": "doc",
      "content": [
@@ -357,7 +357,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Çarpan ters alınır: 2⁄3 "
+            "text": "The factor is inverted: 2⁄3 "
            },
            {
             "marks": [],
@@ -404,7 +404,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İç enerji "
+            "text": "Internal energy is taken to be equal to "
            },
            {
             "marks": [],
@@ -416,7 +416,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "'ye eşit sayılır: 8.0 kJ"
+            "text": ": 8.0 kJ"
            }
           ]
          }
@@ -471,6 +471,11 @@
           "content": [
            {
             "marks": [],
+            "type": "text",
+            "text": "The factor 3 in the expression "
+           },
+           {
+            "marks": [],
             "type": "math_inline",
             "attrs": {
              "latex": "P"
@@ -491,7 +496,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "² ifadesindeki 3 çarpanı enerjiye taşınır: 3"
+            "text": "² is carried over to the energy: 3"
            },
            {
             "marks": [],
@@ -552,7 +557,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 1.5 × 2.0 × 10⁵ × 0.040 = 1.2 × 10⁴ J = 12 kJ. Sıcaklık ve madde miktarı gerekmez."
+          "text": " = 1.5 × 2.0 × 10⁵ × 0.040 = 1.2 × 10⁴ J = 12 kJ. The temperature and the amount of substance are not needed."
          }
         ]
        }
@@ -583,7 +588,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "İdeal gaz yaklaşımının geçerlilik koşulları",
+    "outcome": "Conditions under which the ideal gas approximation is valid",
     "stem": {
      "type": "doc",
      "content": [
@@ -644,7 +649,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca sıcaklık koşulu doğru; yüksek basınçta molekül hacminin ihmal edilemeyeceği gözden kaçar"
+            "text": "Only the temperature condition is right; it overlooks that at high pressure the volume of the molecules cannot be neglected"
            }
           ]
          }
@@ -679,7 +684,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki koşul da ters; gazın sıvılaşmaya en yakın olduğu durum \"ideal\" sanılır"
+            "text": "Both conditions are reversed; the state closest to liquefaction is thought to be \"ideal\""
            }
           ]
          }
@@ -714,7 +719,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca basınç koşulu doğru; düşük sıcaklıkta moleküller arası kuvvetlerin önem kazandığı gözden kaçar"
+            "text": "Only the pressure condition is right; it overlooks that at low temperature the intermolecular forces become significant"
            }
           ]
          }
@@ -753,7 +758,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Düşük basınçta (düşük yoğunlukta) moleküller birbirinden uzaktır; molekül hacmi kabın hacmine göre ihmal edilir. Yüksek sıcaklıkta moleküllerin kinetik enerjisi, moleküller arası kuvvetlerin potansiyel enerjisine göre büyüktür. İkisi birlikte ideal gaz varsayımlarını en iyi karşılar."
+          "text": "At low pressure (low density) the molecules are far apart from one another; the volume of the molecules is negligible compared with the volume of the container. At high temperature the kinetic energy of the molecules is large compared with the potential energy of the intermolecular forces. Together these best satisfy the assumptions of the ideal gas."
          }
         ]
        }
@@ -784,7 +789,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "P = ⅓ρv² ile orantı akıl yürütmesi",
+    "outcome": "Proportional reasoning with P = ⅓ρv²",
     "stem": {
      "type": "doc",
      "content": [
@@ -845,7 +850,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Karekök alınmaz ("
+            "text": "The square root is not taken ("
            },
            {
             "marks": [],
@@ -913,7 +918,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Orantı ters kurulur ("
+            "text": "The proportion is set up the wrong way round ("
            },
            {
             "marks": [],
@@ -960,7 +965,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hem ters kurulur hem karekök alınmaz ("
+            "text": "The proportion is both inverted and the square root is not taken ("
            },
            {
             "marks": [],
@@ -1033,7 +1038,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "/ρ). Basınç aynı olduğundan "
+          "text": "/ρ). Since the pressure is the same, "
          },
          {
           "marks": [],
@@ -1045,7 +1050,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " ∝ 1/√ρ. Oran = 1/√4 = 1⁄2."
+          "text": " ∝ 1/√ρ. Ratio = 1/√4 = 1⁄2."
          }
         ]
        }
@@ -1076,7 +1081,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "İdeal gaz yasası, sabit hacim; kinetik kuramla basınç; iç enerji değişimi; modelin sınırı",
+    "outcome": "Ideal gas law, constant volume; pressure from kinetic theory; change in internal energy; limit of the model",
     "stem": {
      "type": "doc",
      "content": [
@@ -2053,7 +2058,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Sabit hacimde basınç–sıcaklık verisi; doğrusal ile doğru orantılı ayrımı; dış değerleme; belirsizlik",
+    "outcome": "Pressure–temperature data at constant volume; linear versus directly proportional; extrapolation; uncertainty",
     "stem": {
      "type": "doc",
      "content": [
@@ -2393,7 +2398,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Su banyosuna tamamen batırılmış, ağzı tıpayla kapatılmış cam balon. Tıpadan çıkan kısa ve dar bir boru, su yüzeyinin üstündeki bir basınç göstergesine bağlıdır. Suda bir termometre ve bir karıştırıcı vardır. Şekil ölçekli değildir.",
+      "description": "A glass flask fully immersed in a water bath, its neck closed with a stopper. A short, narrow tube leaving the stopper is connected to a pressure gauge above the water surface. The water contains a thermometer and a stirrer. The figure is not to scale.",
       "asset_id": null,
       "alt_text": null
      },
@@ -2401,7 +2406,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
+      "description": "Graph to be generated from data; details in the Figure note of the source file.",
       "asset_id": null,
       "alt_text": null
      }

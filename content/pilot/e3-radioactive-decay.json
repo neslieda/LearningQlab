@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/e3-radioactive-decay-pilot-questions.md",
- "source_sha256": "8b4fbc5c4f59d9e7816e1a4c7d9e27b334a7e9ba90faece652d5bdf55ed12810",
+ "source_sha256": "f465b93c4614b38fb56318e239c90da47264bf7ff1c5e22257954292d871115c",
  "questions": [
   {
    "source_ref": "pilot/e3-radioactive-decay#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Sayım hızı, arka plan ışınımı, yarı ömür (tam sayı yarı ömür)",
+    "outcome": "Count rate, background radiation, half-life (whole number of half-lives)",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bozunma doğrusal sanılır: iki yarı ömürde kaynağın tümüyle tükendiği, yalnızca arka planın kaldığı düşünülür"
+            "text": "Thinks decay is linear: assumes the source is completely used up in two half-lives and only the background remains"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Arka plan çıkarılır ama sonuca geri eklenmez: 160 / 4 = 40"
+            "text": "Subtracts the background but does not add it back to the result: 160 / 4 = 40"
            }
           ]
          }
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Arka plan hiç hesaba katılmaz: 180 / 4 = 45"
+            "text": "Does not account for the background at all: 180 / 4 = 45"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kaynağa ait sayım hızı = 180 − 20 = 160 min⁻¹. 6.0 saat = 2 yarı ömür → 160 / 4 = 40 min⁻¹. Dedektör arka planla birlikte 40 + 20 = 60 min⁻¹ kaydeder."
+          "text": "Count rate due to the source = 180 − 20 = 160 min⁻¹. 6.0 hours = 2 half-lives → 160 / 4 = 40 min⁻¹. With the background included the detector records 40 + 20 = 60 min⁻¹."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "β⁺ bozunma denklemi; nötrino",
+    "outcome": "β⁺ decay equation; neutrino",
     "stem": {
      "type": "doc",
      "content": [
@@ -280,7 +280,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "β⁻ bozunmasının ürünleri yazılır (Z artar, antinötrino)"
+            "text": "Writes the products of β⁻ decay (Z increases, antineutrino)"
            }
           ]
          }
@@ -315,7 +315,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yük korunumu yanlış uygulanır: pozitron yayımında Z'nin arttığı düşünülür"
+            "text": "Applies charge conservation incorrectly: thinks Z increases when a positron is emitted"
            }
           ]
          }
@@ -371,7 +371,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Çekirdek doğru, ancak eşlik eden parçacık β⁻ bozunmasındaki gibi antinötrino alınır"
+            "text": "Nucleus correct, but takes the accompanying particle to be an antineutrino as in β⁻ decay"
            }
           ]
          }
@@ -389,7 +389,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "β⁺ bozunmasında bir proton nötrona dönüşür: proton sayısı 1 azalır (11 → 10), nükleon sayısı değişmez (22). Pozitronla birlikte bir nötrino yayılır: ²²₁₁Na → ²²₁₀Ne + e⁺ + ν."
+          "text": "In β⁺ decay a proton changes into a neutron: the proton number decreases by 1 (11 → 10), the nucleon number does not change (22). A neutrino is emitted together with the positron: ²²₁₁Na → ²²₁₀Ne + e⁺ + ν."
          }
         ]
        }
@@ -420,7 +420,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kütle açığı; bağlanma enerjisi; nükleon başına bağlanma enerjisi",
+    "outcome": "Mass defect; binding energy; binding energy per nucleon",
     "stem": {
      "type": "doc",
      "content": [
@@ -502,7 +502,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Nükleon sayısı yerine nötron sayısına bölünür: 39.2 / 4 = 9.8 MeV"
+            "text": "Divides by the number of neutrons instead of the number of nucleons: 39.2 / 4 = 9.8 MeV"
            }
           ]
          }
@@ -537,7 +537,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Nükleon sayısı yerine proton sayısına bölünür: 39.2 / 3 = 13.1 MeV"
+            "text": "Divides by the number of protons instead of the number of nucleons: 39.2 / 3 = 13.1 MeV"
            }
           ]
          }
@@ -572,7 +572,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Toplam bağlanma enerjisi verilir; nükleon sayısına bölünmez: 39.2 MeV"
+            "text": "Gives the total binding energy; does not divide by the number of nucleons: 39.2 MeV"
            }
           ]
          }
@@ -590,7 +590,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kütle açığı = 3 × 1.00728 + 4 × 1.00866 − 7.01436 = 0.04212 u. Bağlanma enerjisi = 0.04212 × 931.5 = 39.2 MeV. Nükleon başına = 39.2 / 7 = 5.6 MeV."
+          "text": "Mass defect = 3 × 1.00728 + 4 × 1.00866 − 7.01436 = 0.04212 u. Binding energy = 0.04212 × 931.5 = 39.2 MeV. Per nucleon = 39.2 / 7 = 5.6 MeV."
          }
         ]
        }
@@ -620,7 +620,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Bozunma sabiti; T½ = ln 2/λ; A = λN",
+    "outcome": "Decay constant; T½ = ln 2/λ; A = λN",
     "stem": {
      "type": "doc",
      "content": [
@@ -681,7 +681,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bir yarı ömürdeki ortalama aktiflik alınır: (N/2) / T½ = 2.0 × 10¹² / 1200 = 1.7 × 10⁹"
+            "text": "Takes the average activity over one half-life: (N/2) / T½ = 2.0 × 10¹² / 1200 = 1.7 × 10⁹"
            }
           ]
          }
@@ -737,7 +737,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "ln 2 çarpanı unutulur (λ = 1/T½): 4.0 × 10¹² / 1200 = 3.3 × 10⁹"
+            "text": "Forgets the factor ln 2 (λ = 1/T½): 4.0 × 10¹² / 1200 = 3.3 × 10⁹"
            }
           ]
          }
@@ -772,7 +772,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yarı ömür saniyeye çevrilmez: (ln 2 / 20) × 4.0 × 10¹² = 1.4 × 10¹¹ (dakika başına bozunma, Bq değil)"
+            "text": "Does not convert the half-life to seconds: (ln 2 / 20) × 4.0 × 10¹² = 1.4 × 10¹¹ (decays per minute, not Bq)"
            }
           ]
          }
@@ -820,7 +820,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kesikli çekirdek enerji düzeylerinin kanıtı",
+    "outcome": "Evidence for discrete nuclear energy levels",
     "stem": {
      "type": "doc",
      "content": [
@@ -881,7 +881,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sürekli β tayfı düzey kanıtı sanılır; bu gözlem enerjinin üçüncü bir parçacıkla (nötrino) paylaşıldığını gösterir"
+            "text": "Takes the continuous β spectrum as evidence for levels; this observation shows that the energy is shared with a third particle (neutrino)"
            }
           ]
          }
@@ -916,7 +916,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Üstel azalma düzeylerle ilişkilendirilir; bu, bozunma olasılığının sabit olmasının sonucudur"
+            "text": "Relates exponential decrease to levels; this is a consequence of the decay probability being constant"
            }
           ]
          }
@@ -972,7 +972,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Rastgelelik ile kuantumlanma karıştırılır; öngörülemezlik enerji düzeyleri hakkında bilgi vermez"
+            "text": "Confuses randomness with quantization; unpredictability gives no information about energy levels"
            }
           ]
          }
@@ -990,7 +990,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Gama fotonu, çekirdeğin iki enerji düzeyi arasındaki geçişte yayılır; fotonların yalnızca belirli enerjilere sahip olması düzeylerin kesikli olduğunu gösterir (atom tayflarındaki çizgilere benzer biçimde)."
+          "text": "A gamma photon is emitted in a transition of the nucleus between two energy levels; that the photons have only certain energies shows that the levels are discrete (similar to the lines in atomic spectra)."
          }
         ]
        }
@@ -1020,7 +1020,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "E.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "λ ve A = λN; N = N₀e^(−λt) ile keyfi zaman aralığı; sürekli β tayfı",
+    "outcome": "λ and A = λN; arbitrary time interval using N = N₀e^(−λt); continuous β spectrum",
     "stem": {
      "type": "doc",
      "content": [

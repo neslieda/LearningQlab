@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/a1-kinematics-pilot-questions.md",
- "source_sha256": "2d5957877a9c191e2618451dd53997ae3161ee546c535e437dd0f80b5e8b8e9d",
+ "source_sha256": "220548cf103e1b5d74ea260c00e8e49308c81a7b55887b47e802f6465023b26e",
  "questions": [
   {
    "source_ref": "pilot/a1-kinematics#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "A.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yol ile yer değiştirme farkı; ortalama hız",
+    "outcome": "Distance vs displacement; average velocity",
     "stem": {
      "type": "doc",
      "content": [
@@ -100,7 +100,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yer değiştirme yerine toplam yol kullanılır: 1400 / 200 (ortalama sürat)"
+            "text": "Uses total distance instead of displacement: 1400 / 200 (average speed)"
            }
           ]
          }
@@ -135,7 +135,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki bölümün süratlerinin (10 ve 5.7 m s⁻¹) aritmetik ortalaması alınır"
+            "text": "Takes the arithmetic mean of the speeds of the two stages (10 and 5.7 m s⁻¹)"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca ilk bölümün sürati alınır"
+            "text": "Takes only the speed of the first stage"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yer değiştirme = √(600² + 800²) = 1000 m. Toplam süre = 200 s. Ortalama hızın büyüklüğü = 1000 / 200 = 5.0 m s⁻¹."
+          "text": "Displacement = √(600² + 800²) = 1000 m. Total time = 200 s. Magnitude of average velocity = 1000 / 200 = 5.0 m s⁻¹."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Aşağı açılı eğik atışın bileşenlerle çözümü",
+    "outcome": "Solving projectile motion launched below the horizontal using components",
     "stem": {
      "type": "doc",
      "content": [
@@ -315,7 +315,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yatay bileşen yerine hızın tamamı kullanılır: 12 × 1.24 = 14.9 m"
+            "text": "Uses the whole velocity instead of the horizontal component: 12 × 1.24 = 14.9 m"
            }
           ]
          }
@@ -350,7 +350,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düşey ilk hız yok sayılır (yatay atış gibi çözülür): t = 1.75 s, 10.4 × 1.75 = 18.2 m"
+            "text": "Ignores the initial vertical velocity (solves it like a horizontal projection): t = 1.75 s, 10.4 × 1.75 = 18.2 m"
            }
           ]
          }
@@ -385,7 +385,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Taş yukarı açıyla atılmış gibi çözülür: t = 2.47 s, 10.4 × 2.47 = 25.6 m"
+            "text": "Solves as if the stone were thrown upwards at an angle: t = 2.47 s, 10.4 × 2.47 = 25.6 m"
            }
           ]
          }
@@ -403,7 +403,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Aşağı yön pozitif. Düşey ilk hız = 12 sin 30° = 6.0 m s⁻¹; yatay hız = 12 cos 30° = 10.4 m s⁻¹. 15 = 6.0t + 4.9t² → t = 1.24 s. Yatay uzaklık = 10.4 × 1.24 = 12.9 m ≈ 13 m."
+          "text": "Downward positive. Initial vertical velocity = 12 sin 30° = 6.0 m s⁻¹; horizontal velocity = 12 cos 30° = 10.4 m s⁻¹. 15 = 6.0t + 4.9t² → t = 1.24 s. Horizontal distance = 10.4 × 1.24 = 12.9 m ≈ 13 m."
          }
         ]
        }
@@ -434,7 +434,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Akışkan direncinin ivmeye nitel etkisi",
+    "outcome": "Qualitative effect of fluid resistance on acceleration",
     "stem": {
      "type": "doc",
      "content": [
@@ -509,7 +509,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "\"Atıldığı anda hızı en büyük, ivmesi yok\" düşüncesi; hız ile ivmenin karıştırılması"
+            "text": "Thinks \"its speed is greatest at the moment of release, and it has no acceleration\"; confuses velocity with acceleration"
            }
           ]
          }
@@ -551,7 +551,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Direncin her durumda ivmeyi azalttığı varsayılır (iniş için doğru, çıkış için yanlış)"
+            "text": "Assumes resistance always reduces the acceleration (true for the descent, false for the ascent)"
            }
           ]
          }
@@ -588,7 +588,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Direnç yok sayılır; serbest düşme ivmesi alınır"
+            "text": "Ignores resistance; takes the acceleration of free fall"
            }
           ]
          }
@@ -634,7 +634,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yukarı çıkarken direnç kuvveti aşağı yönlüdür, yani ağırlıkla aynı yöndedir. Bileşke kuvvet ağırlıktan büyüktür; ivmenin büyüklüğü "
+          "text": "While the ball rises, the resistive force acts downwards, that is, in the same direction as the weight. The resultant force is greater than the weight; the magnitude of the acceleration is greater than "
          },
          {
           "marks": [],
@@ -646,7 +646,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "'den büyüktür."
+          "text": "."
          }
         ]
        }
@@ -677,7 +677,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yatay atış; hız bileşenleri; dirençli hareketin nitel etkisi",
+    "outcome": "Horizontal projection; velocity components; qualitative effect of resistive motion",
     "stem": {
      "type": "doc",
      "content": [
@@ -1313,7 +1313,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "A.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Serbest düşme verisinin işlenmesi; belirsizlik; sistematik hata",
+    "outcome": "Processing free-fall data; uncertainty; systematic error",
     "stem": {
      "type": "doc",
      "content": [
@@ -1657,7 +1657,7 @@
       "id": "fig1",
       "kind": "graph",
       "use": "read_values",
-      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
+      "description": "Graph to be generated from data; details in the Figure note of the source file.",
       "asset_id": null,
       "alt_text": null
      }

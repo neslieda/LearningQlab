@@ -1,42 +1,42 @@
-# Pilot soru seti: D.3 Elektromanyetik alanlarda hareket
+# Pilot question set: D.3 Motion in electromagnetic fields
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla yazıldı.
-> D teması için istenen tek Paper 1B sorusu bu dosyadadır (Soru 6).
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written following the [authoring standard](AUTHORING_STANDARD.md), with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
+> The single Paper 1B question requested for theme D is in this file (Question 6).
 >
-> **Kaynak:** yalnızca müfredat düğümü D.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı; senaryolar yazarın kurgusudur.
-> **Sayısal doğrulama:** tüm sayısal cevaplar, tüm sayısal çeldiriciler ve Soru 6'daki en uygun / en büyük / en küçük eğimler `python3`
-> (yalnızca standart kütüphane) ile ayrı bir hesapla yeniden üretildi ve dosyadaki değerlerle eşleşti. Kullanılan sabitler:
-> e = 1.60 × 10⁻¹⁹ C, elektron kütlesi 9.11 × 10⁻³¹ kg, g = 9.8 m s⁻² (veri kitapçığı değerleri uzmanca teyit edilmeli).
-> **Bağımsız kontrol:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi. Kör çözücü Soru 6(e)'de KRİTİK bir fizik hatası
-> buldu; parça değiştirildi (bkz. dosya sonu).
-> **Doğrulanmayan:** (1) uzman incelemesi yapılmadı; yeniden yazılan Soru 6(e) ve değişen Soru 5 sayıları ikinci bir kör çözücüden geçti ve uyuştu (review/recheck-2026-10-11.md); (2) kuvvet ve alan yönleri (Soru 3, Soru 5c) sağ el
-> kuralı ve ayrıca vektörel çarpımla (F = qv × B, F = IL × B) elle kontrol edildi, kodla değil; (3) Soru 6'nın verisi yazar tarafından
-> B = 0.080 T ve L = 0.050 m için üretilmiş, küçük saçılma eklenmiş kurgusal veridir; gerçek bir deneyden gelmez; (4) Soru 6'da
-> ±0.04 g belirsizliğin (okumanın dalgalanması) gerçek bir terazi için makul olup olmadığı teyit edilmedi; (5) bilinen bir sınav
-> sorusuna benzerlik açısından uzman gözüyle bakılmadı — hız seçici ve akım terazisi bilinen deney türleridir, soru metinleri özgündür.
+> **Source:** only syllabus node D.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook question or internet source was used as input; the scenarios are the author's inventions.
+> **Numerical check:** all numerical answers, all numerical distractors and the best-fit / maximum / minimum gradients in Question 6 were reproduced by a separate calculation in `python3`
+> (standard library only) and matched the values in the file. Constants used:
+> e = 1.60 × 10⁻¹⁹ C, electron mass 9.11 × 10⁻³¹ kg, g = 9.8 m s⁻² (the data booklet values should be confirmed by an expert).
+> **Independent check:** passed an independent blind solver; has not passed expert review. The blind solver found a CRITICAL physics error in Question 6(e);
+> the part was replaced (see end of file).
+> **Not verified:** (1) no expert review was done; the rewritten Question 6(e) and the changed Question 5 numbers passed a second blind solver and agreed (review/recheck-2026-10-11.md); (2) the force and field directions (Question 3, Question 5c) were checked by hand with the right-hand
+> rule and also with the vector product (F = qv × B, F = IL × B), not by code; (3) the data of Question 6 were produced by the author
+> for B = 0.080 T and L = 0.050 m with small scatter added; they are fictional data and do not come from a real experiment; (4) in Question 6
+> it was not confirmed whether an uncertainty of ±0.04 g (fluctuation of the reading) is reasonable for a real balance; (5) no expert check was made for similarity to
+> any known exam question — the velocity selector and the current balance are well-known experiment types, but the question texts are original.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (D.3) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (D.3) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Düzgün manyetik alanda çembersel hareket; periyodun hızdan bağımsızlığı | AO2 | — | 1 | Orta–zor |
-| 2 | Paper 1A | SL | Birbirine dik elektrik ve manyetik alanlarda sapmadan geçiş (v = E/B) | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Akım taşıyan iletkene etkiyen kuvvetin yönü (F = BIL sin θ) | AO2 | — | 1 | Kolay–orta |
-| 4 | Paper 1A | SL | Yüklü parçacığın düzgün elektrik alandaki hareketi | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | SL | Dik alanlar; düzgün manyetik alanda çembersel yörünge; yük/kütle oranının belirlenmesi | AO1–AO3 | Show that, Explain, Determine, State | 9 | Orta–zor |
-| 6 | Paper 1B | SL | F = BIL deneyi (akım terazisi): belirsizlik, eğimden B'nin belirlenmesi, sıfır hatasının (sistematik) eğime ve kesim noktasına etkisi | AO2–AO3 | Outline, Calculate, Determine, Comment, Explain, Suggest | 10 | Orta–zor |
+| 1 | Paper 1A | SL | Circular motion in a uniform magnetic field; period independent of speed | AO2 | — | 1 | Medium–hard |
+| 2 | Paper 1A | SL | Undeflected passage through perpendicular electric and magnetic fields (v = E/B) | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Direction of the force on a current-carrying conductor (F = BIL sin θ) | AO2 | — | 1 | Easy–medium |
+| 4 | Paper 1A | SL | Motion of a charged particle in a uniform electric field | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | SL | Perpendicular fields; circular path in a uniform magnetic field; determining the charge-to-mass ratio | AO1–AO3 | Show that, Explain, Determine, State | 9 | Medium–hard |
+| 6 | Paper 1B | SL | F = BIL experiment (current balance): uncertainty, determining B from the gradient, effect of a (systematic) zero error on the gradient and intercept | AO2–AO3 | Outline, Calculate, Determine, Comment, Explain, Suggest | 10 | Medium–hard |
 
-Bu set D.3'ün tamamını kapsamaz. Eksik kalanlar: F = qvB sin θ ile θ ≠ 90° durumunda hesap, paralel teller arasındaki kuvvet
-(büyüklük ve yön), düzgün elektrik alanda sapmanın nicel hesabı, yüklü parçacığa etkiyen manyetik kuvvetin yönü (tek başına).
+This set does not cover all of D.3. Not covered: calculation with F = qvB sin θ for θ ≠ 90°, the force between parallel wires
+(magnitude and direction), quantitative calculation of deflection in a uniform electric field, direction of the magnetic force on a charged particle (on its own).
 
-Kapsam sınırı kontrolü: D.3 için rehberde açık bir sınır yok. Parçacığın potansiyel farkıyla hızlandırılması (W = qΔV) D.2'nin ek HL
-içeriği olduğundan bu SL dosyasında bilerek kullanılmadı; Soru 5'te hız, dik alanlar koşulundan bulunur. Türev ya da integral yok.
+Scope limit check: there is no explicit limit for D.3 in the guide. Accelerating a particle through a potential difference (W = qΔV) is additional HL content of D.2,
+so it was deliberately not used in this SL file; in Question 5 the speed is found from the perpendicular-fields condition. No derivatives or integrals.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A charged particle moves at right angles to a uniform magnetic field in a vacuum. The particle moves in a circle with period *T*.
 An identical particle enters the same field at right angles with **twice** the speed.
@@ -48,20 +48,20 @@ B. *T*
 C. 2*T*
 D. 4*T*
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** qvB = mv²/r → r = mv/(qB). T = 2πr/v = 2πm/(qB): periyot hızdan bağımsızdır. Hız iki katına çıkınca yarıçap da iki katına
-çıkar; çevre ve hız aynı oranda arttığı için periyot değişmez.
+**Solution.** qvB = mv²/r → r = mv/(qB). T = 2πr/v = 2πm/(qB): the period is independent of speed. When the speed doubles the radius also doubles;
+the circumference and the speed increase in the same proportion, so the period does not change.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Yarıçapın değişmediği sanılır; aynı çember iki kat hızla dolanılır: T/2 |
-| C | Yarıçapın iki katına çıktığı görülür ama hızın da arttığı unutulur (T ∝ r): 2T |
-| D | Yarıçap v² ile artar sanılır (r ∝ v², mv²/r ifadesinden yanlış çıkarım) ve hız artışı unutulur: 4T |
+| A | Thinks the radius does not change; the same circle is traversed at twice the speed: T/2 |
+| C | Sees that the radius doubles but forgets that the speed also increases (T ∝ r): 2T |
+| D | Thinks the radius increases as v² (r ∝ v², a wrong deduction from the expression mv²/r) and forgets the increase in speed: 4T |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A beam of electrons passes between two parallel plates that are 2.0 cm apart. The potential difference between the plates is 600 V.
 A uniform magnetic field of strength 1.5 mT is applied at right angles to both the electric field and the beam. The electrons pass
@@ -74,25 +74,25 @@ B. 2.0 × 10⁵ m s⁻¹
 C. 4.0 × 10⁵ m s⁻¹
 D. 2.0 × 10⁷ m s⁻¹
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** E = V/d = 600 / 0.020 = 3.0 × 10⁴ V m⁻¹. Sapmama koşulu: eE = evB → v = E/B = 3.0 × 10⁴ / 1.5 × 10⁻³ = 2.0 × 10⁷ m s⁻¹.
+**Solution.** E = V/d = 600 / 0.020 = 3.0 × 10⁴ V m⁻¹. No-deflection condition: eE = evB → v = E/B = 3.0 × 10⁴ / 1.5 × 10⁻³ = 2.0 × 10⁷ m s⁻¹.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Oran ters kurulur (v = B/E): 1.5 × 10⁻³ / 3.0 × 10⁴ = 5.0 × 10⁻⁸ |
-| B | Levha aralığı metreye çevrilmez: E = 600 / 2.0 = 300; 300 / 1.5 × 10⁻³ = 2.0 × 10⁵ |
-| C | Alan şiddeti yerine potansiyel farkı kullanılır (v = V/B): 600 / 1.5 × 10⁻³ = 4.0 × 10⁵ |
+| A | Inverts the ratio (v = B/E): 1.5 × 10⁻³ / 3.0 × 10⁴ = 5.0 × 10⁻⁸ |
+| B | Does not convert the plate separation to metres: E = 600 / 2.0 = 300; 300 / 1.5 × 10⁻³ = 2.0 × 10⁵ |
+| C | Uses the potential difference instead of the field strength (v = V/B): 600 / 1.5 × 10⁻³ = 4.0 × 10⁵ |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A straight horizontal wire lies in the plane of the page and carries a current directed towards the right of the page. The wire is in
 a uniform magnetic field that is directed **into** the page.
 
-> **Şekil:** Sayfa düzleminde soldan sağa uzanan yatay bir tel; üzerinde sağa doğru akım oku (*I*). Telin çevresindeki bölge, sayfanın
-> içine doğru düzgün manyetik alanı gösteren ⊗ simgeleriyle dolu. "Sayfanın üstü" tele dik ve sayfa düzlemindedir. Diagram not to scale.
+> **Figure:** A horizontal wire in the plane of the page, running from left to right, with a current arrow (*I*) pointing right along it. The region around the wire is filled with ⊗ symbols
+> showing a uniform magnetic field into the page. The "top of the page" is perpendicular to the wire and in the plane of the page. Diagram not to scale.
 
 What is the direction of the magnetic force on the wire?
 
@@ -101,21 +101,21 @@ B. towards the bottom of the page
 C. out of the page
 D. into the page
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Kullanılan kural: sağ el kuralı, F = IL × B (konvansiyonel akım yönü). Eksenler: x sağa, y sayfanın üstüne, z sayfadan
-dışarı. Akım +x, alan −z: (+x) × (−z) = +y. Kuvvet sayfanın üstüne doğrudur. (Fleming sol el kuralı da aynı sonucu verir: işaret
-parmağı alan = sayfanın içine, orta parmak akım = sağa, başparmak kuvvet = yukarı.)
+**Solution.** Rule used: the right-hand rule, F = IL × B (conventional current direction). Axes: x to the right, y to the top of the page, z out of
+the page. Current +x, field −z: (+x) × (−z) = +y. The force is towards the top of the page. (Fleming's left-hand rule gives the same result: forefinger
+= field = into the page, middle finger = current = to the right, thumb = force = up.)
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Kural ters elle uygulanır ya da akım yönü yerine elektron akış yönü alınır |
-| C | Kuvvetin alana zıt yönde olduğu sanılır |
-| D | Kuvvetin alan yönünde olduğu sanılır (elektrik alandaki F = qE ile karıştırma) |
+| B | Applies the rule with the wrong hand, or takes the direction of electron flow instead of the current direction |
+| C | Thinks the force is in the direction opposite to the field |
+| D | Thinks the force is in the direction of the field (confusion with F = qE in an electric field) |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 An electron enters a region of uniform electric field in a vacuum. The initial velocity of the electron is at right angles to the
 electric field lines. There is no magnetic field.
@@ -127,30 +127,30 @@ B. The path is a circular arc and the speed increases.
 C. The path is a parabola and the speed increases.
 D. The path is a parabola and the speed is constant.
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Elektrik kuvveti büyüklük ve yön olarak sabittir (alan çizgilerine paralel, alana zıt yönde). Alana dik hız bileşeni
-değişmez, alan doğrultusundaki bileşen düzgün artar: yörünge paraboldür (yatay atışa benzer). Kuvvet hareket doğrultusunda bileşene
-sahip olduğu için iş yapar; sürat artar.
+**Solution.** The electric force is constant in magnitude and direction (parallel to the field lines, opposite to the field). The velocity component perpendicular
+to the field is unchanged and the component along the field increases uniformly: the path is a parabola (like horizontal projectile motion). The force has a component along the
+direction of motion, so it does work; the speed increases.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Elektrik alan, manyetik alanla karıştırılır (kuvvet her zaman hıza dik sanılır) |
-| B | Yörünge manyetik alandaki gibi çember sanılır, ama alanın enerji verdiği doğru düşünülür |
-| D | Yörünge doğru; ancak yalnızca alana dik hız bileşeni düşünülür ya da "kuvvet başlangıçta hıza dik, iş yapmaz" denir |
+| A | Confuses the electric field with a magnetic field (thinks the force is always perpendicular to the velocity) |
+| B | Thinks the path is a circle as in a magnetic field, but correctly thinks that the field transfers energy |
+| D | Path correct; but considers only the velocity component perpendicular to the field, or says "the force is initially perpendicular to the velocity, so it does no work" |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A beam of electrons travels in a vacuum from left to right between two horizontal parallel plates. The plates are 2.5 cm apart and
 the potential difference between them is 460 V. The upper plate is positive. A uniform magnetic field of strength 0.80 mT is applied
 in the region between the plates, at right angles to the beam and to the electric field. The beam passes between the plates without
 being deflected.
 
-> **Şekil:** Sayfa düzleminde iki yatay paralel levha; üstteki "+", alttaki "−" işaretli; aralarındaki uzaklık 2.5 cm olarak
-> etiketli. Elektron demeti levhaların ortasından soldan sağa doğru yatay bir okla gösterilmiş. Elektrik alan çizgileri üst levhadan
-> alt levhaya (sayfanın altına doğru). Manyetik alanın yönü şekilde **gösterilmemiştir**; sayfa düzlemine diktir. Diagram not to scale.
+> **Figure:** Two horizontal parallel plates in the plane of the page; the upper one is marked "+" and the lower one "−"; the separation between them is labelled 2.5 cm.
+> The electron beam is shown by a horizontal arrow midway between the plates, from left to right. Electric field lines run from the upper plate
+> to the lower plate (towards the bottom of the page). The direction of the magnetic field is **not shown** in the figure; it is perpendicular to the plane of the page. Diagram not to scale.
 
 **(a)** Show that the speed of the electrons is about 2.3 × 10⁷ m s⁻¹. [2]
 
@@ -178,34 +178,34 @@ the electrons.
 | 5. | d | | *evB* = *mv*²/*r* **OR** *e*/*m* = *v*/(*Br*) ✓<br>*e*/*m* = 2.3 × 10⁷ / (0.80 × 10⁻³ × 0.16) = 1.8 × 10¹¹ «C kg⁻¹» ✓ | *Allow ECF from (a).* | 2 |
 | 5. | e | | both the electric force and the magnetic force reverse direction «as the charge has opposite sign» **OR** both forces have the same magnitude as before «same *E*, *v*, *B* and magnitude of charge» **AND** are still in opposite directions ✓<br>the forces still balance / *v* = *E*/*B* does not depend on charge or mass, so the protons are not deflected ✓ | *OWTTE*<br>*Award [0] for "not deflected" without reasoning.* | 2 |
 
-**Yön çözümü (b).** Eksenler: x sağa (hız), y sayfanın üstüne, z sayfadan dışarı. E alanı −y (artı levhadan eksi levhaya). Elektron
-(q = −e) üzerindeki elektrik kuvveti +y (artı levhaya doğru). Sapmama için manyetik kuvvet −y olmalı: F = qv × B = (−e)(v x̂ × B).
-B = −z (sayfanın içine) için x̂ × (−ẑ) = +ŷ, (−e) ile çarpılınca −ŷ. Dolayısıyla alan sayfanın içine doğrudur. Sağ el kuralıyla kontrol:
-artı yük için v sağa, B içeri → kuvvet yukarı; elektron için ters, yani aşağı. ✓
+**Direction solution (b).** Axes: x to the right (velocity), y to the top of the page, z out of the page. The E field is −y (from the positive plate to the negative plate). The electric force on the electron
+(q = −e) is +y (towards the positive plate). For no deflection the magnetic force must be −y: F = qv × B = (−e)(v x̂ × B).
+For B = −z (into the page), x̂ × (−ẑ) = +ŷ, and multiplying by (−e) gives −ŷ. Hence the field is into the page. Check with the right-hand rule:
+for a positive charge with v to the right and B into the page the force is up; for the electron it is reversed, that is down. ✓
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `V = 460 V`, `d = 0.025 m`, `B = 0.80e-3 T`, `r = 0.16 m` | |
+| Parameters | `V = 460 V`, `d = 0.025 m`, `B = 0.80e-3 T`, `r = 0.16 m` | |
 | `E` | `V/d` | 1.84 × 10⁴ V m⁻¹ |
 | `v` | `E/B` | 2.30 × 10⁷ m s⁻¹ |
 | `e_over_m` | `v/(B*r)` | 1.80 × 10¹¹ C kg⁻¹ |
-| Tutarlılık kontrolü | `m_e*v/(e*B)` (e = 1.60e-19, m_e = 9.11e-31) | r = 0.164 m; soruda iki anlamlı basamakla 0.16 m verildi, bu yüzden bulunan e/m kabul edilen değerden (1.76 × 10¹¹ C kg⁻¹) yaklaşık %2 büyük |
+| Consistency check | `m_e*v/(e*B)` (e = 1.60e-19, m_e = 9.11e-31) | r = 0.164 m; the question gives 0.16 m to two significant figures, so the e/m found is about 2 % larger than the accepted value (1.76 × 10¹¹ C kg⁻¹) |
 
 ---
 
-## Soru 6 — Paper 1B (10 puan)
+## Question 6 — Paper 1B (10 marks)
 
 A student investigates the force on a current-carrying wire in a magnetic field. Two flat magnets are fixed to a steel yoke so that
 there is an approximately uniform horizontal magnetic field between them. The yoke is placed on an electronic balance. A stiff
 straight horizontal wire is clamped so that it passes between the magnets at right angles to the field. The wire does not touch the
 magnets or the balance. The balance is set to zero when there is no current in the wire.
 
-> **Şekil:** Düzenek şeması. Elektronik terazinin kefesinde U biçimli çelik boyunduruk; boyunduruğun iki iç yüzünde karşılıklı
-> düz mıknatıslar (N ve S etiketli), aralarındaki alan yatay. Yatay, sert bir tel mıknatısların arasından alana dik geçer; tel iki
-> yandan teraziye değmeyen ayrı bir sehpaya kelepçelenmiş ve bir güç kaynağı ile ampermetreye seri bağlı. Telin alan içindeki
-> uzunluğu *L* (mıknatısların uzunluğu) olarak etiketli. Diagram not to scale.
+> **Figure:** Apparatus diagram. A U-shaped steel yoke on the pan of an electronic balance; on the two inner faces of the yoke, facing each other,
+> flat magnets (labelled N and S), with a horizontal field between them. A stiff horizontal wire passes between the magnets at right angles to the field; the wire is clamped
+> at both sides to a separate stand that does not touch the balance and is connected in series with a power supply and an ammeter. The length of the wire in the field
+> is labelled *L* (the length of the magnets). Diagram not to scale.
 
 The student varies the current *I* in the wire and records the change in the balance reading Δ*m*. The direction of the current is
 chosen so that the balance reading increases.
@@ -250,75 +250,75 @@ Explain the effect of this on the value of *B* obtained. [2]
 | 6. | e | | every reading is larger by the same amount «0.15 g» / the line is shifted upwards / the intercept is no longer zero «systematic / zero error» ✓<br>the gradient is unchanged, so the value of *B* obtained is not affected ✓ | *OWTTE*<br>*Do not award MP2 for "no effect" without reference to the gradient.* | 2 |
 | 6. | f | | use larger currents **OR** a longer length of wire in the field / longer magnets **OR** several turns of wire through the field «so that Δ*m* is larger» **OR** a balance with smaller uncertainty **OR** measure *L* with a more precise instrument ✓ | *Do not accept "repeat readings" without stating that a mean is taken.* | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `grad = 0.41e-3 kg/A`, `grad_max = 0.43e-3`, `grad_min = 0.39e-3`, `L = 0.050 m`, `dL = 0.001 m`, `u_dm = 0.04 g`, sabit `g = 9.8` | |
-| `pct_dm` | `100*0.04/0.41` | %9.8 ≈ %10 |
+| Parameters | `grad = 0.41e-3 kg/A`, `grad_max = 0.43e-3`, `grad_min = 0.39e-3`, `L = 0.050 m`, `dL = 0.001 m`, `u_dm = 0.04 g`, constant `g = 9.8` | |
+| `pct_dm` | `100*0.04/0.41` | 9.8 % ≈ 10 % |
 | `B` | `grad*g/L` | 0.0804 T |
 | `u_grad` | `(grad_max - grad_min)/2` | 0.02 × 10⁻³ kg A⁻¹ |
 | `frac` | `u_grad/grad + dL/L` | 0.0488 + 0.0200 = 0.0688 |
 | `u_B` | `B*frac` | 0.0055 T ≈ 0.006 T |
-| Aralık | `B*(1-frac)`, `B*(1+frac)` | 0.0748 T – 0.0859 T (yuvarlanmış değerlerle 0.074–0.086 T) |
-| (d) sağlamlık | 0.083 T; belirsizlik ±0.004, ±0.005, ±0.0055, ±0.006 T için aralıklar | 0.076–0.084, 0.075–0.085, 0.0749–0.0859, 0.074–0.086 T: hepsinde içeride |
-| (e) sıfır hatası | tüm okumalara 0.15 g eklenip en küçük kareler doğrusu yeniden hesaplanır | eğim 0.409 g A⁻¹ (değişmez), kesim noktası 0.151 g |
+| Range | `B*(1-frac)`, `B*(1+frac)` | 0.0748 T – 0.0859 T (0.074–0.086 T with rounded values) |
+| (d) robustness | 0.083 T; ranges for uncertainties ±0.004, ±0.005, ±0.0055, ±0.006 T | 0.076–0.084, 0.075–0.085, 0.0749–0.0859, 0.074–0.086 T: inside in all of them |
+| (e) zero error | add 0.15 g to all readings and recalculate the least-squares line | gradient 0.409 g A⁻¹ (unchanged), intercept 0.151 g |
 
-### Şekil notu
+### Figure note
 
-Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu Δ*m*–*I* grafiği yer alır. Grafik aynı veriden kodla üretilir
-(D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 0.409 g A⁻¹ (kesim noktası 0.001 g); ilk ve son noktanın belirsizlik
-çubuklarının uçlarından geçen doğruların eğimleri 0.430 ve 0.390 g A⁻¹'dir ve bu iki doğru beş noktanın tümünün belirsizlik
-çubuklarının içinden geçer (python ile kontrol edildi). Soruda verilen 0.41, 0.43 ve 0.39 değerleri bunların iki anlamlı basamağa
-yuvarlanmış halidir.
+In the version shown to the student, a Δ*m*–*I* graph with uncertainty bars accompanies the table. The graph is generated by code from the same data
+(D-14). The least-squares gradient calculated from the data in the table is 0.409 g A⁻¹ (intercept 0.001 g); the lines through the ends of the uncertainty
+bars of the first and last points have gradients of 0.430 and 0.390 g A⁻¹, and these two lines pass through the uncertainty
+bars of all five points (checked with python). The values 0.41, 0.43 and 0.39 given in the question are these rounded
+to two significant figures.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi + alt alta A–D | Soru 1–3 "What is …?"; Soru 4 "Which …?" (profilde daha seyrek ama geçerli) |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–2 uygun (artan); Soru 3 yön ifadeleri; Soru 4 aynı kalıpta dört cümle (cümle biçimli seçenek profilde azınlıkta) |
-| 1A: kritik sözcük koyu | Soru 1 ("twice"), Soru 3 ("into") |
-| 1A: tablo seçenekli biçim örnekte doğrulanamadı | Soru 4 bu yüzden iki sütunlu tablo yerine cümle seçenekleriyle yazıldı |
-| 1A: doğru cevap konumu dengeli | B, D, A, C |
-| 1A: seçenekler yuvarlamadan sonra birbirinden farklı | Kontrol edildi (python) |
-| Şekil | Soru 3, 5, 6: metinle tarif edildi; alan ve akım yönleri sözle de verildi. Soru 5(b)'de manyetik alan yönü bilerek gösterilmedi (istenen odur) |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 1, 2, 2, 2; toplam 9). SL örnek kâğıdında kısa sorular 4–6 puan; 9 puan HL aralığının üst sınırı — SL kâğıdı için iki soruya bölünebilir |
-| Paper 2: "Show that" kalıbı; sonraki parça verilen değeri kullanabilir | Soru 5(a) → (d) uygun |
-| Paper 2: en az bir AO3 parça | Soru 5(a) Show that, (c) ve (e) Explain, (d) Determine |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, AND, ECF, OWTTE | Soru 5 ve Soru 6 uygun |
-| 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 6 uygun (2, 1, 3, 1, 2, 1; toplam 10); (e) parçası değiştirildi, puanı ve toplam aynı kaldı |
-| 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 6 uygun |
-| 1B: komut sözcükleri | Outline, Calculate, Determine, Explain, Suggest profilde var; "Comment" profildeki listede yok (A.1 örneğinde kullanıldığı için korundu) — uzman teyidi gerekir |
-| 1B: öğrenci verilen grafiğe en uygun doğruyu çizer ve eğimi kendisi bulur | **Soru 6 uygun değil:** grafik üretilemediği için eğimler metinde verildi. Grafik şablonu hazır olunca (c) parçası yeniden yazılmalı |
-| Değer–birim yazımı (m s⁻¹, g A⁻¹, C kg⁻¹), 2 anlamlı basamak | Uygun |
+| 1A: context + a separate single question sentence + A–D listed vertically | Questions 1–3 "What is …?"; Question 4 "Which …?" (rarer in the profile but valid) |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 1–2 conform (ascending); Question 3 direction statements; Question 4 four sentences in the same pattern (sentence-form options are a minority in the profile) |
+| 1A: critical word in bold | Question 1 ("twice"), Question 3 ("into") |
+| 1A: table-option format could not be verified in the example | Question 4 was therefore written with sentence options instead of a two-column table |
+| 1A: balanced position of the correct answer | B, D, A, C |
+| 1A: options are distinct after rounding | Checked (python) |
+| Figure | Questions 3, 5, 6: described in text; the field and current directions are also given in words. In Question 5(b) the magnetic field direction is deliberately not shown (that is what is asked) |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 1, 2, 2, 2; total 9). In the SL sample paper short questions are 4–6 marks; 9 marks is the upper end of the HL range — for an SL paper it can be split into two questions |
+| Paper 2: "Show that" pattern; the next part may use the given value | Question 5(a) → (d) conform |
+| Paper 2: at least one AO3 part | Question 5(a) Show that, (c) and (e) Explain, (d) Determine |
+| Markscheme: four-column table, ✓, « », OR, AND, ECF, OWTTE | Questions 5 and 6 conform |
+| 1B: experiment question of about 10 marks, sub-parts 1–3 marks | Question 6 conforms (2, 1, 3, 1, 2, 1; total 10); part (e) was replaced, its marks and the total stayed the same |
+| 1B: table heading "quantity / unit ± uncertainty" | Question 6 conforms |
+| 1B: command terms | Outline, Calculate, Determine, Explain, Suggest are in the profile; "Comment" is not in the profile list (kept because it is used in the A.1 example) — expert confirmation needed |
+| 1B: the student draws the line of best fit on a given graph and finds the gradient | **Question 6 does not conform:** because the graph could not be generated, the gradients are given in the text. When the graph template is ready, part (c) should be rewritten |
+| Value–unit notation (m s⁻¹, g A⁻¹, C kg⁻¹), 2 significant figures | Conforms |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, yazarından farklı bir kör çözücü tarafından cevaplar görülmeden çözüldü. Soru 6(e) dışındaki tüm cevap
-anahtarları, çeldirici değerleri, yön çözümleri (Soru 3, 5b) ve Soru 6'daki eğimler bağımsız olarak yeniden üretildi ve eşleşti.
-**Soru 6(e) eşleşmedi ve değiştirildi.** Ayrıntı: [review/d3-review.md](review/d3-review.md). Bu kontrol uzman incelemesinin yerine
-geçmez; değiştirilen parçalar ikinci bir kör çözümden geçmedi.
+Date: 2026-10-11. This file was solved by a blind solver other than its author, without seeing the answers. All answer keys other than Question 6(e),
+distractor values, direction solutions (Questions 3, 5b) and the gradients in Question 6 were independently reproduced and matched.
+**Question 6(e) did not match and was replaced.** Details: [review/d3-review.md](review/d3-review.md). This check does not replace expert review;
+the replaced parts did not pass a second blind solution.
 
-İncelemeye yanıt olarak yapılan değişiklikler:
+Changes made in response to the review:
 
-- **Soru 6(e) — KRİTİK, parça değiştirildi.** Eski parça "tel alana tam dik değilse B'ye etkisi"ni soruyor, anahtar "kuvvet ve eğim
-  küçülür, B küçük bulunur" diyordu. Yazar türetmeyi yeniden yaptı ve inceleyenle aynı sonuca vardı: tel düzdür ve uzunluğu *L* olan
-  alan bölgesini baştan sona geçer; alanla θ açısı yaparsa alan içindeki uzunluğu *L*/sin θ olur ve
-  F = BI(*L*/sin θ) sin θ = BIL değişmez (tel düşey düzlemde eğilse de kuvvetin düşey bileşeni yine BIL'dir). Eski anahtar yanlıştı;
-  doğru düşünen öğrenci sıfır alırdı. Yeni parça: terazi sıfırlanmamıştır ve akım yokken sabit 0.15 g gösterir; öğrenci kesim
-  noktasının kaydığını ama eğimin, dolayısıyla B'nin değişmediğini açıklar (2 puan, AO3). Kapsam tablosu güncellendi; puan toplamı
-  10 olarak kaldı. `python3`: tüm okumalara 0.15 g eklenince eğim 0.409 g A⁻¹ (aynı), kesim noktası 0.151 g.
-- **Soru 6(d) — ORTA.** Üretici değeri 0.085 T → 0.083 T. Eski değer sonuç aralığının sınırındaydı ve varılan yargı belirsizliğin
-  nasıl yuvarlandığına bağlıydı. `python3`: 0.083 T, ±0.004, ±0.005, ±0.0055 ve ±0.006 T'nin hepsinde aralığın içinde. Nota
-  "the conclusion must follow from the candidate's own range" eklendi; 6(c)'deki "Allow ± 0.005 T" notu kaldırıldı.
-- **Soru 5(a):** levhalar arası potansiyel farkı 450 V → 460 V. Eski hız 2.25 × 10⁷ m s⁻¹, "about 2.3 × 10⁷" hedefinde yuvarlama
-  sınırındaydı; yeni değer tam 2.30 × 10⁷ m s⁻¹. Buna bağlı olarak (d) sonucu 1.76 × 10¹¹ → 1.80 × 10¹¹ C kg⁻¹ (anahtar yine
-  1.8 × 10¹¹), kabul aralığı notu ECF notuna indirildi, formül zinciri güncellendi.
-- **Soru 5(e) markscheme:** MP1'in ikinci alternatifi artık yönleri de ister ("… **AND** are still in opposite directions").
-- **Değiştirilmeyen:** Soru 5'in 9 puanlık SL kısa soru olması (istenen 4–9 aralığında; "Biçim uyumu" tablosunda bölünebileceği
-  yazılı) ve Soru 6(d)'deki "Comment" komut sözcüğü (A.1 örneğiyle tutarlı). İkisi de uzman kararı bekliyor.
+- **Question 6(e) — CRITICAL, part replaced.** The old part asked about "the effect on B if the wire is not exactly perpendicular to the field", and the key said "the force and gradient
+  decrease, so B is found to be smaller". The author redid the derivation and reached the same conclusion as the reviewer: the wire is straight and crosses the field region of length *L*
+  from end to end; if it makes an angle θ with the field, its length in the field is *L*/sin θ and
+  F = BI(*L*/sin θ) sin θ = BIL is unchanged (even if the wire is tilted in the vertical plane, the vertical component of the force is still BIL). The old key was wrong;
+  a student who reasoned correctly would have scored zero. New part: the balance has not been zeroed and reads a constant 0.15 g with no current; the student explains that the intercept
+  shifts but the gradient, and therefore B, is unchanged (2 marks, AO3). The scope table was updated; the total of marks
+  stayed at 10. `python3`: when 0.15 g is added to all readings the gradient is 0.409 g A⁻¹ (the same), the intercept 0.151 g.
+- **Question 6(d) — MEDIUM.** Manufacturer value 0.085 T → 0.083 T. The old value was on the boundary of the result range and the judgement reached depended on how the uncertainty
+  was rounded. `python3`: 0.083 T is inside the range for all of ±0.004, ±0.005, ±0.0055 and ±0.006 T. The note
+  "the conclusion must follow from the candidate's own range" was added; the "Allow ± 0.005 T" note in 6(c) was removed.
+- **Question 5(a):** potential difference between the plates 450 V → 460 V. The old speed 2.25 × 10⁷ m s⁻¹ was on a rounding boundary for the "about 2.3 × 10⁷" target;
+  the new value is exactly 2.30 × 10⁷ m s⁻¹. Accordingly the result of (d) 1.76 × 10¹¹ → 1.80 × 10¹¹ C kg⁻¹ (the key is still
+  1.8 × 10¹¹), the acceptance-range note was reduced to an ECF note, and the formula chain was updated.
+- **Question 5(e) markscheme:** the second alternative of MP1 now also requires the directions ("… **AND** are still in opposite directions").
+- **Not changed:** Question 5 being a 9-mark SL short question (within the requested 4–9 range; it is noted in the "Format conformance" table that it can be
+  split) and the command term "Comment" in Question 6(d) (consistent with the A.1 example). Both await an expert decision.

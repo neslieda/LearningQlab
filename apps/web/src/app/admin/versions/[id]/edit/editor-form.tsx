@@ -54,6 +54,7 @@ export function EditorForm({ version, onReload }: EditorFormProps) {
   const [stale, setStale] = useState(false);
   const [locked, setLocked] = useState(false);
   const [announce, setAnnounce] = useState("");
+  const [notice, setNotice] = useState("");
   const submitting = useRef(false);
   const summary = useRef<HTMLDivElement>(null);
 
@@ -86,6 +87,7 @@ export function EditorForm({ version, onReload }: EditorFormProps) {
       setStale(false);
       setSaved({ json: JSON.stringify(vars.document), sha: result.content_sha256 });
       setAnnounce("Saved");
+      setNotice("");
       queryClient.setQueryData(["admin", "version", id], result);
       await queryClient.invalidateQueries({ queryKey: ["admin"] });
     },
@@ -136,10 +138,8 @@ export function EditorForm({ version, onReload }: EditorFormProps) {
   return (
     <form
       className="space-y-6"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSave();
-      }}
+      // Only the Save button saves: Enter in a text input must not submit the form.
+      onSubmit={(e) => e.preventDefault()}
       noValidate
     >
       <p>
@@ -265,7 +265,7 @@ export function EditorForm({ version, onReload }: EditorFormProps) {
 
         <McqSection doc={doc} update={update} problems={problems} />
         {doc.parts.map((p, i) => (
-          <PartSection key={p.id} doc={doc} index={i} update={update} problems={problems} commandTerms={commandTerms} />
+          <PartSection key={p.id} doc={doc} index={i} update={update} problems={problems} commandTerms={commandTerms} notify={setNotice} />
         ))}
 
         {doc.solution_model ? (
@@ -289,13 +289,17 @@ export function EditorForm({ version, onReload }: EditorFormProps) {
         </section>
       ) : null}
 
+      <p role="status" aria-live="polite" className={notice ? "rounded border border-amber-600 p-3" : "sr-only"}>
+        {notice}
+      </p>
+
       <div className="sticky bottom-0 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 border-t border-[var(--page-border)] bg-[var(--page-bg)] py-3">
         <span>Total marks: {totalMarks(doc)}</span>
         {dirty ? <span>Changes pending</span> : null}
         <span role="status" aria-live="polite">
           {announce}
         </span>
-        <button type="submit" className={BTN} disabled={locked} aria-busy={locked}>
+        <button type="button" onClick={onSave} className={BTN} disabled={locked} aria-busy={locked}>
           Save
         </button>
       </div>

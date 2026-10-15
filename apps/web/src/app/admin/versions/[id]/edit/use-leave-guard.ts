@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const MARKER = "__qlabLeaveGuard";
 
@@ -11,42 +11,73 @@ const marked = (state: unknown) => !!(state && typeof state === "object" && (sta
 /**
  * While `active`, leaving the page asks first: closing or reloading the tab (beforeunload), following any link inside
  * the app (a capture-phase click listener, ahead of the router), and the browser's back button.
+ *
+ * The back button works through a marker history entry (same URL) that sits on top while the guard is on. The marker
+ * is removed again when the guard switches off (after a save) and when the user confirms leaving through a link, so
+ * Back never needs a second press and no duplicate of the edit URL is left behind.
  */
 export function useLeaveGuard(active: boolean): void {
+  const mounted = useRef(true);
+  // Declared before the guard effect so that on unmount it has already cleared the flag when the guard cleans up.
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
   useEffect(() => {
     if (!active) return;
+    // True once the user has said yes: no further prompt (not even the browser's own) for this departure.
+    let confirmed = false;
+    let pendingLink: HTMLAnchorElement | null = null;
 
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (confirmed) return;
       e.preventDefault();
       e.returnValue = "";
     };
 
     const onClick = (e: MouseEvent) => {
-      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (confirmed || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const anchor = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
       if (!anchor || (anchor.target && anchor.target !== "_self") || anchor.hasAttribute("download")) return;
       const url = new URL(anchor.href, window.location.href);
-      if (url.origin === window.location.origin && url.pathname === window.location.pathname && url.search === window.location.search) return;
-      if (!window.confirm(LEAVE_MESSAGE)) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+      const sameOrigin = url.origin === window.location.origin;
+      if (sameOrigin && url.pathname === window.location.pathname && url.search === window.location.search) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      if (!window.confirm(LEAVE_MESSAGE)) return;
+      confirmed = true;
+      if (sameOrigin && marked(window.history.state)) {
+        // Pop the marker first, then follow the link from the real entry.
+        pendingLink = anchor;
+        window.history.back();
+      } else {
+        anchor.click();
       }
     };
 
-    // The back button: a marker entry with the same URL sits on top of the history while the guard is on. Going back
-    // lands on the real entry (the page itself); only then do we ask, and either leave for real or put the marker back.
     const pushMarker = () => {
       const state = (window.history.state ?? {}) as Record<string, unknown>;
       window.history.pushState({ ...state, [MARKER]: true }, "", window.location.href);
     };
     if (!marked(window.history.state)) pushMarker();
-    let leaving = false;
+
     const onPopState = (e: PopStateEvent) => {
-      if (leaving || marked(e.state)) return; // going forward onto the marker, or already confirmed
+      if (pendingLink) {
+        // The marker is gone; now follow the link the user confirmed.
+        e.stopImmediatePropagation();
+        const link = pendingLink;
+        pendingLink = null;
+        link.click();
+        return;
+      }
+      if (confirmed || marked(e.state)) return; // going forward onto the marker, or already confirmed
       e.stopImmediatePropagation();
       if (window.confirm(LEAVE_MESSAGE)) {
-        leaving = true;
+        confirmed = true;
         window.history.back();
       } else {
         pushMarker();
@@ -60,6 +91,8 @@ export function useLeaveGuard(active: boolean): void {
       window.removeEventListener("beforeunload", onBeforeUnload);
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("popstate", onPopState, true);
+      // The guard switched off while the page stays (a successful save): take the marker off the history.
+      if (mounted.current && !confirmed && marked(window.history.state)) window.history.back();
     };
   }, [active]);
 }

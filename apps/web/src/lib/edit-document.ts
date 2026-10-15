@@ -111,6 +111,14 @@ export function addMarkPoint(doc: QuestionDocument, partIndex: number): Question
   return updatePart(doc, partIndex, { mark_points: [...part.mark_points, point] });
 }
 
+/** How many notes point at the mark point (they apply to the whole part after it is removed). */
+export function notesPointingAt(doc: QuestionDocument, partIndex: number, pointIndex: number): number {
+  const part = doc.parts[partIndex];
+  const point = part?.mark_points[pointIndex];
+  if (!part || !point || part.mark_points.length <= 1) return 0;
+  return part.notes.filter((n) => n.mark_point_id === point.id).length;
+}
+
 /** Removes a mark point. A part keeps at least one; notes that pointed at the removed point apply to the whole part. */
 export function removeMarkPoint(doc: QuestionDocument, partIndex: number, pointIndex: number): QuestionDocument {
   const part = doc.parts[partIndex];

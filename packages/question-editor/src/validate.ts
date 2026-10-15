@@ -1,5 +1,6 @@
 import type { Doc } from "@qlab/api-client";
 import type { JSONNode } from "./convert";
+import { renderLatex } from "@qlab/question-renderer";
 import { manifest } from "./manifest";
 
 export interface DocProblem {
@@ -11,6 +12,7 @@ export interface DocProblem {
     | "exclusive_marks"
     | "ragged_table"
     | "empty_latex"
+    | "math_does_not_render"
     | "bad_attr"
     | "unknown_node"
     | "unknown_mark";
@@ -89,6 +91,12 @@ function walk(node: JSONNode, path: string, problems: DocProblem[]): void {
     }
   }
   checkAttrs(node, path, problems);
+  if ((node.type === "math_inline" || node.type === "math_block") && typeof node.attrs?.latex === "string" && node.attrs.latex !== "") {
+    // Same KaTeX options and untrusted-command rule as the renderer.
+    if (renderLatex(node.attrs.latex, node.type === "math_block") === null) {
+      problems.push({ path: join(join(path, "attrs"), "latex"), code: "math_does_not_render", message: "KaTeX cannot render this formula" });
+    }
+  }
   if (node.type === "table") checkTable(node, path, problems);
   node.content?.forEach((child, i) => walk(child, join(join(path, "content"), i), problems));
 }

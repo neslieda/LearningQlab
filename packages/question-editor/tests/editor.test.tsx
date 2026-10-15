@@ -253,6 +253,19 @@ describe("DocEditor", () => {
       expect(JSON.stringify(last())).toContain("cell");
     });
 
+    it("keeps unrenderable pasted math as plain text, renderable math as a node", async () => {
+      const { box, last } = await setup(doc(para()));
+      paste(
+        box,
+        '<p><span data-node="math_inline" data-latex="\\frac{1}">A</span> <span data-node="math_inline" data-latex="x^2">B</span></p>',
+      );
+      const out = JSON.stringify(last());
+      expect(out).toContain('"latex":"x^2"');
+      expect(out).not.toContain('"latex":"\\\\frac{1}"');
+      expect(out).toContain("frac{1}");
+      expect(validateDoc(last())).toEqual([]);
+    });
+
     it("strips marks the field does not allow", async () => {
       const { box, last } = await setup(doc(para()), { allowMarks: ["bold"] });
       paste(box, "<p><i>slanted</i> <b>strong</b></p>");

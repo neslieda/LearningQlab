@@ -5,7 +5,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { Fragment, Slice, type Node as PMNode } from "@tiptap/pm/model";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { fromEditorJSON, toEditorJSON, type JSONNode } from "./convert";
-import { LatexForm } from "./LatexForm";
+import { LatexForm, latexProblem } from "./LatexForm";
 import { nodeViews } from "./nodeViews";
 import { buildExtensions } from "./schema";
 import { Toolbar, type BlockName } from "./Toolbar";
@@ -31,6 +31,13 @@ export interface DocEditorProps {
 function cleanSlice(slice: Slice, blocks: readonly BlockName[], marks: readonly MarkName[]): Slice {
   const keep = (node: PMNode): Fragment => {
     const name = node.type.name;
+    // Math that KaTeX rejects is kept as plain text (so nothing is lost), never as a math node.
+    if ((name === "math_inline" || name === "math_block") && latexProblem(String(node.attrs.latex ?? ""), name === "math_block")) {
+      const latex = String(node.attrs.latex ?? "");
+      const schema = node.type.schema;
+      const run = latex ? [schema.text(latex)] : [];
+      return name === "math_block" ? Fragment.from(schema.nodes.paragraph!.create(null, run)) : Fragment.fromArray(run);
+    }
     if (name === "figure") return Fragment.empty;
     if (name === "math_block" && !blocks.includes("math_block")) {
       return Fragment.from(node.type.schema.nodes.paragraph!.create(null, node.type.schema.nodes.math_inline!.create(node.attrs)));

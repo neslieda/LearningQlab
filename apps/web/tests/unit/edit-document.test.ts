@@ -12,6 +12,7 @@ import {
   moveMarkPoint,
   moveNote,
   newMarkPointId,
+  notesPointingAt,
   partTag,
   pathLabel,
   removeMarkPoint,
@@ -88,6 +89,12 @@ describe("mark points", () => {
     expect(removeMarkPoint(doc(), 1, 0)).toEqual(doc());
   });
 
+  it("counts the notes that a removal rebinds to the whole part", () => {
+    expect(notesPointingAt(doc(), 0, 0)).toBe(1);
+    expect(notesPointingAt(doc(), 0, 1)).toBe(0);
+    expect(notesPointingAt(doc(), 1, 0)).toBe(0); // the last point cannot be removed
+  });
+
   it("moves a point up and down, and ignores moves past the ends", () => {
     const down = moveMarkPoint(doc(), 0, 0, 1);
     expect(down.parts[0]!.mark_points.map((m) => m.id)).toEqual(["a-m2", "a-m1"]);
@@ -156,6 +163,7 @@ describe("labels", () => {
     expect(pathLabel("parts[0].marks", d)).toBe("Part (a) marks");
     expect(pathLabel("mcq.options[1].rationale.content[0]", d)).toBe("Rationale for B");
     expect(pathLabel("mcq.explanation", d)).toBe("Explanation");
+    expect(describePath("parts.0.ecf_from", d).field).toBe("parts[0].ecf_from");
     expect(describePath("parts[0].body.content[0].text", d).field).toBe("parts[0].body");
     expect(describePath("parts[0].mark_points[1].content.content[0]", d).field).toBe("parts[0].mark_points[1].content");
   });

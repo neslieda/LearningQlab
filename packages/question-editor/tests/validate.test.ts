@@ -45,6 +45,14 @@ describe("validateDoc", () => {
     ]);
   });
 
+  it("reports math KaTeX rejects, including untrusted commands", () => {
+    const d = doc(
+      { type: "math_block", attrs: { latex: "\\frac{1}" } },
+      para({ marks: [], type: "math_inline", attrs: { latex: "\\href{https://x.invalid}{a}" } }, { marks: [], type: "math_inline", attrs: { latex: "x^2" } }),
+    );
+    expect(codes(d)).toEqual(["math_does_not_render@content[0].attrs.latex", "math_does_not_render@content[1].content[0].attrs.latex"]);
+  });
+
   it("reports unknown nodes and never throws", () => {
     expect(codes(doc({ type: "heading" }))).toEqual(["unknown_node@content[0]"]);
   });

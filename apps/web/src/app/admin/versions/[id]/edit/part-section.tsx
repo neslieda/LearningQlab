@@ -9,6 +9,7 @@ import {
   moveMarkPoint,
   moveNote,
   partTag,
+  notesPointingAt,
   removeMarkPoint,
   removeNote,
   setPartMarks,
@@ -18,7 +19,7 @@ import {
   type EditProblem,
   type Part,
 } from "@/lib/edit-document";
-import { BTN, CheckControl, DocField, MARKSCHEME_MARKS, SelectControl, TABLE_BLOCKS, TextControl } from "./controls";
+import { BTN, CheckControl, DocField, FieldShell, MARKSCHEME_MARKS, SelectControl, TABLE_BLOCKS, TextControl } from "./controls";
 
 type AnswerType = Part["answer_type"];
 type PointKind = Part["mark_points"][number]["kind"];
@@ -51,9 +52,11 @@ export interface PartSectionProps {
   update: (fn: (d: QuestionDocument) => QuestionDocument) => void;
   problems: readonly EditProblem[];
   commandTerms: readonly string[];
+  /** Announces something the user should know about (visible and read out). */
+  notify: (message: string) => void;
 }
 
-export function PartSection({ doc, index, update, problems, commandTerms }: PartSectionProps) {
+export function PartSection({ doc, index, update, problems, commandTerms, notify }: PartSectionProps) {
   const part = doc.parts[index];
   if (!part) return null;
   const tag = partTag(part.label);
@@ -109,21 +112,25 @@ export function PartSection({ doc, index, update, problems, commandTerms }: Part
         <CheckControl path={`${base}.show_that`} label={`Part ${tag} show that`} checked={part.show_that} problems={problems} onChange={(v) => patch({ show_that: v })} />
       </div>
       {earlier.length > 0 ? (
-        <fieldset className="space-y-1">
-          <legend className="font-medium">Error carried forward into part {tag}</legend>
-          <div className="flex flex-wrap gap-x-6 gap-y-1">
-            {earlier.map((p) => (
-              <CheckControl
-                key={p.id}
-                path={`${base}.ecf_from.${p.id}`}
-                label={`From part ${partTag(p.label)}`}
-                checked={part.ecf_from.includes(p.id)}
-                problems={problems}
-                onChange={(on) => patch({ ecf_from: on ? [...part.ecf_from, p.id] : part.ecf_from.filter((x) => x !== p.id) })}
-              />
-            ))}
-          </div>
-        </fieldset>
+        <FieldShell path={`${base}.ecf_from`} problems={problems}>
+          {(describedBy) => (
+            <fieldset className="space-y-1" aria-describedby={describedBy}>
+              <legend className="font-medium">Error carried forward into part {tag}</legend>
+              <div className="flex flex-wrap gap-x-6 gap-y-1">
+                {earlier.map((p) => (
+                  <CheckControl
+                    key={p.id}
+                    path={`${base}.ecf_from.${p.id}`}
+                    label={`From part ${partTag(p.label)}`}
+                    checked={part.ecf_from.includes(p.id)}
+                    problems={problems}
+                    onChange={(on) => patch({ ecf_from: on ? [...part.ecf_from, p.id] : part.ecf_from.filter((x) => x !== p.id) })}
+                  />
+                ))}
+              </div>
+            </fieldset>
+          )}
+        </FieldShell>
       ) : null}
 
       <div className="space-y-4">
@@ -171,7 +178,11 @@ export function PartSection({ doc, index, update, problems, commandTerms }: Part
                 <button type="button" className={BTN} disabled={j === part.mark_points.length - 1} aria-label={`Move mark point ${n} down`} onClick={() => update((x) => moveMarkPoint(x, index, j, 1))}>
                   Down
                 </button>
-                <button type="button" className={BTN} disabled={part.mark_points.length <= 1} aria-label={`Remove mark point ${n}`} onClick={() => update((x) => removeMarkPoint(x, index, j))}>
+                <button type="button" className={BTN} disabled={part.mark_points.length <= 1} aria-label={`Remove mark point ${n}`} onClick={() => {
+                    const rebound = notesPointingAt(doc, index, j);
+                    if (rebound > 0) notify(`Removing mark point ${n} changed ${rebound} ${rebound === 1 ? "note" : "notes"} to apply to the whole part.`);
+                    update((x) => removeMarkPoint(x, index, j));
+                  }}>
                   Remove
                 </button>
               </div>

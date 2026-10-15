@@ -20,15 +20,18 @@ function Inner({ id }: { id: string }) {
   // The content the editor started from, pinned: later reads never replace what the user is editing.
   const [base, setBase] = useState<AdminVersion | null>(null);
   const [epoch, setEpoch] = useState(0);
+  const [reloadError, setReloadError] = useState<unknown>(null);
 
   const version = useQuery({
     queryKey: ["admin", "version", id],
+    // A copy cached by the version page may be older than the stored content: always read again before starting.
+    refetchOnMount: "always",
     queryFn: async () => unwrap(await api.GET("/v1/admin/question-versions/{version_id}", { params: { path: { version_id: id } } })),
   });
-  if (version.data && (base === null || base.id !== version.data.id)) setBase(version.data);
+  // Pin only data from a settled read, never the cached copy that was on screen while the read was running.
+  if (version.data && !version.isFetching && (base === null || base.id !== version.data.id)) setBase(version.data);
 
-  if (version.isPending) return <p>Loading...</p>;
-  if (version.isError && !version.data) return <ProblemView error={version.error} onReload={() => void version.refetch()} />;
+  if (!base && version.isError) return <ProblemView error={version.error} onReload={() => void version.refetch()} />;
   if (!base) return <p>Loading...</p>;
 
   if (!isEditableStatus(base.status)) {
@@ -44,12 +47,21 @@ function Inner({ id }: { id: string }) {
 
   const reload = () => {
     void version.refetch().then((result) => {
-      if (result.data) {
-        setBase(result.data);
-        setEpoch((n) => n + 1);
+      if (result.isError || !result.data) {
+        // Keep the user's edits; say why nothing changed.
+        setReloadError(result.error ?? new Error("reload failed"));
+        return;
       }
+      setReloadError(null);
+      setBase(result.data);
+      setEpoch((n) => n + 1);
     });
   };
 
-  return <EditorForm key={`${epoch}`} version={base} onReload={reload} />;
+  return (
+    <div className="space-y-4">
+      <ProblemView error={reloadError} questionId={base.question_id} onReload={reload} />
+      <EditorForm key={`${epoch}`} version={base} onReload={reload} />
+    </div>
+  );
 }

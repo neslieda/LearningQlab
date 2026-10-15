@@ -33,9 +33,8 @@ describe("round trip over the pilot content", () => {
   it("is also identical through a real Editor instance", () => {
     const editor = new Editor({ extensions: buildExtensions() });
     try {
-      // Every 7th doc keeps the test quick; the schema test above covers all of them.
+      // One editor instance, every doc.
       const bad = docs
-        .filter((_, i) => i % 7 === 0)
         .filter(({ doc: d }) => {
           editor.commands.setContent(toEditorJSON(d as Doc), { emitUpdate: false });
           return JSON.stringify(fromEditorJSON(editor.getJSON() as JSONNode)) !== JSON.stringify(d);

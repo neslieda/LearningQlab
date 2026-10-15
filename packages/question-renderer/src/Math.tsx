@@ -22,7 +22,7 @@ export interface MathProps {
   display: boolean;
 }
 
-function renderLatex(latex: string, display: boolean): string | null {
+export function renderLatex(latex: string, display: boolean): string | null {
   // With trust off, KaTeX does not throw for \href, \url or \includegraphics: it prints the
   // command in red. Asking through a trust function lets us notice and show the fallback instead.
   let untrusted = false;

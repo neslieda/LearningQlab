@@ -1,0 +1,22 @@
+.qe-editor { display: block; max-width: 100%; }
+.qe-label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+.qe-toolbar { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 0.25rem; }
+.qe-toolbar button, .qe-popover button { min-width: 2rem; min-height: 2rem; padding: 0 0.5rem; border: 1px solid currentColor; border-radius: 0.25rem; background: transparent; color: inherit; cursor: pointer; }
+.qe-toolbar button[aria-pressed="true"] { background: Highlight; color: HighlightText; }
+.qe-editor button:focus-visible, .qe-editor input:focus-visible, .qe-editor textarea:focus-visible, .qe-content:focus-visible { outline: 3px solid Highlight; outline-offset: 2px; }
+.qe-content { min-height: 4rem; padding: 0.5rem; border: 1px solid currentColor; border-radius: 0.25rem; overflow-wrap: anywhere; overflow-x: auto; max-width: 100%; }
+.qe-content p { margin: 0 0 0.5rem; }
+.qe-content table { border-collapse: collapse; display: block; overflow-x: auto; max-width: 100%; }
+.qe-content td, .qe-content th { border: 1px solid currentColor; padding: 0.25rem 0.5rem; min-width: 3rem; }
+.qe-math-block { overflow-x: auto; max-width: 100%; margin: 0.5rem 0; }
+.qe-node-button { border: 1px dashed transparent; background: transparent; color: inherit; cursor: pointer; padding: 0 0.125rem; font: inherit; }
+.qe-node-button:hover { border-color: currentColor; }
+.qe-popover { display: block; margin: 0.25rem 0; padding: 0.5rem; border: 1px solid currentColor; border-radius: 0.25rem; background: Canvas; color: CanvasText; max-width: 100%; }
+.qe-popover input, .qe-popover textarea { display: block; width: 100%; box-sizing: border-box; font-family: monospace; }
+.qe-error { min-height: 1.25rem; color: #b00020; }
+.qe-preview { overflow-x: auto; max-width: 100%; padding: 0.25rem 0; }
+.qe-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.qe-chip { display: inline-block; padding: 0.125rem 0.5rem; border: 1px solid currentColor; border-radius: 1rem; }
+.qe-figure { margin: 0.5rem 0; }
+.qe-muted { opacity: 0.7; }
+@media (prefers-color-scheme: dark) { .qe-error { color: #ff8a80; } }

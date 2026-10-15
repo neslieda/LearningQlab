@@ -1,0 +1,46 @@
+{
+  "name": "@qlab/question-editor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Rich-text editor for question docs. The schema is built from src/manifest.json, generated from the backend Pydantic models (docs/slices/M1G-7B-EDITOR.md section 3). Consumed as source.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "sideEffects": ["*.css"],
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@qlab/api-client": "0.0.0",
+    "@qlab/question-renderer": "0.0.0",
+    "@tiptap/core": "3.31.4",
+    "@tiptap/pm": "3.31.4",
+    "@tiptap/react": "3.31.4",
+    "katex": "0.19.0"
+  },
+  "peerDependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.0",
+    "jsdom": "30.1.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "typescript": "5.9.3",
+    "vitest": "5.0.4"
+  }
+}

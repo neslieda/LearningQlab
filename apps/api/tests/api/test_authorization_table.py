@@ -319,7 +319,7 @@ def real_request(
     if number == 6:
         body = {"kind": "mcq", "selected_key": "A"}
     elif number == 11:
-        body = {"document": samples.mcq_document()}
+        body = {"document": samples.mcq_document(), "expected_content_sha256": sha}
     elif number in (13, 17):
         body = {"expected_content_sha256": sha}
     elif number in (14, 15, 18):

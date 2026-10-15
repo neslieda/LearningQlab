@@ -627,14 +627,26 @@ def test_the_history_lists_what_happened_in_order_without_the_action_prefix(
     reviewer, admin = api.headers(Role.REVIEWER), api.headers(Role.CONTENT_ADMIN)
     view = create(session, env, actor=api.actor(Role.CONTENT_ADMIN))
     edit = api.client.put(
-        vurl(view.id), headers=reviewer, json={"document": samples.mcq_document()}
+        vurl(view.id),
+        headers=reviewer,
+        json={
+            "document": samples.mcq_document(),
+            "expected_content_sha256": stored_hash(session, view.id),
+        },
     )
     assert edit.status_code == 200
     api.client.post(vurl(view.id, "/submit"), headers=reviewer)
     api.client.post(
         vurl(view.id, "/request-changes"), headers=reviewer, json={"reason": "fix the stem"}
     )
-    api.client.put(vurl(view.id), headers=reviewer, json={"document": samples.mcq_document()})
+    api.client.put(
+        vurl(view.id),
+        headers=reviewer,
+        json={
+            "document": samples.mcq_document(),
+            "expected_content_sha256": stored_hash(session, view.id),
+        },
+    )
     api.client.post(vurl(view.id, "/submit"), headers=reviewer)
     api.client.post(
         vurl(view.id, "/approve"),

@@ -118,7 +118,11 @@ def call(api: ApiHarness, session: Session, role: Role, op: str, view: Any) -> R
     sha = stored_hash(session, view.id)
     client = api.client
     if op == "edit":
-        return client.put(vurl(view.id), headers=headers, json={"document": samples.mcq_document()})
+        return client.put(
+            vurl(view.id),
+            headers=headers,
+            json={"document": samples.mcq_document(), "expected_content_sha256": sha},
+        )
     if op == "revision":
         return client.post(
             f"/v1/admin/questions/{qid(view.question_id)}/revisions", headers=headers
@@ -178,7 +182,14 @@ def test_a_question_goes_from_draft_to_a_corrected_published_version(
         return str(audit_for(session, version)[-1].actor)
 
     # edit the draft
-    edited = api.client.put(vurl(v1), headers=reviewer, json={"document": samples.mcq_document()})
+    edited = api.client.put(
+        vurl(v1),
+        headers=reviewer,
+        json={
+            "document": samples.mcq_document(),
+            "expected_content_sha256": stored_hash(session, v1),
+        },
+    )
     assert edited.status_code == 200
     assert edited.json()["status"] == "draft"
     assert stored_document(edited) == document(samples.mcq_document())
@@ -246,7 +257,10 @@ def test_a_question_goes_from_draft_to_a_corrected_published_version(
     edit2 = api.client.put(
         vurl(v2),
         headers=api.headers(Role.PLATFORM_ADMIN),
-        json={"document": samples.show_that_document()},
+        json={
+            "document": samples.show_that_document(),
+            "expected_content_sha256": stored_hash(session, v2),
+        },
     )
     assert edit2.status_code == 200
     assert newest_actor(v2) == api.actor(Role.PLATFORM_ADMIN)
@@ -481,7 +495,9 @@ def test_put_returns_the_stored_document_and_resets_the_status_to_draft(
     view = seed(session, connection, env, "needs_fix")
     new = samples.show_that_document()
     response = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": new}
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": new, "expected_content_sha256": stored_hash(session, view.id)},
     )
     assert response.status_code == 200
     body = response.json()
@@ -501,7 +517,9 @@ def test_put_with_math_that_does_not_render_is_invalid_document_and_changes_noth
     bad["stem"] = samples.line(samples.math(r"\undefinedcommand{x}"))
     before = snapshot(session, connection, view.question_id)
     response = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": bad}
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": bad, "expected_content_sha256": stored_hash(session, view.id)},
     )
     assert response.status_code == 422
     assert response.json()["code"] == "invalid_document"
@@ -520,7 +538,9 @@ def test_put_with_unknown_vocabulary_is_invalid_document_and_changes_nothing(
     view = seed(session, connection, env, "draft")
     before = snapshot(session, connection, view.question_id)
     response = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": bad}
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": bad, "expected_content_sha256": stored_hash(session, view.id)},
     )
     assert response.status_code == 422
     assert response.json()["code"] == "invalid_document"
@@ -534,7 +554,9 @@ def test_put_with_an_unknown_command_term_is_invalid_document(
     bad = samples.data_based_document()
     bad["parts"][0]["command_term"] = "frobnicate"
     response = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": bad}
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": bad, "expected_content_sha256": stored_hash(session, view.id)},
     )
     assert response.status_code == 422
     assert response.json()["code"] == "invalid_document"
@@ -549,8 +571,89 @@ def test_put_on_a_version_that_is_not_editable_is_invalid_transition(
     response = api.client.put(
         vurl(view.id),
         headers=api.headers(Role.CONTENT_ADMIN),
-        json={"document": samples.mcq_document()},
+        json={
+            "document": samples.mcq_document(),
+            "expected_content_sha256": stored_hash(session, view.id),
+        },
     )
+    assert response.status_code == 409
+    assert response.json()["code"] == "invalid_transition"
+    assert snapshot(session, connection, view.question_id) == before
+
+
+def put_with(
+    api: ApiHarness, view_id: uuid.UUID, doc: dict[str, Any], sha: str, role: Role = Role.REVIEWER
+) -> Response:
+    return api.client.put(
+        vurl(view_id),
+        headers=api.headers(role),
+        json={"document": doc, "expected_content_sha256": sha},
+    )
+
+
+@pytest.mark.parametrize("status", ["draft", "needs_fix"])
+def test_put_with_a_hash_that_is_not_the_stored_one_is_stale_content_and_changes_nothing(
+    api: ApiHarness, session: Session, connection: Connection, env: Env, status: str
+) -> None:
+    view = seed(session, connection, env, status)
+    before = snapshot(session, connection, view.question_id)
+    audit_before = len(audit_for(session, view.id))
+    response = put_with(api, view.id, samples.show_that_document(), "f" * 64)
+    assert response.status_code == 409
+    assert response.json()["code"] == "stale_content"
+    assert snapshot(session, connection, view.question_id) == before
+    assert status_of(connection, view.id) == status
+    assert len(audit_for(session, view.id)) == audit_before
+
+
+def test_two_editors_the_second_save_is_refused_until_they_read_again(
+    api: ApiHarness, session: Session, connection: Connection, env: Env
+) -> None:
+    view = seed(session, connection, env, "draft")
+    h = stored_hash(session, view.id)
+    first = put_with(api, view.id, samples.show_that_document(), h, Role.REVIEWER)
+    assert first.status_code == 200
+    new_hash = first.json()["content_sha256"]
+    assert new_hash != h
+    before = snapshot(session, connection, view.question_id)
+    second = put_with(api, view.id, samples.mcq_document(), h, Role.CONTENT_ADMIN)
+    assert second.status_code == 409
+    assert second.json()["code"] == "stale_content"
+    assert snapshot(session, connection, view.question_id) == before
+    assert svc.get_version(session, view.id).document == document(samples.show_that_document())
+    reread = api.client.get(vurl(view.id), headers=api.headers(Role.CONTENT_ADMIN))
+    assert reread.json()["content_sha256"] == new_hash
+    third = put_with(api, view.id, samples.mcq_document(), new_hash, Role.CONTENT_ADMIN)
+    assert third.status_code == 200
+    assert stored_document(third) == document(samples.mcq_document())
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [{}, {"expected_content_sha256": "A" * 64}, {"expected_content_sha256": "a" * 63}],
+    ids=["missing", "uppercase", "63 characters"],
+)
+def test_put_without_a_well_formed_hash_is_validation_failed_and_changes_nothing(
+    api: ApiHarness, session: Session, connection: Connection, env: Env, extra: dict[str, Any]
+) -> None:
+    view = seed(session, connection, env, "draft")
+    before = snapshot(session, connection, view.question_id)
+    response = api.client.put(
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": samples.mcq_document(), **extra},
+    )
+    assert response.status_code == 422
+    assert response.json()["code"] == "validation_failed"
+    assert snapshot(session, connection, view.question_id) == before
+
+
+def test_the_status_is_checked_before_the_hash(
+    api: ApiHarness, session: Session, connection: Connection, env: Env
+) -> None:
+    view = seed(session, connection, env, "published")
+    before = snapshot(session, connection, view.question_id)
+    response = put_with(api, view.id, samples.mcq_document(), "f" * 64, Role.CONTENT_ADMIN)
     assert response.status_code == 409
     assert response.json()["code"] == "invalid_transition"
     assert snapshot(session, connection, view.question_id) == before
@@ -586,7 +689,9 @@ def test_put_with_inconsistent_total_marks_is_validation_failed(
     bad = samples.data_based_document()
     bad["total_marks"] = 99
     response = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": bad}
+        vurl(view.id),
+        headers=api.headers(Role.REVIEWER),
+        json={"document": bad, "expected_content_sha256": stored_hash(session, view.id)},
     )
     assert response.status_code == 422
     assert response.json()["code"] == "validation_failed"
@@ -597,7 +702,7 @@ def test_put_on_an_unknown_version_is_404(api: ApiHarness) -> None:
     response = api.client.put(
         f"/v1/admin/question-versions/{unknown}",
         headers=api.headers(Role.REVIEWER),
-        json={"document": samples.data_based_document()},
+        json={"document": samples.data_based_document(), "expected_content_sha256": NO_HASH},
     )
     assert response.status_code == 404
     assert response.json()["code"] == "not_found"
@@ -624,7 +729,9 @@ def test_a_malformed_version_id_is_404_on_every_staff_endpoint(
     responses = [
         api.client.get(base, headers=headers),
         api.client.get(f"{base}/history", headers=headers),
-        api.client.put(base, headers=headers, json={"document": samples.data_based_document()}),
+        api.client.put(
+            base, headers=headers, json={"document": samples.data_based_document(), **sha}
+        ),
         api.client.post(f"{base}/submit", headers=headers),
         api.client.post(f"{base}/approve", headers=headers, json=sha),
         api.client.post(f"{base}/request-changes", headers=headers, json=reason),
@@ -821,9 +928,7 @@ def test_the_last_editor_is_whoever_last_edited_through_the_api(
     api: ApiHarness, session: Session, env: Env
 ) -> None:
     view = create(session, env, actor=api.actor(Role.CONTENT_ADMIN))
-    edit = api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": samples.mcq_document()}
-    )
+    edit = put_document(api, Role.REVIEWER, view.id, samples.mcq_document())
     assert edit.status_code == 200
     api.client.post(vurl(view.id, "/submit"), headers=api.headers(Role.CONTENT_ADMIN))
     # The content admin created it, but the reviewer edited it last.
@@ -870,9 +975,7 @@ def test_with_the_rule_on_an_edit_through_the_api_makes_the_editor_the_last_edit
 ) -> None:
     api = strict_api
     view = create(session, env, actor=api.actor(Role.CONTENT_ADMIN))
-    api.client.put(
-        vurl(view.id), headers=api.headers(Role.REVIEWER), json={"document": samples.mcq_document()}
-    )
+    put_document(api, Role.REVIEWER, view.id, samples.mcq_document())
     api.client.post(vurl(view.id, "/submit"), headers=api.headers(Role.CONTENT_ADMIN))
     body = {"expected_content_sha256": stored_hash(session, view.id)}
     refused = api.client.post(
@@ -946,7 +1049,13 @@ def duty_api(
 def put_document(
     api: ApiHarness, role: Role, version_id: uuid.UUID, doc: dict[str, Any]
 ) -> Response:
-    return api.client.put(vurl(version_id), headers=api.headers(role), json={"document": doc})
+    """Save as an editor who has just read the current content."""
+    current = api.client.get(vurl(version_id), headers=api.headers(role)).json()["content_sha256"]
+    return api.client.put(
+        vurl(version_id),
+        headers=api.headers(role),
+        json={"document": doc, "expected_content_sha256": current},
+    )
 
 
 def approve_as(api: ApiHarness, session: Session, role: Role, version_id: uuid.UUID) -> Response:

@@ -313,7 +313,10 @@ class VersionStateOut(Api):
 
 
 class UpdateDraftRequest(Api):
+    """Replace the content the caller started editing from (`stale_content` if it changed)."""
+
     document: QuestionDocument
+    expected_content_sha256: ContentHash
 
 
 class DecisionRequest(Api):

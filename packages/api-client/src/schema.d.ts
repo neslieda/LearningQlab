@@ -44,8 +44,9 @@ export interface paths {
         /**
          * Update Draft
          * @description Replace the content of a `draft` or `needs_fix` version; the result is `draft`.
-         *     422 `invalid_document` when the document uses unknown labels or math that does not render;
-         *     409 `invalid_transition` in any other status.
+         *     422 `invalid_document` when the document uses unknown labels or math that does not render,
+         *     or is not written in English; 409 `stale_content` when the stored content is no longer the
+         *     one the caller started from; 409 `invalid_transition` in any other status.
          */
         put: operations["adminUpdateDraft"];
         post?: never;
@@ -1418,9 +1419,14 @@ export interface components {
              */
             type: "text";
         };
-        /** UpdateDraftRequest */
+        /**
+         * UpdateDraftRequest
+         * @description Replace the content the caller started editing from (`stale_content` if it changed).
+         */
         UpdateDraftRequest: {
             document: components["schemas"]["QuestionDocument"];
+            /** Expected Content Sha256 */
+            expected_content_sha256: string;
         };
         /**
          * VersionStateOut

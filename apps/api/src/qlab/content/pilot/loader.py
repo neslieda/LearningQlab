@@ -253,7 +253,11 @@ def load_pilot(
                 report.skipped[ref] = "edited"
             else:
                 content.update_draft(
-                    session, actor=actor, version_id=latest.id, document=question.document
+                    session,
+                    actor=actor,
+                    version_id=latest.id,
+                    document=question.document,
+                    expected_content_sha256=latest.content_sha256,
                 )
                 report.updated.append(ref)
     audit.record(

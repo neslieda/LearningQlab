@@ -133,6 +133,12 @@ export function problemMessage(problem: ProblemLike): ProblemMessage {
       };
     case "working_version_exists":
       return { message: "A version is already being worked on", reasons: [], followUp: "question" };
+    case "own_content_rights_unavailable":
+      return {
+        message: "New questions cannot be created right now: the platform's content rights record is missing. Ask a platform admin.",
+        reasons: [],
+        followUp: null,
+      };
     case "not_found":
       return { message: "Not found or not visible to you", reasons: [], followUp: null };
     default:

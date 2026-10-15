@@ -127,7 +127,11 @@ def get_version(request: Request, caller: Caller, version_id: str) -> AdminVersi
     status_code=201,
     response_model=AdminVersion,
     responses={
-        **CONFLICT,
+        409: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "The platform's own-content rights record is missing or does not "
+            "permit display (`own_content_rights_unavailable`); nothing was created.",
+        },
         404: {
             "model": AUTH_ERRORS[404]["model"],
             "description": "No such programme, subject or syllabus version (`not_found`).",

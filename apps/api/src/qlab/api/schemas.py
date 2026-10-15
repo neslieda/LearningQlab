@@ -88,6 +88,25 @@ class ExamSectionOut(Api):
     title: str
 
 
+class CatalogVersionOut(Api):
+    code: str
+    title: str
+
+
+class CatalogSubjectOut(Api):
+    """A subject questions can be written for, and its syllabus versions."""
+
+    program: str
+    program_name: str
+    subject: str
+    subject_name: str
+    versions: tuple[CatalogVersionOut, ...] = Field(description="Newest first.")
+
+
+class CatalogOut(Api):
+    items: tuple[CatalogSubjectOut, ...]
+
+
 class SyllabusOut(Api):
     """One syllabus version: its node tree (parents before children, in syllabus order) and its
     exam format vocabulary."""

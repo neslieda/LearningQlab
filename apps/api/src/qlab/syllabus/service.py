@@ -296,3 +296,37 @@ def get_tree(
         exam_sections=tuple((s.code, s.title) for s in definition.sections),
         command_terms=tuple(definition.command_terms),
     )
+
+
+@dataclass(frozen=True)
+class CatalogSubject:
+    program: str
+    program_name: str
+    subject: str
+    subject_name: str
+    versions: tuple[tuple[str, str], ...]  # (code, title), newest first
+
+
+def list_catalog(session: Session) -> list[CatalogSubject]:
+    """Every subject that has at least one syllabus version with an exam format (the only ones
+    questions can be written against), ordered by programme and subject code. Versions are
+    newest first (greatest id, as in `get_tree`)."""
+    rows = session.execute(
+        select(Program, Subject, SyllabusVersion)
+        .join(Subject, Subject.program_id == Program.id)
+        .join(SyllabusVersion, SyllabusVersion.subject_id == Subject.id)
+        .join(ExamFormat, ExamFormat.syllabus_version_id == SyllabusVersion.id)
+        .order_by(Program.code, Subject.code, SyllabusVersion.id.desc())
+    ).all()
+    catalog: dict[uuid.UUID, CatalogSubject] = {}
+    for program, subject, version in rows:
+        entry = catalog.get(subject.id)
+        versions = (entry.versions if entry else ()) + ((version.code, version.title),)
+        catalog[subject.id] = CatalogSubject(
+            program=program.code,
+            program_name=program.name,
+            subject=subject.code,
+            subject_name=subject.name,
+            versions=versions,
+        )
+    return list(catalog.values())

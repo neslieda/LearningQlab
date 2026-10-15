@@ -58,6 +58,7 @@ ENDPOINT_POLICY: Final[Mapping[tuple[str, str], Access]] = MappingProxyType(
     {
         ("GET", "/healthz"): PUBLIC,
         ("GET", "/v1/me"): EVERYONE,
+        ("GET", "/v1/programs"): EVERYONE,
         ("GET", "/v1/programs/{program}/subjects/{subject}/syllabus"): EVERYONE,
         ("GET", "/v1/questions"): EVERYONE,
         ("GET", "/v1/questions/{question_id}"): EVERYONE,

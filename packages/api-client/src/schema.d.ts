@@ -307,6 +307,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/programs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Programs
+         * @description Programmes, subjects and syllabus versions that questions can be written against.
+         */
+        get: operations["listPrograms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/programs/{program}/subjects/{subject}/syllabus": {
         parameters: {
             query?: never;
@@ -553,6 +573,37 @@ export interface components {
              * @enum {string}
              */
             type: "bullet_list";
+        };
+        /** CatalogOut */
+        CatalogOut: {
+            /** Items */
+            items: components["schemas"]["CatalogSubjectOut"][];
+        };
+        /**
+         * CatalogSubjectOut
+         * @description A subject questions can be written for, and its syllabus versions.
+         */
+        CatalogSubjectOut: {
+            /** Program */
+            program: string;
+            /** Program Name */
+            program_name: string;
+            /** Subject */
+            subject: string;
+            /** Subject Name */
+            subject_name: string;
+            /**
+             * Versions
+             * @description Newest first.
+             */
+            versions: components["schemas"]["CatalogVersionOut"][];
+        };
+        /** CatalogVersionOut */
+        CatalogVersionOut: {
+            /** Code */
+            code: string;
+            /** Title */
+            title: string;
         };
         /** CellAttrs */
         CellAttrs: {
@@ -2245,13 +2296,13 @@ export interface operations {
                     "application/json": components["schemas"]["Problem"];
                 };
             };
-            /** @description `invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`. */
+            /** @description The platform's own-content rights record is missing or does not permit display (`own_content_rights_unavailable`); nothing was created. */
             409: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["Problem"];
+                    "application/json": components["schemas"]["Problem"];
                 };
             };
             /** @description The request is not valid (`validation_failed`). */
@@ -2388,6 +2439,53 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPrograms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogOut"];
                 };
             };
             /** @description No acceptable token (`unauthenticated`). */

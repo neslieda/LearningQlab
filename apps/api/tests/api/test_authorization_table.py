@@ -57,6 +57,7 @@ TABLE: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
     (18, "POST", QV + "/withdraw", PUBLISHERS),
     (19, "POST", QV + "/republish", PUBLISHERS),
     (20, "POST", "/v1/admin/questions", STAFF),
+    (21, "GET", "/v1/programs", EVERYONE),
 ]
 NON_PUBLIC = [row for row in TABLE if row[3] is not None]
 
@@ -82,9 +83,9 @@ def call(client: TestClient, method: str, template: str, headers: dict[str, str]
 # --- the table in the code is the table in the specification ----------------------------------
 
 
-def test_the_specification_table_has_twenty_distinct_endpoints() -> None:
-    assert [row[0] for row in TABLE] == list(range(1, 21))
-    assert len({(m, t) for _, m, t, _ in TABLE}) == 20
+def test_the_specification_table_has_twenty_one_distinct_endpoints() -> None:
+    assert [row[0] for row in TABLE] == list(range(1, 22))
+    assert len({(m, t) for _, m, t, _ in TABLE}) == 21
 
 
 def test_the_policy_has_exactly_the_endpoints_of_the_specification() -> None:
@@ -302,6 +303,7 @@ POSITIVE: Final[dict[int, tuple[str, int]]] = {
     18: ("published", 200),
     19: ("withdrawn", 200),
     20: ("draft", 201),
+    21: ("published", 200),
 }
 
 

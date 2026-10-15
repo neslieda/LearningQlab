@@ -15,6 +15,9 @@ from qlab.api.schemas import (
     CODE_PATTERN,
     DEFAULT_PAGE_SIZE,
     MAX_PAGE_SIZE,
+    CatalogOut,
+    CatalogSubjectOut,
+    CatalogVersionOut,
     CheckRequest,
     CheckResult,
     ExamSectionOut,
@@ -34,6 +37,25 @@ Limit = Annotated[int, Query(ge=1, le=MAX_PAGE_SIZE)]
 # Codes of exam sections, syllabus nodes and versions: nothing else reaches a query.
 Code = Annotated[str, Query(max_length=120, pattern=CODE_PATTERN)]
 PathCode = Annotated[str, Path(max_length=120, pattern=CODE_PATTERN)]
+
+
+@router.get("/v1/programs", response_model=CatalogOut, operation_id="listPrograms")
+def list_programs(request: Request, caller: Caller) -> CatalogOut:
+    """Programmes, subjects and syllabus versions that questions can be written against."""
+    with deps.reading(request) as session:
+        entries = syllabus.list_catalog(session)
+    return CatalogOut(
+        items=tuple(
+            CatalogSubjectOut(
+                program=e.program,
+                program_name=e.program_name,
+                subject=e.subject,
+                subject_name=e.subject_name,
+                versions=tuple(CatalogVersionOut(code=c, title=t) for c, t in e.versions),
+            )
+            for e in entries
+        )
+    )
 
 
 @router.get(

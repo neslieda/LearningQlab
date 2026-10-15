@@ -21,6 +21,9 @@
    - Bilinmeyen program, ders ya da sürüm: 404 `not_found`.
    - Belge sorunları: 422 `invalid_document` (yerleriyle).
    - Audit: `question_version.created` (var olan).
+4. **Katalog** (2026-10-15 eklendi; ekranın programı sabit yazmadan bulabilmesi için). `GET /v1/programs` (giriş yapmış her hesap,
+   müfredat okumasıyla aynı yetki): `{items: [{program, program_name, subject, subject_name, versions: [{code, title}]}]}`. Yalnızca
+   sınav biçimi olan müfredat sürümleri (soru yazılabilenler); sürümler en yeniden eskiye. Salt okunur.
 
 ## 2. Ekran
 

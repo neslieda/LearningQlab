@@ -118,6 +118,10 @@ class DocumentProblem:
     location: str | None = None
 
 
+MAX_PROBLEMS = 50
+MAX_LOCATION_CHARS = 500
+
+
 class OwnContentRightsUnavailable(ContentError):
     """The platform's own-content rights record is missing, ambiguous or does not permit display:
     a new question cannot be created (fail-closed, D-58)."""
@@ -170,6 +174,19 @@ class InvalidDocument(ContentError):
     with where it is."""
 
     def __init__(self, errors: tuple[DocumentProblem, ...]) -> None:
+        # Bounded however hostile the document: at most MAX_PROBLEMS items, short locations.
+        if len(errors) > MAX_PROBLEMS:
+            more = len(errors) - (MAX_PROBLEMS - 1)
+            errors = (
+                *errors[: MAX_PROBLEMS - 1],
+                DocumentProblem(f"... and {more} more problems", None),
+            )
+        errors = tuple(
+            DocumentProblem(e.message, e.location[:MAX_LOCATION_CHARS])
+            if e.location is not None and len(e.location) > MAX_LOCATION_CHARS
+            else e
+            for e in errors
+        )
         super().__init__("; ".join(e.message for e in errors))
         self.errors = errors
 

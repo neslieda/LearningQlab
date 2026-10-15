@@ -510,6 +510,9 @@ def check(document: QuestionDocument) -> tuple[str, ...]:
     return tuple(message for _, message in _problems(document))
 
 
+MAX_PLACES_PER_NODE = 5
+
+
 def check_located(document: QuestionDocument) -> tuple[MathProblem, ...]:
     """The same problems as `check`, one per place the offending node occurs (the same node
     used twice is reported at both places). A problem about the whole document, or a node whose
@@ -525,5 +528,5 @@ def check_located(document: QuestionDocument) -> tuple[MathProblem, ...]:
         if not places:
             located.append(MathProblem(message, None))
         else:
-            located.extend(MathProblem(message, place) for place in places)
+            located.extend(MathProblem(message, place) for place in places[:MAX_PLACES_PER_NODE])
     return tuple(located)

@@ -125,17 +125,18 @@ def create_question(
     if rights_record_id is None:
         raise content.OwnContentRightsUnavailable("no own-content rights record exists")
     try:
-        created = content.create_question(
-            session,
-            actor=actor,
-            document=document,
-            rights_record_id=rights_record_id,
-            syllabus_version_id=syllabus_version_id,
-            origin=content.Origin.AUTHORED,
-            source_ref=None,
-        )
+        syllabus.get_vocabulary(session, syllabus_version_id)
     except LookupError:  # a version without an exam format has no vocabulary
         raise errors.not_found() from None
+    created = content.create_question(
+        session,
+        actor=actor,
+        document=document,
+        rights_record_id=rights_record_id,
+        syllabus_version_id=syllabus_version_id,
+        origin=content.Origin.AUTHORED,
+        source_ref=None,
+    )
     return _version(session, created, content.get_checks(session, created.id))
 
 

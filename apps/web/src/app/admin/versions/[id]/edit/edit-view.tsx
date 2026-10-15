@@ -9,7 +9,7 @@ import { useApi } from "@/lib/api";
 import { isEditableStatus } from "@/lib/decisions";
 import { ProblemView } from "../../../problem-view";
 import { StaffGate } from "../../../staff-gate";
-import { EditorForm, consumeCreated } from "./editor-form";
+import { EditorForm, wasJustCreated } from "./editor-form";
 
 export function EditView({ id }: { id: string }) {
   return <StaffGate>{() => <Inner id={id} />}</StaffGate>;
@@ -21,8 +21,8 @@ function Inner({ id }: { id: string }) {
   const [base, setBase] = useState<AdminVersion | null>(null);
   const [epoch, setEpoch] = useState(0);
   const [reloadError, setReloadError] = useState<unknown>(null);
-  // True once, when this page was opened by creating the question.
-  const [created] = useState(() => consumeCreated(id));
+  // True when this page was opened by creating the question a moment ago.
+  const [created] = useState(() => wasJustCreated(id));
 
   const version = useQuery({
     queryKey: ["admin", "version", id],

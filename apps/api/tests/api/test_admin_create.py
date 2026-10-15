@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import uuid
 from datetime import timedelta
 from typing import Any
 
@@ -346,3 +347,86 @@ def test_turkish_locations_reach_the_client(api: ApiHarness, session: Session, e
         "document.outcome",
         "document.parts.1.mark_points.0.content.content.0.content.0.text",
     ]
+
+
+# --- a hostile document cannot amplify the 422 -------------------------------------------------
+
+PROBLEM_CAP = 50
+
+
+def with_inlines(*inlines: Any) -> dict[str, Any]:
+    document = samples.data_based_document()
+    document["parts"][1]["mark_points"][0]["content"] = samples.line(*inlines)
+    return document
+
+
+def assert_capped(response: Response, *, total: int | None = None) -> None:
+    assert response.status_code == 422
+    items = response.json()["errors"]
+    assert len(items) <= PROBLEM_CAP
+    assert all(len(i.get("location") or "") <= 500 for i in items)
+    assert len(response.content) < 20_000
+    if total is not None:
+        assert len(items) == PROBLEM_CAP
+        assert items[-1]["message"] == f"... and {total - (PROBLEM_CAP - 1)} more problems"
+        assert items[-1].get("location") is None
+
+
+def test_many_turkish_text_nodes_give_a_capped_422(
+    api: ApiHarness, session: Session, env: Env
+) -> None:
+    own_content(session)
+    response = post(api, body(with_inlines(*[samples.text("ş")] * 3000)))
+    assert_capped(response, total=3000)
+
+
+@pytest.mark.node
+def test_many_distinct_bad_math_nodes_give_a_capped_422(
+    api: ApiHarness, session: Session, env: Env
+) -> None:
+    own_content(session)
+    nodes = [samples.math(rf"\def\q{{{i}}}") for i in range(300)]
+    response = post(api, body(with_inlines(*nodes)))
+    assert_capped(response)
+    assert response.json()["errors"][-1]["message"].endswith("more problems")
+
+
+@pytest.mark.node
+def test_one_bad_math_node_repeated_reports_at_most_five_places(
+    api: ApiHarness, session: Session, env: Env
+) -> None:
+    own_content(session)
+    response = post(api, body(with_inlines(*[samples.math(r"\def\q{1}")] * 300)))
+    assert_capped(response)
+    assert len(response.json()["errors"]) == 5
+
+
+def test_a_version_without_exam_format_is_not_found_when_newest(
+    api: ApiHarness, session: Session, env: Env
+) -> None:
+    own_content(session)
+    session.execute(
+        text(
+            "INSERT INTO syllabus_version (id, subject_id, code, title, status) "
+            "SELECT :id, s.id, '2099', 'Newest', 'synthetic' FROM subject s "
+            "JOIN program p ON p.id = s.program_id WHERE p.code = 'ib_dp' AND s.code = 'physics'"
+        ),
+        {"id": uuid.uuid7()},
+    )
+    session.flush()
+    response = post(api, body())  # no `version`: the newest, which has no exam format
+    assert response.status_code == 404
+    assert response.json()["code"] == "not_found"
+
+
+def test_a_lookup_error_from_content_is_not_turned_into_not_found(
+    api: ApiHarness, session: Session, env: Env, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    own_content(session)
+
+    def boom(*args: Any, **kwargs: Any) -> None:
+        raise LookupError("unrelated")
+
+    monkeypatch.setattr(svc, "create_question", boom)
+    response = post(api, body())
+    assert response.status_code == 500

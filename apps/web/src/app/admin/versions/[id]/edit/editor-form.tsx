@@ -67,12 +67,11 @@ const CLASS_OPTIONS: Array<{ value: QuestionClass; text: string }> = [
   { value: "data_based", text: "data based" },
 ];
 
-// The one place the page says "Created": set before leaving the new-question page, read once by the edit page.
-let createdId: string | null = null;
-export function consumeCreated(id: string): boolean {
-  const hit = createdId === id;
-  if (hit) createdId = null;
-  return hit;
+// Set just before leaving the new-question page. Reading it changes nothing (a React StrictMode double render must see
+// the same answer); it only counts for a few seconds, so a later visit to the page does not say "Created" again.
+let created: { id: string; at: number } | null = null;
+export function wasJustCreated(id: string): boolean {
+  return created !== null && created.id === id && Date.now() - created.at < 5000;
 }
 
 type Tab = "form" | "preview";
@@ -86,7 +85,7 @@ export function EditorForm({ version, create, onReload, initialAnnounce = "" }: 
   const [doc, setDoc] = useState<QuestionDocument>(() => version?.document ?? newDocument("short_structured"));
   // What the stored content is, as far as this page knows: the document it started from (or last saved) and its digest.
   const [saved, setSaved] = useState<{ json: string; sha: string }>(() => ({ json: JSON.stringify(doc), sha: version?.content_sha256 ?? "" }));
-  const [createdTo, setCreatedTo] = useState<string | null>(null);
+  const createdRef = useRef(false);
   const [tab, setTab] = useState<Tab>("form");
   const [problems, setProblems] = useState<EditProblem[]>([]);
   const [attempt, setAttempt] = useState(0);
@@ -99,7 +98,7 @@ export function EditorForm({ version, create, onReload, initialAnnounce = "" }: 
   const summary = useRef<HTMLDivElement>(null);
 
   const dirty = useMemo(() => JSON.stringify(doc) !== saved.json, [doc, saved.json]);
-  useLeaveGuard(dirty);
+  const releaseGuard = useLeaveGuard(dirty);
 
   // The vocabulary comes from the syllabus version the document was validated against.
   const ref = version?.syllabus ?? create ?? { program: "", subject: "", version: "" };
@@ -160,11 +159,13 @@ export function EditorForm({ version, create, onReload, initialAnnounce = "" }: 
       setSaved({ json: JSON.stringify(vars.document), sha: result.content_sha256 });
       setNotice("");
       if (create) {
-        // Leave only after the leave guard is off (the effect below), and say "Created" on the edit page.
-        createdId = result.id;
+        // The question exists now: the form stays locked for good (a second Create would make a second question).
+        createdRef.current = true;
         queryClient.setQueryData(["admin", "version", result.id], result);
         await queryClient.invalidateQueries({ queryKey: ["admin"] });
-        setCreatedTo(result.id);
+        created = { id: result.id, at: Date.now() };
+        await releaseGuard();
+        router.push(`/admin/versions/${result.id}/edit`);
         return;
       }
       setAnnounce("Saved");
@@ -186,6 +187,7 @@ export function EditorForm({ version, create, onReload, initialAnnounce = "" }: 
       }
     },
     onSettled: () => {
+      if (createdRef.current) return; // stays locked
       submitting.current = false;
       setLocked(false);
     },
@@ -195,26 +197,9 @@ export function EditorForm({ version, create, onReload, initialAnnounce = "" }: 
     if (attempt > 0) summary.current?.focus();
   }, [attempt]);
 
-  useEffect(() => {
-    if (!createdTo || dirty) return;
-    // Switching the leave guard off takes its marker entry off the history (an asynchronous "back"). Follow that,
-    // otherwise the back step would undo the navigation; a timer covers the case where there was no marker.
-    let done = false;
-    const go = () => {
-      if (done) return;
-      done = true;
-      router.push(`/admin/versions/${createdTo}/edit`);
-    };
-    window.addEventListener("popstate", go, { once: true });
-    const timer = setTimeout(go, 250);
-    return () => {
-      window.removeEventListener("popstate", go);
-      clearTimeout(timer);
-    };
-  }, [createdTo, dirty, router]);
 
   function onSave() {
-    if (submitting.current) return;
+    if (submitting.current || createdRef.current) return;
     setAnnounce("");
     setError(null);
     const found = [...(create ? createProblems(doc, { sections: create.syllabus.exam_sections.map((x) => x.code), leaves: leafNodes.map((n) => n.code) }) : []), ...clientProblems(doc)];

@@ -259,6 +259,27 @@ describe("parts", () => {
     expect(dropped).toBe(2);
   });
 
+  it("drops solution-model answers bound to a removed part and counts them", () => {
+    const d = threeParts();
+    d.solution_model = {
+      parameters: [],
+      constants: [],
+      steps: [{ id: "s1", name: "s_one", expr: "1", unit: "" }],
+      answers: [{ part_id: "a", step: "s1" }, { part_id: "c", step: "s1" }],
+    } as QuestionDocument["solution_model"];
+    const { doc: next, dropped } = removePart(d, 2);
+    expect(next.solution_model!.answers).toEqual([{ part_id: "a", step: "s1" }]);
+    expect(next.solution_model!.steps).toHaveLength(1);
+    expect(dropped).toBe(1);
+    expect(movePart(d, 0, 1).doc.solution_model!.answers).toHaveLength(2);
+  });
+
+  it("avoids an id whose first mark point id is taken", () => {
+    const d = threeParts();
+    d.parts[0] = { ...d.parts[0]!, mark_points: [{ ...d.parts[0]!.mark_points[0]!, id: "d-m1" }] };
+    expect(addPart(d).parts[3]!.id).toBe("d-2");
+  });
+
   it("keeps at least one part", () => {
     const d = doc();
     d.parts = [part("a", 1, ["a-m1"])];
@@ -273,8 +294,8 @@ describe("parts", () => {
     expect(d.parts[0]!.depends_on).toEqual([]);
     expect(d.parts[2]!.ecf_from).toEqual(["b", "a"]);
     expect(dropped).toBe(2);
-    expect(referenceNotice("Moving", "(a)", dropped)).toBe("Moving part (a) removed 2 references to an earlier part.");
-    expect(referenceNotice("Moving", "(a)", 1)).toBe("Moving part (a) removed 1 reference to an earlier part.");
+    expect(referenceNotice("Moving", "(a)", dropped)).toBe("Moving part (a): 2 references to a part that no longer applies were removed.");
+    expect(referenceNotice("Moving", "(a)", 1)).toBe("Moving part (a): 1 reference to a part that no longer applies was removed.");
     expect(referenceNotice("Moving", "(a)", 0)).toBe("");
   });
 
@@ -324,6 +345,7 @@ describe("error locations", () => {
     expect(matchField("document.parts.1.mark_points.0.solution_step", d())?.field).toBe("parts[1].mark_points[0].content");
     expect(matchField("document.parts.1.notes.0.mark_point_id", d())?.field).toBe("parts[1].notes[0].mark_point_id");
     expect(matchField("document.parts.1.depends_on", d())?.field).toBe("parts[1].ecf_from");
+    expect(matchField("document.secondary_syllabus_nodes.0", d())?.field).toBe("primary_syllabus_node");
   });
 
   it("returns null for the whole document and for unknown paths", () => {

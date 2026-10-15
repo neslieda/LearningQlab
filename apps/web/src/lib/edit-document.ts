@@ -230,14 +230,26 @@ export interface PartChange {
 
 function rebuild(doc: QuestionDocument, parts: readonly Part[]): PartChange {
   const pruned = pruneReferences(relabel(parts));
-  return { doc: withTotal({ ...doc, parts: pruned.parts }), dropped: pruned.dropped };
+  let dropped = pruned.dropped;
+  let solution_model = doc.solution_model;
+  if (solution_model) {
+    // An answer binding names a part; one whose part is gone would be rejected. (Steps and parameters belong to no part.)
+    const ids = new Set(pruned.parts.map((p) => p.id));
+    const answers = solution_model.answers.filter((a) => ids.has(a.part_id));
+    if (answers.length !== solution_model.answers.length) {
+      dropped += solution_model.answers.length - answers.length;
+      solution_model = { ...solution_model, answers };
+    }
+  }
+  return { doc: withTotal({ ...doc, parts: pruned.parts, solution_model }), dropped };
 }
 
 function newPartId(doc: QuestionDocument, label: string): string {
   const taken = new Set(doc.parts.map((p) => p.id));
   const pointIds = allPointIds(doc);
   let id = label;
-  for (let n = 2; taken.has(id) || pointIds.has(id); n++) id = `${label}-${n}`;
+  // The first mark point of the part is `<id>-m1`: that must be free too.
+  for (let n = 2; taken.has(id) || pointIds.has(id) || pointIds.has(`${id}-m1`); n++) id = `${label}-${n}`;
   return id;
 }
 
@@ -287,7 +299,7 @@ export function movePart(doc: QuestionDocument, partIndex: number, delta: -1 | 1
 /** Text of the notice after a removal or move; empty when no reference changed. */
 export function referenceNotice(action: "Moving" | "Removing", tag: string, dropped: number): string {
   if (dropped === 0) return "";
-  return `${action} part ${tag} removed ${dropped} ${dropped === 1 ? "reference" : "references"} to an earlier part.`;
+  return `${action} part ${tag}: ${dropped} ${dropped === 1 ? "reference" : "references"} to a part that no longer applies ${dropped === 1 ? "was" : "were"} removed.`;
 }
 
 // ---------------------------------------------------------------------------------------------- new question
@@ -407,7 +419,7 @@ const FIELD_PATTERNS: FieldPattern[] = [
   [/^calculator/, () => "Calculator"],
   [/^total_marks/, () => "Total marks"],
   [/^exam_section/, () => "Exam section"],
-  [/^(primary|secondary)_syllabus_nodes?/, () => "Syllabus node"],
+  [/^primary_syllabus_node/, () => "Syllabus node"],
   [/^mcq\.explanation/, () => "Explanation"],
   [/^mcq\.correct_key/, () => "Correct option"],
   [/^mcq\.column_headers\[(\d+)\]/, (m) => `Column header ${Number(m[1]) + 1}`],
@@ -423,6 +435,7 @@ const FIELD_PATTERNS: FieldPattern[] = [
 
 /** Paths inside an item that has no editor of its own are shown at the item's text field (the nearest editable one). */
 const NEAREST: Array<[RegExp, string]> = [
+  [/^secondary_syllabus_nodes(?:\[\d+\])?/, "primary_syllabus_node"],
   [/^(parts\[\d+\]\.mark_points\[\d+\])(?:\.|$)/, "$1.content"],
   [/^(parts\[\d+\]\.notes\[\d+\])(?:\.|$)/, "$1.content"],
   [/^(parts\[\d+\])\.depends_on/, "$1.ecf_from"],

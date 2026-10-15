@@ -73,6 +73,16 @@ export function availableActions(
   return out.map((id) => ({ id, label: ACTION_LABEL[id] }));
 }
 
+/** Statuses in which the content can be edited in the browser (docs/slices/M1G-7B-EDITOR.md section 4). */
+export function isEditableStatus(status: VersionStatus | string): boolean {
+  return status === "draft" || status === "needs_fix";
+}
+
+/** Staff may edit a `draft` or `needs_fix` version. The API enforces this too. */
+export function canEdit(status: VersionStatus | string, roles: readonly Role[] | readonly string[]): boolean {
+  return isStaff(roles) && isEditableStatus(status);
+}
+
 /** Version statuses that count as "being worked on" (not published, withdrawn or rejected). */
 export function isWorkingStatus(status: VersionStatus | string): boolean {
   return ["draft", "auto_checking", "needs_fix", "in_review", "approved"].includes(status);
@@ -81,7 +91,7 @@ export function isWorkingStatus(status: VersionStatus | string): boolean {
 export interface ProblemLike {
   status?: number;
   code?: string;
-  errors?: ReadonlyArray<{ code: string }>;
+  errors?: ReadonlyArray<{ code: string; message?: string; location?: string | null }>;
 }
 
 export type FollowUp = "reload" | "sign-in" | "question" | null;

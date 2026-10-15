@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AdminVersion } from "@qlab/api-client";
 import { unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
-import { REASON_WARNING, availableActions, type DecisionAction } from "@/lib/decisions";
+import { REASON_WARNING, availableActions, canEdit, type DecisionAction } from "@/lib/decisions";
 import { ProblemView } from "../../problem-view";
 
 const NEEDS_REASON: readonly DecisionAction[] = ["request_changes", "reject", "withdraw", "republish"];
@@ -117,9 +118,15 @@ export function DecisionPanel({ version, roles, hasWorkingVersion, questionLoade
       <h2 id="decision-heading" className="text-lg font-medium">
         Decision
       </h2>
-      {status === "needs_fix" ? <p>Waiting for changes</p> : null}
+      {status === "needs_fix" && canEdit(status, roles) ? (
+        <p>
+          <Link href={`/admin/versions/${id}/edit`} className="underline">
+            Edit to fix
+          </Link>
+        </p>
+      ) : null}
       {status === "auto_checking" ? <p>Checks are running. No decision is available yet.</p> : null}
-      {actions.length === 0 && status !== "needs_fix" && status !== "auto_checking" ? <p>No decision is available to you for this version.</p> : null}
+      {actions.length === 0 && !(status === "needs_fix" && canEdit(status, roles)) && status !== "auto_checking" ? <p>No decision is available to you for this version.</p> : null}
       {showReason ? (
         <div>
           <label htmlFor={`${uid}-reason`} className="block font-medium">

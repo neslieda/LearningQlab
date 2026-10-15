@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { QuestionDocumentView } from "@qlab/question-renderer";
 import { formatTime, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
-import { isWorkingStatus } from "@/lib/decisions";
+import { canEdit, isWorkingStatus } from "@/lib/decisions";
 import { ProblemView } from "../../problem-view";
 import { StaffGate } from "../../staff-gate";
 import { ScrollBox, StatusBadge } from "../../status-badge";
@@ -69,6 +69,13 @@ function Inner({ id, roles, accountId }: { id: string; roles: readonly string[];
       </p>
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold">Version {v.version_no}</h1>
+        {canEdit(v.status, roles) ? (
+          <p>
+            <Link href={`/admin/versions/${v.id}/edit`} className="inline-block rounded border border-[var(--page-border)] px-3 py-1.5">
+              Edit
+            </Link>
+          </p>
+        ) : null}
         <h2 id="version-status-heading" tabIndex={-1} className="flex flex-wrap items-center gap-2 text-base font-normal">
           <span className="sr-only">Status</span>
           <StatusBadge status={v.status} />

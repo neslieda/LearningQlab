@@ -499,12 +499,13 @@ test.describe("decisions", () => {
     for (const n of ["Withdraw", "Republish"]) await expect(page.getByRole("button", { name: n })).toHaveCount(0);
   });
 
-  test("needs_fix shows no decision buttons and says it is waiting", async ({ page }) => {
+  test("needs_fix shows no decision buttons and offers the Edit to fix link", async ({ page }) => {
     const v = version({ status: "needs_fix" });
     await mockApi(page, ["platform_admin"], versionServer(v).handler);
     await signIn(page);
     await page.goto(`/admin/versions/${v.id}`);
-    await expect(page.getByText("Waiting for changes")).toBeVisible();
+    await expect(page.getByText("Waiting for changes")).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Edit to fix" })).toHaveAttribute("href", `/admin/versions/${v.id}/edit`);
     for (const n of ["Submit for review", "Approve", "Request changes", "Reject", "Publish", "Withdraw", "Republish", "Open revision"])
       await expect(page.getByRole("button", { name: n })).toHaveCount(0);
   });

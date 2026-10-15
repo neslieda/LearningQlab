@@ -2,7 +2,7 @@
 // The return shape of availableActions is not fixed by the spec, so results are flattened to the
 // set of action names the spec defines ("Submit for review", "Approve", ...).
 import { describe, expect, it } from "vitest";
-import { availableActions, problemMessage } from "../../src/lib/decisions";
+import { availableActions, canEdit, problemMessage } from "../../src/lib/decisions";
 
 const STATUSES = [
   "draft",
@@ -209,5 +209,14 @@ describe("problemMessage", () => {
     expect(r.message).toContain(code);
     expect(r.followUp).toBeNull();
     expect(r.reasons).toEqual([]);
+  });
+});
+
+describe("canEdit (slice 7b: Edit button and Edit to fix link)", () => {
+  it.each(STATUSES)("status %s: only staff may edit, and only draft and needs_fix", (status) => {
+    const editable = status === "draft" || status === "needs_fix";
+    for (const role of ["reviewer", "content_admin", "platform_admin"]) expect(canEdit(status, [role])).toBe(editable);
+    for (const role of ["student", "teacher", "org_admin"]) expect(canEdit(status, [role])).toBe(false);
+    expect(canEdit(status, [])).toBe(false);
   });
 });

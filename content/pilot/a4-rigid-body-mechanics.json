@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/a4-rigid-body-mechanics-pilot-questions.md",
- "source_sha256": "178a5ee71522afe64b5e305d79d8d9c6e5641815bd1450797878471f1dafb250",
+ "source_sha256": "93053ebbc770397d29b6e3ee587d47d29868c61d3a47edc4703de70c438a84d4",
  "questions": [
   {
    "source_ref": "pilot/a4-rigid-body-mechanics#1",
@@ -17,7 +17,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Tork ve dönme dengesi",
+    "outcome": "Torque and rotational equilibrium",
     "stem": {
      "type": "doc",
      "content": [
@@ -54,7 +54,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Solda düşey duvar; duvara menteşeyle bağlı, sağa doğru uzanan 3.0 m'lik yatay kiriş. Menteşeden 2.0 m uzakta kirişten yukarı çıkan düşey kablo. Kirişin sağ (serbest) ucundan aşağı sarkan lamba. Diagram not to scale.",
+      "description": "On the left a vertical wall; a horizontal 3.0 m beam hinged to the wall and extending to the right. A vertical cable rising from the beam at 2.0 m from the hinge. A lamp hanging from the right (free) end of the beam. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -93,7 +93,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kirişin kendi ağırlığı hesaba katılmaz: 150 × 3.0 / 2.0 = 225 N"
+            "text": "Leaves out the weight of the beam itself: 150 × 3.0 / 2.0 = 225 N"
            }
           ]
          }
@@ -128,7 +128,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Tork yerine yalnızca düşey kuvvet dengesi yazılır, menteşe kuvveti yok sayılır: 200 + 150 = 350 N"
+            "text": "Writes only the vertical force balance instead of the torque balance, ignoring the hinge force: 200 + 150 = 350 N"
            }
           ]
          }
@@ -184,7 +184,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kirişin ağırlığının orta nokta yerine serbest uçtan etkidiği varsayılır: (200 × 3.0 + 150 × 3.0) / 2.0 = 525 N"
+            "text": "Assumes the weight of the beam acts at the free end instead of the midpoint: (200 × 3.0 + 150 × 3.0) / 2.0 = 525 N"
            }
           ]
          }
@@ -202,7 +202,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Menteşeye göre tork dengesi: "
+          "text": "Torque balance about the hinge: "
          },
          {
           "marks": [],
@@ -226,7 +226,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 375 N. (Menteşe kirişe aşağı yönlü 25 N uygular; bu kuvvetin menteşeye göre torku sıfırdır.)"
+          "text": " = 375 N. (The hinge exerts a downward force of 25 N on the beam; the torque of this force about the hinge is zero.)"
          }
         ]
        }
@@ -256,7 +256,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "*τ* = *Iα* ve sabit açısal ivme denklemleri",
+    "outcome": "*τ* = *Iα* and the equations of constant angular acceleration",
     "stem": {
      "type": "doc",
      "content": [
@@ -329,7 +329,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Verilen ½ çarpanı atlanır, "
+            "text": "Skips the given factor ½ and takes "
            },
            {
             "marks": [],
@@ -353,7 +353,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "² = 0.50 kg m² alınır: "
+            "text": "² = 0.50 kg m²: "
            },
            {
             "marks": [],
@@ -433,7 +433,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kuvvet kolu olarak yarıçap yerine çap alınır: "
+            "text": "Takes the diameter instead of the radius as the perpendicular distance from the axis to the force: "
            },
            {
             "marks": [],
@@ -504,7 +504,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Tork yerine kuvvetin kendisi kullanılır ("
+            "text": "Uses the force itself instead of the torque ("
            },
            {
             "marks": [],
@@ -679,7 +679,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "A.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Açısal momentumun korunumu; nokta kütle için *mr*²",
+    "outcome": "Conservation of angular momentum; *mr*² for a point mass",
     "stem": {
      "type": "doc",
      "content": [
@@ -761,7 +761,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Açısal momentum yerine dönme kinetik enerjisinin korunduğu varsayılır: 3.0 × √(0.80 / 1.30) = 2.4 rad s⁻¹"
+            "text": "Assumes rotational kinetic energy is conserved instead of angular momentum: 3.0 × √(0.80 / 1.30) = 2.4 rad s⁻¹"
            }
           ]
          }
@@ -796,7 +796,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Düşey düşen kilin dönmeyi etkilemediği düşünülür; açısal sürat değişmez"
+            "text": "Thinks the vertically falling clay does not affect the rotation; the angular speed does not change"
            }
           ]
          }
@@ -831,7 +831,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Eylemsizlik momentlerinin oranı ters çevrilir: 3.0 × 1.30 / 0.80 = 4.9 rad s⁻¹"
+            "text": "Inverts the ratio of the moments of inertia: 3.0 × 1.30 / 0.80 = 4.9 rad s⁻¹"
            }
           ]
          }
@@ -849,7 +849,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kil düşey düştüğü için eksene göre açısal momentumu yoktur; dış tork olmadığından sistemin açısal momentumu korunur. Yeni eylemsizlik momenti = 0.80 + 2.0 × 0.50² = 1.30 kg m². "
+          "text": "Because the clay falls vertically, it has no angular momentum about the axis; as there is no external torque, the angular momentum of the system is conserved. New moment of inertia = 0.80 + 2.0 × 0.50² = 1.30 kg m². "
          },
          {
           "marks": [],
@@ -891,7 +891,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "A.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kaymadan yuvarlanmada öteleme ve dönme kinetik enerjisinin paylaşımı",
+    "outcome": "Sharing of translational and rotational kinetic energy in rolling without slipping",
     "stem": {
      "type": "doc",
      "content": [
@@ -988,7 +988,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İstenen oran yerine dönme kinetik enerjisinin payı verilir: (1/5) / (7/10) = 2/7"
+            "text": "Gives the share of rotational kinetic energy instead of the requested ratio: (1/5) / (7/10) = 2/7"
            }
           ]
          }
@@ -1023,7 +1023,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Eylemsizlik momentindeki katsayı doğrudan enerji oranı sanılır: 2/5"
+            "text": "Takes the coefficient in the moment of inertia to be the energy ratio directly: 2/5"
            }
           ]
          }
@@ -1058,7 +1058,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Enerjinin öteleme ve dönme arasında her zaman eşit paylaşıldığı varsayılır: 1/2"
+            "text": "Assumes energy is always shared equally between translation and rotation: 1/2"
            }
           ]
          }
@@ -1097,7 +1097,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kaymadan yuvarlanmada "
+          "text": "In rolling without slipping "
          },
          {
           "marks": [],
@@ -1133,7 +1133,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": ". Dönme kinetik enerjisi = ½ × ⅖"
+          "text": ". Rotational kinetic energy = ½ × ⅖"
          },
          {
           "marks": [],
@@ -1181,7 +1181,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "². Öteleme kinetik enerjisi = ½"
+          "text": "². Translational kinetic energy = ½"
          },
          {
           "marks": [],
@@ -1193,7 +1193,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "². Toplam = 7/10 "
+          "text": "². Total = 7/10 "
          },
          {
           "marks": [],
@@ -1205,7 +1205,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "². Oran = (1/2) / (7/10) = 5/7."
+          "text": "². Ratio = (1/2) / (7/10) = 5/7."
          }
         ]
        }
@@ -1235,7 +1235,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "A.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kaymadan yuvarlanma; enerji korunumu; açısal momentum; eylemsizlik momentinin harekete etkisi",
+    "outcome": "Rolling without slipping; conservation of energy; angular momentum; effect of moment of inertia on motion",
     "stem": {
      "type": "doc",
      "content": [

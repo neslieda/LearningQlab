@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/d4-induction-pilot-questions.md",
- "source_sha256": "b2294f40c3887abef2e76991c22c233ffd38cbd0cc7e9c996e2ad3524e680cfb",
+ "source_sha256": "29624d50fefb0267f32d2b5878ebc7ddca92c9bd9fdc7063ebc0c209c6997a72",
  "questions": [
   {
    "source_ref": "pilot/d4-induction#1",
@@ -17,7 +17,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Alana giren dikdörtgen bobinde emk (ε = BvL, N sarım)",
+    "outcome": "Emf in a rectangular coil entering a field (ε = BvL, N turns)",
     "stem": {
      "type": "doc",
      "content": [
@@ -54,7 +54,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Sayfa düzleminde dikdörtgen bir bobin (kısa kenar 0.10 m düşey, uzun kenar 0.20 m yatay) sağa doğru v hızıyla hareket ediyor. Sağ tarafta, sayfaya dik düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Bobinin sağdaki 0.10 m'lik kenarı alanın içinde, soldaki kenarı dışında. Diagram not to scale.",
+      "description": "A rectangular coil in the plane of the page (short side 0.10 m vertical, long side 0.20 m horizontal) moving to the right with velocity v. On the right, a region of uniform magnetic field perpendicular to the page (⊗ symbols) begins at a vertical boundary line. The 0.10 m side of the coil on the right is inside the field and the side on the left is outside it. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -93,7 +93,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sarım sayısı unutulur: 0.30 × 0.50 × 0.10 = 0.015 V"
+            "text": "Forgets the number of turns: 0.30 × 0.50 × 0.10 = 0.015 V"
            }
           ]
          }
@@ -128,7 +128,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Emk yerine tam akı bağlantısı hesaplanır (NBA): 20 × 0.30 × 0.10 × 0.20 = 0.12"
+            "text": "Calculates the full flux linkage (NBA) instead of the emf: 20 × 0.30 × 0.10 × 0.20 = 0.12"
            }
           ]
          }
@@ -184,7 +184,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hıza dik kenar yerine hıza paralel kenar kullanılır: 20 × 0.30 × 0.50 × 0.20 = 0.60 V"
+            "text": "Uses the side parallel to the velocity instead of the side perpendicular to it: 20 × 0.30 × 0.50 × 0.20 = 0.60 V"
            }
           ]
          }
@@ -202,7 +202,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yalnızca alan içindeki öndeki kenar akı çizgilerini keser. Her sarımda ε = BvL = 0.30 × 0.50 × 0.10 = 0.015 V; 20 sarım seri olduğundan ε = 20 × 0.015 = 0.30 V. (Eşdeğer: akı bağlantısının değişim hızı N B L v.)"
+          "text": "Only the leading side, which is inside the field, cuts the flux lines. For each turn ε = BvL = 0.30 × 0.50 × 0.10 = 0.015 V; the 20 turns are in series, so ε = 20 × 0.015 = 0.30 V. (Equivalent: the rate of change of flux linkage is N B L v.)"
          }
         ]
        }
@@ -232,7 +232,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Lenz yasası: indüklenen akımın ve kuvvetin yönü",
+    "outcome": "Lenz's law: direction of the induced current and force",
     "stem": {
      "type": "doc",
      "content": [
@@ -283,7 +283,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Sayfa düzleminde dikdörtgen bir iletken çerçeve. Sol tarafta, sayfanın içine doğru düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle bitiyor; sınırın sağında alan yok. Çerçevenin sol kenarı alanın içinde, sağ kenarı dışında. Çerçeveye sağa doğru bir hız oku (v) çizilmiş. Akım yönleri sayfaya bakan gözlemciye göre tanımlanır. Diagram not to scale.",
+      "description": "A rectangular conducting frame in the plane of the page. On the left, a region of uniform magnetic field into the page (⊗ symbols) ends at a vertical boundary line; there is no field to the right of the boundary. The left side of the frame is inside the field and the right side is outside. A velocity arrow (v) pointing right is drawn on the frame. Current directions are defined as seen by an observer looking at the page. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -343,7 +343,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Akım yönü doğru; ancak kuvvetin hareketi desteklediği sanılır (enerji korunumuna aykırı) ya da el kuralı ters uygulanır"
+            "text": "Current direction correct; but thinks the force assists the motion (contradicts conservation of energy) or applies the hand rule the wrong way round"
            }
           ]
          }
@@ -378,7 +378,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İndüklenen alanın dış alana her zaman zıt olduğu sanılır (akının azaldığı gözden kaçar); kuvvet için \"harekete karşı\" doğru hatırlanır"
+            "text": "Thinks the induced field is always opposite to the external field (misses that the flux is decreasing); correctly remembers \"opposes the motion\" for the force"
            }
           ]
          }
@@ -413,7 +413,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hem indüklenen alan dış alana zıt sanılır, hem bu akıma kural uygulanarak kuvvet bulunur: anticlockwise akım sol kenarda aşağı, (−y) × (−z) = +x, sağa"
+            "text": "Thinks the induced field is opposite to the external field, and then finds the force by applying the rule to this current: an anticlockwise current is downwards in the left side, (−y) × (−z) = +x, to the right"
            }
           ]
          }
@@ -431,7 +431,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Çerçeve alandan çıkarken sayfanın içine doğru olan akı azalır. Lenz yasası: indüklenen akım bu azalmaya karşı koyar, yani çerçevenin içinde sayfanın içine doğru alan oluşturur. Sağ el kavrama kuralı (parmaklar akım yönünde kıvrılır, başparmak halkanın içindeki alanı gösterir): sayfanın içine doğru alan için akım saat yönündedir. Kuvvet: saat yönündeki akım, alan içindeki sol kenarda sayfanın üstüne doğrudur (+y). F = IL × B = (+y) × (−z) = −x: sola doğru. Üst ve alt kenarların alan içindeki parçalarına etkiyen kuvvetler eşit ve zıttır. Kuvvet harekete karşıdır; enerji korunumuyla uyumlu."
+          "text": "As the frame leaves the field, the flux into the page decreases. Lenz's law: the induced current opposes this decrease, that is, it produces a field into the page inside the frame. Right-hand grip rule (fingers curl in the direction of the current, the thumb points along the field inside the loop): for a field into the page the current is clockwise. Force: the clockwise current is towards the top of the page (+y) in the left side, which is in the field. F = IL × B = (+y) × (−z) = −x: to the left. The forces on the parts of the top and bottom sides that are in the field are equal and opposite. The force opposes the motion; consistent with conservation of energy."
          }
         ]
        }
@@ -461,7 +461,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Dönen bobinde akı bağlantısı ile emk arasındaki ilişki",
+    "outcome": "Relationship between flux linkage and emf in a rotating coil",
     "stem": {
      "type": "doc",
      "content": [
@@ -536,7 +536,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Emk'nin akı bağlantısının kendisiyle orantılı olduğu sanılır (değişim hızıyla değil)"
+            "text": "Thinks the emf is proportional to the flux linkage itself (not to its rate of change)"
            }
           ]
          }
@@ -592,7 +592,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bobin düzleminin alana paralel olması ile dik olması karıştırılır"
+            "text": "Confuses the coil plane being parallel to the field with it being perpendicular"
            }
           ]
          }
@@ -627,7 +627,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hem konum karıştırılır hem emk akıyla orantılı sanılır"
+            "text": "Confuses the position and also thinks the emf is proportional to the flux"
            }
           ]
          }
@@ -645,7 +645,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Bobin düzlemi alan çizgilerine paralelken bobinden hiç alan çizgisi geçmez: akı bağlantısı sıfırdır. Aynı anda bobinin kenarları alan çizgilerini dik keser; akı bağlantısı en hızlı bu anda değişir. Faraday yasasına göre emk, akı bağlantısının değişim hızıyla orantılıdır, dolayısıyla en büyük değerindedir."
+          "text": "When the plane of the coil is parallel to the field lines, no field lines pass through the coil: the flux linkage is zero. At the same instant the sides of the coil cut the field lines at right angles; the flux linkage changes most rapidly at this instant. By Faraday's law the emf is proportional to the rate of change of flux linkage, so it is at its maximum value."
          }
         ]
        }
@@ -675,7 +675,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Dönme frekansının sinüzoidal emk'ye etkisi",
+    "outcome": "Effect of rotation frequency on a sinusoidal emf",
     "stem": {
      "type": "doc",
      "content": [
@@ -736,7 +736,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Frekans ile periyot karıştırılır (periyot iki katına çıkar) ve emk'nin de buna göre yarıya indiği düşünülür"
+            "text": "Confuses frequency with period (the period doubles) and thinks the emf halves accordingly"
            }
           ]
          }
@@ -771,7 +771,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Tepe emk'nin yalnızca B, alan ve sarım sayısına bağlı olduğu sanılır; periyot doğru"
+            "text": "Thinks the peak emf depends only on B, the area and the number of turns; period correct"
            }
           ]
          }
@@ -806,7 +806,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Emk'nin arttığı bilinir ama emk'nin periyodunun dönme periyoduyla birlikte değiştiği görülmez"
+            "text": "Knows the emf increases but does not see that the period of the emf changes together with the rotation period"
            }
           ]
          }
@@ -845,7 +845,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Frekans iki katına çıkınca periyot yarıya iner: 20 ms. Akı bağlantısının en büyük değeri değişmez ama aynı değişim yarı sürede gerçekleşir; akı bağlantısının en büyük değişim hızı, dolayısıyla tepe emk iki katına çıkar: 12 V."
+          "text": "When the frequency doubles, the period halves: 20 ms. The maximum value of the flux linkage does not change, but the same change takes place in half the time; the maximum rate of change of flux linkage, and therefore the peak emf, doubles: 12 V."
          }
         ]
        }
@@ -875,7 +875,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Hareketli iletkende emk; indüklenen akım ve kuvvet; Lenz yasası ve enerji korunumu; Faraday yasası",
+    "outcome": "Emf in a moving conductor; induced current and force; Lenz's law and conservation of energy; Faraday's law",
     "stem": {
      "type": "doc",
      "content": [
@@ -902,7 +902,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Yukarıdan görünüş. Dikdörtgen çerçeve (öndeki ve arkadaki kenarlar 0.20 m, harekete dik; yan kenarlar daha uzun, harekete paralel) sağa doğru 1.5 m s⁻¹ hızla hareket ediyor. Sağda, sayfanın içine doğru (yukarıdan bakana göre aşağı doğru) düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Çerçevenin öndeki kenarı alanın içinde, arkadaki kenarı dışında. Diagram not to scale.",
+      "description": "View from above. A rectangular frame (the leading and trailing sides 0.20 m, at right angles to the motion; the side edges longer, parallel to the motion) moves to the right at 1.5 m s⁻¹. On the right, a region of uniform magnetic field into the page (downwards for an observer looking from above) (⊗ symbols) begins at a vertical boundary line. The leading side of the frame is inside the field and the trailing side is outside it. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }

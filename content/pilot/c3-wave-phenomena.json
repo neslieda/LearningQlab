@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/c3-wave-phenomena-pilot-questions.md",
- "source_sha256": "5e95adee9e036b609eec1cacc568158d8972e1e7ab199190cfd362bf56b034f9",
+ "source_sha256": "74dc19295289e5a2897ce3c77d447cc33e51342dae1acc9036c34eca24c80ceb",
  "questions": [
   {
    "source_ref": "pilot/c3-wave-phenomena#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kritik açı; iki saydam ortam arasında tam yansıma",
+    "outcome": "Critical angle; total internal reflection between two transparent media",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Açı normalden değil yüzeyden ölçülür: 90° − 54.3° = 35.7° ≈ 36°"
+            "text": "Measures the angle from the surface instead of from the normal: 90° − 54.3° = 35.7° ≈ 36°"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İkinci ortam hava sanılır: sin⁻¹(1 / 1.6) = 38.7° ≈ 39°"
+            "text": "Assumes the second medium is air: sin⁻¹(1 / 1.6) = 38.7° ≈ 39°"
            }
           ]
          }
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Suyun hava ile sınırındaki kritik açısı alınır: sin⁻¹(1 / 1.3) = 50.3° ≈ 50°"
+            "text": "Takes the critical angle at the water–air boundary: sin⁻¹(1 / 1.3) = 50.3° ≈ 50°"
            }
           ]
          }
@@ -261,7 +261,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Çift yarık; s = λD/d ile orantı",
+    "outcome": "Double slit; proportionality with s = λD/d",
     "stem": {
      "type": "doc",
      "content": [
@@ -322,7 +322,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "s hem D hem d ile ters orantılı alınır: 2.0 / (3 × 2) = 0.33 mm"
+            "text": "Takes s to be inversely proportional to both D and d: 2.0 / (3 × 2) = 0.33 mm"
            }
           ]
          }
@@ -357,7 +357,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "D ve d'nin rolleri değiştirilir (s ∝ d / D): 2.0 × 2 / 3 = 1.3 mm"
+            "text": "Swaps the roles of D and d (s ∝ d / D): 2.0 × 2 / 3 = 1.3 mm"
            }
           ]
          }
@@ -413,7 +413,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "s hem D hem d ile doğru orantılı alınır: 2.0 × 3 × 2 = 12 mm"
+            "text": "Takes s to be directly proportional to both D and d: 2.0 × 3 × 2 = 12 mm"
            }
           ]
          }
@@ -431,7 +431,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "s = λD / d. D üç katına, d iki katına çıkar: s yeni = 2.0 × 3 / 2 = 3.0 mm."
+          "text": "s = λD / d. D triples and d doubles: new s = 2.0 × 3 / 2 = 3.0 mm."
          }
         ]
        }
@@ -462,7 +462,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Eşfazlı kaynaklar; yol farkı ve yıkıcı girişim koşulu",
+    "outcome": "Sources in phase; path difference and the condition for destructive interference",
     "stem": {
      "type": "doc",
      "content": [
@@ -523,7 +523,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yıkıcı girişim için yol farkı çeyrek dalga boyu alınır: λ = 2.72 m → 340 / 2.72 = 125 Hz"
+            "text": "Takes the path difference for destructive interference to be a quarter of a wavelength: λ = 2.72 m → 340 / 2.72 = 125 Hz"
            }
           ]
          }
@@ -579,7 +579,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yapıcı girişim koşulu kullanılır (yol farkı = λ): 340 / 0.68 = 500 Hz"
+            "text": "Uses the condition for constructive interference (path difference = λ): 340 / 0.68 = 500 Hz"
            }
           ]
          }
@@ -614,7 +614,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bir sonraki minimum alınır (yol farkı = 3λ/2); bu frekansta da minimum vardır ama en düşük değildir: 3 × 340 / (2 × 0.68) = 750 Hz"
+            "text": "Takes the next minimum (path difference = 3λ/2); there is also a minimum at this frequency but it is not the lowest: 3 × 340 / (2 × 0.68) = 750 Hz"
            }
           ]
          }
@@ -632,7 +632,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Yol farkı = 2.68 − 2.00 = 0.68 m. Yıkıcı girişim için yol farkı = (n + ½)λ; en düşük frekans en büyük dalga boyuna karşılık gelir: λ/2 = 0.68 m → λ = 1.36 m → f = 340 / 1.36 = 250 Hz."
+          "text": "Path difference = 2.68 − 2.00 = 0.68 m. For destructive interference the path difference = (n + ½)λ; the lowest frequency corresponds to the largest wavelength: λ/2 = 0.68 m → λ = 1.36 m → f = 340 / 1.36 = 250 Hz."
          }
         ]
        }
@@ -662,7 +662,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kırınım ağı; gözlenebilen en yüksek mertebe",
+    "outcome": "Diffraction grating; highest observable order",
     "stem": {
      "type": "doc",
      "content": [
@@ -744,7 +744,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "4.17 yukarı yuvarlanır; n = 5 için sin θ = 1.2 > 1 olur, bu mertebe oluşmaz"
+            "text": "Rounds 4.17 up; for n = 5, sin θ = 1.2 > 1, so this order does not occur"
            }
           ]
          }
@@ -779,7 +779,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Merkezin iki yanındaki maksimumların sayısı verilir: 2 × 4 = 8"
+            "text": "Gives the number of maxima on both sides of the centre: 2 × 4 = 8"
            }
           ]
          }
@@ -814,7 +814,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ekranda görülen toplam maksimum sayısı verilir: 2 × 4 + 1 = 9"
+            "text": "Gives the total number of maxima seen on the screen: 2 × 4 + 1 = 9"
            }
           ]
          }
@@ -832,7 +832,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "d = 1.0 × 10⁻³ / 400 = 2.5 × 10⁻⁶ m. nλ = d sin θ ve sin θ ≤ 1 → n ≤ d / λ = 2.5 × 10⁻⁶ / (600 × 10⁻⁹) = 4.17. En yüksek tam sayı 4'tür (sin θ₄ = 0.96)."
+          "text": "d = 1.0 × 10⁻³ / 400 = 2.5 × 10⁻⁶ m. nλ = d sin θ and sin θ ≤ 1 → n ≤ d / λ = 2.5 × 10⁻⁶ / (600 × 10⁻⁹) = 4.17. The highest whole number is 4 (sin θ₄ = 0.96)."
          }
         ]
        }
@@ -862,7 +862,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Tek yarık kırınımı; θ = λ/b ve merkezî maksimumun genişliği",
+    "outcome": "Single-slit diffraction; θ = λ/b and the width of the central maximum",
     "stem": {
      "type": "doc",
      "content": [
@@ -923,7 +923,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İlk minimum için θ = λ / 2b alınır (çift yarıktaki yarım dalga boyu koşuluyla karıştırma) ve iki katı alınmaz: 6.0 mm"
+            "text": "Takes θ = λ / 2b for the first minimum (confusion with the half-wavelength condition in the double slit) and does not double: 6.0 mm"
            }
           ]
          }
@@ -958,7 +958,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Merkezden ilk minimuma uzaklık (yarı genişlik) verilir: λD / b = 12 mm"
+            "text": "Gives the distance from the centre to the first minimum (half-width): λD / b = 12 mm"
            }
           ]
          }
@@ -1014,7 +1014,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki katına alma iki kez uygulanır: 4λD / b = 48 mm"
+            "text": "Applies the doubling twice: 4λD / b = 48 mm"
            }
           ]
          }
@@ -1032,7 +1032,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "İlk minimumun açısı θ = λ / b = 600 × 10⁻⁹ / (0.10 × 10⁻³) = 6.0 × 10⁻³ rad. Merkezden ilk minimuma uzaklık = θD = 6.0 × 10⁻³ × 2.0 = 12 mm. Merkezî maksimum iki yandaki ilk minimumlar arasındadır: 2 × 12 = 24 mm."
+          "text": "The angle of the first minimum is θ = λ / b = 600 × 10⁻⁹ / (0.10 × 10⁻³) = 6.0 × 10⁻³ rad. The distance from the centre to the first minimum = θD = 6.0 × 10⁻³ × 2.0 = 12 mm. The central maximum lies between the first minima on either side: 2 × 12 = 24 mm."
          }
         ]
        }
@@ -1062,7 +1062,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "C.3",
     "secondary_syllabus_nodes": [],
-    "outcome": "Yapıcı girişim; s = λD/d; tek yarığın çift yarık desenini biçimlendirmesi; çoklu yarık",
+    "outcome": "Constructive interference; s = λD/d; modulation of the double-slit pattern by the single slit; multiple slits",
     "stem": {
      "type": "doc",
      "content": [
@@ -1089,7 +1089,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Soldan gelen lazer demeti, iki paralel yarığı olan ince bir levhaya dik düşer; levhanın 3.0 m sağında levhaya paralel bir ekran. Ekranda eşit aralıklı parlak saçaklar; merkezî saçak işaretli. \"diagram not to scale\". Soru şekil olmadan çözülebilir.",
+      "description": "A laser beam coming from the left is incident normally on a thin plate with two parallel slits; 3.0 m to the right of the plate, parallel to the plate, is a screen. On the screen are equally spaced bright fringes; the central fringe is marked. \"diagram not to scale\". The question can be solved without the figure.",
       "asset_id": null,
       "alt_text": null
      }

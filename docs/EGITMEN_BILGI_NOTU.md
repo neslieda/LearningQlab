@@ -89,7 +89,9 @@ incelemede ilk düzeltilecek yerlerdir ([SINIRLAR.md](SINIRLAR.md) §7.1; soru b
    fazladan veri, çeldirici yolların neden anahtara düşmediği) yalnızca Markdown dosyasındadır: `a5` soru 5, `c1` soru 6, `c3` soru 6,
    `d2` soru 4, `d4` soru 5. İncelerken kaynak dosyaya da bakın.
 7. **Şekil tarifleri personel içindir.** Veri temelli sorulardaki "Şekil notu" cevabı içerebildiği için sisteme alınmadı.
-8. **Türkçe açıklamalar.** Çözüm ve çeldirici gerekçeleri Türkçedir; öğrenciye açılmadan önce İngilizceye çevrilmeleri gerekir.
+8. **Her şey İngilizce (D-60).** Soru, cevap anahtarı, markscheme, çözüm açıklaması, çeldirici gerekçesi, kazanım ve şekil tarifi dahil
+   sisteme yazdığınız her içerik İngilizce olmalıdır; Türkçe harf (ğ, ı, İ, ş) içeren içerik kaydedilmez. Pilot soruların Türkçe kısımları
+   İngilizceye çevrildi; çeviriyi incelerken fizik terimlerinin doğruluğuna da bakın.
 
 Bir soruyu sistemde düzelttikten sonra doğru olan sistemdeki halidir; kaynak Markdown güncellenmez ve yeniden içe aktarma
 düzeltmenizi ezmez.

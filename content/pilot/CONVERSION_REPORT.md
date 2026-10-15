@@ -79,7 +79,7 @@ Bunlar kaynak bilgisi değil, varsayımdır; eğitmen incelemesinde düzeltilir.
 |---|---|
 | statement | 271 |
 
-**Uyaran `kind` (Şekil bloğu ve Şekil notu)**
+**Uyaran `kind` (Figure block ve Figure note)**
 
 | Değer | Adet |
 |---|---|
@@ -250,34 +250,34 @@ Sabit değerler: `part.assessment_objective`, `depends_on`, `stimulus_refs` boş
 
 | Soru | Uyaran | Tür | Kaynak |
 |---|---|---|---|
-| `pilot/a1-kinematics#5` | fig1 | graph | Şekil notu |
-| `pilot/a4-rigid-body-mechanics#1` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/a5-relativity#5` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/b3-gas-laws#6` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/b3-gas-laws#6` | fig2 | graph | Şekil notu |
-| `pilot/b4-thermodynamics#6` | fig1 | graph | Şekil bloğu |
-| `pilot/b5-current-circuits#3` | fig1 | circuit_diagram | Şekil bloğu |
-| `pilot/b5-current-circuits#4` | fig1 | circuit_diagram | Şekil bloğu |
-| `pilot/b5-current-circuits#5` | fig1 | circuit_diagram | Şekil bloğu |
-| `pilot/c1-simple-harmonic-motion#7` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/c1-simple-harmonic-motion#7` | fig2 | graph | Şekil notu |
-| `pilot/c2-wave-model#2` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/c3-wave-phenomena#6` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/c4-standing-waves-resonance#5` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/c5-doppler-effect#5` | fig1 | ray_wavefront_diagram | Şekil bloğu |
-| `pilot/d2-electric-magnetic-fields#3` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/d3-motion-in-em-fields#3` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/d3-motion-in-em-fields#5` | fig1 | field_diagram | Şekil bloğu |
-| `pilot/d3-motion-in-em-fields#6` | fig1 | circuit_diagram | Şekil bloğu |
-| `pilot/d3-motion-in-em-fields#6` | fig2 | graph | Şekil notu |
-| `pilot/d4-induction#1` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/d4-induction#2` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/d4-induction#5` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/e1-structure-of-atom#2` | fig1 | energy_level_diagram | Şekil bloğu |
-| `pilot/e2-quantum-physics#5` | fig1 | schematic_diagram | Şekil bloğu |
-| `pilot/e2-quantum-physics#6` | fig1 | circuit_diagram | Şekil bloğu |
-| `pilot/e2-quantum-physics#6` | fig2 | graph | Şekil notu |
-| `pilot/e5-fusion-stars#3` | fig1 | graph | Şekil bloğu |
+| `pilot/a1-kinematics#5` | fig1 | graph | Figure note |
+| `pilot/a4-rigid-body-mechanics#1` | fig1 | schematic_diagram | Figure block |
+| `pilot/a5-relativity#5` | fig1 | schematic_diagram | Figure block |
+| `pilot/b3-gas-laws#6` | fig1 | schematic_diagram | Figure block |
+| `pilot/b3-gas-laws#6` | fig2 | graph | Figure note |
+| `pilot/b4-thermodynamics#6` | fig1 | graph | Figure block |
+| `pilot/b5-current-circuits#3` | fig1 | circuit_diagram | Figure block |
+| `pilot/b5-current-circuits#4` | fig1 | circuit_diagram | Figure block |
+| `pilot/b5-current-circuits#5` | fig1 | circuit_diagram | Figure block |
+| `pilot/c1-simple-harmonic-motion#7` | fig1 | schematic_diagram | Figure block |
+| `pilot/c1-simple-harmonic-motion#7` | fig2 | graph | Figure note |
+| `pilot/c2-wave-model#2` | fig1 | schematic_diagram | Figure block |
+| `pilot/c3-wave-phenomena#6` | fig1 | schematic_diagram | Figure block |
+| `pilot/c4-standing-waves-resonance#5` | fig1 | schematic_diagram | Figure block |
+| `pilot/c5-doppler-effect#5` | fig1 | ray_wavefront_diagram | Figure block |
+| `pilot/d2-electric-magnetic-fields#3` | fig1 | schematic_diagram | Figure block |
+| `pilot/d3-motion-in-em-fields#3` | fig1 | schematic_diagram | Figure block |
+| `pilot/d3-motion-in-em-fields#5` | fig1 | field_diagram | Figure block |
+| `pilot/d3-motion-in-em-fields#6` | fig1 | circuit_diagram | Figure block |
+| `pilot/d3-motion-in-em-fields#6` | fig2 | graph | Figure note |
+| `pilot/d4-induction#1` | fig1 | schematic_diagram | Figure block |
+| `pilot/d4-induction#2` | fig1 | schematic_diagram | Figure block |
+| `pilot/d4-induction#5` | fig1 | schematic_diagram | Figure block |
+| `pilot/e1-structure-of-atom#2` | fig1 | energy_level_diagram | Figure block |
+| `pilot/e2-quantum-physics#5` | fig1 | schematic_diagram | Figure block |
+| `pilot/e2-quantum-physics#6` | fig1 | circuit_diagram | Figure block |
+| `pilot/e2-quantum-physics#6` | fig2 | graph | Figure note |
+| `pilot/e5-fusion-stars#3` | fig1 | graph | Figure block |
 
 ## 3. Çözüm modelleri (§3.4)
 
@@ -298,22 +298,22 @@ Aktarılan: **13**. Atlanan: **16** (soru yine aktarılır, `solution_model` bo�
 |---|---|---|
 | `pilot/a1-kinematics#5` | bölüm yok |  |
 | `pilot/a4-rigid-body-mechanics#5` | ters tırnaksız parametre metni | `'( )'` |
-| `pilot/b3-gas-laws#6` | ters tırnaksız parametre metni | `'veri tablosu'` |
-| `pilot/b4-thermodynamics#6` | satır adı tanımlayıcı değil | `line 208: 'Tutarlılık kontrolü (öğrenciden istenmez)'` |
-| `pilot/b5-current-circuits#5` | satır adı tanımlayıcı değil | `line 180: 'Karşılaştırma'` |
-| `pilot/c1-simple-harmonic-motion#6` | satır adı tanımlayıcı değil | `line 189: 'Denetim (soruda istenmez)'` |
+| `pilot/b3-gas-laws#6` | ters tırnaksız parametre metni | `'data table'` |
+| `pilot/b4-thermodynamics#6` | satır adı tanımlayıcı değil | `line 208: 'Consistency check (not asked of the student)'` |
+| `pilot/b5-current-circuits#5` | satır adı tanımlayıcı değil | `line 180: 'Comparison'` |
+| `pilot/c1-simple-harmonic-motion#6` | satır adı tanımlayıcı değil | `line 189: 'Check (not asked in the question)'` |
 | `pilot/c1-simple-harmonic-motion#7` | ters tırnaksız parametre metni | `'(s² kg⁻¹)'` |
-| `pilot/c2-wave-model#5` | satır adı tanımlayıcı değil | `line 171: 'Denetim (e)'` |
+| `pilot/c2-wave-model#5` | satır adı tanımlayıcı değil | `line 171: 'Check (e)'` |
 | `pilot/c3-wave-phenomena#6` | ifade sütunu tek ifade değil | `line 203` |
-| `pilot/c4-standing-waves-resonance#5` | satır adı tanımlayıcı değil | `line 180: 'Denetim'` |
-| `pilot/c5-doppler-effect#5` | satır adı tanımlayıcı değil | `line 178: 'Denetim (yanlış formül)'` |
-| `pilot/d2-electric-magnetic-fields#5` | satır adı tanımlayıcı değil | `line 192: 'Çeldirici yol (c)'` |
-| `pilot/d3-motion-in-em-fields#5` | satır adı tanımlayıcı değil | `line 194: 'Tutarlılık kontrolü'` |
-| `pilot/d3-motion-in-em-fields#6` | satır adı tanımlayıcı değil | `line 263: 'Aralık'` |
+| `pilot/c4-standing-waves-resonance#5` | satır adı tanımlayıcı değil | `line 180: 'Check'` |
+| `pilot/c5-doppler-effect#5` | satır adı tanımlayıcı değil | `line 178: 'Check (wrong formula)'` |
+| `pilot/d2-electric-magnetic-fields#5` | satır adı tanımlayıcı değil | `line 192: 'Distractor route (c)'` |
+| `pilot/d3-motion-in-em-fields#5` | satır adı tanımlayıcı değil | `line 194: 'Consistency check'` |
+| `pilot/d3-motion-in-em-fields#6` | satır adı tanımlayıcı değil | `line 263: 'Range'` |
 | `pilot/e4-fission#5` | ters tırnaksız parametre metni | `'(u)'` |
-| `pilot/e5-fusion-stars#6` | satır adı tanımlayıcı değil | `line 203: 'Kontrol'` |
+| `pilot/e5-fusion-stars#6` | satır adı tanımlayıcı değil | `line 203: 'Check'` |
 
-**Adım birimleri.** Aktarılan modellerde 61 adım var; bunlardan **14** tanesinin `unit` alanı boş, çünkü `Sonuç` hücresi "sayı + birim" değil (sayı, açıklama ya da birimsiz ifade). Soru başına (yalnızca boş birimi olanlar):
+**Adım birimleri.** Aktarılan modellerde 61 adım var; bunlardan **13** tanesinin `unit` alanı boş, çünkü `Sonuç` hücresi "sayı + birim" değil (sayı, açıklama ya da birimsiz ifade). Soru başına (yalnızca boş birimi olanlar):
 
 | Soru | Birimsiz adım | Adım |
 |---|---|---|
@@ -324,10 +324,9 @@ Aktarılan: **13**. Atlanan: **16** (soru yine aktarılır, `solution_model` bo�
 | `pilot/d1-gravitational-fields#5` | 2 | 5 |
 | `pilot/d4-induction#5` | 1 | 5 |
 | `pilot/e2-quantum-physics#5` | 1 | 4 |
-| `pilot/e2-quantum-physics#6` | 1 | 5 |
 | `pilot/e3-radioactive-decay#6` | 2 | 5 |
 
-**`sabit` sözcüğünden sonra gelip parametre olarak aktarılan değerler (24).** Sabit tablosuna bağ kurulmaz:
+**`constant` sözcüğünden sonra gelip parametre olarak aktarılan değerler (24).** Sabit tablosuna bağ kurulmaz:
 
 `pilot/a1-kinematics#4` `g`, `pilot/a2-forces-momentum#5` `g`, `pilot/a3-work-energy-power#5` `g`, `pilot/a5-relativity#5` `c`, `pilot/b1-thermal-energy-transfers#5` `L`, `pilot/b1-thermal-energy-transfers#5` `c`, `pilot/b2-greenhouse-effect#5` `sigma`, `pilot/b3-gas-laws#5` `R`, `pilot/b5-current-circuits#5` `rho`, `pilot/c1-simple-harmonic-motion#6` `g`, `pilot/d1-gravitational-fields#5` `G`, `pilot/d2-electric-magnetic-fields#5` `k`, `pilot/d3-motion-in-em-fields#6` `g`, `pilot/e1-structure-of-atom#6` `R0`, `pilot/e1-structure-of-atom#6` `e`, `pilot/e1-structure-of-atom#6` `k`, `pilot/e2-quantum-physics#5` `c`, `pilot/e2-quantum-physics#5` `e`, `pilot/e2-quantum-physics#5` `h`, `pilot/e2-quantum-physics#5` `m_e`, `pilot/e2-quantum-physics#6` `e`, `pilot/e5-fusion-stars#6` `ly_m`, `pilot/e5-fusion-stars#6` `pc_ly`, `pilot/e5-fusion-stars#6` `sigma`
 
@@ -349,7 +348,7 @@ Markscheme ve formül zincirinden sonra (çoktan seçmelide yanılgı tablosunda
 | `pilot/d3-motion-in-em-fields#5` | 1 |
 | `pilot/d4-induction#5` | 1 |
 
-**Aktarılmayan Şekil notu metni:** 5 soruda `### Şekil notu` bölümü vardır; metni aktarılmaz (§3.2), uyaranın açıklaması sabit metindir: `pilot/a1-kinematics#5`, `pilot/b3-gas-laws#6`, `pilot/c1-simple-harmonic-motion#7`, `pilot/d3-motion-in-em-fields#6`, `pilot/e2-quantum-physics#6`.
+**Aktarılmayan Figure note metni:** 5 soruda `### Figure note` bölümü vardır; metni aktarılmaz (§3.2), uyaranın açıklaması sabit metindir: `pilot/a1-kinematics#5`, `pilot/b3-gas-laws#6`, `pilot/c1-simple-harmonic-motion#7`, `pilot/d3-motion-in-em-fields#6`, `pilot/e2-quantum-physics#6`.
 
 ## 5. İtalik belirteçler (§4.2)
 
@@ -448,7 +447,7 @@ IMPORT_RULES.md'nin açıkça karşılamadığı ve dönüştürücünün dar bi
   - Gerektiği yerler (2): `pilot/a2-forces-momentum#5`, `pilot/c1-simple-harmonic-motion#6`
 - **total-max** — Markscheme `Total` hücresi `n` ya da `n max` olabilir (`2 max`); sayı parça puanına eşit olmalıdır.
   - Gerektiği yerler (2): `pilot/b2-greenhouse-effect#5`, `pilot/b3-gas-laws#5`
-- **mcq-trailing-note** — Çoktan seçmelide yanılgı tablosundan sonra gelen serbest paragraflar (`Not: …`) aktarılmaz, raporda sayılır.
+- **mcq-trailing-note** — Çoktan seçmelide yanılgı tablosundan sonra gelen serbest paragraflar (`Note: …`) aktarılmaz, raporda sayılır.
   - Gerektiği yerler (3): `pilot/c4-standing-waves-resonance#4`, `pilot/c5-doppler-effect#4`, `pilot/d2-electric-magnetic-fields#4`
 - **italic-word** — Kapalı italik sözcük listesine eklenen belirteçler (aşağıda).
   - Gerektiği yerler (4): `Accept` (3; ilk: `pilot/b4-thermodynamics#6`), `Allow` (1; ilk: `pilot/c1-simple-harmonic-motion#6`), `OWTTE` (36; ilk: `pilot/a1-kinematics#4`), `and` (1; ilk: `pilot/c1-simple-harmonic-motion#7`)
@@ -461,11 +460,11 @@ Kuralın birden çok okunabildiği yerlerde seçilen okuma:
 
 - **Uyaran türü** (§3.3): "en önce geçen anahtar sözcük" açıklama metninde en küçük konumlu eşleşme olarak okundu (listedeki sıra değil). Eşleşme büyük/küçük harfe duyarsızdır (Türkçe `I/ı`, `İ/i` çiftleriyle: `Işın` → `ışın`) ve sözcük başında aranır; sözcüğün sonu serbesttir (`devre` → `devresi`). `P–V` yalnızca uzun çizgiyle yazıldığında eşleşir.
 - **Not içindeki `✓`** (§8): metinde kalır; kaynak karşılaştırması da `✓` atar. Bu notlar Notlar sütununa yazılmış alternatif yollardır.
-- **Şekil notu** (§3.2): metni aktarılmaz; uyaran sabit açıklama ve `graph` türüyle açılır.
+- **Figure note** (§3.2): metni aktarılmaz; uyaran sabit açıklama ve `graph` türüyle açılır.
 - **Yunan harfi komutu** (§4.3): komut adı Unicode harf adından alınır (`ε` → `\epsilon`, `φ` → `\phi`, `λ` → `\lambda`, `µ` → `\mu`, `Ω` → `\Omega`); `\varepsilon` ve `\varphi` kullanılmaz.
 - **option_kind** (§5): "sayı + birim" = sayı (isteğe bağlı `× 10ⁿ`) ve en çok dört sözcüklük düz metin birim; seçeneklerden biri bile bu kalıba uymazsa (ör. birimsiz `0`) sıradaki kurala geçilir, bu yüzden `−2.0 J K⁻¹ | 0 | +0.50 J K⁻¹ | +2.0 J K⁻¹` `word_phrase` olur. İtalik harf içeren seçenek (`1.3*c*`) değişken sayılır → `algebraic_expression`.
 - **Kazanım** (`outcome`): tablo hücresi olduğu gibi alınır; hücredeki `*γ*` gibi işaretler çevrilmez.
 - **Düzey** (§3): başlık `HL` diyor da tablo `SL` diyorsa dönüştürücü durur; tablo `HL` iken başlıkta HL yazmaması hata değildir.
 - **Parametre birimi**: ters tırnak içinde değerden sonra gelen metin birimdir; ters tırnağın dışındaki açıklama (`(s² kg⁻¹)`) "ters tırnaksız parametre" sayılır ve modeli düşürür.
-- **Adım adı**: ilk sütundaki ilk ters tırnaklı tanımlayıcıdır; ardından gelen ters tırnaksız metin (`(denetim)`) yok sayılır, ikinci bir ters tırnaklı ad modeli düşürür.
-- **Sonuç sütunu birimi**: sayıdan sonra kalan metin yalnızca birim sözcüklerinden oluşuyorsa `unit` olur; açıklama içeren sonuçlar (`180 s (tam)`) birimsiz bırakılır.
+- **Adım adı**: ilk sütundaki ilk ters tırnaklı tanımlayıcıdır; ardından gelen ters tırnaksız metin (`(check)`) yok sayılır, ikinci bir ters tırnaklı ad modeli düşürür.
+- **Sonuç sütunu birimi**: sayıdan sonra kalan metin yalnızca birim sözcüklerinden oluşuyorsa `unit` olur; açıklama içeren sonuçlar (`180 s (exact)`) birimsiz bırakılır.

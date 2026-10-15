@@ -1,41 +1,41 @@
-# Pilot soru seti: E.1 Atomun yapısı
+# Pilot question set: E.1 Structure of the atom
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Yazım ölçütleri: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Yapı örneği: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> Authoring criteria: [AUTHORING_STANDARD.md](AUTHORING_STANDARD.md). Structure example: [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü E.1 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve genel
-> fizik. Hiçbir sınav kâğıdı, markscheme, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; senaryolar özgün kurgudur.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` ile ayrı bir hesapla yeniden üretildi. Kullanılan
-> sabitler: h = 6.63 × 10⁻³⁴ J s, c = 3.00 × 10⁸ m s⁻¹, e = 1.60 × 10⁻¹⁹ C, k = 8.99 × 10⁹ N m² C⁻², R₀ = 1.20 × 10⁻¹⁵ m
-> (veri kitapçığı değerleri uzmanca teyit edilmeli).
-> **Doğrulanmayan:**
-> - Bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi (bkz. sondaki "Bağımsız kontrol"). Bilinen bir sınav sorusuna benzerlik
->   açısından uzman gözüyle bakılmadı.
-> - Bellekten yazılan değerler: R₀ = 1.20 × 10⁻¹⁵ m (Soru 6), kalay-120 için Z = 50 (Soru 6), alfa enerjisi 5.5 MeV'in tipik bir alfa
->   kaynağı için gerçekçi olduğu. Soru 2'deki enerji düzeyleri gerçek bir elemente ait değildir; kurgusaldır ve soruda atom adı verilmez.
-> - Soru 3'te soğuk sodyum buharının görünür bölgede soğurma çizgisi verdiği (temel düzeyden geçiş) genel bilgiye dayanır.
-> - Soru 6 (c)(ii)'deki "sapma eşiği" kestirimi, alfa parçacığının kendi yarıçapını ve güçlü kuvvetin menzilini yok sayar; gerçek
->   eşik daha düşüktür (alfa yarıçapı eklenirse yaklaşık 18 MeV). Bu varsayım artık soru kökünde açıkça yazılıdır ve parça "Estimate"
->   ile sorulur; uzman bu basitleştirmenin kabul edilebilirliğini teyit etmeli.
+> **Source:** only syllabus node E.1 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and general
+> physics. No exam paper, markscheme, textbook or internet question was used as input; the scenarios are original inventions.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced by a separate calculation in `python3`. Constants
+> used: h = 6.63 × 10⁻³⁴ J s, c = 3.00 × 10⁸ m s⁻¹, e = 1.60 × 10⁻¹⁹ C, k = 8.99 × 10⁹ N m² C⁻², R₀ = 1.20 × 10⁻¹⁵ m
+> (the data booklet values should be confirmed by an expert).
+> **Not verified:**
+> - Passed an independent blind solver; has not passed expert review (see "Independent check" at the end). No expert check was made for similarity
+>   to any known exam question.
+> - Values written from memory: R₀ = 1.20 × 10⁻¹⁵ m (Question 6), Z = 50 for tin-120 (Question 6), and that an alpha energy of 5.5 MeV is realistic for a typical alpha
+>   source. The energy levels in Question 2 do not belong to a real element; they are fictional and no atom name is given in the question.
+> - That cool sodium vapour gives an absorption line in the visible region in Question 3 (a transition from the ground level) is based on general knowledge.
+> - The "deviation threshold" estimate in Question 6 (c)(ii) ignores the radius of the alpha particle itself and the range of the strong force; the real
+>   threshold is lower (about 18 MeV if the alpha radius is added). This assumption is now stated explicitly in the question stem and the part is asked with "Estimate";
+>   an expert should confirm that this simplification is acceptable.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (E.1) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (E.1) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Geiger–Marsden–Rutherford deneyinin nitel yorumu | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Kesikli enerji düzeyleri; foton enerjisi E = hf = hc/λ | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Soğurma tayfının oluşumu; tayftan bileşim | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | HL | R = R₀A^(1/3); çekirdek yoğunluğunun A'dan bağımsızlığı | AO3 | — | 1 | Orta |
-| 5 | Paper 1A | HL | Bohr modeli: E = −13.6/n² eV; geçiş enerjileri | AO2 | — | 1 | Orta |
-| 6 | Paper 2 | HL | En yakın yaklaşma uzaklığı; çekirdek yarıçapı; yüksek enerjide Rutherford saçılmasından sapma | AO2–AO3 | Show, Calculate, Explain, Estimate | 8 | Orta–zor |
+| 1 | Paper 1A | SL | Qualitative interpretation of the Geiger–Marsden–Rutherford experiment | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Discrete energy levels; photon energy E = hf = hc/λ | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Formation of an absorption spectrum; composition from a spectrum | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | HL | R = R₀A^(1/3); nuclear density independent of A | AO3 | — | 1 | Medium |
+| 5 | Paper 1A | HL | Bohr model: E = −13.6/n² eV; transition energies | AO2 | — | 1 | Medium |
+| 6 | Paper 2 | HL | Distance of closest approach; nuclear radius; deviation from Rutherford scattering at high energy | AO2–AO3 | Show, Calculate, Explain, Estimate | 8 | Medium–hard |
 
-Bu set E.1'in tamamını kapsamaz. Eksik kalanlar: çekirdek gösterimi (proton, nötron, nükleon sayısı), yayma tayfının deneysel elde
-edilişi, tayf çizgilerinden bileşim belirlemenin nicel örneği, Bohr modelinde açısal momentum kuantumlanması (mvr = nh/2π), çekirdek
-yoğunluğunun sayısal hesabı.
+This set does not cover all of E.1. Not covered: nuclear notation (proton, neutron, nucleon number), how an emission spectrum is obtained
+experimentally, a quantitative example of determining composition from spectral lines, quantization of angular momentum in the Bohr model (mvr = nh/2π), numerical calculation of nuclear
+density.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 In the Geiger–Marsden–Rutherford experiment, alpha particles are directed at a thin gold foil. A few alpha particles are deflected
 through angles greater than 90°.
@@ -47,25 +47,25 @@ B. The positive charge is spread uniformly throughout the atom.
 C. The electrons occupy discrete energy levels.
 D. The positive charge and most of the mass are concentrated in a very small region.
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Bir alfa parçacığının geri saçılabilmesi için çok büyük bir itme kuvveti gerekir. Bu, ancak pozitif yükün küçük bir bölgede
-toplanmasıyla (yakın geçişte çok güçlü alan) ve bu bölgenin alfa parçacığından çok daha büyük kütleli olmasıyla açıklanır.
+**Solution.** A very large repulsive force is needed for an alpha particle to be scattered backwards. This can be explained only if the positive charge is concentrated in a small region
+(a very strong field at close approach) and this region has a much greater mass than the alpha particle.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Deneyin öbür gözlemiyle (parçacıkların çoğunun sapmadan geçmesi) karıştırılır; boşluk büyük açılı sapmayı açıklamaz |
-| B | Düzgün dağılmış yük modeli (çekirdek öncesi model) alınır; bu model yalnızca çok küçük sapmalar verir |
-| C | Tayf kanıtı ile saçılma kanıtı karıştırılır; enerji düzeyleri saçılma deneyinin sonucu değildir |
+| A | Confused with the other observation of the experiment (most particles pass through undeflected); empty space does not explain large-angle deflection |
+| B | Uses the uniformly distributed charge model (the pre-nucleus model); this model gives only very small deflections |
+| C | Confuses the evidence from spectra with the evidence from scattering; energy levels are not a result of the scattering experiment |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 The diagram shows three energy levels of an atom.
 
-> **Şekil:** Üç yatay çizgiden oluşan enerji düzeyi diyagramı. En alttaki çizgi −5.80 eV, ortadaki −3.30 eV, en üstteki −1.20 eV olarak
-> etiketlidir. Diyagram ölçekli değildir. (Soru, metinde verilen bu üç değerle şekil olmadan çözülebilir.)
+> **Figure:** An energy level diagram made of three horizontal lines. The lowest line is labelled −5.80 eV, the middle one −3.30 eV and the top one −1.20 eV.
+> The diagram is not to scale. (The question can be solved without the figure, using these three values given in the text.)
 
 The energies of the levels are −5.80 eV, −3.30 eV and −1.20 eV. Electron transitions take place between these levels.
 
@@ -76,20 +76,20 @@ B. 497 nm
 C. 592 nm
 D. 1040 nm
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** En uzun dalga boyu en küçük enerji farkına karşılık gelir. Farklar: 2.50 eV, 2.10 eV, 4.60 eV. En küçüğü 2.10 eV.
+**Solution.** The longest wavelength corresponds to the smallest energy difference. The differences are 2.50 eV, 2.10 eV, 4.60 eV. The smallest is 2.10 eV.
 λ = hc / E = (6.63 × 10⁻³⁴ × 3.00 × 10⁸) / (2.10 × 1.60 × 10⁻¹⁹) = 5.92 × 10⁻⁷ m = 592 nm.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | En uzun dalga boyu için en büyük enerji farkı seçilir: 4.60 eV → 270 nm (λ ile E'nin ters orantısı gözden kaçar) |
-| B | Yalnızca en alttaki iki düzey arasındaki geçiş düşünülür: 2.50 eV → 497 nm |
-| D | Enerji farkı yerine en üst düzeyin enerjisinin büyüklüğü kullanılır: 1.20 eV → 1036 nm ≈ 1040 nm |
+| A | Chooses the largest energy difference for the longest wavelength: 4.60 eV → 270 nm (misses that λ and E are inversely proportional) |
+| B | Considers only the transition between the lowest two levels: 2.50 eV → 497 nm |
+| D | Uses the magnitude of the energy of the top level instead of an energy difference: 1.20 eV → 1036 nm ≈ 1040 nm |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 White light from a hot filament passes through cool, low-pressure sodium vapour. The transmitted light is then dispersed by a
 diffraction grating and viewed on a screen.
@@ -101,21 +101,21 @@ B. Bright lines on a dark background at certain wavelengths that sodium can emit
 C. A continuous spectrum with no lines
 D. A continuous spectrum with brighter lines at certain wavelengths that sodium can emit
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Buhardaki atomlar yalnızca enerji düzeyi farklarına eşit enerjili fotonları soğurur; bunlar atomun yayabildiği dalga
-boyları arasındadır (soğuk buharda yalnızca temel düzeyden başlayan geçişler). Soğurulan enerji her yöne yeniden yayıldığı için gözlem doğrultusunda bu dalga boylarında şiddet azalır: sürekli tayf
-üzerinde karanlık çizgiler (soğurma tayfı).
+**Solution.** The atoms in the vapour absorb only photons whose energy equals the differences between energy levels; these are among the wavelengths the atom can emit
+(in a cool vapour only transitions starting from the ground level). Because the absorbed energy is re-emitted in all directions, the intensity at these wavelengths is reduced in the direction of observation: dark lines
+on a continuous spectrum (an absorption spectrum).
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Soğurma tayfı ile yayma tayfı karıştırılır; bu görüntü sıcak buharın tek başına verdiği tayftır |
-| C | Düşük basınçlı gazın ışığa tümüyle saydam olduğu, fotonlarla etkileşmediği düşünülür |
-| D | Buharın, geçen ışığa kendi çizgilerini "eklediği" düşünülür; yeniden yayımın her yöne olduğu gözden kaçar |
+| B | Confuses an absorption spectrum with an emission spectrum; this picture is the spectrum given by hot vapour on its own |
+| C | Thinks a low-pressure gas is completely transparent to light and does not interact with photons |
+| D | Thinks the vapour "adds" its own lines to the transmitted light; misses that re-emission is in all directions |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 Nucleus X has nucleon number 27 and nucleus Y has nucleon number 216.
 
@@ -126,19 +126,19 @@ B. 1
 C. 2
 D. 8
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** R = R₀A^(1/3) olduğundan hacim ∝ R³ ∝ A. Kütle de ∝ A. Yoğunluk = kütle / hacim, A'dan bağımsızdır; oran 1.
+**Solution.** Since R = R₀A^(1/3), volume ∝ R³ ∝ A. Mass is also ∝ A. Density = mass / volume is independent of A; the ratio is 1.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | R ∝ A alınır: kütle oranı 8, hacim oranı 8³ = 512; 8 / 512 = 1/64 |
-| C | Hacim yerine yüzey alanına bölünür: yarıçap oranı 2, alan oranı 4; 8 / 4 = 2 |
-| D | İki çekirdeğin hacmi eşit sayılır; yalnızca kütle oranı alınır: 216 / 27 = 8 |
+| A | Takes R ∝ A: mass ratio 8, volume ratio 8³ = 512; 8 / 512 = 1/64 |
+| C | Divides by surface area instead of volume: radius ratio 2, area ratio 4; 8 / 4 = 2 |
+| D | Treats the volumes of the two nuclei as equal; takes only the mass ratio: 216 / 27 = 8 |
 
 ---
 
-## Soru 5 — Paper 1A
+## Question 5 — Paper 1A
 
 In the Bohr model of the hydrogen atom, the energy of the level with quantum number *n* is −13.6 / *n*² eV. Photon P is emitted in
 the transition from *n* = 3 to *n* = 2. Photon Q is emitted in the transition from *n* = 2 to *n* = 1.
@@ -150,20 +150,20 @@ B. 1/3
 C. 4/9
 D. 1
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** E<sub>P</sub> = 13.6 (1/4 − 1/9) = 13.6 × 5/36 = 1.89 eV. E<sub>Q</sub> = 13.6 (1 − 1/4) = 13.6 × 3/4 = 10.2 eV.
-Oran = (5/36) / (3/4) = 5/27 ≈ 0.19.
+**Solution.** E<sub>P</sub> = 13.6 (1/4 − 1/9) = 13.6 × 5/36 = 1.89 eV. E<sub>Q</sub> = 13.6 (1 − 1/4) = 13.6 × 3/4 = 10.2 eV.
+Ratio = (5/36) / (3/4) = 5/27 ≈ 0.19.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Düzey enerjisi 1/n ile orantılı alınır: (1/2 − 1/3) / (1 − 1/2) = 1/3 |
-| C | Foton enerjileri yerine düzey enerjilerinin oranı alınır: E₃ / E₂ = (1/9) / (1/4) = 4/9 |
-| D | Düzeylerin eşit aralıklı olduğu düşünülür; ardışık iki geçiş aynı enerjiyi verir |
+| B | Takes the level energy as proportional to 1/n: (1/2 − 1/3) / (1 − 1/2) = 1/3 |
+| C | Takes the ratio of level energies instead of photon energies: E₃ / E₂ = (1/9) / (1/4) = 4/9 |
+| D | Thinks the levels are equally spaced; two successive transitions give the same energy |
 
 ---
 
-## Soru 6 — Paper 2 (8 puan)
+## Question 6 — Paper 2 (8 marks)
 
 Alpha particles of kinetic energy 5.5 MeV are directed at a thin tin foil. One alpha particle approaches a nucleus of tin-120
 (¹²⁰₅₀Sn) head-on and comes to rest momentarily before returning along its original path. The recoil of the tin nucleus is negligible.
@@ -191,11 +191,11 @@ large angles is different from that predicted by Rutherford scattering.
 | 6. | c | i | alpha particle gets close enough to the nucleus for the strong nuclear force to act «on it» ✓<br>so the force is no longer only electric repulsion / the alpha particle may be attracted or absorbed, «changing the scattering pattern» ✓ | *OWTTE* | 2 |
 | 6. | c | ii | use of *E* ∝ 1/*d* with *d* = *R* **OR** *E* = *k*(2*e*)(50*e*) / *R* ✓<br>*E* = 5.5 × (2.62 × 10⁻¹⁴ / 5.92 × 10⁻¹⁵) ≈ 24 «MeV» ✓ | *Allow ECF from (b).*<br>*Accept answers in the range 23–25 MeV.*<br>*The stem fixes the criterion d = R(Sn); do not award MP2 for 18 MeV obtained with R(Sn) + R(α).* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `E_MeV = 5.5`, `Z = 50`, `A = 120`, sabitler `k = 8.99e9`, `e = 1.60e-19`, `R0 = 1.20e-15` | |
+| Parameters | `E_MeV = 5.5`, `Z = 50`, `A = 120`, constants `k = 8.99e9`, `e = 1.60e-19`, `R0 = 1.20e-15` | |
 | `E_k` | `E_MeV*1e6*e` | 8.80 × 10⁻¹³ J |
 | `d` | `k*2*Z*e**2/E_k` | 2.615 × 10⁻¹⁴ m |
 | `R` | `R0*A**(1/3)` | 5.92 × 10⁻¹⁵ m |
@@ -203,33 +203,33 @@ large angles is different from that predicted by Rutherford scattering.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?" / "Which …?") + alt alta A–D | Soru 1–5 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 2, 4, 5 uygun (artan); Soru 1 ve 3 cümle biçiminde seçenek (profilde azınlık biçim) |
-| 1A: doğru cevap konumu dengeli | D, C, A, B, A |
-| 1A: şekil olmadan çözülebilirlik | Soru 2'de şekil tarif edildi; değerler metinde de verildi |
-| Kapsam sınırı: SL'de deney yalnızca nitel | Soru 1 nitel; nicel saçılma yalnızca HL etiketli Soru 6'da |
-| Kapsam sınırı: saçılmada yalnızca elektriksel itme | Soru 6 (a) ve (c)(ii) yalnızca Coulomb potansiyel enerjisi kullanır; güçlü kuvvet (c)(i)'de yalnızca nitel |
-| Kapsam sınırı: kimyasal semboller ezberlenmez | Soru 6'da sembol, Z ve A soruda verildi; Soru 3'te element adı yazıyla |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 6 uygun (3, 1, 2, 2; toplam 8) |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | (a) Show that, (c)(i) Explain; (c)(ii) verilen yaklaşık değeri kullanır ve eşik ölçütü kökte varsayım olarak yazılıdır |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 6 uygun |
-| Değer–birim yazımı, anlamlı basamak | Uygun; Soru 2'de veriler 3 anlamlı basamak, cevap 3 anlamlı basamak |
-| Düzey etiketi | Soru 1–3 SL; Soru 4–6 HL (ek HL içeriği) |
+| 1A: context + a separate single question sentence ("What is …?" / "Which …?") + A–D listed vertically | Questions 1–5 conform |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 2, 4, 5 conform (ascending); Questions 1 and 3 have sentence-form options (a minority format in the profile) |
+| 1A: balanced position of the correct answer | D, C, A, B, A |
+| 1A: solvable without the figure | Question 2: the figure is described; the values are also given in the text |
+| Scope limit: at SL the experiment is only qualitative | Question 1 is qualitative; quantitative scattering is only in Question 6, labelled HL |
+| Scope limit: only electrical repulsion in scattering | Question 6 (a) and (c)(ii) use only Coulomb potential energy; the strong force is only qualitative in (c)(i) |
+| Scope limit: chemical symbols are not memorized | In Question 6 the symbol, Z and A are given in the question; in Question 3 the element name is written out |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 6 conforms (3, 1, 2, 2; total 8) |
+| Paper 2: at least one AO3 part; "Show that" pattern | (a) Show that, (c)(i) Explain; (c)(ii) uses the given approximate value and the threshold criterion is written in the stem as an assumption |
+| Markscheme: four-column table, ✓, « », OR, ECF, OWTTE | Question 6 conforms |
+| Value–unit notation, significant figures | Conforms; in Question 2 the data are to 3 significant figures and the answer to 3 significant figures |
+| Level label | Questions 1–3 SL; Questions 4–6 HL (additional HL content) |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Yazardan farklı bir kör çözücü soruları cevapları görmeden çözdü; tüm cevap anahtarlarını bağımsız olarak yeniden
-üretti, çekirdek denklemlerini (nükleon sayısı ve yük korunumu) ve Paper 1B eğimlerini yeniden hesapladı. Bulgular:
-[review/e1-review.md](review/e1-review.md). KRİTİK bulgu yok. Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. A blind solver other than the author solved the questions without seeing the answers; reproduced all answer keys independently,
+recalculated the nuclear equations (conservation of nucleon number and charge) and the Paper 1B gradients. Findings:
+[review/e1-review.md](review/e1-review.md). No CRITICAL findings. This check does not replace expert review.
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile yeniden hesaplandı):
+Changes made in response to the findings (every changed number was recalculated with `python3`):
 
-- **Soru 6 (c)(ii) (ORTA):** eşik ölçütü köke eklendi ("distance of closest approach is equal to the radius of the tin-120 nucleus … alpha particle … treated as a point"). Cevap 24 MeV ve 23–25 MeV aralığı değişmedi; markscheme notuna, ölçüt kökte verildiği için R(Sn) + R(α) ile bulunan 18 MeV'in son puanı almadığı yazıldı.
-- **Soru 6 (b) (DÜŞÜK):** cevap 5.9 × 10⁻¹⁵ m → 5.92 × 10⁻¹⁵ m; "Accept 5.9 × 10⁻¹⁵ m" notu eklendi. (c)(ii) satırı 2.62 × 10⁻¹⁴ / 5.92 × 10⁻¹⁵ ile yazıldı (24.3 MeV).
-- **Soru 3 (DÜŞÜK):** A, B ve D seçeneklerinde "at wavelengths that sodium emits" → "at certain wavelengths that sodium can emit"; çözüm metni buna göre düzeltildi. Cevap A değişmedi.
+- **Question 6 (c)(ii) (MEDIUM):** the threshold criterion was added to the stem ("distance of closest approach is equal to the radius of the tin-120 nucleus … alpha particle … treated as a point"). The answer of 24 MeV and the 23–25 MeV range did not change; the markscheme note now says that, because the criterion is given in the stem, 18 MeV obtained with R(Sn) + R(α) does not score the final mark.
+- **Question 6 (b) (LOW):** answer 5.9 × 10⁻¹⁵ m → 5.92 × 10⁻¹⁵ m; the note "Accept 5.9 × 10⁻¹⁵ m" was added. The (c)(ii) row was written with 2.62 × 10⁻¹⁴ / 5.92 × 10⁻¹⁵ (24.3 MeV).
+- **Question 3 (LOW):** in options A, B and D, "at wavelengths that sodium emits" → "at certain wavelengths that sodium can emit"; the solution text was corrected accordingly. Answer A did not change.

@@ -12,6 +12,7 @@ import pytest
 
 from qlab.content.pilot.__main__ import _layout_problems
 from qlab.content.pilot.markdown import (
+    _DIFFICULTY,
     FIGURE_NOTE_DESCRIPTION,
     MAX_FILE_BYTES,
     MAX_LINE_CHARS,
@@ -39,10 +40,10 @@ from qlab.content.pilot.markdown import (
     split_row,
     stimulus_kind,
     to_latex,
-    turkish_lower,
 )
 from qlab.content.schema import (
     AnswerType,
+    Difficulty,
     MarkType,
     NoteKind,
     OptionKind,
@@ -341,11 +342,11 @@ def test_an_escaped_pipe_stops_the_conversion() -> None:
 @pytest.mark.parametrize(
     ("text", "section", "marks", "hl"),
     [
-        ("## Soru 3 — Paper 1A", "1A", None, False),
-        ("## Soru 4 — Paper 1A (HL)", "1A", None, True),
-        ("## Soru 5 — Paper 2 (9 puan)", "2", 9, False),
-        ("## Soru 6 — Paper 2 (HL, 9 puan)", "2", 9, True),
-        ("## Soru 7 — Paper 1B (10 puan)", "1B", 10, False),
+        ("## Question 3 — Paper 1A", "1A", None, False),
+        ("## Question 4 — Paper 1A (HL)", "1A", None, True),
+        ("## Question 5 — Paper 2 (9 marks)", "2", 9, False),
+        ("## Question 6 — Paper 2 (HL, 9 marks)", "2", 9, True),
+        ("## Question 7 — Paper 1B (10 marks)", "1B", 10, False),
     ],
 )
 def test_question_headings(text: str, section: str, marks: int | None, hl: bool) -> None:
@@ -354,7 +355,8 @@ def test_question_headings(text: str, section: str, marks: int | None, hl: bool)
 
 
 @pytest.mark.parametrize(
-    "text", ["## Soru 3 - Paper 1A", "## Soru 3 — Paper 2", "## Soru 3 — Paper 1A (1 puan)"]
+    "text",
+    ["## Question 3 - Paper 1A", "## Question 3 — Paper 2", "## Question 3 — Paper 1A (1 marks)"],
 )
 def test_unrecognised_headings_are_errors(text: str) -> None:
     with pytest.raises(ConversionError):
@@ -560,20 +562,24 @@ def test_every_vocabulary_command_term_has_an_answer_type() -> None:
 @pytest.mark.parametrize(
     ("description", "kind"),
     [
-        ("Tek gözlü seri devre çizilmiş.", StimulusKind.CIRCUIT_DIAGRAM),
-        ("Üç Direnç seri bağlı.", StimulusKind.CIRCUIT_DIAGRAM),
-        ("Bir batarya ve bir lamba.", StimulusKind.CIRCUIT_DIAGRAM),
-        ("İdeal voltmetre ölçer.", StimulusKind.CIRCUIT_DIAGRAM),
-        ("Ampermetre seri.", StimulusKind.CIRCUIT_DIAGRAM),
-        ("Bir P–V diyagramı.", StimulusKind.GRAPH),
-        ("Yatay eksen zaman, grafik doğrusal.", StimulusKind.GRAPH),
-        ("Elektrik alan çizgileri.", StimulusKind.FIELD_DIAGRAM),
-        ("Işın diyagramı.", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
-        ("Dalga cepheleri düzlem.", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
-        ("Enerji düzeyleri gösterilir.", StimulusKind.ENERGY_LEVEL_DIAGRAM),
-        ("Uzay-zaman diyagramı.", StimulusKind.SPACETIME_DIAGRAM),
-        ("Veri tablosu.", StimulusKind.DATA_TABLE),
-        ("Bir platform ve bir mekik.", StimulusKind.SCHEMATIC_DIAGRAM),
+        ("A single-loop series circuit is drawn.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("Three Resistors in series.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("A battery and a lamp.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("A cell and a switch.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("An ideal voltmeter reads.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("An ammeter in series.", StimulusKind.CIRCUIT_DIAGRAM),
+        ("A P–V diagram.", StimulusKind.GRAPH),
+        ("The horizontal axis is time.", StimulusKind.GRAPH),
+        ("Both axes are labelled.", StimulusKind.GRAPH),
+        ("A linear graph.", StimulusKind.GRAPH),
+        ("Electric field lines.", StimulusKind.FIELD_DIAGRAM),
+        ("A ray diagram.", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
+        ("Plane wavefronts.", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
+        ("Energy levels are shown.", StimulusKind.ENERGY_LEVEL_DIAGRAM),
+        ("A spacetime diagram.", StimulusKind.SPACETIME_DIAGRAM),
+        ("A space-time diagram.", StimulusKind.SPACETIME_DIAGRAM),
+        ("A data table.", StimulusKind.DATA_TABLE),
+        ("A platform and a shuttle.", StimulusKind.SCHEMATIC_DIAGRAM),
     ],
 )
 def test_stimulus_kind_from_the_first_keyword(description: str, kind: StimulusKind) -> None:
@@ -581,39 +587,69 @@ def test_stimulus_kind_from_the_first_keyword(description: str, kind: StimulusKi
 
 
 def test_stimulus_kind_takes_the_keyword_that_comes_first_in_the_text() -> None:
-    assert stimulus_kind("Bir grafik ve bir devre.") is StimulusKind.GRAPH
-    assert stimulus_kind("Bir devre ve bir grafik.") is StimulusKind.CIRCUIT_DIAGRAM
+    assert stimulus_kind("A graph and a circuit.") is StimulusKind.GRAPH
+    assert stimulus_kind("A circuit and a graph.") is StimulusKind.CIRCUIT_DIAGRAM
 
 
 def test_stimulus_keywords_match_at_a_word_start_only() -> None:
-    # `ışın` inside "dışında" and `tablo` inside "stablo" are not keywords
-    assert stimulus_kind("Çerçevenin dışında kalan bölge.") is StimulusKind.SCHEMATIC_DIAGRAM
-    assert stimulus_kind("Bir stablo ve bir oku.") is StimulusKind.SCHEMATIC_DIAGRAM
-    assert stimulus_kind("Çerçevenin dışında bir ışın.") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
-    assert stimulus_kind("(ışın) gelir") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    # `ray` inside "array" and `table` inside "stable" are not keywords
+    assert stimulus_kind("An array of detectors.") is StimulusKind.SCHEMATIC_DIAGRAM
+    assert stimulus_kind("A stable platform.") is StimulusKind.SCHEMATIC_DIAGRAM
+    assert stimulus_kind("An array with a ray.") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    # whole words only, with an optional plural: "graphite" is not a graph, "graphs" and "rays" are
+    assert stimulus_kind("A thin graphite film.") is StimulusKind.SCHEMATIC_DIAGRAM
+    assert stimulus_kind("Two graphs side by side.") is StimulusKind.GRAPH
+    assert stimulus_kind("Parallel rays.") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("Electric field lines.") is StimulusKind.FIELD_DIAGRAM
+    assert stimulus_kind("(ray) arrives") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
 
 
-def test_turkish_lower_casing_keeps_dotted_and_dotless_i_apart() -> None:
-    assert turkish_lower("Işın") == "ışın"
-    assert turkish_lower("İş") == "iş"
-    assert turkish_lower("IŞIN") == "ışın"
-    assert stimulus_kind("IŞIN demeti") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
-    assert stimulus_kind("Işın demeti") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
-    assert stimulus_kind("DEVRE şeması") is StimulusKind.CIRCUIT_DIAGRAM
+def test_the_earliest_stimulus_keyword_wins_and_case_is_ignored() -> None:
+    assert stimulus_kind("A ray diagram beside a table.") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("A table next to a ray.") is StimulusKind.DATA_TABLE
+    assert stimulus_kind("RAY diagram") is StimulusKind.RAY_WAVEFRONT_DIAGRAM
+    assert stimulus_kind("CIRCUIT sketch") is StimulusKind.CIRCUIT_DIAGRAM
+
+
+def test_the_figure_note_description_is_the_fixed_english_text() -> None:
+    assert FIGURE_NOTE_DESCRIPTION == (
+        "Graph to be generated from data; details in the Figure note of the source file."
+    )
+
+
+@pytest.mark.parametrize(
+    ("word", "difficulty"),
+    [
+        ("Easy", Difficulty.EASY),
+        ("Easy–medium", Difficulty.MEDIUM),
+        ("Medium", Difficulty.MEDIUM),
+        ("Medium–hard", Difficulty.HARD),
+        ("Hard", Difficulty.HARD),
+    ],
+)
+def test_difficulty_words_map_to_the_three_levels(word: str, difficulty: Difficulty) -> None:
+    assert _DIFFICULTY[word] is difficulty
+
+
+def test_turkish_markers_are_not_recognised() -> None:
+    assert set(_DIFFICULTY) == {"Easy", "Easy–medium", "Medium", "Medium–hard", "Hard"}
+    turkish = SAMPLE.replace("## Question 1", "## Soru 1").replace("**Answer: D**", "**Cevap: D**")
+    with pytest.raises(ConversionError):
+        convert_markdown(turkish.encode(), "a1-test", VOCABULARY, Tally())
 
 
 # --- Solution model (section 3.4) ---------------------------------------------------------------
 
 
 def chain(*rows: str) -> list[Line]:
-    header = ["| Adım | İfade | Sonuç |", "|---|---|---|"]
+    header = ["| Step | Expression | Result |", "|---|---|---|"]
     return [Line(no, text) for no, text in enumerate([*header, *rows], start=1)]
 
 
 def test_a_conforming_chain_becomes_a_model() -> None:
     model, reason = solution_model(
         chain(
-            "| Parametreler | `u = 18 m/s`, `H = 44 m`, sabit `g = 9.8 m/s^2`, `k = 3` | |",
+            "| Parameters | `u = 18 m/s`, `H = 44 m`, constant `g = 9.8 m/s^2`, `k = 3` | |",
             "| `t` | `sqrt(2*H/g)` | 3.00 s |",
             "| `v_y` | `g*t` | 29.4 m s⁻¹ |",
             "| `r` | `u/v_y` | 0.61 |",
@@ -636,20 +672,20 @@ def test_a_conforming_chain_becomes_a_model() -> None:
     assert model.constants == () and model.answers == ()
 
 
-def test_the_constants_after_sabit_are_listed_in_the_tally() -> None:
+def test_the_constants_after_constant_are_listed_in_the_tally() -> None:
     env = make_env()
-    solution_model(chain("| Parametreler | `a = 1 m`, sabit `g = 9.8 m/s^2` | |"), env)
+    solution_model(chain("| Parameters | `a = 1 m`, constant `g = 9.8 m/s^2` | |"), env)
     assert env.tally.constants == [("pilot/a1-test#3", "g")]
 
 
 @pytest.mark.parametrize(
     ("row", "code"),
     [
-        ("| Parametreler | `a = 1 m`, b = 2 | |", "ters tırnaksız parametre metni"),
-        ("| Parametreler | `a = çok` | |", "sayı biçimi"),
-        ("| Parametreler | `a = 1 3 m!` | |", "birim biçimi"),
-        ("| Parametreler | `a is 1` | |", "parametre biçimi"),
-        ("| Kontrol | `x` | 1 |", "satır adı tanımlayıcı değil"),
+        ("| Parameters | `a = 1 m`, b = 2 | |", "ters tırnaksız parametre metni"),
+        ("| Parameters | `a = many` | |", "sayı biçimi"),
+        ("| Parameters | `a = 1 3 m!` | |", "birim biçimi"),
+        ("| Parameters | `a is 1` | |", "parametre biçimi"),
+        ("| Check | `x` | 1 |", "satır adı tanımlayıcı değil"),
         ("| `1x` | `x` | 1 |", "satır adı tanımlayıcı değil"),
         ("| `a`, `b` | `x` | 1 |", "satır adı tanımlayıcı değil"),
         ("| `a` | `x`, `y` | 1 |", "ifade sütunu tek ifade değil"),
@@ -666,7 +702,7 @@ def test_a_chain_that_does_not_fit_is_omitted_with_a_reason(row: str, code: str)
 
 def test_duplicate_names_omit_the_model() -> None:
     model, reason = solution_model(
-        chain("| Parametreler | `a = 1 m` | |", "| `a` | `2*a` | 2 m |"), make_env()
+        chain("| Parameters | `a = 1 m` | |", "| `a` | `2*a` | 2 m |"), make_env()
     )
     assert model is None
     assert reason is not None and reason[0] == "yinelenen ad"
@@ -674,29 +710,29 @@ def test_duplicate_names_omit_the_model() -> None:
 
 def test_one_bad_row_omits_the_whole_model() -> None:
     model, _ = solution_model(
-        chain("| `a` | `1` | 1 |", "| Denetim | 3 | |", "| `b` | `2` | 2 |"), make_env()
+        chain("| `a` | `1` | 1 |", "| Check | 3 | |", "| `b` | `2` | 2 |"), make_env()
     )
     assert model is None
 
 
 # --- Whole files (a short synthetic example) ----------------------------------------------------
 
-SAMPLE = """# Pilot soru seti: A.1 Deneme
+SAMPLE = """# Pilot question set: A.1 Trial
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (A.1) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (A.1) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Sabit hızla hareket | AO2 | — | 1 | Kolay–orta |
-| 2 | Paper 2 | HL | Serbest düşme | AO1–AO3 | State, Show that | 3 | Orta–zor |
+| 1 | Paper 1A | SL | Motion at constant speed | AO2 | — | 1 | Easy–medium |
+| 2 | Paper 2 | HL | Free fall | AO1–AO3 | State, Show that | 3 | Medium–hard |
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A trolley moves at a constant speed of 2.0 m s⁻¹ for 5.0 s.
 
-> **Şekil:** Düz bir ray üzerinde bir araba; hız oku sağa dönük.
+> **Figure:** A trolley on a straight track; the velocity arrow points right.
 
 What distance does the trolley travel?
 
@@ -705,21 +741,21 @@ B. 2.5 m
 C. 7.0 m
 D. 10 m
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** *s* = *vt* = 2.0 × 5.0 = 10 m.
+**Solution.** *s* = *vt* = 2.0 × 5.0 = 10 m.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Süre hıza bölünür: 5.0 / 2.0 |
-| B | Hız süreye bölünür: 5.0 / 2.0 |
-| C | Hız ile süre toplanır: 2.0 + 5.0 |
+| A | Time divided by speed: 5.0 / 2.0 |
+| B | Speed divided by time: 5.0 / 2.0 |
+| C | Speed and time added: 2.0 + 5.0 |
 
-Not: yalnızca bu denemede kullanılan bir ek paragraf.
+Note: an extra paragraph used only in this trial.
 
 ---
 
-## Soru 2 — Paper 2 (HL, 3 puan)
+## Question 2 — Paper 2 (HL, 3 marks)
 
 A stone falls from rest for *t* seconds.
 
@@ -739,21 +775,21 @@ The stone then lands on soft ground.
 | 2. | b | i | *v* = 9.8 × 2.0 = 20 «m s⁻¹» ✓ | *Answer must be seen to 2 s.f.* | 1 |
 | 2. | b | ii | **ALTERNATIVE 1**<br>a ✓<br>**ALTERNATIVE 2**<br>b ✓ | *Allow ECF from (b)(i)* | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `t = 2.0 s`, sabit `g = 9.8 m/s^2` | |
+| Parameters | `t = 2.0 s`, constant `g = 9.8 m/s^2` | |
 | `v` | `g*t` | 19.6 m s⁻¹ |
 | `d` | `0.5*g*t**2` | 19.6 m |
 
-Denetim: serbest açıklama.
+Check: free comment.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Hiçbir şey.
+Nothing.
 """
 
 
@@ -813,12 +849,12 @@ def test_a_part_without_marks_and_a_question_missing_from_the_scope_table_stop()
     assert failed is not None and "no `[n]` marks" in failed.errors[0].message
     with pytest.raises(ConversionError, match="not in the scope table"):
         convert_markdown(
-            SAMPLE.replace("## Soru 2 —", "## Soru 3 —").encode(), "a1-test", VOCABULARY
+            SAMPLE.replace("## Question 2 —", "## Question 3 —").encode(), "a1-test", VOCABULARY
         )
 
 
 def test_heading_and_part_marks_must_agree() -> None:
-    failed, _ = convert_sample(SAMPLE.replace("(HL, 3 puan)", "(HL, 4 puan)"))
+    failed, _ = convert_sample(SAMPLE.replace("(HL, 3 marks)", "(HL, 4 marks)"))
     assert failed is not None and "the parts add up to 3" in failed.errors[0].message
 
 
@@ -832,7 +868,7 @@ def test_the_total_column_must_equal_the_part_marks() -> None:
 
 
 def test_an_option_row_for_the_correct_answer_or_a_missing_row_is_an_error() -> None:
-    missing = SAMPLE.replace("| C | Hız ile süre toplanır: 2.0 + 5.0 |\n", "")
+    missing = SAMPLE.replace("| C | Speed and time added: 2.0 + 5.0 |\n", "")
     failed, _ = convert_sample(missing)
     assert failed is not None and "no misconception row for C" in failed.errors[0].message
 
@@ -842,8 +878,8 @@ def test_an_option_row_for_the_correct_answer_or_a_missing_row_is_an_error() -> 
 
 def test_a_figure_note_is_not_imported_and_gets_the_fixed_description() -> None:
     text = SAMPLE.replace(
-        "Denetim: serbest açıklama.\n",
-        "Denetim: serbest açıklama.\n\n### Şekil notu\n\nThe gradient is exactly 42 N.\n",
+        "Check: free comment.\n",
+        "Check: free comment.\n\n### Figure note\n\nThe gradient is exactly 42 N.\n",
     )
     tally = Tally()
     pilot = convert_markdown(text.encode(), "a1-test", VOCABULARY, tally)
@@ -857,7 +893,7 @@ def test_a_figure_note_is_not_imported_and_gets_the_fixed_description() -> None:
 
 
 def test_a_non_blank_line_between_the_rule_and_the_next_heading_is_an_error() -> None:
-    text = SAMPLE.replace("---\n\n## Soru 2", "---\n\nLeftover text.\n\n## Soru 2")
+    text = SAMPLE.replace("---\n\n## Question 2", "---\n\nLeftover text.\n\n## Question 2")
     failed, _ = convert_sample(text)
     assert failed is not None
     error = failed.errors[0]
@@ -867,7 +903,7 @@ def test_a_non_blank_line_between_the_rule_and_the_next_heading_is_an_error() ->
 
 
 def test_a_second_rule_inside_a_question_block_is_an_error() -> None:
-    text = SAMPLE.replace("**Cevap: D**", "---\n\n**Cevap: D**")
+    text = SAMPLE.replace("**Answer: D**", "---\n\n**Answer: D**")
     failed, _ = convert_sample(text)
     assert failed is not None and failed.errors[0].question == 1
 
@@ -875,9 +911,9 @@ def test_a_second_rule_inside_a_question_block_is_an_error() -> None:
 @pytest.mark.parametrize(
     "text",
     [
-        SAMPLE.replace("## Soru 1 —", "## Soru 123456 —"),
+        SAMPLE.replace("## Question 1 —", "## Question 123456 —"),
         SAMPLE.replace("| 1 | Paper 1A", "| 12345 | Paper 1A"),
-        SAMPLE.replace("(HL, 3 puan)", "(HL, " + "9" * 5000 + " puan)"),
+        SAMPLE.replace("(HL, 3 marks)", "(HL, " + "9" * 5000 + " marks)"),
         SAMPLE.replace(
             "| 2. | a | | zero «m s⁻¹» ✓ | *OWTTE* | 1 |", "| 2. | a | | z ✓ | *OWTTE* | ²³ |"
         ),
@@ -906,20 +942,20 @@ def test_input_size_limits_are_conversion_errors() -> None:
 
 
 def test_a_table_with_only_a_separator_row_is_an_error_not_an_index_error() -> None:
-    start = SAMPLE.index("| Seçenek")
-    end = SAMPLE.index("Not: yalnızca")
+    start = SAMPLE.index("| Option")
+    end = SAMPLE.index("Note: an extra")
     text = SAMPLE[:start] + "|---|---|\n\n" + SAMPLE[end:]
     failed, _ = convert_sample(text)
     assert failed is not None and "table without a header row" in failed.errors[0].message
     scope_only = SAMPLE.replace(
-        SAMPLE[SAMPLE.index("| # | Bölüm") : SAMPLE.index("| 1 | Paper 1A")], "|---|---|\n"
+        SAMPLE[SAMPLE.index("| # | Section") : SAMPLE.index("| 1 | Paper 1A")], "|---|---|\n"
     )
     with pytest.raises(ConversionError):
         convert_markdown(scope_only.encode(), "a1-test", VOCABULARY)
 
 
 def test_a_file_without_questions_is_an_error() -> None:
-    head = SAMPLE[: SAMPLE.index("## Soru 1")]
+    head = SAMPLE[: SAMPLE.index("## Question 1")]
     only_scope = head.replace("| 1 | Paper 1A", "| x | Paper 1A")
     with pytest.raises(ConversionError):
         convert_markdown(only_scope.encode(), "a1-test", VOCABULARY)

@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/d2-electric-magnetic-fields-pilot-questions.md",
- "source_sha256": "4fe668910da4f9e3d839fa19ca9ebb8cce943376e30a6bafc57e1c895bbe4f7b",
+ "source_sha256": "e2b2bad71d89605b59ed3ea56acaf63bf97b6383f445d60eaa2e20932b078ec8",
  "questions": [
   {
    "source_ref": "pilot/d2-electric-magnetic-fields#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Millikan deneyi: düzgün alanda yüklü damlanın dengesi; yükün kuantumlu olması",
+    "outcome": "Millikan experiment: equilibrium of a charged drop in a uniform field; quantization of charge",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Gerilim, eklenen yükün ilk yüke oranı kadar azaltılır: 600 × (1 − 2/3) = 200 V"
+            "text": "Reduces the potential difference by the fraction (added charge / initial charge): 600 × (1 − 2/3) = 200 V"
            }
           ]
          }
@@ -135,7 +135,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Damlanın ağırlığı değişmediği için gereken gerilimin de değişmediği düşünülür"
+            "text": "Thinks the required voltage is unchanged because the weight of the drop is unchanged"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur (V ∝ q): 600 × 5/3 = 1000 V"
+            "text": "Inverts the ratio (V ∝ q): 600 × 5/3 = 1000 V"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Denge: qV/d = mg, yani V ∝ 1/q (m, g, d sabit). Yük 3e'den 5e'ye çıkar: V = 600 × 3/5 = 360 V."
+          "text": "Equilibrium: qV/d = mg, so V ∝ 1/q (m, g, d constant). The charge increases from 3e to 5e: V = 600 × 3/5 = 360 V."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Paralel levhalar arasında alan şiddeti (E = V/d) ve yüke etkiyen kuvvet",
+    "outcome": "Field strength between parallel plates (E = V/d) and the force on a charge",
     "stem": {
      "type": "doc",
      "content": [
@@ -309,7 +309,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "E = V × d alınır: 3.0 × 10³ × 0.015 = 45; F = 3.2 × 10⁻¹⁹ × 45 = 1.4 × 10⁻¹⁷ N"
+            "text": "Uses E = V × d: 3.0 × 10³ × 0.015 = 45; F = 3.2 × 10⁻¹⁹ × 45 = 1.4 × 10⁻¹⁷ N"
            }
           ]
          }
@@ -344,7 +344,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Uzaklık metreye çevrilmez: E = 3.0 × 10³ / 15 = 200; F = 3.2 × 10⁻¹⁹ × 200 = 6.4 × 10⁻¹⁷ N"
+            "text": "Does not convert the distance to metres: E = 3.0 × 10³ / 15 = 200; F = 3.2 × 10⁻¹⁹ × 200 = 6.4 × 10⁻¹⁷ N"
            }
           ]
          }
@@ -379,7 +379,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Alfa parçacığının yükü e alınır: 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 3.2 × 10⁻¹⁴ N"
+            "text": "Takes the charge of the alpha particle as e: 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 3.2 × 10⁻¹⁴ N"
            }
           ]
          }
@@ -418,7 +418,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "E = V/d = 3.0 × 10³ / 0.015 = 2.0 × 10⁵ V m⁻¹ (levhalar arasında her yerde aynı). F = qE = 2 × 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 6.4 × 10⁻¹⁴ N."
+          "text": "E = V/d = 3.0 × 10³ / 0.015 = 2.0 × 10⁵ V m⁻¹ (the same everywhere between the plates). F = qE = 2 × 1.60 × 10⁻¹⁹ × 2.0 × 10⁵ = 6.4 × 10⁻¹⁴ N."
          }
         ]
        }
@@ -449,7 +449,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Akım taşıyan düz telin manyetik alan deseni ve yönü",
+    "outcome": "Magnetic field pattern and direction for a current-carrying straight wire",
     "stem": {
      "type": "doc",
      "content": [
@@ -514,7 +514,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Sayfa düzleminde yatay bir doğru üzerinde, soldan sağa X teli, P noktası, Y teli. X, sayfaya dik ve akımı sayfanın içine doğru (⊗ simgesi); Y, sayfaya dik ve akımı sayfadan dışarı doğru (⊙ simgesi). P, X ile Y'nin tam ortasında. \"Sayfanın üstü\" ve \"sayfanın altı\" yönleri XY doğrusuna diktir. Diagram not to scale.",
+      "description": "On a horizontal line in the plane of the page, from left to right: wire X, point P, wire Y. X is perpendicular to the page and its current is into the page (⊗ symbol); Y is perpendicular to the page and its current is out of the page (⊙ symbol). P is exactly midway between X and Y. The \"top of the page\" and \"bottom of the page\" directions are perpendicular to the line XY. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -553,7 +553,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "\"Zıt yönlü eşit akımların alanları birbirini götürür\" düşüncesi; P'nin tellerin zıt taraflarında olduğu göz ardı edilir"
+            "text": "Thinks \"the fields of equal currents in opposite directions cancel\"; ignores that P is on opposite sides of the two wires"
            }
           ]
          }
@@ -588,7 +588,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kavrama kuralı ters uygulanır (sol el ya da dolanma yönü ters)"
+            "text": "Applies the grip rule the wrong way round (left hand, or reversed sense of circulation)"
            }
           ]
          }
@@ -644,7 +644,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Manyetik alan, elektrik alandaki \"artıdan eksiye\" gibi bir telden ötekine doğru sanılır (alanın tele dik çemberler olduğu bilinmez)"
+            "text": "Thinks the magnetic field points from one wire to the other, like \"positive to negative\" in an electric field (does not know the field forms circles around the wire)"
            }
           ]
          }
@@ -662,7 +662,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kullanılan kural: sağ el kavrama kuralı (başparmak akım yönünde, parmaklar alan çizgilerinin dolanma yönünde). X (akım sayfanın içine): alan çizgileri sayfaya bakan gözlemciye göre saat yönünde çemberlerdir; X'in sağındaki P'de alan sayfanın altına doğrudur. Y (akım sayfadan dışarı): alan çizgileri saat yönünün tersinedir; Y'nin solundaki P'de alan yine sayfanın altına doğrudur. İki alan aynı yönlüdür ve toplanır: bileşke sayfanın altına doğru. Vektörel kontrol (x sağa, y sayfanın üstüne, z sayfadan dışarı; B ∝ I × r): X için (−z) × (+x) = −y; Y için (+z) × (−x) = −y."
+          "text": "Rule used: the right-hand grip rule (thumb along the current, fingers curling in the direction of the field lines). X (current into the page): the field lines are clockwise circles as seen by an observer looking at the page; at P, to the right of X, the field is towards the bottom of the page. Y (current out of the page): the field lines are anticlockwise; at P, to the left of Y, the field is again towards the bottom of the page. The two fields are in the same direction and add: the resultant is towards the bottom of the page. Vector check (x to the right, y to the top of the page, z out of the page; B ∝ I × r): for X, (−z) × (+x) = −y; for Y, (+z) × (−x) = −y."
          }
         ]
        }
@@ -692,7 +692,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "D.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Nokta yüklerin elektrik potansiyeli (skaler toplam)",
+    "outcome": "Electric potential of point charges (scalar sum)",
     "stem": {
      "type": "doc",
      "content": [
@@ -791,7 +791,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yükün işareti yok sayılır, büyüklükler toplanır: 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15 = 600 V"
+            "text": "Ignores the signs of the charges and adds the magnitudes: 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15 = 600 V"
            }
           ]
          }
@@ -826,7 +826,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Potansiyel için 1/r² kullanılır (işaretli toplam): 8.99 × 10⁹ × 2.0 × 10⁻⁹ / 0.15² = 800"
+            "text": "Uses 1/r² for potential (signed sum): 8.99 × 10⁹ × 2.0 × 10⁻⁹ / 0.15² = 800"
            }
           ]
          }
@@ -861,7 +861,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Potansiyel yerine alan şiddeti hesaplanır (alanlar aynı yönlü, toplanır): 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15² = 4000"
+            "text": "Calculates field strength instead of potential (the fields are in the same direction and add): 8.99 × 10⁹ × 10.0 × 10⁻⁹ / 0.15² = 4000"
            }
           ]
          }
@@ -879,7 +879,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Potansiyel skalerdir ve işaretiyle toplanır; P her iki yüke 0.15 m uzaklıktadır. V = k(q₁ + q₂)/r = 8.99 × 10⁹ × (6.0 − 4.0) × 10⁻⁹ / 0.15 = 120 V."
+          "text": "Potential is a scalar and is added with its sign; P is 0.15 m from each charge. V = k(q₁ + q₂)/r = 8.99 × 10⁹ × (6.0 − 4.0) × 10⁻⁹ / 0.15 = 120 V."
          }
         ]
        }
@@ -909,7 +909,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "D.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Potansiyel ve alan şiddeti; W = qΔV; eşpotansiyel yüzeyler",
+    "outcome": "Potential and field strength; W = qΔV; equipotential surfaces",
     "stem": {
      "type": "doc",
      "content": [

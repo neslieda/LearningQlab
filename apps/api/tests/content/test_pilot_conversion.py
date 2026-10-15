@@ -6,7 +6,7 @@ converter: both sides are reduced to plain text and compared by code in this mod
 
 How it works
 ------------
-* `SourceQuestion` is this module's own reading of one `## Soru N` block of a Markdown file
+* `SourceQuestion` is this module's own reading of one `## Question N` block of a Markdown file
   (IMPORT_RULES section 3 for the block layout). Inline markup is read by `scan`, a small state
   machine over `**`, `*`, `<sub>`, `<sup>`, `<br>`, the guillemets and the tick mark.
 * The document side is read by `doc_items` / `nodes_of`, straight from the schema objects.
@@ -71,7 +71,9 @@ EXPECTED_FILES = 24
 EXPECTED_QUESTIONS = 130
 EXPECTED_BY_SECTION = {"paper_1a": 101, "paper_2": 24, "paper_1b": 5}
 # IMPORT_RULES 3.2: the text of a figure note is not imported; its stimulus carries this sentence.
-FIGURE_NOTE_DESCRIPTION = "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda."
+FIGURE_NOTE_DESCRIPTION = (
+    "Graph to be generated from data; details in the Figure note of the source file."
+)
 
 # --------------------------------------------------------------------------------------------
 # Small text helpers
@@ -341,7 +343,7 @@ class SourceQuestion:
     has_formula_chain: bool = False
     figure_note: str | None = None
     free_paragraphs: list[str] = field(default_factory=list)
-    # `> **Şekil:**` block texts in document order (stem, lead-ins); the figure note is apart
+    # `> **Figure:**` block texts in document order (stem, lead-ins); the figure note is apart
     figures: list[str] = field(default_factory=list)
     row: dict[str, str] = field(default_factory=dict)
 
@@ -360,7 +362,7 @@ class SourceQuestion:
 
     @property
     def level_hl(self) -> bool:
-        return self.heading_hl or self.row.get("Düzey") == "HL"
+        return self.heading_hl or self.row.get("Level") == "HL"
 
     @property
     def total_marks(self) -> int:
@@ -372,7 +374,7 @@ class SourceQuestion:
         return f"{head[0].upper()}.{head[1:]}"
 
 
-_HEADING = re.compile(r"^## Soru (\d+) — Paper (1A|1B|2)(?: \(([^)]*)\))?\s*$")
+_HEADING = re.compile(r"^## Question (\d+) — Paper (1A|1B|2)(?: \(([^)]*)\))?\s*$")
 _PART = re.compile(r"^\s*\*\*\(([a-z])\)\*\*\s*(.*)$")
 _ROMAN_PART = re.compile(r"^\s*\(([ivx]+)\)\s+(.*)$")
 _ROMAN_AFTER_LETTER = re.compile(r"^\(([ivx]+)\)\s*(.*)$")
@@ -397,7 +399,7 @@ def _quote_text(el: Element) -> str:
     return " ".join(line.lstrip(">").strip() for line in el.lines)
 
 
-_FIGURE_LABEL = "**Şekil:**"
+_FIGURE_LABEL = "**Figure:**"
 
 
 def _item(el: Element, q: SourceQuestion, where: str) -> SItem:
@@ -432,7 +434,7 @@ def _parse_mcq(q: SourceQuestion, els: list[Element]) -> None:
     if keys != ["A", "B", "C", "D"]:
         raise SourceError(f"{q.ref}: options are {keys}")
     el = next(it, None)
-    m = re.fullmatch(r"\*\*Cevap: ([A-D])\*\*", el.lines[0].strip()) if el else None
+    m = re.fullmatch(r"\*\*Answer: ([A-D])\*\*", el.lines[0].strip()) if el else None
     if el is None or m is None or len(el.lines) != 1:
         raise SourceError(f"{q.ref}: no answer line after the options")
     q.correct = m.group(1)
@@ -440,9 +442,9 @@ def _parse_mcq(q: SourceQuestion, els: list[Element]) -> None:
     while el is not None and el.kind == "para":
         text = " ".join(line.strip() for line in el.lines)
         if not q.explanation:
-            if not text.startswith("**Çözüm.**"):
+            if not text.startswith("**Solution.**"):
                 raise SourceError(f"{q.ref}: explanation does not start with the label")
-            text = text.removeprefix("**Çözüm.**").strip()
+            text = text.removeprefix("**Solution.**").strip()
         q.explanation.append(text)
         el = next(it, None)
     if not q.explanation:
@@ -450,7 +452,7 @@ def _parse_mcq(q: SourceQuestion, els: list[Element]) -> None:
     if el is None or el.kind != "table":
         raise SourceError(f"{q.ref}: no misconception table")
     rows = _table_rows(el)
-    if rows[0] != ("Seçenek", "Dayandığı yanılgı"):
+    if rows[0] != ("Option", "Misconception"):
         raise SourceError(f"{q.ref}: misconception table header is {rows[0]}")
     for row in rows[1:]:
         if len(row) != 2:
@@ -520,8 +522,8 @@ def _parse_structured(q: SourceQuestion, els: list[Element]) -> None:
     if pending:
         raise SourceError(f"{q.ref}: content between the last part and the first section")
 
-    q.has_formula_chain = any(name.startswith("Formül zinciri") for name in sections)
-    figure_note = [name for name in sections if name.startswith("Şekil notu")]
+    q.has_formula_chain = any(name.startswith("Formula chain") for name in sections)
+    figure_note = [name for name in sections if name.startswith("Figure note")]
     if len(figure_note) > 1:
         raise SourceError(f"{q.ref}: several figure notes")
     markscheme = [name for name in sections if name == "Markscheme"]
@@ -569,7 +571,7 @@ def _parse_structured(q: SourceQuestion, els: list[Element]) -> None:
 def _parse_kapsam(text: str, stem: str) -> dict[int, dict[str, str]]:
     lines = text.split("\n")
     try:
-        start = lines.index("## Kapsam tablosu")
+        start = lines.index("## Scope table")
     except ValueError:
         raise SourceError(f"{stem}: no scope table") from None
     i = start + 1
@@ -583,7 +585,7 @@ def _parse_kapsam(text: str, stem: str) -> dict[int, dict[str, str]]:
         cells = split_row(line)
         if len(cells) != len(header):
             raise SourceError(f"{stem}: scope row has {len(cells)} cells")
-        # the outcome column is headed "Kazanım (A.1)": keep the key without the node
+        # the outcome column is headed "Outcome (A.1)": keep the key without the node
         keys = [re.sub(r" \(.*\)$", "", h) for h in header]
         rows[int(cells[0])] = dict(zip(keys, cells, strict=True))
     return rows
@@ -593,13 +595,13 @@ def _parse_kapsam(text: str, stem: str) -> dict[int, dict[str, str]]:
 class SourceFile:
     stem: str
     sha256: str
-    numbers: list[int]  # every `## Soru N` heading, in order, found by a plain regex
+    numbers: list[int]  # every `## Question N` heading, in order, found by a plain regex
     questions: list[SourceQuestion]
 
 
 def parse_source_text(text: str, stem: str, digest: str = "") -> SourceFile:
     kapsam = _parse_kapsam(text, stem)
-    numbers = [int(n) for n in re.findall(r"^## Soru (\d+)\b", text, flags=re.M)]
+    numbers = [int(n) for n in re.findall(r"^## Question (\d+)\b", text, flags=re.M)]
     blocks: list[tuple[re.Match[str], list[str]]] = []
     current: tuple[re.Match[str], list[str]] | None = None
     after_rule = False
@@ -619,7 +621,7 @@ def parse_source_text(text: str, stem: str, digest: str = "") -> SourceFile:
             current = (m, [])
             blocks.append(current)
             continue
-        if line.startswith("## Soru"):
+        if line.startswith("## Question"):
             raise SourceError(f"{stem}: heading not understood: {line!r}")
         if current is not None:
             current[1].append(line)
@@ -628,7 +630,7 @@ def parse_source_text(text: str, stem: str, digest: str = "") -> SourceFile:
         extra = [t.strip() for t in (m.group(3) or "").split(",") if t.strip()]
         marks: int | None = None
         for token in extra:
-            marks_token = re.fullmatch(r"(\d+) puan", token)
+            marks_token = re.fullmatch(r"(\d+) marks", token)
             if marks_token is not None:
                 marks = int(marks_token.group(1))
         q = SourceQuestion(stem, int(m.group(1)), m.group(2), "HL" in extra, marks)
@@ -1124,28 +1126,31 @@ def leaf_nodes() -> set[str]:
 
 PAPER_SECTION = {"1A": "paper_1a", "1B": "paper_1b", "2": "paper_2"}
 DIFFICULTY = {
-    "Kolay": "easy",
-    "Kolay–orta": "medium",
-    "Orta": "medium",
-    "Orta–zor": "hard",
-    "Zor": "hard",
+    "Easy": "easy",
+    "Easy–medium": "medium",
+    "Medium": "medium",
+    "Medium–hard": "hard",
+    "Hard": "hard",
 }
 # IMPORT_RULES 3.3 (as amended): keyword -> kind. The earliest keyword in the description wins.
 STIMULUS_KEYWORDS: tuple[tuple[str, str], ...] = (
-    ("devre", "circuit_diagram"),
-    ("direnç", "circuit_diagram"),
-    ("batarya", "circuit_diagram"),
-    ("voltmetre", "circuit_diagram"),
-    ("ampermetre", "circuit_diagram"),
-    ("grafik", "graph"),
-    ("eksen", "graph"),
+    ("circuit", "circuit_diagram"),
+    ("resistor", "circuit_diagram"),
+    ("battery", "circuit_diagram"),
+    ("cell", "circuit_diagram"),
+    ("voltmeter", "circuit_diagram"),
+    ("ammeter", "circuit_diagram"),
+    ("graph", "graph"),
+    ("axis", "graph"),
+    ("axes", "graph"),
     ("p–v", "graph"),
-    ("alan çizgi", "field_diagram"),
-    ("ışın", "ray_wavefront_diagram"),
-    ("dalga cephe", "ray_wavefront_diagram"),
-    ("enerji düzey", "energy_level_diagram"),
-    ("uzay-zaman", "spacetime_diagram"),
-    ("tablo", "data_table"),
+    ("field line", "field_diagram"),
+    ("ray", "ray_wavefront_diagram"),
+    ("wavefront", "ray_wavefront_diagram"),
+    ("energy level", "energy_level_diagram"),
+    ("spacetime", "spacetime_diagram"),
+    ("space-time", "spacetime_diagram"),
+    ("table", "data_table"),
 )
 
 
@@ -1164,7 +1169,7 @@ def expected_class(src: SourceQuestion) -> str:
 
 def expected_outcome(src: SourceQuestion) -> str:
     """Section 3 and 8: the Kazanim cell as it stands, markup included."""
-    return src.row["Kazanım"]
+    return src.row["Outcome"]
 
 
 def structure_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
@@ -1184,12 +1189,12 @@ def structure_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
         errors,
         "difficulty",
         doc.difficulty.value if doc.difficulty else None,
-        DIFFICULTY[src.row["Zorluk"]],
+        DIFFICULTY[src.row["Difficulty"]],
     )
     _eq(errors, "primary_syllabus_node", doc.primary_syllabus_node, src.primary_node)
     _eq(errors, "secondary_syllabus_nodes", doc.secondary_syllabus_nodes, ())
     if doc.outcome is None or squash(doc.outcome) != squash(expected_outcome(src)):
-        errors.append(f"outcome: {doc.outcome!r}, the scope-table cell is {src.row['Kazanım']!r}")
+        errors.append(f"outcome: {doc.outcome!r}, the scope-table cell is {src.row['Outcome']!r}")
     _eq(errors, "total_marks", doc.total_marks, src.total_marks)
     errors += _stimulus_structure(src, doc)
     level_content = "ahl" if src.level_hl else "sl_core"
@@ -1230,18 +1235,17 @@ def _stimulus_structure(src: SourceQuestion, doc: QuestionDocument) -> list[str]
     return errors
 
 
-def turkish_lower(text: str) -> str:
-    return text.replace("I", "ı").replace("İ", "i").lower()
-
-
 def stimulus_kind(description: str) -> str:
     """IMPORT_RULES 3.3: the keyword that comes first in the text, matched case-insensitively
-    (Turkish casing) at a word start; no keyword gives `schematic_diagram`."""
-    lowered = turkish_lower(description)
+    as a whole word with an optional plural `s`/`es`; no keyword gives `schematic_diagram`."""
+    lowered = description.casefold()
     best: tuple[int, str] | None = None
     for word, kind in STIMULUS_KEYWORDS:
-        for m in re.finditer(re.escape(word), lowered):
-            if m.start() == 0 or not lowered[m.start() - 1].isalpha():
+        for m in re.finditer(re.escape(word) + "(?:s|es)?", lowered):
+            end = m.end()
+            if (m.start() == 0 or not lowered[m.start() - 1].isalpha()) and (
+                end == len(lowered) or not lowered[end].isalpha()
+            ):
                 if best is None or m.start() < best[0]:
                     best = (m.start(), kind)
                 break
@@ -1259,7 +1263,7 @@ def _mcq_structure(src: SourceQuestion, doc: QuestionDocument, level_content: st
     _eq(errors, "column_headers", mcq.column_headers, ())
     _eq(errors, "statements", mcq.statements, ())
     _eq(errors, "level_content", mcq.level_content.value, level_content)
-    hedef = re.fullmatch(r"AO([123])", src.row["Hedef"])
+    hedef = re.fullmatch(r"AO([123])", src.row["Objective"])
     _eq(
         errors,
         "assessment_objective",
@@ -1579,22 +1583,22 @@ def all_errors(src: SourceQuestion, doc: QuestionDocument) -> list[str]:
 # ============================================================================================
 
 SELF_CHECK_MARKDOWN = """\
-# Pilot soru seti: A.1 Self-check
+# Pilot question set: A.1 Self-check
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (A.1) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (A.1) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Net force on a body in circular motion | AO2 | — | 1 | Orta |
-| 2 | Paper 2 | HL | Rolling without slipping on a ramp | AO1–AO3 | State, Show that | 7 | Orta–zor |
+| 1 | Paper 1A | SL | Net force on a body in circular motion | AO2 | — | 1 | Medium |
+| 2 | Paper 2 | HL | Rolling without slipping on a ramp | AO1–AO3 | State, Show that | 7 | Medium–hard |
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A turntable rotates with angular speed *ω* about a vertical axis.<br>A coin of mass *m* rests on it at a distance *r* from the axis, and the coin does **not** slip.
 
-> **Şekil:** A flat disc seen from above with a small coin near its rim. *Diagram not to scale.*
+> **Figure:** A flat disc seen from above with a small coin near its rim. *Diagram not to scale.*
 
 What is the magnitude of the net force on the coin?
 
@@ -1603,11 +1607,11 @@ B. *mωr*
 C. *m*<sub>c</sub>*g*
 D. zero
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** The net force is the centripetal force, *F* = *mω*<sup>2</sup>*r*. It is directed *towards the centre*, so **speed** alone is not what is asked.
+**Solution.** The net force is the centripetal force, *F* = *mω*<sup>2</sup>*r*. It is directed *towards the centre*, so **speed** alone is not what is asked.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
 | B | Linear speed *v* = *ωr* is used in place of the force |
 | C | Weight *m*<sub>c</sub>*g* is chosen, as if the coin were in free fall |
@@ -1615,11 +1619,11 @@ D. zero
 
 ---
 
-## Soru 2 — Paper 2 (HL, 7 puan)
+## Question 2 — Paper 2 (HL, 7 marks)
 
 A small trolley of mass 0.40 kg rolls from rest down a smooth ramp. The speed *v* of the trolley is recorded after it has travelled a distance *s* along the ramp.
 
-> **Şekil:** A ramp inclined at angle *θ* to the horizontal with a trolley at its upper end.
+> **Figure:** A ramp inclined at angle *θ* to the horizontal with a trolley at its upper end.
 > *Diagram not to scale.*
 
 | *s* / m | *v* / m s⁻¹ ± 0.1 m s⁻¹ |
@@ -1633,7 +1637,7 @@ A small trolley of mass 0.40 kg rolls from rest down a smooth ramp. The speed *v
 
 The trolley is replaced by a hoop that rolls without slipping.
 
-> **Şekil:** The hoop at the top of the same ramp.
+> **Figure:** The hoop at the top of the same ramp.
 
 **(c)** (i) Explain why the linear acceleration of the hoop is smaller than that of the trolley. [2]
 
@@ -1651,14 +1655,14 @@ The trolley is replaced by a hoop that rolls without slipping.
 
 This free paragraph uses *g* = 9.8 m s⁻² and is not part of the question text.
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | s = 2.0 m | |
+| Parameters | s = 2.0 m | |
 | `a` | `v**2/(2*s)` | 2.25 m s⁻² |
 
-### Şekil notu
+### Figure note
 
 A graph of *v*² against *s* is drawn with gradient 4.50 m s⁻² and intercept 0.12 m² s⁻².
 
@@ -2105,7 +2109,7 @@ def test_self_check_line_without_a_tick_is_compared_with_its_cell() -> None:
 
 def test_self_check_text_between_a_closing_rule_and_the_next_heading_is_an_error() -> None:
     broken = SELF_CHECK_MARKDOWN.replace(
-        "---\n\n## Soru 2", "---\n\nstray words after the rule\n\n## Soru 2"
+        "---\n\n## Question 2", "---\n\nstray words after the rule\n\n## Question 2"
     )
     assert broken != SELF_CHECK_MARKDOWN
     with pytest.raises(SourceError, match="closing ---"):
@@ -2695,21 +2699,22 @@ def test_note_and_option_rules_on_small_inputs() -> None:
 @pytest.mark.parametrize(
     ("description", "kind"),
     [
-        ("Bir devre ve bir grafik", "circuit_diagram"),
-        ("Bir grafik ve bir devre", "graph"),  # the earliest keyword wins, not list order
+        ("A circuit and a graph", "circuit_diagram"),
+        ("A graph and a circuit", "graph"),  # the earliest keyword wins, not list order
         ("Nothing special", "schematic_diagram"),
-        ("Kenarın dışında kalan bölge", "schematic_diagram"),  # "ışın" inside "dışında": no match
-        ("Işın demeti levhaya gelir", "ray_wavefront_diagram"),  # capital Turkish dotless I
-        ("IŞIN demeti", "ray_wavefront_diagram"),
-        ("Devreye seri bağlı bir ampermetre", "circuit_diagram"),
-        ("Bir ampermetre ve bir eksen", "circuit_diagram"),
-        ("Bir gaz için P–V çevrimi", "graph"),
-        ("Dalga cepheleri ve ışınlar", "ray_wavefront_diagram"),
-        ("Enerji düzeyleri ve bir tablo", "energy_level_diagram"),
-        ("Bir uzay-zaman çizimi", "spacetime_diagram"),
-        ("Bir tablo", "data_table"),
-        ("Alan çizgileri", "field_diagram"),
-        ("Bir sistemi gösteren şema", "schematic_diagram"),
+        ("An array of detectors", "schematic_diagram"),  # "ray" inside "array": no match
+        ("A stable platform", "schematic_diagram"),  # "table" inside "stable": no match
+        ("RAY box and a lens", "ray_wavefront_diagram"),
+        ("A series circuit with an ammeter", "circuit_diagram"),
+        ("An ammeter and an axis", "circuit_diagram"),
+        ("A P–V cycle for a gas", "graph"),
+        ("Wavefronts and rays", "ray_wavefront_diagram"),
+        ("Energy levels and a table", "energy_level_diagram"),
+        ("A space-time sketch", "spacetime_diagram"),
+        ("A spacetime sketch", "spacetime_diagram"),
+        ("A table", "data_table"),
+        ("Electric field lines", "field_diagram"),
+        ("A schematic showing a system", "schematic_diagram"),
     ],
 )
 def test_stimulus_kind_rule(description: str, kind: str) -> None:
@@ -2741,10 +2746,10 @@ def test_source_question_numbers_are_the_headings_in_order(sf: SourceFile) -> No
 @pytest.mark.parametrize("src", QUESTION_PARAMS)
 def test_source_question_is_internally_consistent(src: SourceQuestion) -> None:
     """Section 3 conditions that make a question convertible at all, read from the Markdown."""
-    assert src.row["Bölüm"] == f"Paper {src.paper}"
-    assert src.row["Düzey"] in ("SL", "HL")
-    assert src.row["Zorluk"] in DIFFICULTY
-    assert int(src.row["Puan"]) == src.total_marks
+    assert src.row["Section"] == f"Paper {src.paper}"
+    assert src.row["Level"] in ("SL", "HL")
+    assert src.row["Difficulty"] in DIFFICULTY
+    assert int(src.row["Marks"]) == src.total_marks
     assert src.stem_items, "empty stem"
     if src.is_mcq:
         assert src.correct in "ABCD"

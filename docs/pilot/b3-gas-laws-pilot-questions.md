@@ -1,41 +1,41 @@
-# Pilot soru seti: B.3 Gaz yasaları
+# Pilot question set: B.3 Gas laws
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla yazıldı.
-> B teması için istenen tek Paper 1B (veri temelli) sorusu bu dosyadadır (Soru 6).
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written following the [authoring standard](AUTHORING_STANDARD.md), with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
+> The only Paper 1B (data-based) question requested for theme B is in this file (Question 6).
 >
-> **Kaynak:** yalnızca müfredat düğümü B.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı; PDF açılmadı.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile ayrı bir hesapla
-> yeniden üretildi ve dosyadaki değerlerle eşleşti. Soru 6'daki en uygun doğru (en küçük kareler) ve tüm belirsizlik çubuklarından
-> geçen en dik / en yatık doğrular da tablodaki veriden kodla hesaplandı. Sabitler: R = 8.31 J K⁻¹ mol⁻¹, k<sub>B</sub> = 1.38 × 10⁻²³ J K⁻¹,
-> N<sub>A</sub> = 6.02 × 10²³ mol⁻¹; gereken soruda verildi; veri kitapçığı değerleri uzmanca teyit edilmeli.
-> **Doğrulanmayan:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; nitel maddeler (Soru 3, 5c, 5e, 6a–c, 6g) kodla
-> denetlenemez; Soru 6'nın verisi kurgusaldır (ideal gaz davranışına ölçüm saçılması eklenerek yazıldı), gerçek bir deneyden alınmadı;
-> "root mean square speed" teriminin rehberin P = ⅓ρv² için kullandığı terimle aynı olduğu teyit edilmedi (Soru 4); bilinen bir sınav
-> sorusuna benzerlik açısından uzman gözüyle bakılmadı.
+> **Source:** only syllabus node B.3 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook question or internet source was used as input; no PDF was opened.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced by a separate calculation in `python3` (standard library only)
+> and matched the values in the file. The line of best fit (least squares) in Question 6 and the steepest / shallowest lines passing through all
+> uncertainty bars were also calculated by code from the data in the table. Constants: R = 8.31 J K⁻¹ mol⁻¹, k<sub>B</sub> = 1.38 × 10⁻²³ J K⁻¹,
+> N<sub>A</sub> = 6.02 × 10²³ mol⁻¹; given in the question where needed; the data booklet values must be confirmed by an expert.
+> **Not verified:** passed an independent blind solver; has not passed expert review; qualitative points (Questions 3, 5c, 5e, 6a–c, 6g) cannot be checked
+> by code; the data of Question 6 are fictional (written by adding measurement scatter to ideal gas behaviour) and were not taken from a real experiment;
+> it was not confirmed that the term "root mean square speed" is the same as the term the guide uses for P = ⅓ρv² (Question 4); no expert check was made for resemblance
+> to a known exam question.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (B.3) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (B.3) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | PV = NkT ile molekül sayısı; kelvin sıcaklığı | AO2 | — | 1 | Orta |
-| 2 | Paper 1A | SL | Tek atomlu ideal gazın iç enerjisi (U = 3⁄2 PV) | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | İdeal gaz yaklaşımının geçerlilik koşulları | AO1 | — | 1 | Kolay |
-| 4 | Paper 1A | SL | P = ⅓ρv² ile orantı akıl yürütmesi | AO3 | — | 1 | Orta |
-| 5 | Paper 2 | SL | İdeal gaz yasası, sabit hacim; kinetik kuramla basınç; iç enerji değişimi; modelin sınırı | AO2–AO3 | Show that, Calculate, Explain, Suggest | 9 | Orta |
-| 6 | Paper 1B | SL | Sabit hacimde basınç–sıcaklık verisi; doğrusal ile doğru orantılı ayrımı; dış değerleme; belirsizlik | AO2–AO3 | State, Outline, Discuss, Determine, Comment, Suggest | 11 | Orta–zor |
+| 1 | Paper 1A | SL | Number of molecules using PV = NkT; kelvin temperature | AO2 | — | 1 | Medium |
+| 2 | Paper 1A | SL | Internal energy of a monatomic ideal gas (U = 3⁄2 PV) | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Conditions under which the ideal gas approximation is valid | AO1 | — | 1 | Easy |
+| 4 | Paper 1A | SL | Proportional reasoning with P = ⅓ρv² | AO3 | — | 1 | Medium |
+| 5 | Paper 2 | SL | Ideal gas law, constant volume; pressure from kinetic theory; change in internal energy; limit of the model | AO2–AO3 | Show that, Calculate, Explain, Suggest | 9 | Medium |
+| 6 | Paper 1B | SL | Pressure–temperature data at constant volume; linear versus directly proportional; extrapolation; uncertainty | AO2–AO3 | State, Outline, Discuss, Determine, Comment, Suggest | 11 | Medium–hard |
 
-Bu set B.3'ün tamamını kapsamaz. Eksik kalanlar: basıncın tanımı (P = F/A) ile hesap; mol–kütle–molar kütle dönüşümleri; sabit
-sıcaklık (PV = sabit) ve sabit basınç (V/T = sabit) süreçleri; P–V diyagramının çizimi ve yorumu; ideal gaz modelinin varsayımlarının
-sayılması; P = ⅓ρv² ile doğrudan sayısal hesap.
+This set does not cover all of B.3. Not covered: calculations using the definition of pressure (P = F/A); mole–mass–molar mass conversions; processes at constant
+temperature (PV = constant) and constant pressure (V/T = constant); drawing and interpreting a P–V diagram; listing the assumptions of the ideal gas model;
+direct numerical calculation with P = ⅓ρv².
 
-Kapsam sınırı kontrolü: süreçler yalnızca sabit hacim (Soru 5, 6) ve ideal gaz yasasının tek durumda uygulanması (Soru 1, 2, 4);
-adyabatik ya da başka süreç yok. Türev ya da integral yok.
+Scope boundary check: the processes are only constant volume (Questions 5, 6) and the application of the ideal gas law to a single state (Questions 1, 2, 4);
+there are no adiabatic or other processes. No derivatives or integrals.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A sealed flask of volume 2.0 × 10⁻³ m³ contains an ideal gas at a pressure of 1.5 × 10⁵ Pa and a temperature of 27 °C.
 
@@ -48,20 +48,20 @@ B. 6.0 × 10²³
 C. 8.1 × 10²³
 D. 2.2 × 10²⁵
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** *T* = 27 + 273 = 300 K. *N* = *PV* / *kT* = (1.5 × 10⁵ × 2.0 × 10⁻³) / (1.38 × 10⁻²³ × 300) = 300 / 4.14 × 10⁻²¹ =
+**Solution.** *T* = 27 + 273 = 300 K. *N* = *PV* / *kT* = (1.5 × 10⁵ × 2.0 × 10⁻³) / (1.38 × 10⁻²³ × 300) = 300 / 4.14 × 10⁻²¹ =
 7.2 × 10²².
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Kapta bir mol gaz olduğu varsayılır; Avogadro sabiti cevap olarak verilir: 6.0 × 10²³ |
-| C | Sıcaklık kelvine çevrilmez: 300 / (1.38 × 10⁻²³ × 27) = 8.05 × 10²³ |
-| D | Sıcaklık hesaba katılmaz: *PV* / *k* = 300 / 1.38 × 10⁻²³ = 2.17 × 10²⁵ |
+| B | The flask is assumed to contain one mole of gas; the Avogadro constant is given as the answer: 6.0 × 10²³ |
+| C | The temperature is not converted to kelvin: 300 / (1.38 × 10⁻²³ × 27) = 8.05 × 10²³ |
+| D | The temperature is not taken into account: *PV* / *k* = 300 / 1.38 × 10⁻²³ = 2.17 × 10²⁵ |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A monatomic ideal gas is in a container of volume 0.040 m³ at a pressure of 2.0 × 10⁵ Pa.
 
@@ -72,19 +72,19 @@ B. 8.0 kJ
 C. 12 kJ
 D. 24 kJ
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** *U* = 3⁄2 *NkT* = 3⁄2 *PV* = 1.5 × 2.0 × 10⁵ × 0.040 = 1.2 × 10⁴ J = 12 kJ. Sıcaklık ve madde miktarı gerekmez.
+**Solution.** *U* = 3⁄2 *NkT* = 3⁄2 *PV* = 1.5 × 2.0 × 10⁵ × 0.040 = 1.2 × 10⁴ J = 12 kJ. The temperature and the amount of substance are not needed.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Çarpan ters alınır: 2⁄3 *PV* = 5.33 kJ |
-| B | İç enerji *PV*'ye eşit sayılır: 8.0 kJ |
-| D | *P* = ⅓ρ*v*² ifadesindeki 3 çarpanı enerjiye taşınır: 3*PV* = 24 kJ |
+| A | The factor is inverted: 2⁄3 *PV* = 5.33 kJ |
+| B | Internal energy is taken to be equal to *PV*: 8.0 kJ |
+| D | The factor 3 in the expression *P* = ⅓ρ*v*² is carried over to the energy: 3*PV* = 24 kJ |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 The behaviour of a real gas is compared with the predictions of the ideal gas model.
 
@@ -95,21 +95,21 @@ B. high pressure and low temperature
 C. low pressure and low temperature
 D. low pressure and high temperature
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Düşük basınçta (düşük yoğunlukta) moleküller birbirinden uzaktır; molekül hacmi kabın hacmine göre ihmal edilir. Yüksek
-sıcaklıkta moleküllerin kinetik enerjisi, moleküller arası kuvvetlerin potansiyel enerjisine göre büyüktür. İkisi birlikte ideal gaz
-varsayımlarını en iyi karşılar.
+**Solution.** At low pressure (low density) the molecules are far apart from one another; the volume of the molecules is negligible compared with the volume of the container. At high
+temperature the kinetic energy of the molecules is large compared with the potential energy of the intermolecular forces. Together these best satisfy the
+assumptions of the ideal gas.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Yalnızca sıcaklık koşulu doğru; yüksek basınçta molekül hacminin ihmal edilemeyeceği gözden kaçar |
-| B | İki koşul da ters; gazın sıvılaşmaya en yakın olduğu durum "ideal" sanılır |
-| C | Yalnızca basınç koşulu doğru; düşük sıcaklıkta moleküller arası kuvvetlerin önem kazandığı gözden kaçar |
+| A | Only the temperature condition is right; it overlooks that at high pressure the volume of the molecules cannot be neglected |
+| B | Both conditions are reversed; the state closest to liquefaction is thought to be "ideal" |
+| C | Only the pressure condition is right; it overlooks that at low temperature the intermolecular forces become significant |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 Containers X and Y hold different ideal gases at the same pressure. The density of the gas in X is four times the density of the
 gas in Y.
@@ -121,19 +121,19 @@ B. 1⁄2
 C. 2
 D. 4
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** *P* = ⅓ρ*v*² → *v* = √(3*P*/ρ). Basınç aynı olduğundan *v* ∝ 1/√ρ. Oran = 1/√4 = 1⁄2.
+**Solution.** *P* = ⅓ρ*v*² → *v* = √(3*P*/ρ). Since the pressure is the same, *v* ∝ 1/√ρ. Ratio = 1/√4 = 1⁄2.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Karekök alınmaz (*v* ∝ 1/ρ): 1⁄4 |
-| C | Orantı ters kurulur (*v* ∝ √ρ): 2 |
-| D | Hem ters kurulur hem karekök alınmaz (*v* ∝ ρ): 4 |
+| A | The square root is not taken (*v* ∝ 1/ρ): 1⁄4 |
+| C | The proportion is set up the wrong way round (*v* ∝ √ρ): 2 |
+| D | The proportion is both inverted and the square root is not taken (*v* ∝ ρ): 4 |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A rigid steel cylinder of volume 0.012 m³ contains helium at a pressure of 1.5 × 10⁷ Pa and a temperature of 17 °C. Helium is a
 monatomic gas and is assumed to behave as an ideal gas.
@@ -162,25 +162,25 @@ The cylinder is left in sunlight and the temperature of the helium rises to 46 �
 | 5. | d | | Δ*U* = 3⁄2 *nR*Δ*T* = 1.5 × 75 × 8.31 × 29 ✓<br>Δ*U* = 2.7 × 10⁴ «J» ✓ | *Allow ECF from (a) and (b).*<br>**ALTERNATIVE:** Δ*U* = 3⁄2 *V*Δ*P* = 1.5 × 0.012 × 1.5 × 10⁶ ✓ = 2.7 × 10⁴ «J» ✓ | 2 |
 | 5. | e | | the pressure / density is high so the volume of the atoms is not negligible «compared with the volume of the cylinder» **OR** the atoms are close together so the forces between them are not negligible ✓ | *OWTTE*<br>*Do not accept "helium is a real gas" without a reason.* | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `V = 0.012 m^3`, `P1 = 1.5e7 Pa`, `T1 = 290 K`, `T2 = 319 K`; sabit `R = 8.31 J/(K mol)` | |
+| Parameters | `V = 0.012 m^3`, `P1 = 1.5e7 Pa`, `T1 = 290 K`, `T2 = 319 K`; constant `R = 8.31 J/(K mol)` | |
 | `n` | `P1*V/(R*T1)` | 74.7 mol |
 | `P2` | `P1*T2/T1` | 1.65 × 10⁷ Pa |
-| `dU` | `1.5*n*R*(T2 - T1)` | 2.70 × 10⁴ J (n = 75 mol ile 2.71 × 10⁴ J) |
+| `dU` | `1.5*n*R*(T2 - T1)` | 2.70 × 10⁴ J (2.71 × 10⁴ J with n = 75 mol) |
 
 ---
 
-## Soru 6 — Paper 1B (11 puan)
+## Question 6 — Paper 1B (11 marks)
 
 A student investigates how the pressure of a gas depends on its temperature. A sealed flask of air is connected by a short narrow
 tube to a pressure gauge. The flask is fully immersed in a water bath. The student changes the temperature *θ* of the water, waits
 several minutes and then records *θ* and the pressure *P* of the air.
 
-> **Şekil:** Su banyosuna tamamen batırılmış, ağzı tıpayla kapatılmış cam balon. Tıpadan çıkan kısa ve dar bir boru, su yüzeyinin
-> üstündeki bir basınç göstergesine bağlıdır. Suda bir termometre ve bir karıştırıcı vardır. Şekil ölçekli değildir.
+> **Figure:** A glass flask fully immersed in a water bath, its neck closed with a stopper. A short, narrow tube leaving the stopper is connected to a pressure gauge
+> above the water surface. The water contains a thermometer and a stirrer. The figure is not to scale.
 
 | *θ* / °C ± 0.5 °C | *P* / kPa ± 1 kPa |
 |---|---|
@@ -229,65 +229,65 @@ value. [1]
 | 6. | f | | consistent, because −273 °C lies within the range of the result «−295 °C to −255 °C» ✓ | *Allow ECF from (d) and (e).*<br>*A conclusion without reference to the range does not gain the mark.* | 1 |
 | 6. | g | | **ALTERNATIVE 1**<br>use a wider range of temperatures «e.g. include an ice bath or a freezing mixture» ✓<br>so that the extrapolation is shorter / the gradient is determined more precisely ✓<br>**ALTERNATIVE 2**<br>use a pressure gauge with a smaller uncertainty / better resolution ✓<br>so that the uncertainty bars are smaller and the range of possible lines is narrower ✓ | *OWTTE*<br>*The second mark is for a reason linked to the change.*<br>*Do not accept "repeat the readings" without a link to the uncertainty in P.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | veri tablosu; `dP = 1 kPa` | |
-| `m_best`, `c_best` | en küçük kareler doğrusu | 0.345 kPa °C⁻¹, 94.95 kPa |
-| `theta0` | `-c_best/m_best` | −275.2 °C (soruda verilen 95.0 ile −275.4 °C) |
-| `m_max`, `c_max` | tüm belirsizlik çubuklarından geçen en dik doğru | 0.3667 kPa °C⁻¹, 94.00 kPa |
-| `m_min`, `c_min` | tüm belirsizlik çubuklarından geçen en yatık doğru | 0.325 kPa °C⁻¹, 95.75 kPa |
-| `theta0_max` | `-c_max/m_max` | −256.4 °C (soruda verilen 0.3667 ile −256.3 °C) |
+| Parameters | data table; `dP = 1 kPa` | |
+| `m_best`, `c_best` | least-squares line | 0.345 kPa °C⁻¹, 94.95 kPa |
+| `theta0` | `-c_best/m_best` | −275.2 °C (−275.4 °C with the 95.0 given in the question) |
+| `m_max`, `c_max` | steepest line passing through all the uncertainty bars | 0.3667 kPa °C⁻¹, 94.00 kPa |
+| `m_min`, `c_min` | shallowest line passing through all the uncertainty bars | 0.325 kPa °C⁻¹, 95.75 kPa |
+| `theta0_max` | `-c_max/m_max` | −256.4 °C (−256.3 °C with the 0.3667 given in the question) |
 | `theta0_min` | `-c_min/m_min` | −294.6 °C |
-| `d_theta0` | `(theta0_max - theta0_min)/2` | 19.1 °C ≈ 19 °C (tek anlamlı basamakla 20 °C) |
+| `d_theta0` | `(theta0_max - theta0_min)/2` | 19.1 °C ≈ 19 °C (20 °C to one significant figure) |
 
-### Şekil notu
+### Figure note
 
-Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu *P*–*θ* grafiği yer alır; yatay eksen dış değerleme
-yapılabilmesi için −300 °C'ye kadar uzatılır. Grafik aynı veriden kodla üretilir (D-14). En dik doğru (30 °C; 105 kPa) ve
-(90 °C; 127 kPa) çubuk uçlarından, en yatık doğru (10 °C; 99 kPa) ve (90 °C; 125 kPa) çubuk uçlarından geçer; soruda verilen eğim ve
-kesim değerleri bunların dört anlamlı basamağa yuvarlanmış halidir. Sonuç: *θ*₀ = (−275 ± 19) °C ya da (−280 ± 20) °C.
+The version shown to the student includes, together with the table, a *P*–*θ* graph with uncertainty bars; the horizontal axis is extended to −300 °C so that extrapolation
+can be carried out. The graph is generated by code from the same data (D-14). The steepest line passes through the bar ends (30 °C; 105 kPa) and
+(90 °C; 127 kPa), the shallowest line through the bar ends (10 °C; 99 kPa) and (90 °C; 125 kPa); the gradient and
+intercept values given in the question are these rounded to four significant figures. Result: *θ*₀ = (−275 ± 19) °C or (−280 ± 20) °C.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi + alt alta A–D | Soru 1, 2, 4 "What is …?"; Soru 3 "Under which conditions …?" (seyrek "Which" biçimi) |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1, 2, 4 uygun (artan); Soru 3 iki değişkenli kısa sözel seçenek |
-| 1A: tablo seçenekli biçim doğrulanamadı | Soru 3 tablo yerine "… and …" kalıplı kısa seçeneklerle yazıldı |
-| 1A: doğru cevap konumu dengeli | A, C, D, B |
-| 1A: şekil olmadan çözülebilir | Soru 1–4 şekil gerektirmiyor |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 2, 2, 2, 1; toplam 9) |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | Soru 5 uygun: (a) Show that, (c) Explain, (e) Suggest |
-| Paper 2: olumsuzluk sözcüğü koyu | Soru 5(e) ("not") uygun |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, AND, max, ECF, OWTTE | Soru 5 ve Soru 6 uygun (Soru 6 da dört sütunlu biçimde) |
-| 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 6 uygun (1, 1, 2, 2, 2, 1, 2; toplam 11) |
-| 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 6 uygun; hangi belirsizlik çubuğunun çizilmediği metinde söyleniyor |
-| 1B: düzenek şeması | Yalnızca `> **Şekil:**` tarifi var; çizim üretilmedi. Soru şekil olmadan çözülebilir |
-| 1B: öğrenci verilen grafiğe en uygun doğruyu çizer, eğimi ve kesimi kendisi bulur | **Soru 6 uygun değil:** grafik üretilemediği için eğim ve kesim değerleri metinde verildi. Grafik şablonu hazır olunca (d) ve (e) parçaları yeniden yazılmalı |
-| 1B: parça yapısı (a), (b) altında (i)–(iv) | Soru 6 yalnızca (a)–(g) düzeyinde; alt numaralandırma kullanılmadı |
-| Değer–birim yazımı (kPa °C⁻¹), anlamlı basamak | Uygun; en uygun doğrunun eğimi ve kesimi 3, en dik / en yatık doğrularınki 4 anlamlı basamakla verildi (dış değerleme yuvarlamaya duyarlı; 3 basamak çubuk uçlarını aşıyordu) |
+| 1A: context + a separate single question sentence + A–D listed one under another | Questions 1, 2, 4 "What is …?"; Question 3 "Under which conditions …?" (rare "Which" form) |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 1, 2, 4 conform (ascending); Question 3 has short verbal options with two variables |
+| 1A: table-format options could not be confirmed | Question 3 was written with short options of the "… and …" pattern instead of a table |
+| 1A: position of the correct answer balanced | A, C, D, B |
+| 1A: solvable without a figure | Questions 1–4 need no figure |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 2, 2, 2, 1; total 9) |
+| Paper 2: at least one AO3 part; "Show that" pattern | Question 5 conforms: (a) Show that, (c) Explain, (e) Suggest |
+| Paper 2: negation word in bold | Question 5(e) ("not") conforms |
+| Markscheme: four-column table, ✓, « », OR, AND, max, ECF, OWTTE | Questions 5 and 6 conform (Question 6 also in the four-column format) |
+| 1B: experiment question of about 10 marks, sub-parts 1–3 marks | Question 6 conforms (1, 1, 2, 2, 2, 1, 2; total 11) |
+| 1B: table heading "quantity / unit ± uncertainty" | Question 6 conforms; the text says which uncertainty bar is not drawn |
+| 1B: apparatus diagram | Only a `> **Figure:**` description is present; no drawing was produced. The question can be solved without the figure |
+| 1B: the student draws the line of best fit on the given graph and finds the gradient and intercept themselves | **Question 6 does not conform:** because the graph could not be generated, the gradient and intercept values are given in the text. Parts (d) and (e) must be rewritten when the graph template is ready |
+| 1B: part structure (a), (i)–(iv) under (b) | Question 6 is only at the (a)–(g) level; sub-numbering was not used |
+| Value–unit notation (kPa °C⁻¹), significant figures | Conforms; the gradient and intercept of the best-fit line are given to 3 significant figures, those of the steepest / shallowest lines to 4 (the extrapolation is sensitive to rounding; 3 figures exceeded the bar ends) |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, yazarından bağımsız bir kör çözücü tarafından cevaplar görülmeden çözüldü; tüm cevap anahtarları ve
-markscheme sonuçları (Soru 6'nın veri işlemesi dahil) bağımsız olarak yeniden üretildi (KRİTİK ve ORTA bulgu yok). Ayrıntı:
-[review/b3-review.md](review/b3-review.md). Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by a blind solver independent of its author, without seeing the answers; all answer keys and
+markscheme results (including the data processing of Question 6) were reproduced independently (no CRITICAL or MEDIUM findings). Detail:
+[review/b3-review.md](review/b3-review.md). This check does not replace expert review.
 
-İnceleme sonucu yapılan değişiklikler (değişen her sayı `python3` ile yeniden hesaplandı):
+Changes made as a result of the review (every changed number was recalculated with `python3`):
 
-- **Soru 6 (e), DÜŞÜK-2:** en dik / en yatık doğruların değerleri 0.367 / 94.0 ve 0.325 / 95.8 → 0.3667 / 94.00 ve 0.3250 / 95.75
-  yapıldı; "values rounded to four significant figures" notu eklendi. Önceki değerler çubuk uçlarını 0.03–0.05 kPa aşıyordu; yeni
-  değerlerde en yatık doğru uçlara tam oturuyor, en dik doğru 90 °C'de yalnızca 0.003 kPa aşıyor (0.36666… yuvarlaması).
-  *θ*₀ değerleri −256.1 / −294.8 °C → −256.3 / −294.6 °C; yarı aralık 19.3 °C → 19.1 °C.
-- **Soru 6 (e), DÜŞÜK-3:** markscheme cevabı "20 «°C», accept 19 or 19.5" → "19 «°C», accept 20" oldu; en uygun değerden farkla
-  ilgili not "19 or 20 °C" olarak düzeltildi. Formül zinciri ve şekil notu buna göre güncellendi.
-- **Soru 4, DÜŞÜK-1 ("root mean square speed" terimi):** değişiklik yapılmadı; inceleme de terimin fizik olarak doğru olduğunu ve
-  uzman teyidine kadar kalmasını öneriyor.
-- **DÜŞÜK-4 (1B'de eğimin metinde verilmesi) ve DÜŞÜK-5 (SL kısa soruda 9 puan):** değişiklik yapılmadı; ilki grafik şablonu
-  gelene kadar çözülemez ve "Biçim uyumu"nda zaten işaretli, ikincisi uzman teyidi bekleyen kayıt.
+- **Question 6 (e), LOW-2:** the values of the steepest / shallowest lines 0.367 / 94.0 and 0.325 / 95.8 were changed to 0.3667 / 94.00 and 0.3250 / 95.75;
+  the note "values rounded to four significant figures" was added. The earlier values exceeded the bar ends by 0.03–0.05 kPa; with the new
+  values the shallowest line fits the ends exactly and the steepest line exceeds them at 90 °C by only 0.003 kPa (the 0.36666… rounding).
+  The *θ*₀ values changed from −256.1 / −294.8 °C to −256.3 / −294.6 °C; the half-range from 19.3 °C to 19.1 °C.
+- **Question 6 (e), LOW-3:** the markscheme answer "20 «°C», accept 19 or 19.5" became "19 «°C», accept 20"; the note about the difference from
+  the best-fit value was corrected to "19 or 20 °C". The formula chain and the figure note were updated accordingly.
+- **Question 4, LOW-1 ("root mean square speed" term):** no change made; the review also finds the term physically correct and recommends
+  keeping it until expert confirmation.
+- **LOW-4 (gradient given in the text in 1B) and LOW-5 (9 marks in an SL short question):** no change made; the first cannot be resolved until the graph template
+  is available and is already flagged in "Format conformance"; the second is a record awaiting expert confirmation.

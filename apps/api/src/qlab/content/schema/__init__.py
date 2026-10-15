@@ -31,6 +31,7 @@ from qlab.content.schema.blocks import (
     iter_latex,
     iter_quantities,
 )
+from qlab.content.schema.language import non_english_message, non_english_paths
 from qlab.content.schema.question import (
     MAX_PART_MARKS,
     SCHEMA_VERSION,
@@ -116,4 +117,6 @@ __all__ = [
     "iter_inlines",
     "iter_latex",
     "iter_quantities",
+    "non_english_message",
+    "non_english_paths",
 ]

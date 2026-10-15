@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/b5-current-circuits-pilot-questions.md",
- "source_sha256": "b5d8ee3c62e5c4e66e3c91051bf81c69c6f592de1d07f5d6c0f57b691f6cee4b",
+ "source_sha256": "eb40539f7e2a087bc6a123263fec3356f2f2ebf84e0e460b091e3fd47cb3bd9c",
  "questions": [
   {
    "source_ref": "pilot/b5-current-circuits#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Özdirenç; direncin uzunluk ve kesit alanına bağlılığı (orantı)",
+    "outcome": "Resistivity; dependence of resistance on length and cross-sectional area (proportion)",
     "stem": {
      "type": "doc",
      "content": [
@@ -149,7 +149,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kesit alanı çapla doğru orantılı alınır ("
+            "text": "Cross-sectional area is taken as directly proportional to the diameter ("
            },
            {
             "marks": [],
@@ -215,7 +215,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Çapın etkisi yok sayılır; yalnızca uzunluk hesaba katılır: 2"
+            "text": "The effect of the diameter is ignored; only the length is taken into account: 2"
            },
            {
             "marks": [],
@@ -264,7 +264,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Direnç hem uzunlukla hem çapla artıyor sayılır: 2 × 2 = 4"
+            "text": "Resistance is taken to increase with both length and diameter: 2 × 2 = 4"
            }
           ]
          }
@@ -313,7 +313,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " ve "
+          "text": " and "
          },
          {
           "marks": [],
@@ -337,7 +337,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "². Uzunluk 2 kat, kesit alanı 4 kat: direnç 2 / 4 = 1⁄2 katına iner."
+          "text": "². The length is doubled and the cross-sectional area is quadrupled: the resistance falls to 2 / 4 = 1⁄2 of its value."
          }
         ]
        }
@@ -368,7 +368,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "İç direnç; dış dirençte harcanan güç",
+    "outcome": "Internal resistance; power dissipated in the external resistor",
     "stem": {
      "type": "doc",
      "content": [
@@ -429,7 +429,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İç dirençte harcanan güç hesaplanır: 2.0² × 0.50 = 2.0 W"
+            "text": "The power dissipated in the internal resistance is calculated: 2.0² × 0.50 = 2.0 W"
            }
           ]
          }
@@ -485,7 +485,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bataryanın toplam gücü verilir: ε"
+            "text": "The total power of the battery is given: ε"
            },
            {
             "marks": [],
@@ -532,7 +532,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İç direnç yok sayılır: ε²/"
+            "text": "The internal resistance is ignored: ε²/"
            },
            {
             "marks": [],
@@ -593,7 +593,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": ") = 6.0 / 3.0 = 2.0 A. Dirençte harcanan güç = "
+          "text": ") = 6.0 / 3.0 = 2.0 A. Power dissipated in the resistor = "
          },
          {
           "marks": [],
@@ -648,7 +648,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Değişken direnç (LDR) ile gerilim bölücü",
+    "outcome": "Potential divider with a variable resistor (LDR)",
     "stem": {
      "type": "doc",
      "content": [
@@ -685,7 +685,7 @@
       "id": "fig1",
       "kind": "circuit_diagram",
       "use": "read_only",
-      "description": "Tek gözlü seri devre: 9.0 V batarya, LDR ve 10 kΩ sabit direnç art arda bağlı. Voltmetre yalnızca 10 kΩ direncin uçlarına paralel bağlı.",
+      "description": "Single-loop series circuit: a 9.0 V battery, an LDR and a 10 kΩ fixed resistor connected one after another. The voltmeter is connected only in parallel across the 10 kΩ resistor.",
       "asset_id": null,
       "alt_text": null
      }
@@ -724,7 +724,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "LDR'nin uçlarındaki gerilim hesaplanır: 9.0 × 2.0 / 12 = 1.5 V"
+            "text": "The pd across the LDR is calculated: 9.0 × 2.0 / 12 = 1.5 V"
            }
           ]
          }
@@ -759,7 +759,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Gerilim, dirençlerin birbirine oranıyla bulunur (toplama bölünmez): 9.0 × 2.0 / 10 = 1.8 V"
+            "text": "The pd is found from the ratio of the resistances to each other (not divided by the sum): 9.0 × 2.0 / 10 = 1.8 V"
            }
           ]
          }
@@ -794,7 +794,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Seri bağlı iki elemanın gerilimi eşit paylaştığı varsayılır: 9.0 / 2 = 4.5 V"
+            "text": "Two components in series are assumed to share the pd equally: 9.0 / 2 = 4.5 V"
            }
           ]
          }
@@ -833,7 +833,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Gerilim bölücü: "
+          "text": "Potential divider: "
          },
          {
           "marks": [],
@@ -876,7 +876,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Seri ve paralel bağlama; paralel kolda akım paylaşımı",
+    "outcome": "Series and parallel connection; sharing of current in parallel branches",
     "stem": {
      "type": "doc",
      "content": [
@@ -913,7 +913,7 @@
       "id": "fig1",
       "kind": "circuit_diagram",
       "use": "read_only",
-      "description": "18 V bataryanın bir ucundan çıkan iletken önce 6.0 Ω dirençten geçer, sonra iki kola ayrılır: bir kolda 12 Ω, öbür kolda 4.0 Ω direnç vardır. Kollar yeniden birleşir ve bataryanın öbür ucuna döner.",
+      "description": "The conductor leaving one terminal of the 18 V battery first passes through the 6.0 Ω resistor and then splits into two branches: one branch has a 12 Ω resistor, the other has a 4.0 Ω resistor. The branches rejoin and return to the other terminal of the battery.",
       "asset_id": null,
       "alt_text": null
      }
@@ -952,7 +952,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Akım dirençle doğru orantılı paylaştırılır (ya da 12 Ω dirençteki akım verilir): 2.0 × 4.0 / 16 = 0.50 A"
+            "text": "The current is shared in direct proportion to resistance (or the current in the 12 Ω resistor is given): 2.0 × 4.0 / 16 = 0.50 A"
            }
           ]
          }
@@ -987,7 +987,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Akımın iki kola eşit bölündüğü varsayılır: 2.0 / 2 = 1.0 A"
+            "text": "The current is assumed to split equally between the two branches: 2.0 / 2 = 1.0 A"
            }
           ]
          }
@@ -1043,7 +1043,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Ana kol akımı verilir; kollara ayrılma hesaba katılmaz: 2.0 A"
+            "text": "The current in the main branch is given; the split into branches is not taken into account: 2.0 A"
            }
           ]
          }
@@ -1061,7 +1061,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Paralel bölüm: (12 × 4.0) / (12 + 4.0) = 3.0 Ω. Toplam direnç 9.0 Ω; ana kol akımı 18 / 9.0 = 2.0 A. Paralel bölümün gerilimi 2.0 × 3.0 = 6.0 V. 4.0 Ω dirençteki akım = 6.0 / 4.0 = 1.5 A."
+          "text": "Parallel section: (12 × 4.0) / (12 + 4.0) = 3.0 Ω. Total resistance 9.0 Ω; current in the main branch 18 / 9.0 = 2.0 A. The pd across the parallel section is 2.0 × 3.0 = 6.0 V. Current in the 4.0 Ω resistor = 6.0 / 4.0 = 1.5 A."
          }
         ]
        }
@@ -1092,7 +1092,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Özdirenç; emk, iç direnç ve uç gerilimi; güç; paralel bağlamanın etkisinin değerlendirilmesi",
+    "outcome": "Resistivity; emf, internal resistance and terminal pd; power; evaluating the effect of connecting in parallel",
     "stem": {
      "type": "doc",
      "content": [
@@ -1123,7 +1123,7 @@
       "id": "fig1",
       "kind": "circuit_diagram",
       "use": "read_only",
-      "description": "Bataryanın (emk 6.0 V, iç direnç 1.2 Ω) uçları arasına, her biri 4.8 Ω olan iki nikrom tel birbirine paralel bağlıdır.",
+      "description": "Two nichrome wires, each of 4.8 Ω, are connected in parallel with each other across the terminals of the battery (emf 6.0 V, internal resistance 1.2 Ω).",
       "asset_id": null,
       "alt_text": null
      }

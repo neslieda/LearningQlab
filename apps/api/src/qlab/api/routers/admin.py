@@ -21,6 +21,7 @@ from qlab.api.schemas import (
     AdminQuestion,
     AdminQuestionPage,
     AdminVersion,
+    CreateQuestionRequest,
     DecisionRequest,
     History,
     ReasonRequest,
@@ -119,6 +120,36 @@ def get_version(request: Request, caller: Caller, version_id: str) -> AdminVersi
         return admin_view.version(
             content.get_version(session, uid), content.get_checks(session, uid)
         )
+
+
+@router.post(
+    "/v1/admin/questions",
+    status_code=201,
+    response_model=AdminVersion,
+    responses={
+        **CONFLICT,
+        404: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "No such programme, subject or syllabus version (`not_found`).",
+        },
+    },
+    operation_id="adminCreateQuestion",
+)
+def create_question(request: Request, caller: Caller, body: CreateQuestionRequest) -> AdminVersion:
+    """A new `authored` question whose first version is a `draft`, under the platform's
+    own-content rights record (D-52, D-58). 422 `invalid_document` as for `PUT`; 409
+    `own_content_rights_unavailable` when that rights record is missing or does not permit
+    display (fail-closed: nothing is created)."""
+    with deps.writing(request) as session:
+        created = admin_view.create_question(
+            session,
+            actor=caller.actor,
+            program=body.program,
+            subject=body.subject,
+            version=body.version,
+            document=body.document,
+        )
+        return created
 
 
 @router.get(f"{_QV}/history", response_model=History, operation_id="adminGetVersionHistory")

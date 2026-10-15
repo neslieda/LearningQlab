@@ -104,7 +104,22 @@ def from_service_error(error: Exception) -> ApiError | None:
             422,
             "invalid_document",
             "The document was not accepted",
-            errors=[ProblemItem(code="invalid_document", message=m) for m in error.errors],
+            errors=[
+                ProblemItem(
+                    code="invalid_document",
+                    message=p.message,
+                    location=None if p.location is None else f"document.{p.location}",
+                )
+                for p in error.errors
+            ],
+        )
+    if isinstance(error, content.OwnContentRightsUnavailable):
+        return ApiError(
+            409,
+            "own_content_rights_unavailable",
+            "New questions cannot be created",
+            detail="The platform's own-content rights record is missing or does not permit "
+            "display. Nothing was created.",
         )
     if isinstance(error, content.StaleContent):
         return ApiError(

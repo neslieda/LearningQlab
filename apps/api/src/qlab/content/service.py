@@ -107,11 +107,27 @@ class OriginClosed(ContentError):
     """The origin is not accepted yet: only `authored` content is (D-52)."""
 
 
-class InvalidDocument(ContentError):
-    """The document uses labels the syllabus version does not define. `errors` lists them."""
+@dataclass(frozen=True)
+class DocumentProblem:
+    """One reason a document was refused. `location` is the dotted path inside the document
+    (list indices as numbers, e.g. `parts.0.mark_points.1.content.content.0.content.2.attrs.latex`),
+    or None when the problem is about the document as a whole (size, NUL character)."""
 
-    def __init__(self, errors: tuple[str, ...]) -> None:
-        super().__init__("; ".join(errors))
+    message: str
+    location: str | None = None
+
+
+class OwnContentRightsUnavailable(ContentError):
+    """The platform's own-content rights record is missing, ambiguous or does not permit display:
+    a new question cannot be created (fail-closed, D-58)."""
+
+
+class InvalidDocument(ContentError):
+    """The document was refused (vocabulary, math, language, size). `errors` lists every problem
+    with where it is."""
+
+    def __init__(self, errors: tuple[DocumentProblem, ...]) -> None:
+        super().__init__("; ".join(e.message for e in errors))
         self.errors = errors
 
 

@@ -43,6 +43,8 @@ QuestionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_ID_PATTERN)]
 QuestionVersionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_VERSION_ID_PATTERN)]
 AccountId = Annotated[str, StringConstraints(pattern=ids.ACCOUNT_ID_PATTERN)]
 ContentHash = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
+# Codes of programmes, subjects, syllabus versions, exam sections and nodes.
+CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.]*$"
 Reason = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, max_length=MAX_REASON_LENGTH)
 ]
@@ -270,7 +272,17 @@ class CheckOut(Api):
     detail: dict[str, Any]
 
 
+class SyllabusRef(Api):
+    """The syllabus version a question belongs to; its vocabulary (exam sections, command terms,
+    nodes) is the one the document is checked against."""
+
+    program: str
+    subject: str
+    version: str
+
+
 class AdminVersion(AdminVersionSummary):
+    syllabus: SyllabusRef
     document: QuestionDocument
     checks: tuple[CheckOut, ...] = Field(
         description="Results stored for the current content, by code."
@@ -310,6 +322,19 @@ class VersionStateOut(Api):
     version_no: int
     status: VersionStatus
     content_sha256: ContentHash
+
+
+SyllabusCode = Annotated[str, StringConstraints(max_length=120, pattern=CODE_PATTERN)]
+
+
+class CreateQuestionRequest(Api):
+    """A new `authored` question under the platform's own-content rights record (D-52, D-58).
+    Without `version`, the subject's newest syllabus version is used."""
+
+    program: SyllabusCode
+    subject: SyllabusCode
+    version: SyllabusCode | None = None
+    document: QuestionDocument
 
 
 class UpdateDraftRequest(Api):

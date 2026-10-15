@@ -12,6 +12,7 @@ from qlab.api.deps import Caller
 from qlab.api.routers.common import AUTH_ERRORS, Routes
 from qlab.api.routers.common import question_id as decode_question_id
 from qlab.api.schemas import (
+    CODE_PATTERN,
     DEFAULT_PAGE_SIZE,
     MAX_PAGE_SIZE,
     CheckRequest,
@@ -31,7 +32,6 @@ router = Routes(tags=["questions"], responses=AUTH_ERRORS)
 Cursor = Annotated[str | None, Query(max_length=200, description="`next_cursor` of the last page.")]
 Limit = Annotated[int, Query(ge=1, le=MAX_PAGE_SIZE)]
 # Codes of exam sections, syllabus nodes and versions: nothing else reaches a query.
-CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.]*$"
 Code = Annotated[str, Query(max_length=120, pattern=CODE_PATTERN)]
 PathCode = Annotated[str, Path(max_length=120, pattern=CODE_PATTERN)]
 

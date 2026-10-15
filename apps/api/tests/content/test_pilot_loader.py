@@ -1312,7 +1312,9 @@ def test_the_invalid_document_error_names_the_problem(session: Session, env: Env
     with pytest.raises(svc.InvalidDocument) as caught:
         run(session, env, [broken_file()])
 
-    assert any("no_such_command_term" in error for error in caught.value.errors)
+    assert any(
+        "no_such_command_term" in error for error in [e.message for e in caught.value.errors]
+    )
 
 
 def test_an_invalid_document_on_update_raises_too(session: Session, env: Env) -> None:

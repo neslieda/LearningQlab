@@ -455,24 +455,75 @@ def _quote(latex: str) -> str:
     return latex if len(latex) <= 60 else latex[:57] + "..."
 
 
+def _located(value: object, path: str, found: dict[MathNode, list[str]]) -> None:
+    """Dotted path of every math node in the JSON form of a document, by node."""
+    if isinstance(value, dict):
+        kind = value.get("type")
+        attrs = value.get("attrs")
+        if kind in ("math_block", "math_inline") and isinstance(attrs, dict):
+            latex = attrs.get("latex")
+            if isinstance(latex, str):
+                node = MathNode(latex, display=kind == "math_block")
+                found.setdefault(node, []).append(f"{path}.attrs.latex" if path else "attrs.latex")
+        for key, item in value.items():
+            _located(item, f"{path}.{key}" if path else str(key), found)
+    elif isinstance(value, list | tuple):
+        for index, item in enumerate(value):
+            _located(item, f"{path}.{index}" if path else str(index), found)
+
+
+@dataclass(frozen=True)
+class MathProblem:
+    message: str
+    # Dotted path of the node's `latex` inside the document (list indices as numbers), e.g.
+    # `parts.0.mark_points.1.content.content.0.content.2.attrs.latex`; None for a problem
+    # about the document as a whole.
+    location: str | None
+
+
+def _problems(document: QuestionDocument) -> list[tuple[MathNode | None, str]]:
+    nodes = list(dict.fromkeys(math_nodes(document)))
+    if len(nodes) > MAX_MATH_NODES:
+        return [(None, f"more than {MAX_MATH_NODES} distinct math nodes")]
+    problems: list[tuple[MathNode | None, str]] = []
+    renderable: list[MathNode] = []
+    for node in nodes:
+        refused = disallowed(node.latex)
+        if refused:
+            problems.append(
+                (node, f"math `{_quote(node.latex)}`: not allowed: {', '.join(refused)}")
+            )
+        else:
+            renderable.append(node)
+    for node, error in zip(renderable, render_errors(renderable), strict=True):
+        if error is not None:
+            problems.append((node, f"math `{_quote(node.latex)}`: does not render: {error}"))
+    return problems
+
+
 def check(document: QuestionDocument) -> tuple[str, ...]:
     """Problems with the question's math, for the author; empty when every node renders.
 
     A node refused by the closed list is not sent to the renderer. Raises
     RendererUnavailable when the renderer is needed and cannot be run.
     """
-    nodes = list(dict.fromkeys(math_nodes(document)))
-    if len(nodes) > MAX_MATH_NODES:
-        return (f"more than {MAX_MATH_NODES} distinct math nodes",)
-    problems: list[str] = []
-    renderable: list[MathNode] = []
-    for node in nodes:
-        refused = disallowed(node.latex)
-        if refused:
-            problems.append(f"math `{_quote(node.latex)}`: not allowed: {', '.join(refused)}")
+    return tuple(message for _, message in _problems(document))
+
+
+def check_located(document: QuestionDocument) -> tuple[MathProblem, ...]:
+    """The same problems as `check`, one per place the offending node occurs (the same node
+    used twice is reported at both places). A problem about the whole document, or a node whose
+    place cannot be found, has location None."""
+    problems = _problems(document)
+    if not problems:
+        return ()
+    found: dict[MathNode, list[str]] = {}
+    _located(document.model_dump(mode="json"), "", found)
+    located: list[MathProblem] = []
+    for node, message in problems:
+        places = found.get(node) if node is not None else None
+        if not places:
+            located.append(MathProblem(message, None))
         else:
-            renderable.append(node)
-    for node, error in zip(renderable, render_errors(renderable), strict=True):
-        if error is not None:
-            problems.append(f"math `{_quote(node.latex)}`: does not render: {error}")
-    return tuple(problems)
+            located.extend(MathProblem(message, place) for place in places)
+    return tuple(located)

@@ -186,6 +186,43 @@ def find_syllabus_version(
     return None if row is None else row.id
 
 
+@dataclass(frozen=True)
+class SyllabusCodes:
+    program: str
+    subject: str
+    version: str
+
+
+def get_codes(session: Session, syllabus_version_id: uuid.UUID) -> SyllabusCodes:
+    """Programme, subject and version codes of a syllabus version. Unknown id: LookupError."""
+    row = session.execute(
+        select(Program.code, Subject.code, SyllabusVersion.code)
+        .select_from(SyllabusVersion)
+        .join(Subject, Subject.id == SyllabusVersion.subject_id)
+        .join(Program, Program.id == Subject.program_id)
+        .where(SyllabusVersion.id == syllabus_version_id)
+    ).one_or_none()
+    if row is None:
+        raise LookupError(f"unknown syllabus version {syllabus_version_id}")
+    return SyllabusCodes(program=row[0], subject=row[1], version=row[2])
+
+
+def resolve_version(
+    session: Session, *, program: str, subject: str, version: str | None = None
+) -> uuid.UUID | None:
+    """Id of the syllabus version with these codes, or None. Without `version`: the subject's
+    newest version (the greatest id; identifiers are time-ordered)."""
+    query = (
+        select(SyllabusVersion.id)
+        .join(Subject, Subject.id == SyllabusVersion.subject_id)
+        .join(Program, Program.id == Subject.program_id)
+        .where(Program.code == program, Subject.code == subject)
+    )
+    if version is not None:
+        query = query.where(SyllabusVersion.code == version)
+    return session.scalars(query.order_by(SyllabusVersion.id.desc()).limit(1)).first()
+
+
 def get_vocabulary(session: Session, syllabus_version_id: uuid.UUID) -> Vocabulary:
     """Vocabulary of one syllabus version. Unknown id, or no exam format: LookupError."""
     exam_format = _exam_format(session, syllabus_version_id)

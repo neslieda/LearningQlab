@@ -11,6 +11,7 @@ id legitimately gives 404 from a handler.
 from __future__ import annotations
 
 import uuid
+from datetime import timedelta
 from typing import Any, Final
 
 import pytest
@@ -19,10 +20,12 @@ from sqlalchemy import Connection, text
 from sqlalchemy.orm import Session
 
 from qlab.api import ids, policy
+from qlab.content import service as svc
 from qlab.organizations.service import Role
+from qlab.rights import service as rights
 from tests.api.support import ApiHarness
 from tests.content import samples
-from tests.content.support import Env, bring_to, document, make_env, stored_hash
+from tests.content.support import Env, bring_to, document, make_env, now, stored_hash
 
 R = Role
 USER_ROLES: Final = frozenset({R.STUDENT, R.TEACHER, R.ORG_ADMIN})  # one column in M1-G
@@ -53,6 +56,7 @@ TABLE: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
     (17, "POST", QV + "/publish", PUBLISHERS),
     (18, "POST", QV + "/withdraw", PUBLISHERS),
     (19, "POST", QV + "/republish", PUBLISHERS),
+    (20, "POST", "/v1/admin/questions", STAFF),
 ]
 NON_PUBLIC = [row for row in TABLE if row[3] is not None]
 
@@ -78,9 +82,9 @@ def call(client: TestClient, method: str, template: str, headers: dict[str, str]
 # --- the table in the code is the table in the specification ----------------------------------
 
 
-def test_the_specification_table_has_nineteen_distinct_endpoints() -> None:
-    assert [row[0] for row in TABLE] == list(range(1, 20))
-    assert len({(m, t) for _, m, t, _ in TABLE}) == 19
+def test_the_specification_table_has_twenty_distinct_endpoints() -> None:
+    assert [row[0] for row in TABLE] == list(range(1, 21))
+    assert len({(m, t) for _, m, t, _ in TABLE}) == 20
 
 
 def test_the_policy_has_exactly_the_endpoints_of_the_specification() -> None:
@@ -297,6 +301,7 @@ POSITIVE: Final[dict[int, tuple[str, int]]] = {
     17: ("approved", 200),
     18: ("published", 200),
     19: ("withdrawn", 200),
+    20: ("draft", 201),
 }
 
 
@@ -326,6 +331,22 @@ def real_request(
         body = {"reason": "synthetic reason for the decision"}
     elif number == 19:
         body = {"expected_content_sha256": sha, "reason": "synthetic reason for the decision"}
+    elif number == 20:
+        # The platform's own-content record the creation needs, then a valid new document.
+        rights.create_record(
+            session,
+            holder="Synthetic holder",
+            valid_from=now() - timedelta(days=1),
+            display_scope=rights.DisplayScope.ALL,
+            allows_ai_processing=True,
+            allows_commercial_use=True,
+            license_ref=svc.OWN_CONTENT_LICENSE_REF,
+        )
+        body = {
+            "program": "ib_dp",
+            "subject": "physics",
+            "document": samples.data_based_document(),
+        }
     return method, path, body
 
 

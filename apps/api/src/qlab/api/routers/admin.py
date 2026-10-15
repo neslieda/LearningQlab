@@ -109,7 +109,7 @@ def start_revision(request: Request, caller: Caller, question_id: str) -> AdminV
         created = content.start_revision(
             session, actor=caller.actor, question_id=question_id_(question_id)
         )
-        return admin_view.version(created, content.get_checks(session, created.id))
+        return admin_view.version(session, created, content.get_checks(session, created.id))
 
 
 @router.get(_QV, response_model=AdminVersion, operation_id="adminGetVersion")
@@ -118,7 +118,7 @@ def get_version(request: Request, caller: Caller, version_id: str) -> AdminVersi
     with deps.reading(request) as session:
         uid = version_id_(version_id)
         return admin_view.version(
-            content.get_version(session, uid), content.get_checks(session, uid)
+            session, content.get_version(session, uid), content.get_checks(session, uid)
         )
 
 
@@ -177,7 +177,7 @@ def update_draft(
             document=body.document,
             expected_content_sha256=body.expected_content_sha256,
         )
-        return admin_view.version(updated, content.get_checks(session, uid))
+        return admin_view.version(session, updated, content.get_checks(session, uid))
 
 
 @router.post(

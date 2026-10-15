@@ -30,7 +30,7 @@ from typing import Any
 
 from pydantic import ValidationError
 from sqlalchemy import delete, func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from qlab.audit import service as audit
 from qlab.content import math
@@ -43,7 +43,7 @@ from qlab.content.models import (
     QuestionVersionCheck,
     QuestionVersionSyllabus,
 )
-from qlab.content.schema import QuestionDocument
+from qlab.content.schema import Level, QuestionClass, QuestionDocument
 from qlab.rights import service as rights
 from qlab.syllabus import service as syllabus
 
@@ -125,6 +125,10 @@ class StaleContent(ContentError):
     """The version's content is not the content the caller says it looked at."""
 
 
+class SelfApprovalForbidden(ContentError):
+    """The approver is the account that last edited the version, and that is not allowed."""
+
+
 class NotPublishable(ContentError):
     """Publishing was refused. `reasons` holds one or more of: `critical_checks_failed` (a
     critical check failed or a required one has not passed), `unverified_visuals`,
@@ -177,6 +181,51 @@ class VersionState:
     version_no: int
     status: VersionStatus
     content_sha256: str
+
+
+@dataclass(frozen=True)
+class VersionSummary:
+    """A version without its content: what lists show."""
+
+    id: uuid.UUID
+    question_id: uuid.UUID
+    version_no: int
+    status: VersionStatus
+    content_sha256: str
+    question_class: QuestionClass
+    exam_section: str
+    levels: tuple[Level, ...]
+    total_marks: int
+    has_unverified_visuals: bool
+    created_by: str
+    created_at: datetime
+    updated_at: datetime
+
+
+@dataclass(frozen=True)
+class QuestionListItem:
+    question: QuestionView
+    # The version with the highest number.
+    latest: VersionSummary
+    published_version_id: uuid.UUID | None
+    working_version_id: uuid.UUID | None
+
+
+@dataclass(frozen=True)
+class ListFilter:
+    """Conditions on the version a list is about; None means "any"."""
+
+    status: VersionStatus | None = None
+    exam_section: str | None = None
+    level: Level | None = None
+    question_class: QuestionClass | None = None
+    # A syllabus node code; matches the primary node and the secondary ones.
+    syllabus_node: str | None = None
+    has_unverified_visuals: bool | None = None
+
+
+# One more than the largest API page: a caller asks for a page plus one to learn whether more exist.
+MAX_LIST_LIMIT = 101
 
 
 def content_sha256(document: QuestionDocument) -> str:
@@ -701,9 +750,27 @@ def request_changes(
     return _state(version)
 
 
+def _last_editor(session: Session, version_id: uuid.UUID) -> str | None:
+    """Actor of the latest entry that wrote the version's content: `created`, or an `updated`
+    that changed it. Saving the same content again does not make someone the editor."""
+    for entry in reversed(audit.entries_for(session, "question_version", str(version_id))):
+        if entry.action == "question_version.created":
+            return entry.actor
+        if entry.action == "question_version.updated" and entry.data.get(
+            "previous_content_sha256"
+        ) != entry.data.get("content_sha256"):
+            return entry.actor
+    return None
+
+
 @_atomic
 def approve(
-    session: Session, *, actor: str, version_id: uuid.UUID, expected_content_sha256: str
+    session: Session,
+    *,
+    actor: str,
+    version_id: uuid.UUID,
+    expected_content_sha256: str,
+    forbid_self_approval: bool = False,
 ) -> VersionState:
     """`in_review` → `approved`. One approval is enough in M1-G (D-53); the approver is the
     audit entry's actor (`question_version.approved`).
@@ -711,12 +778,29 @@ def approve(
     `expected_content_sha256` is the hash of the content the approver looked at; if the
     version's content is different now, StaleContent is raised. Other status:
     InvalidTransition. Rights as in `create_question`.
+
+    Separation of duties (D-59): the audit entry carries `approver_is_last_editor`, true when
+    `actor` is the actor of the version's latest `created` entry or `updated` entry that
+    changed the content (re-saving identical content does not count). With
+    `forbid_self_approval` such an approval raises SelfApprovalForbidden instead, after the
+    status and content checks; an approval whose last editor cannot be determined is refused
+    too.
     """
     version, question = _locked(session, version_id)
     _require_rights(session, question)
     _expect(version, VersionStatus.IN_REVIEW)
     _expect_content(version, expected_content_sha256)
-    _move(session, actor, version, VersionStatus.APPROVED, "approved")
+    last_editor = _last_editor(session, version.id)
+    if forbid_self_approval and (last_editor is None or last_editor == actor):
+        raise SelfApprovalForbidden("the last editor of a version cannot approve it")
+    _move(
+        session,
+        actor,
+        version,
+        VersionStatus.APPROVED,
+        "approved",
+        approver_is_last_editor=last_editor == actor,
+    )
     return _state(version)
 
 
@@ -962,3 +1046,206 @@ def get_checks(session: Session, version_id: uuid.UUID) -> list[CheckResult]:
         CheckResult(row.check_code, Severity(row.severity), Outcome(row.outcome), row.detail)
         for row in rows
     ]
+
+
+def summarize(view: QuestionVersionView) -> VersionSummary:
+    """The summary of a version that was read with its content."""
+    return VersionSummary(
+        id=view.id,
+        question_id=view.question_id,
+        version_no=view.version_no,
+        status=view.status,
+        content_sha256=view.content_sha256,
+        question_class=view.document.question_class,
+        exam_section=view.document.exam_section,
+        levels=view.document.levels,
+        total_marks=view.document.total_marks,
+        has_unverified_visuals=view.has_unverified_visuals,
+        created_by=view.created_by,
+        created_at=view.created_at,
+        updated_at=view.updated_at,
+    )
+
+
+def _summary(row: QuestionVersion) -> VersionSummary:
+    return VersionSummary(
+        id=row.id,
+        question_id=row.question_id,
+        version_no=row.version_no,
+        status=VersionStatus(row.status),
+        content_sha256=row.content_sha256,
+        question_class=QuestionClass(row.question_class),
+        exam_section=row.exam_section,
+        levels=tuple(Level(level) for level in row.levels),
+        total_marks=row.total_marks,
+        has_unverified_visuals=row.has_unverified_visuals,
+        created_by=row.created_by,
+        created_at=row.created_at,
+        updated_at=row.updated_at,
+    )
+
+
+def _check_limit(limit: int) -> None:
+    if not 1 <= limit <= MAX_LIST_LIMIT:
+        raise ValueError(f"limit must be 1 to {MAX_LIST_LIMIT}")
+
+
+def _listing(
+    session: Session,
+    filter: ListFilter | None,
+    after: uuid.UUID | None,
+    limit: int,
+    *,
+    published_only: bool,
+) -> list[tuple[Question, QuestionVersion]]:
+    """Questions with the version a list is about (the latest one, or the published one),
+    in question id order. Rights are decided per distinct record and applied in the query,
+    before the limit."""
+    _check_limit(limit)
+    filter = filter or ListFilter()
+    record_ids = session.scalars(select(Question.rights_record_id).distinct()).all()
+    permitted = [
+        record_id
+        for record_id in record_ids
+        if rights.is_permitted(session, record_id, rights.Purpose.DISPLAY)
+    ]
+    if not permitted:
+        return []
+    statement = (
+        select(Question, QuestionVersion)
+        .join(QuestionVersion, QuestionVersion.question_id == Question.id)
+        .where(Question.rights_record_id.in_(permitted))
+        .order_by(Question.id)
+        .limit(limit)
+        .execution_options(populate_existing=True)
+    )
+    if published_only:
+        statement = statement.where(QuestionVersion.status == VersionStatus.PUBLISHED.value)
+    else:
+        other = aliased(QuestionVersion)
+        latest = (
+            select(func.max(other.version_no))
+            .where(other.question_id == Question.id)
+            .scalar_subquery()
+        )
+        statement = statement.where(QuestionVersion.version_no == latest)
+    if after is not None:
+        statement = statement.where(Question.id > after)
+    if filter.status is not None:
+        statement = statement.where(QuestionVersion.status == filter.status.value)
+    if filter.exam_section is not None:
+        statement = statement.where(QuestionVersion.exam_section == filter.exam_section)
+    if filter.level is not None:
+        statement = statement.where(QuestionVersion.levels.contains([filter.level.value]))
+    if filter.question_class is not None:
+        statement = statement.where(QuestionVersion.question_class == filter.question_class.value)
+    if filter.has_unverified_visuals is not None:
+        statement = statement.where(
+            QuestionVersion.has_unverified_visuals == filter.has_unverified_visuals
+        )
+    if filter.syllabus_node is not None:
+        # Codes are unique inside one syllabus version only: resolve them per version.
+        node_ids: list[uuid.UUID] = []
+        for syllabus_version_id in session.scalars(
+            select(Question.syllabus_version_id).distinct()
+        ).all():
+            try:
+                found = syllabus.node_ids(
+                    session, syllabus_version_id, frozenset({filter.syllabus_node})
+                )
+            except LookupError:
+                continue
+            node_ids.extend(found.values())
+        if not node_ids:
+            return []
+        statement = statement.where(
+            select(QuestionVersionSyllabus.question_version_id)
+            .where(
+                QuestionVersionSyllabus.question_version_id == QuestionVersion.id,
+                QuestionVersionSyllabus.syllabus_node_id.in_(node_ids),
+            )
+            .exists()
+        )
+    return [(question, version) for question, version in session.execute(statement).all()]
+
+
+def list_questions(
+    session: Session,
+    *,
+    filter: ListFilter | None = None,
+    after: uuid.UUID | None = None,
+    limit: int,
+) -> list[QuestionListItem]:
+    """Questions in any status, for staff: ordered by question id ascending (creation order),
+    only those with an id greater than `after`, at most `limit` (1 to MAX_LIST_LIMIT, else
+    ValueError).
+
+    `filter` applies to each question's latest version (highest `version_no`); a question
+    whose latest version does not match is left out. `published_version_id` and
+    `working_version_id` are filled regardless of the filter.
+
+    Rights are fail-closed (CLAUDE.md rule 2): a question is listed only when its rights
+    record permits display to everyone right now, decided by `qlab.rights.service.is_permitted`
+    (once per distinct rights record, not once per question). Filtering by rights happens
+    before the limit is applied, so a page is short only at the end of the list.
+    """
+    items = _listing(session, filter, after, limit, published_only=False)
+    if not items:
+        return []
+    ids = [question.id for question, _ in items]
+    published: dict[uuid.UUID, uuid.UUID] = {}
+    working: dict[uuid.UUID, uuid.UUID] = {}
+    rows = session.execute(
+        select(QuestionVersion.question_id, QuestionVersion.id, QuestionVersion.status).where(
+            QuestionVersion.question_id.in_(ids),
+            QuestionVersion.status.in_(
+                (VersionStatus.PUBLISHED.value, *(s for s in WORKING_STATUSES))
+            ),
+        )
+    )
+    for question_id, version_id, status in rows:
+        if status == VersionStatus.PUBLISHED.value:
+            published[question_id] = version_id
+        else:
+            working[question_id] = version_id
+    return [
+        QuestionListItem(
+            question=_question_view(question),
+            latest=_summary(version),
+            published_version_id=published.get(question.id),
+            working_version_id=working.get(question.id),
+        )
+        for question, version in items
+    ]
+
+
+def list_published(
+    session: Session,
+    *,
+    filter: ListFilter | None = None,
+    after: uuid.UUID | None = None,
+    limit: int,
+) -> list[VersionSummary]:
+    """The published version of every question that has one: ordered by question id
+    ascending, only questions with an id greater than `after`, at most `limit` (1 to
+    MAX_LIST_LIMIT, else ValueError).
+
+    `filter` applies to the published version; `filter.status` must be None (ValueError). No
+    version in another status is ever returned. Rights as in `list_questions`.
+    """
+    if filter is not None and filter.status is not None:
+        raise ValueError("list_published takes no status filter")
+    return [
+        _summary(version)
+        for _, version in _listing(session, filter, after, limit, published_only=True)
+    ]
+
+
+def get_history(session: Session, version_id: uuid.UUID) -> list[audit.AuditEntry]:
+    """The audit entries about one version (entity type `question_version`), oldest first.
+    NotFound as in `get_version`."""
+    version = session.get(QuestionVersion, version_id)
+    question = None if version is None else session.get(Question, version.question_id)
+    if version is None or question is None or not _displayable(session, question):
+        raise NotFound(f"question version {version_id}")
+    return audit.entries_for(session, "question_version", str(version_id))

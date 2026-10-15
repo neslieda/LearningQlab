@@ -5,9 +5,12 @@ description = "Backend for the exam-prep platform (modular monolith: API + worke
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.20.0",
+    "fastapi>=0.143.0",
     "psycopg[binary]>=3.2",
     "pydantic>=2.14.0",
+    "pyjwt[crypto]>=2.15.1",
     "sqlalchemy>=2.0",
+    "uvicorn>=0.54.0",
 ]
 
 [dependency-groups]
@@ -17,6 +20,7 @@ dev = [
     "pytest",
     "hypothesis",
     "import-linter",
+    "httpx2>=2.13.1",
 ]
 
 [build-system]
@@ -127,6 +131,75 @@ source_modules = ["qlab.content"]
 forbidden_modules = [
     "qlab.identity",
     "qlab.organizations",
+    "qlab.ingestion",
+    "qlab.generation",
+    "qlab.verification",
+    "qlab.review",
+    "qlab.exams",
+    "qlab.attempts",
+    "qlab.marking",
+    "qlab.analytics",
+    "qlab.llm",
+    "qlab.pipeline",
+]
+
+[[tool.importlinter.contracts]]
+name = "no module imports the HTTP layer"
+type = "forbidden"
+source_modules = [
+    "qlab.identity",
+    "qlab.organizations",
+    "qlab.rights",
+    "qlab.entitlements",
+    "qlab.audit",
+    "qlab.syllabus",
+    "qlab.content",
+    "qlab.ingestion",
+    "qlab.generation",
+    "qlab.verification",
+    "qlab.review",
+    "qlab.exams",
+    "qlab.attempts",
+    "qlab.marking",
+    "qlab.analytics",
+    "qlab.llm",
+    "qlab.pipeline",
+]
+forbidden_modules = ["qlab.api"]
+
+[[tool.importlinter.contracts]]
+name = "identity depends on no other module (docs/API_DESIGN.md section 2)"
+type = "forbidden"
+source_modules = ["qlab.identity"]
+forbidden_modules = [
+    "qlab.organizations",
+    "qlab.rights",
+    "qlab.entitlements",
+    "qlab.audit",
+    "qlab.syllabus",
+    "qlab.content",
+    "qlab.ingestion",
+    "qlab.generation",
+    "qlab.verification",
+    "qlab.review",
+    "qlab.exams",
+    "qlab.attempts",
+    "qlab.marking",
+    "qlab.analytics",
+    "qlab.llm",
+    "qlab.pipeline",
+]
+
+[[tool.importlinter.contracts]]
+name = "organizations depends only on identity (docs/API_DESIGN.md section 2)"
+type = "forbidden"
+source_modules = ["qlab.organizations"]
+forbidden_modules = [
+    "qlab.rights",
+    "qlab.entitlements",
+    "qlab.audit",
+    "qlab.syllabus",
+    "qlab.content",
     "qlab.ingestion",
     "qlab.generation",
     "qlab.verification",

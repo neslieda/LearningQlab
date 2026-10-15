@@ -47,4 +47,5 @@ def database_url() -> str:
 
 
 def make_engine(url: str | None = None) -> Engine:
-    return create_engine(url or database_url(), pool_pre_ping=True)
+    # Statement parameters hold question content; they stay out of error messages and logs.
+    return create_engine(url or database_url(), pool_pre_ping=True, hide_parameters=True)

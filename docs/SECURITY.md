@@ -35,11 +35,19 @@
 | Kurum öğrencilerinin sonuçları | — | kendi kurumu | kendi kurumu | — | — | — |
 | İtiraz edilen cevap | sahibi | — | — | ✔ | — | ✔ |
 | İnceleme kuyruğu, karar | — | — | — | ✔ | ✔ | ✔ |
+| Taslak düzenleme, incelemeye gönderme, revizyon açma (D-59) | — | — | — | ✔ | ✔ | ✔ |
 | Kaynak yükleme, pipeline | — | — | — | — | ✔ | ✔ |
 | Yayın / geri çekme | — | — | — | — | ✔ | ✔ |
 | Rights, kill switch, roller, kural tabloları | — | — | — | — | — | ✔ |
 
 **Zorlama:** bu tablo bir test verisidir. Her uç nokta × her rol için otomatik test çalışır; tabloya girmemiş uç nokta CI'ı geçemez.
+
+**Uygulama (M1-G dilim 5).** Uç nokta × rol tablosu `apps/api/src/qlab/api/policy.py` içindeki `ENDPOINT_POLICY`'dir; tabloda olmayan
+yol ya da yöntem sunulmaz ve uygulama, tablo ile yollar bire bir eşleşmiyorsa açılmaz. Karar, gövde okunmadan ve parametreler
+doğrulanmadan önce verilir. Token'ı olmayan ya da geçersiz olan çağıran **401**, rolü yetmeyen çağıran var olmayan bir yolla bayt bayt
+aynı **404** alır. Roller token'da değil veritabanındadır ve her istekte okunur. Kimliği doğrulanmış çağıran için gövde boyutu
+sınırlıdır (cevap denetimi 64 KiB, diğerleri 1 MiB). Yerelde token'lar bu makinede üretilen bir anahtarla imzalanır; uygulama yerel
+ortam dışında bu anahtarı ve bu vereni reddeder. Ayrıntı: [slices/M1G-5-SOZLESME.md](slices/M1G-5-SOZLESME.md).
 
 ## 4. Haklar ve lisans ⚖️
 

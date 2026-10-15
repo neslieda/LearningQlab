@@ -10,8 +10,10 @@
 | Ne | Durum |
 |---|---|
 | Web arayüzü (soru görüntüleme, inceleme, düzenleme) | Yok. Dilim 6–8'de gelir |
-| Giriş, hesaplar ve roller | Yok. Dilim 5'te gelir; o zamana kadar kimin neyi yapabileceği denetlenmez |
-| Öğrenci görünümü | Yok. Dilim 8'de gelir |
+| Giriş, hesaplar ve roller | Yalnızca yerelde, geliştirme hesaplarıyla (her rol için bir hesap). Kimin neyi yapabileceği API'de denetleniyor (dilim 5); gerçek giriş ekranı ve kayıt yok, web'e açılışla (dilim 9) gelir |
+| Öğrenci görünümü | API'de var (dilim 5): öğrenci yalnızca yayınlanmış soruyu görür, doğru cevabı ancak cevabını gönderdikten sonra. Ekranı dilim 8'de gelir |
+| Öğrenci cevabının saklanması ve puanlanması | Yok. Cevap sunucuya gider, doğru cevap ya da markscheme döner; cevap saklanmaz, puanlanmaz |
+| Türkçe açıklamaların öğrenciye gösterimi | Yok. Çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri İngilizceye çevrilene kadar öğrenci görünümüne girmez (D-59) |
 | Soruların sisteme yüklenmiş hali | 130 pilot soru şemaya çevrildi ve **taslak** olarak içe aktarılabiliyor (§7.1); görüntüleyecek arayüz henüz yok |
 | Şekil, grafik ve diyagram | Üretilemiyor ve yüklenemiyor |
 | Sayısal cevapların kodla doğrulanması | Yok (formül yorumlayıcısı M3'te) |

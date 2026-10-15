@@ -110,6 +110,26 @@ question_version_check(id, question_version_id, check_code, severity, outcome, d
 - **Onay.** M1-G'de tek onay yeter (D-53). Rol denetimi bu katmanda değil, yetki katmanındadır (dilim 5); servis yalnızca `actor`
   kimliğini audit'e yazar.
 
+### 2.3 Hesap ve rol tabloları — uygulanan hali (dilim 5, 2026-10-14)
+
+Kod: `apps/api/src/qlab/{identity,organizations}/models.py`; migration `0005_identity_roles.py`.
+
+```
+account(id, issuer, subject, created_at, disabled_at)                       -- (issuer, subject) tekil
+role_assignment(id, account_id, role, granted_by, created_at, revoked_at, revoked_by)
+```
+
+- **Hesap** bir kimlik sağlayıcısı öznesidir (token'ın `iss` ve `sub` alanları). Ad, e-posta, parola ya da doğum tarihi saklanmaz;
+  yaş bandı ve ülke gerçek sağlayıcıyla birlikte gelir (M2). Kapatılmış hesap (`disabled_at`) kimse olarak doğrulanmaz.
+- **Rol ataması** bir hesabın bir rolüdür; aynı hesap ve rol için en çok bir etkin atama olur (kısmi tekil indeks). Rol geri alınınca
+  satır silinmez, `revoked_at` / `revoked_by` doldurulur; yeniden verme yeni satırdır. M1-G'de kurum tablosu olmadığı için atama
+  platform genelindedir; kurum kapsamı M2'de eklenir.
+- **Silme engeli yoktur.** Diğer tablolardaki "silinemez" tetikleyicisi bu iki tabloya bilerek konmadı: hesap silme hakkı
+  ([SECURITY.md](SECURITY.md) §5.4) bu satırların silinebilmesini ister. Kimin hangi rolü ne zaman aldığının kalıcı kaydı
+  `audit_log`'dadır. `organizations` modülü `audit`'e bağımlı olamadığı için rol verme ve almanın audit kaydını **çağıran** yazar.
+  **Sınır:** uygulamanın veritabanı rolüyle bu tablolara doğrudan yazabilen biri kendine rol verebilir ve audit kaydı oluşmaz;
+  rol ayrımı (uygulama rolü / migration rolü) web'e açılış hazırlığında (dilim 9) yazılır.
+
 **Sonraki dilimlere devredenler**
 
 1. Rights kaydı açan ya da iptal eden her yol audit kaydı yazar; bunu bir test doğrular (içe aktarma komutu, dilim 4; yönetim uç noktaları).

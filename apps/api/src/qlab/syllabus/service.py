@@ -27,6 +27,32 @@ class Vocabulary:
     leaf_node_codes: frozenset[str]
 
 
+@dataclass(frozen=True)
+class TreeNode:
+    code: str
+    title: str
+    # Code of the parent node; None for a top-level node.
+    parent: str | None
+    is_leaf: bool
+    attributes: dict[str, str]
+
+
+@dataclass(frozen=True)
+class SyllabusTree:
+    """One syllabus version, by codes. `nodes` are in syllabus order (position), so a parent
+    comes before its children."""
+
+    program: str
+    subject: str
+    version: str
+    title: str
+    status: str
+    nodes: tuple[TreeNode, ...]
+    # (code, title) of each exam section, in the order of the exam format.
+    exam_sections: tuple[tuple[str, str], ...]
+    command_terms: tuple[str, ...]
+
+
 def _find_version(
     session: Session, *, program: str, subject: str, version: str
 ) -> SyllabusVersion | None:
@@ -185,3 +211,51 @@ def node_ids(
     if missing:
         raise LookupError(f"unknown syllabus nodes: {sorted(missing)}")
     return found
+
+
+def get_tree(
+    session: Session, *, program: str, subject: str, version: str | None = None
+) -> SyllabusTree | None:
+    """The syllabus version with these codes, or None when the programme, the subject or the
+    version does not exist or the version has no exam format.
+
+    Without `version`: the subject's newest version, which is the one with the greatest id
+    (identifiers are time-ordered).
+    """
+    query = (
+        select(SyllabusVersion)
+        .join(Subject, Subject.id == SyllabusVersion.subject_id)
+        .join(Program, Program.id == Subject.program_id)
+        .where(Program.code == program, Subject.code == subject)
+    )
+    if version is not None:
+        query = query.where(SyllabusVersion.code == version)
+    row = session.scalars(query.order_by(SyllabusVersion.id.desc()).limit(1)).first()
+    if row is None:
+        return None
+    exam_format = _exam_format(session, row.id)
+    if exam_format is None:
+        return None
+    definition = ExamFormatDefinition.model_validate(exam_format.definition)
+    nodes = _nodes(session, row.id)
+    codes = {n.id: n.code for n in nodes}
+    parents = {n.parent_id for n in nodes}
+    return SyllabusTree(
+        program=program,
+        subject=subject,
+        version=row.code,
+        title=row.title,
+        status=row.status,
+        nodes=tuple(
+            TreeNode(
+                code=n.code,
+                title=n.title,
+                parent=codes[n.parent_id] if n.parent_id is not None else None,
+                is_leaf=n.id not in parents,
+                attributes=dict(n.attributes),
+            )
+            for n in nodes
+        ),
+        exam_sections=tuple((s.code, s.title) for s in definition.sections),
+        command_terms=tuple(definition.command_terms),
+    )

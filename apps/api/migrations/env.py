@@ -6,6 +6,8 @@ from alembic import context
 
 import qlab.audit.models
 import qlab.content.models
+import qlab.identity.models
+import qlab.organizations.models
 import qlab.rights.models
 import qlab.syllabus.models  # noqa: F401
 from qlab.database import Base, make_engine

@@ -1,0 +1,4612 @@
+{
+  "components": {
+    "schemas": {
+      "AcceptRange": {
+        "additionalProperties": false,
+        "properties": {
+          "maximum": {
+            "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+            "title": "Maximum",
+            "type": "string"
+          },
+          "minimum": {
+            "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+            "title": "Minimum",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "pattern": "^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$",
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum"
+        ],
+        "title": "AcceptRange",
+        "type": "object"
+      },
+      "AdminQuestion": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/Origin"
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          },
+          "versions": {
+            "description": "Oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/AdminVersionSummary"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "source_ref",
+          "created_by",
+          "created_at",
+          "versions"
+        ],
+        "title": "AdminQuestion",
+        "type": "object"
+      },
+      "AdminQuestionPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminQuestionSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "AdminQuestionPage",
+        "type": "object"
+      },
+      "AdminQuestionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "latest_version": {
+            "$ref": "#/components/schemas/AdminVersionSummary"
+          },
+          "origin": {
+            "$ref": "#/components/schemas/Origin"
+          },
+          "published_version_id": {
+            "anyOf": [
+              {
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published Version Id"
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          },
+          "working_version_id": {
+            "anyOf": [
+              {
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Working Version Id"
+          }
+        },
+        "required": [
+          "id",
+          "origin",
+          "source_ref",
+          "created_at",
+          "latest_version",
+          "published_version_id",
+          "working_version_id"
+        ],
+        "title": "AdminQuestionSummary",
+        "type": "object"
+      },
+      "AdminVersion": {
+        "additionalProperties": false,
+        "properties": {
+          "checks": {
+            "description": "Results stored for the current content, by code.",
+            "items": {
+              "$ref": "#/components/schemas/CheckOut"
+            },
+            "title": "Checks",
+            "type": "array"
+          },
+          "content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "document": {
+            "$ref": "#/components/schemas/QuestionDocument"
+          },
+          "exam_section": {
+            "title": "Exam Section",
+            "type": "string"
+          },
+          "has_unverified_visuals": {
+            "title": "Has Unverified Visuals",
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "question_class": {
+            "$ref": "#/components/schemas/QuestionClass"
+          },
+          "question_id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Question Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/VersionStatus"
+          },
+          "total_marks": {
+            "title": "Total Marks",
+            "type": "integer"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version_no": {
+            "title": "Version No",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "question_id",
+          "version_no",
+          "status",
+          "content_sha256",
+          "question_class",
+          "exam_section",
+          "levels",
+          "total_marks",
+          "has_unverified_visuals",
+          "created_by",
+          "created_at",
+          "updated_at",
+          "document",
+          "checks"
+        ],
+        "title": "AdminVersion",
+        "type": "object"
+      },
+      "AdminVersionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "exam_section": {
+            "title": "Exam Section",
+            "type": "string"
+          },
+          "has_unverified_visuals": {
+            "title": "Has Unverified Visuals",
+            "type": "boolean"
+          },
+          "id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "question_class": {
+            "$ref": "#/components/schemas/QuestionClass"
+          },
+          "question_id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Question Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/VersionStatus"
+          },
+          "total_marks": {
+            "title": "Total Marks",
+            "type": "integer"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version_no": {
+            "title": "Version No",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "question_id",
+          "version_no",
+          "status",
+          "content_sha256",
+          "question_class",
+          "exam_section",
+          "levels",
+          "total_marks",
+          "has_unverified_visuals",
+          "created_by",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AdminVersionSummary",
+        "type": "object"
+      },
+      "AnswerBinding": {
+        "additionalProperties": false,
+        "properties": {
+          "part_id": {
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Part Id",
+            "type": "string"
+          },
+          "step": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Step",
+            "type": "string"
+          }
+        },
+        "required": [
+          "part_id",
+          "step"
+        ],
+        "title": "AnswerBinding",
+        "type": "object"
+      },
+      "AnswerType": {
+        "enum": [
+          "numeric_with_unit",
+          "numeric_unitless",
+          "value_from_graph",
+          "unit",
+          "algebraic_expression",
+          "symbolic_equation",
+          "word_phrase",
+          "explanation",
+          "judgement_justified",
+          "extended_evaluation",
+          "derivation_algebraic",
+          "derivation_numeric",
+          "drawing_on_diagram",
+          "graph_sketch"
+        ],
+        "title": "AnswerType",
+        "type": "string"
+      },
+      "BulletList": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItem"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "bullet_list",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "BulletList",
+        "type": "object"
+      },
+      "CellAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "colspan": {
+            "default": 1,
+            "maximum": 12.0,
+            "minimum": 1.0,
+            "title": "Colspan",
+            "type": "integer"
+          },
+          "rowspan": {
+            "default": 1,
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Rowspan",
+            "type": "integer"
+          }
+        },
+        "title": "CellAttrs",
+        "type": "object"
+      },
+      "CheckOut": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "title": "Detail",
+            "type": "object"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/Outcome"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/Severity"
+          }
+        },
+        "required": [
+          "code",
+          "severity",
+          "outcome",
+          "detail"
+        ],
+        "title": "CheckOut",
+        "type": "object"
+      },
+      "Constant": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Name",
+            "type": "string"
+          },
+          "ref": {
+            "minLength": 1,
+            "title": "Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "ref"
+        ],
+        "title": "Constant",
+        "type": "object"
+      },
+      "DecisionRequest": {
+        "additionalProperties": false,
+        "description": "Approve or publish exactly the content the caller looked at (D-56).",
+        "properties": {
+          "expected_content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Expected Content Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expected_content_sha256"
+        ],
+        "title": "DecisionRequest",
+        "type": "object"
+      },
+      "Difficulty": {
+        "enum": [
+          "easy",
+          "medium",
+          "hard"
+        ],
+        "title": "Difficulty",
+        "type": "string"
+      },
+      "Doc": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bullet_list": "#/components/schemas/BulletList",
+                  "figure": "#/components/schemas/Figure",
+                  "math_block": "#/components/schemas/MathBlock",
+                  "ordered_list": "#/components/schemas/OrderedList",
+                  "paragraph": "#/components/schemas/Paragraph",
+                  "table": "#/components/schemas/Table"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Paragraph"
+                },
+                {
+                  "$ref": "#/components/schemas/MathBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/Table"
+                },
+                {
+                  "$ref": "#/components/schemas/Figure"
+                },
+                {
+                  "$ref": "#/components/schemas/BulletList"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderedList"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "doc",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "Doc",
+        "type": "object"
+      },
+      "ExamSectionOut": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "title"
+        ],
+        "title": "ExamSectionOut",
+        "type": "object"
+      },
+      "Figure": {
+        "additionalProperties": false,
+        "description": "Placement of a stimulus in the text; the stimulus lives in QuestionDocument.stimuli.",
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/FigureAttrs"
+          },
+          "type": {
+            "const": "figure",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "Figure",
+        "type": "object"
+      },
+      "FigureAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "stimulus_id": {
+            "minLength": 1,
+            "title": "Stimulus Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "stimulus_id"
+        ],
+        "title": "FigureAttrs",
+        "type": "object"
+      },
+      "HardBreak": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "hard_break",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "HardBreak",
+        "type": "object"
+      },
+      "Health": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "const": "ok",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "History": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "description": "Oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/HistoryEntry"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "History",
+        "type": "object"
+      },
+      "HistoryEntry": {
+        "additionalProperties": false,
+        "description": "One audit entry about a version. Fields an action does not carry are null.",
+        "properties": {
+          "action": {
+            "description": "Without the `question_version.` prefix, e.g. `approved`.",
+            "title": "Action",
+            "type": "string"
+          },
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "approver_is_last_editor": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approver Is Last Editor"
+          },
+          "based_on": {
+            "anyOf": [
+              {
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Based On"
+          },
+          "check": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Check"
+          },
+          "content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "failed_checks": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failed Checks"
+          },
+          "occurred_at": {
+            "format": "date-time",
+            "title": "Occurred At",
+            "type": "string"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Outcome"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "previous_content_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Content Sha256"
+          },
+          "previous_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VersionStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "severity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Severity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ref"
+          },
+          "status": {
+            "$ref": "#/components/schemas/VersionStatus"
+          },
+          "superseded_by": {
+            "anyOf": [
+              {
+                "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By"
+          }
+        },
+        "required": [
+          "occurred_at",
+          "actor",
+          "action",
+          "status",
+          "previous_status",
+          "content_sha256",
+          "previous_content_sha256",
+          "reason",
+          "failed_checks",
+          "check",
+          "severity",
+          "outcome",
+          "based_on",
+          "superseded_by",
+          "source_ref",
+          "approver_is_last_editor"
+        ],
+        "title": "HistoryEntry",
+        "type": "object"
+      },
+      "LanguageWarning": {
+        "additionalProperties": false,
+        "description": "Help, not a refusal: the mark scheme is returned all the same.",
+        "properties": {
+          "code": {
+            "const": "answer_not_english",
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "LanguageWarning",
+        "type": "object"
+      },
+      "LearnerMcq": {
+        "additionalProperties": false,
+        "properties": {
+          "column_headers": {
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "title": "Column Headers",
+            "type": "array"
+          },
+          "option_layout": {
+            "$ref": "#/components/schemas/OptionLayout"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/LearnerOption"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "statements": {
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "title": "Statements",
+            "type": "array"
+          }
+        },
+        "required": [
+          "option_layout",
+          "column_headers",
+          "statements",
+          "options"
+        ],
+        "title": "LearnerMcq",
+        "type": "object"
+      },
+      "LearnerOption": {
+        "additionalProperties": false,
+        "properties": {
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "title": "Cells",
+            "type": "array"
+          },
+          "key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "cells"
+        ],
+        "title": "LearnerOption",
+        "type": "object"
+      },
+      "LearnerPart": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "command_term": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Term"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "lead_in": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Doc"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "marks": {
+            "title": "Marks",
+            "type": "integer"
+          },
+          "stimulus_refs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Stimulus Refs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "lead_in",
+          "body",
+          "marks",
+          "command_term",
+          "stimulus_refs"
+        ],
+        "title": "LearnerPart",
+        "type": "object"
+      },
+      "LearnerQuestion": {
+        "additionalProperties": false,
+        "description": "The published version of a question as a learner sees it before answering.",
+        "properties": {
+          "exam_section": {
+            "title": "Exam Section",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "mcq": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LearnerMcq"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parts": {
+            "items": {
+              "$ref": "#/components/schemas/LearnerPart"
+            },
+            "title": "Parts",
+            "type": "array"
+          },
+          "question_class": {
+            "$ref": "#/components/schemas/QuestionClass"
+          },
+          "stem": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "stimuli": {
+            "items": {
+              "$ref": "#/components/schemas/LearnerStimulus"
+            },
+            "title": "Stimuli",
+            "type": "array"
+          },
+          "total_marks": {
+            "title": "Total Marks",
+            "type": "integer"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "version_id",
+          "question_class",
+          "exam_section",
+          "levels",
+          "total_marks",
+          "stem",
+          "stimuli",
+          "mcq",
+          "parts"
+        ],
+        "title": "LearnerQuestion",
+        "type": "object"
+      },
+      "LearnerQuestionPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LearnerQuestionSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "LearnerQuestionPage",
+        "type": "object"
+      },
+      "LearnerQuestionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "exam_section": {
+            "title": "Exam Section",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "question_class": {
+            "$ref": "#/components/schemas/QuestionClass"
+          },
+          "total_marks": {
+            "title": "Total Marks",
+            "type": "integer"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "version_id",
+          "question_class",
+          "exam_section",
+          "levels",
+          "total_marks"
+        ],
+        "title": "LearnerQuestionSummary",
+        "type": "object"
+      },
+      "LearnerStimulus": {
+        "additionalProperties": false,
+        "description": "Placeholder for a figure. Its description is staff-only and is not here.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/StimulusKind"
+          }
+        },
+        "required": [
+          "id",
+          "kind"
+        ],
+        "title": "LearnerStimulus",
+        "type": "object"
+      },
+      "Level": {
+        "description": "Papers the question may be used in. Declaration order is the canonical order.",
+        "enum": [
+          "sl",
+          "hl"
+        ],
+        "title": "Level",
+        "type": "string"
+      },
+      "LevelContent": {
+        "enum": [
+          "sl_core",
+          "ahl"
+        ],
+        "title": "LevelContent",
+        "type": "string"
+      },
+      "ListItem": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Paragraph"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "list_item",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "ListItem",
+        "type": "object"
+      },
+      "Mark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/MarkType"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Mark",
+        "type": "object"
+      },
+      "MarkPoint": {
+        "additionalProperties": false,
+        "description": "One mark.\n\nPoints sharing an alternative_group are alternatives for a single mark. Points sharing a route\nform one complete way of earning the part's marks; routes are mutually exclusive.",
+        "properties": {
+          "accept_range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcceptRange"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alternative_group": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternative Group"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/MarkPointKind",
+            "default": "statement"
+          },
+          "route": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Route"
+          },
+          "solution_step": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Step"
+          }
+        },
+        "required": [
+          "id",
+          "content"
+        ],
+        "title": "MarkPoint",
+        "type": "object"
+      },
+      "MarkPointKind": {
+        "enum": [
+          "method",
+          "answer",
+          "statement"
+        ],
+        "title": "MarkPointKind",
+        "type": "string"
+      },
+      "MarkPointOut": {
+        "additionalProperties": false,
+        "properties": {
+          "accept_range": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AcceptRange"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alternative_group": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternative Group"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/MarkPointKind"
+          },
+          "route": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Route"
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "kind",
+          "alternative_group",
+          "route",
+          "accept_range"
+        ],
+        "title": "MarkPointOut",
+        "type": "object"
+      },
+      "MarkType": {
+        "enum": [
+          "bold",
+          "italic",
+          "sub",
+          "sup",
+          "optional",
+          "essential"
+        ],
+        "title": "MarkType",
+        "type": "string"
+      },
+      "MathAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "latex": {
+            "minLength": 1,
+            "title": "Latex",
+            "type": "string"
+          }
+        },
+        "required": [
+          "latex"
+        ],
+        "title": "MathAttrs",
+        "type": "object"
+      },
+      "MathBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/MathAttrs"
+          },
+          "type": {
+            "const": "math_block",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "MathBlock",
+        "type": "object"
+      },
+      "MathInline": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/MathAttrs"
+          },
+          "marks": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "title": "Marks",
+            "type": "array"
+          },
+          "type": {
+            "const": "math_inline",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "MathInline",
+        "type": "object"
+      },
+      "Mcq": {
+        "additionalProperties": false,
+        "properties": {
+          "assessment_objective": {
+            "anyOf": [
+              {
+                "enum": [
+                  1,
+                  2,
+                  3
+                ],
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assessment Objective"
+          },
+          "column_headers": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "title": "Column Headers",
+            "type": "array"
+          },
+          "correct_key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Correct Key",
+            "type": "string"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Doc"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level_content": {
+            "$ref": "#/components/schemas/LevelContent",
+            "default": "sl_core"
+          },
+          "option_kind": {
+            "$ref": "#/components/schemas/OptionKind"
+          },
+          "option_layout": {
+            "$ref": "#/components/schemas/OptionLayout",
+            "default": "single_value"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/McqOption"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "solution_step": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solution Step"
+          },
+          "statements": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "title": "Statements",
+            "type": "array"
+          }
+        },
+        "required": [
+          "option_kind",
+          "options",
+          "correct_key"
+        ],
+        "title": "Mcq",
+        "type": "object"
+      },
+      "McqAnswer": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "mcq",
+            "title": "Kind",
+            "type": "string"
+          },
+          "selected_key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Selected Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "selected_key"
+        ],
+        "title": "McqAnswer",
+        "type": "object"
+      },
+      "McqCheckResult": {
+        "additionalProperties": false,
+        "properties": {
+          "correct": {
+            "title": "Correct",
+            "type": "boolean"
+          },
+          "correct_key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Correct Key",
+            "type": "string"
+          },
+          "kind": {
+            "const": "mcq",
+            "title": "Kind",
+            "type": "string"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "version_id",
+          "correct",
+          "correct_key"
+        ],
+        "title": "McqCheckResult",
+        "type": "object"
+      },
+      "McqOption": {
+        "additionalProperties": false,
+        "properties": {
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/Doc"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Cells",
+            "type": "array"
+          },
+          "key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Key",
+            "type": "string"
+          },
+          "rationale": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Doc"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "cells"
+        ],
+        "title": "McqOption",
+        "type": "object"
+      },
+      "Me": {
+        "additionalProperties": false,
+        "description": "The caller. M1-G has no profile, entitlement or quota yet.",
+        "properties": {
+          "account_id": {
+            "pattern": "^acc_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Account Id",
+            "type": "string"
+          },
+          "roles": {
+            "description": "Sorted by name.",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "title": "Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "account_id",
+          "roles"
+        ],
+        "title": "Me",
+        "type": "object"
+      },
+      "Note": {
+        "additionalProperties": false,
+        "description": "A mark-scheme note for a part, optionally tied to one of its mark points.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/NoteKind",
+            "default": "general"
+          },
+          "mark_point_id": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mark Point Id"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "title": "Note",
+        "type": "object"
+      },
+      "NoteKind": {
+        "enum": [
+          "general",
+          "owtte",
+          "accept",
+          "do_not_accept",
+          "cap",
+          "ecf"
+        ],
+        "title": "NoteKind",
+        "type": "string"
+      },
+      "NoteOut": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/NoteKind"
+          },
+          "mark_point_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mark Point Id"
+          }
+        },
+        "required": [
+          "kind",
+          "content",
+          "mark_point_id"
+        ],
+        "title": "NoteOut",
+        "type": "object"
+      },
+      "OptionKind": {
+        "enum": [
+          "numeric_with_unit",
+          "ratio",
+          "algebraic_expression",
+          "word_phrase",
+          "statement",
+          "figure_choice"
+        ],
+        "title": "OptionKind",
+        "type": "string"
+      },
+      "OptionLayout": {
+        "enum": [
+          "single_value",
+          "two_column_table",
+          "figure_options",
+          "roman_statements"
+        ],
+        "title": "OptionLayout",
+        "type": "string"
+      },
+      "OrderedList": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItem"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "ordered_list",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "OrderedList",
+        "type": "object"
+      },
+      "Origin": {
+        "enum": [
+          "authored",
+          "generated",
+          "source_original"
+        ],
+        "title": "Origin",
+        "type": "string"
+      },
+      "Outcome": {
+        "enum": [
+          "passed",
+          "failed",
+          "not_applicable"
+        ],
+        "title": "Outcome",
+        "type": "string"
+      },
+      "Paragraph": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "default": [],
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "hard_break": "#/components/schemas/HardBreak",
+                  "math_inline": "#/components/schemas/MathInline",
+                  "quantity": "#/components/schemas/Quantity",
+                  "text": "#/components/schemas/Text"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Text"
+                },
+                {
+                  "$ref": "#/components/schemas/MathInline"
+                },
+                {
+                  "$ref": "#/components/schemas/Quantity"
+                },
+                {
+                  "$ref": "#/components/schemas/HardBreak"
+                }
+              ]
+            },
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "paragraph",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "Paragraph",
+        "type": "object"
+      },
+      "Parameter": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Name",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "pattern": "^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$",
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "title": "Parameter",
+        "type": "object"
+      },
+      "Part": {
+        "additionalProperties": false,
+        "properties": {
+          "answer_type": {
+            "$ref": "#/components/schemas/AnswerType"
+          },
+          "assessment_objective": {
+            "anyOf": [
+              {
+                "enum": [
+                  1,
+                  2,
+                  3
+                ],
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assessment Objective"
+          },
+          "body": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "command_term": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z][a-z_]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command Term"
+          },
+          "depends_on": {
+            "default": [],
+            "items": {
+              "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+              "type": "string"
+            },
+            "title": "Depends On",
+            "type": "array"
+          },
+          "ecf_from": {
+            "default": [],
+            "items": {
+              "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+              "type": "string"
+            },
+            "title": "Ecf From",
+            "type": "array"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "pattern": "^[a-z](\\.(i|ii|iii|iv|v|vi|vii|viii))?$",
+            "title": "Label",
+            "type": "string"
+          },
+          "lead_in": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Doc"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level_content": {
+            "$ref": "#/components/schemas/LevelContent",
+            "default": "sl_core"
+          },
+          "mark_points": {
+            "items": {
+              "$ref": "#/components/schemas/MarkPoint"
+            },
+            "minItems": 1,
+            "title": "Mark Points",
+            "type": "array"
+          },
+          "marks": {
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Marks",
+            "type": "integer"
+          },
+          "marks_capped": {
+            "default": false,
+            "title": "Marks Capped",
+            "type": "boolean"
+          },
+          "notes": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Note"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "show_that": {
+            "default": false,
+            "title": "Show That",
+            "type": "boolean"
+          },
+          "stimulus_refs": {
+            "default": [],
+            "items": {
+              "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+              "type": "string"
+            },
+            "title": "Stimulus Refs",
+            "type": "array"
+          },
+          "syllabus_node": {
+            "minLength": 1,
+            "title": "Syllabus Node",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "body",
+          "marks",
+          "answer_type",
+          "syllabus_node",
+          "mark_points"
+        ],
+        "title": "Part",
+        "type": "object"
+      },
+      "Problem": {
+        "additionalProperties": false,
+        "description": "RFC 9457 problem details.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "errors": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/ProblemItem"
+            },
+            "title": "Errors",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code"
+        ],
+        "title": "Problem",
+        "type": "object"
+      },
+      "ProblemItem": {
+        "additionalProperties": false,
+        "description": "One thing that is wrong. `location` names the field or part it is about, if any.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ProblemItem",
+        "type": "object"
+      },
+      "Quantity": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/QuantityAttrs"
+          },
+          "marks": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "title": "Marks",
+            "type": "array"
+          },
+          "type": {
+            "const": "quantity",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "Quantity",
+        "type": "object"
+      },
+      "QuantityAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "param": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Param"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty"
+          },
+          "unit": {
+            "default": "",
+            "pattern": "^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$",
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "title": "QuantityAttrs",
+        "type": "object"
+      },
+      "QuestionClass": {
+        "enum": [
+          "mcq",
+          "data_based",
+          "short_structured",
+          "long_structured"
+        ],
+        "title": "QuestionClass",
+        "type": "string"
+      },
+      "QuestionDocument": {
+        "additionalProperties": false,
+        "properties": {
+          "calculator": {
+            "default": true,
+            "title": "Calculator",
+            "type": "boolean"
+          },
+          "difficulty": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Difficulty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exam_section": {
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Exam Section",
+            "type": "string"
+          },
+          "language": {
+            "default": "en",
+            "pattern": "^[a-z]{2}$",
+            "title": "Language",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/Level"
+            },
+            "minItems": 1,
+            "title": "Levels",
+            "type": "array"
+          },
+          "mcq": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Mcq"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "parts": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Part"
+            },
+            "title": "Parts",
+            "type": "array"
+          },
+          "primary_syllabus_node": {
+            "minLength": 1,
+            "title": "Primary Syllabus Node",
+            "type": "string"
+          },
+          "question_class": {
+            "$ref": "#/components/schemas/QuestionClass"
+          },
+          "schema_version": {
+            "const": "1.0",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "secondary_syllabus_nodes": {
+            "default": [],
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "title": "Secondary Syllabus Nodes",
+            "type": "array"
+          },
+          "solution_model": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolutionModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stem": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "stimuli": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Stimulus"
+            },
+            "title": "Stimuli",
+            "type": "array"
+          },
+          "total_marks": {
+            "minimum": 1.0,
+            "title": "Total Marks",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "schema_version",
+          "question_class",
+          "exam_section",
+          "levels",
+          "primary_syllabus_node",
+          "stem",
+          "total_marks"
+        ],
+        "title": "QuestionDocument",
+        "type": "object"
+      },
+      "ReasonRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "description": "About the content, never about a person.",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "ReasonRequest",
+        "type": "object"
+      },
+      "RepublishRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Expected Content Sha256",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expected_content_sha256",
+          "reason"
+        ],
+        "title": "RepublishRequest",
+        "type": "object"
+      },
+      "Role": {
+        "description": "docs/DOMAIN_MODEL.md section 3.",
+        "enum": [
+          "student",
+          "teacher",
+          "org_admin",
+          "reviewer",
+          "content_admin",
+          "platform_admin"
+        ],
+        "title": "Role",
+        "type": "string"
+      },
+      "Severity": {
+        "enum": [
+          "critical",
+          "warning"
+        ],
+        "title": "Severity",
+        "type": "string"
+      },
+      "SolutionModel": {
+        "additionalProperties": false,
+        "description": "Declarative formula chain, stored as data. It is not evaluated here (no interpreter yet).",
+        "properties": {
+          "answers": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/AnswerBinding"
+            },
+            "title": "Answers",
+            "type": "array"
+          },
+          "constants": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Constant"
+            },
+            "title": "Constants",
+            "type": "array"
+          },
+          "parameters": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Parameter"
+            },
+            "title": "Parameters",
+            "type": "array"
+          },
+          "steps": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "title": "SolutionModel",
+        "type": "object"
+      },
+      "Step": {
+        "additionalProperties": false,
+        "properties": {
+          "expr": {
+            "minLength": 1,
+            "title": "Expr",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+            "title": "Name",
+            "type": "string"
+          },
+          "stated_value": {
+            "anyOf": [
+              {
+                "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stated Value"
+          },
+          "unit": {
+            "default": "",
+            "pattern": "^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$",
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "expr"
+        ],
+        "title": "Step",
+        "type": "object"
+      },
+      "Stimulus": {
+        "additionalProperties": false,
+        "description": "A figure, graph or similar. Without an asset it is a description and blocks publishing.",
+        "properties": {
+          "alt_text": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alt Text"
+          },
+          "asset_id": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Id"
+          },
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/StimulusKind"
+          },
+          "use": {
+            "$ref": "#/components/schemas/StimulusUse",
+            "default": "read_only"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "description"
+        ],
+        "title": "Stimulus",
+        "type": "object"
+      },
+      "StimulusKind": {
+        "enum": [
+          "schematic_diagram",
+          "graph",
+          "data_table",
+          "circuit_diagram",
+          "field_diagram",
+          "ray_wavefront_diagram",
+          "energy_level_diagram",
+          "spacetime_diagram",
+          "picture"
+        ],
+        "title": "StimulusKind",
+        "type": "string"
+      },
+      "StimulusUse": {
+        "enum": [
+          "read_only",
+          "read_values",
+          "student_annotates"
+        ],
+        "title": "StimulusUse",
+        "type": "string"
+      },
+      "SyllabusNodeOut": {
+        "additionalProperties": false,
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Attributes",
+            "type": "object"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "is_leaf": {
+            "description": "Questions are tagged with leaf nodes only.",
+            "title": "Is Leaf",
+            "type": "boolean"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Code of the parent node; null for a top-level node.",
+            "title": "Parent"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "title",
+          "parent",
+          "is_leaf",
+          "attributes"
+        ],
+        "title": "SyllabusNodeOut",
+        "type": "object"
+      },
+      "SyllabusOut": {
+        "additionalProperties": false,
+        "description": "One syllabus version: its node tree (parents before children, in syllabus order) and its\nexam format vocabulary.",
+        "properties": {
+          "command_terms": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Command Terms",
+            "type": "array"
+          },
+          "exam_sections": {
+            "items": {
+              "$ref": "#/components/schemas/ExamSectionOut"
+            },
+            "title": "Exam Sections",
+            "type": "array"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/SyllabusNodeOut"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "program": {
+            "title": "Program",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "program",
+          "subject",
+          "version",
+          "title",
+          "nodes",
+          "exam_sections",
+          "command_terms"
+        ],
+        "title": "SyllabusOut",
+        "type": "object"
+      },
+      "Table": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/TableRow"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "table",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "Table",
+        "type": "object"
+      },
+      "TableCell": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/CellAttrs",
+            "default": {
+              "colspan": 1,
+              "rowspan": 1
+            }
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Paragraph"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "table_cell",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "TableCell",
+        "type": "object"
+      },
+      "TableHeader": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/CellAttrs",
+            "default": {
+              "colspan": 1,
+              "rowspan": 1
+            }
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Paragraph"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "table_header",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "TableHeader",
+        "type": "object"
+      },
+      "TableRow": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "table_cell": "#/components/schemas/TableCell",
+                  "table_header": "#/components/schemas/TableHeader"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TableCell"
+                },
+                {
+                  "$ref": "#/components/schemas/TableHeader"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "table_row",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "TableRow",
+        "type": "object"
+      },
+      "Text": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Mark"
+            },
+            "title": "Marks",
+            "type": "array"
+          },
+          "text": {
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "Text",
+        "type": "object"
+      },
+      "UpdateDraftRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "$ref": "#/components/schemas/QuestionDocument"
+          }
+        },
+        "required": [
+          "document"
+        ],
+        "title": "UpdateDraftRequest",
+        "type": "object"
+      },
+      "VersionStateOut": {
+        "additionalProperties": false,
+        "description": "Where a version stands after a decision. Never carries content (D-56).",
+        "properties": {
+          "content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "question_id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Question Id",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/VersionStatus"
+          },
+          "version_no": {
+            "title": "Version No",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "question_id",
+          "version_no",
+          "status",
+          "content_sha256"
+        ],
+        "title": "VersionStateOut",
+        "type": "object"
+      },
+      "VersionStatus": {
+        "enum": [
+          "draft",
+          "auto_checking",
+          "needs_fix",
+          "in_review",
+          "approved",
+          "published",
+          "withdrawn",
+          "rejected"
+        ],
+        "title": "VersionStatus",
+        "type": "string"
+      },
+      "WrittenAnswer": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "written",
+            "title": "Kind",
+            "type": "string"
+          },
+          "part_id": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Part Id",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "part_id",
+          "text"
+        ],
+        "title": "WrittenAnswer",
+        "type": "object"
+      },
+      "WrittenCheckResult": {
+        "additionalProperties": false,
+        "description": "The mark scheme of one part. The answer is not marked (AI marking is M4).",
+        "properties": {
+          "kind": {
+            "const": "written",
+            "title": "Kind",
+            "type": "string"
+          },
+          "language_warning": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LanguageWarning"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mark_points": {
+            "items": {
+              "$ref": "#/components/schemas/MarkPointOut"
+            },
+            "title": "Mark Points",
+            "type": "array"
+          },
+          "marks": {
+            "title": "Marks",
+            "type": "integer"
+          },
+          "marks_capped": {
+            "title": "Marks Capped",
+            "type": "boolean"
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/NoteOut"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "part_id": {
+            "title": "Part Id",
+            "type": "string"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "version_id",
+          "part_id",
+          "marks",
+          "marks_capped",
+          "mark_points",
+          "notes",
+          "language_warning"
+        ],
+        "title": "WrittenCheckResult",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "LearningQlab API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/healthz": {
+      "get": {
+        "description": "Liveness. Needs no token and returns no content.",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [],
+        "summary": "Health",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}": {
+      "get": {
+        "description": "A version in any status, with its whole document and its check results.",
+        "operationId": "adminGetVersion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminVersion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get Version",
+        "tags": [
+          "admin"
+        ]
+      },
+      "put": {
+        "description": "Replace the content of a `draft` or `needs_fix` version; the result is `draft`.\n422 `invalid_document` when the document uses unknown labels or math that does not render;\n409 `invalid_transition` in any other status.",
+        "operationId": "adminUpdateDraft",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminVersion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update Draft",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/approve": {
+      "post": {
+        "description": "`in_review` → `approved`, for exactly the content the caller looked at.",
+        "operationId": "adminApprove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The caller is the last editor and separation of duties is on (`self_approval_forbidden`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Approve",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/history": {
+      "get": {
+        "description": "What happened to the version, oldest first.",
+        "operationId": "adminGetVersionHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/History"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get History",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/publish": {
+      "post": {
+        "description": "`approved` → `published`. 409 `not_publishable` lists every reason: a failed or missing\ncritical check, unverified visuals, rights (CLAUDE.md rule 8).",
+        "operationId": "adminPublish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Publish",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/reject": {
+      "post": {
+        "description": "`in_review` → `rejected` (final).",
+        "operationId": "adminReject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reject",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/republish": {
+      "post": {
+        "description": "`withdrawn` → `published`, under the same conditions as publishing.",
+        "operationId": "adminRepublish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepublishRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Republish",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/request-changes": {
+      "post": {
+        "description": "Send an `in_review` or `approved` version back to `needs_fix`.",
+        "operationId": "adminRequestChanges",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Request Changes",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/submit": {
+      "post": {
+        "description": "Run the automatic checks on a draft: the result is `in_review` or `needs_fix`.",
+        "operationId": "adminSubmit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/question-versions/{version_id}/withdraw": {
+      "post": {
+        "description": "`published` → `withdrawn`.",
+        "operationId": "adminWithdraw",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Withdraw",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/questions": {
+      "get": {
+        "description": "Questions in every status, oldest first. The filters apply to each question's latest\nversion (highest number). Questions whose rights record does not permit display are not\nlisted.",
+        "operationId": "adminListQuestions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/VersionStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exam_section",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Exam Section"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Level"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          },
+          {
+            "in": "query",
+            "name": "question_class",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/QuestionClass"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Question Class"
+            }
+          },
+          {
+            "description": "Node code; matches primary and secondary nodes.",
+            "in": "query",
+            "name": "syllabus_node",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Node code; matches primary and secondary nodes.",
+              "title": "Syllabus Node"
+            }
+          },
+          {
+            "in": "query",
+            "name": "has_unverified_visuals",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Has Unverified Visuals"
+            }
+          },
+          {
+            "description": "`next_cursor` of the last page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "`next_cursor` of the last page.",
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminQuestionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List Questions",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/questions/{question_id}": {
+      "get": {
+        "description": "A question and all its versions, without their content.",
+        "operationId": "adminGetQuestion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "question_id",
+            "required": true,
+            "schema": {
+              "title": "Question Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminQuestion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get Question",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/admin/questions/{question_id}/revisions": {
+      "post": {
+        "description": "Open a new draft version to correct a question; a published version is never edited\n(CLAUDE.md rule 7). 409 `working_version_exists` when one is already being worked on.",
+        "operationId": "adminStartRevision",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "question_id",
+            "required": true,
+            "schema": {
+              "title": "Question Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminVersion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "`invalid_transition`, `stale_content`, `not_publishable` or `working_version_exists`."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Start Revision",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "description": "The caller's account identifier and roles.",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Me",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/v1/programs/{program}/subjects/{subject}/syllabus": {
+      "get": {
+        "description": "The syllabus tree and exam format vocabulary of a subject. Unknown programme, subject\nor version: 404.",
+        "operationId": "getSyllabus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+              "title": "Program",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "subject",
+            "required": true,
+            "schema": {
+              "maxLength": 120,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+              "title": "Subject",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Syllabus version code. Default: the newest version.",
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Syllabus version code. Default: the newest version.",
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyllabusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get Syllabus",
+        "tags": [
+          "questions"
+        ]
+      }
+    },
+    "/v1/questions": {
+      "get": {
+        "description": "Published questions, oldest question first. Only questions with a published version\nwhose rights record permits display are listed. A cursor that was not issued by this\nendpoint: 422.",
+        "operationId": "listQuestions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "exam_section",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Exam Section"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Level"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          },
+          {
+            "in": "query",
+            "name": "question_class",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/QuestionClass"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Question Class"
+            }
+          },
+          {
+            "description": "Node code; matches primary and secondary nodes.",
+            "in": "query",
+            "name": "syllabus_node",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 120,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Node code; matches primary and secondary nodes.",
+              "title": "Syllabus Node"
+            }
+          },
+          {
+            "description": "`next_cursor` of the last page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "`next_cursor` of the last page.",
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnerQuestionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List Questions",
+        "tags": [
+          "questions"
+        ]
+      }
+    },
+    "/v1/questions/{question_id}": {
+      "get": {
+        "description": "The published version of a question in the learner view: no answer, no mark scheme.\n404 when the question does not exist, has no published version, or may not be displayed.",
+        "operationId": "getQuestion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "question_id",
+            "required": true,
+            "schema": {
+              "title": "Question Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnerQuestion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get Question",
+        "tags": [
+          "questions"
+        ]
+      }
+    },
+    "/v1/questions/{question_id}/check": {
+      "post": {
+        "description": "Send an answer and see the correct one. The answer is not stored and not marked.\n\n- `mcq`: whether the selected option is correct, and the correct option.\n- `written`: the mark points and notes of that part, and a language warning when the\n  answer does not look English.\n\nAn `mcq` answer to a structured question, a `written` answer to a multiple-choice\nquestion or an unknown `part_id`: 422 `answer_does_not_fit`.",
+        "operationId": "checkAnswer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "question_id",
+            "required": true,
+            "schema": {
+              "title": "Question Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "discriminator": {
+                  "mapping": {
+                    "mcq": "#/components/schemas/McqAnswer",
+                    "written": "#/components/schemas/WrittenAnswer"
+                  },
+                  "propertyName": "kind"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/McqAnswer"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WrittenAnswer"
+                  }
+                ],
+                "title": "Answer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "discriminator": {
+                    "mapping": {
+                      "mcq": "#/components/schemas/McqCheckResult",
+                      "written": "#/components/schemas/WrittenCheckResult"
+                    },
+                    "propertyName": "kind"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/McqCheckResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/WrittenCheckResult"
+                    }
+                  ],
+                  "title": "Response Checkanswer"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Check Answer",
+        "tags": [
+          "questions"
+        ]
+      }
+    }
+  }
+}

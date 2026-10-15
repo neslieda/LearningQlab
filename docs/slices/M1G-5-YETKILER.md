@@ -69,15 +69,11 @@ Roller: [DOMAIN_MODEL.md](../DOMAIN_MODEL.md) §3. M1-G'de kurum ve entitlement 
   uyarı verebilir. Bu bir yardım iletisidir, engel değildir.
 - **Sınır:** metin uzunluğu sınırlıdır; hız sınırı web'e açılışla (dilim 9) gelir.
 
-### 3.1 Türkçe içerik (bilinen uyumsuzluk)
+### 3.1 Türkçe içerik (kapandı, D-60)
 
-"Sistemde kayıtlı her içerik İngilizcedir" ilkesine bugün uymayan alanlar: çözüm açıklamaları, çeldirici gerekçeleri, kazanım
-cümleleri ve şekil tarifleri (pilot sorular böyle yazıldı; [SINIRLAR.md](../SINIRLAR.md) §7.1). Soru metni, seçenekler, markscheme
-maddeleri ve notlar İngilizcedir.
-
-- Dilim 5'te bu alanların **hiçbiri öğrenci görünümüne girmez** (§4); öğrenci yalnızca doğru seçeneği ve İngilizce markscheme'i görür.
-- İngilizceye çevrilmeleri ayrı bir içerik işidir (çeviri + eğitmen incelemesi); bitince açıklamalar cevapla birlikte açılır.
-  **Zamanlaması sahibinin kararını bekliyor**; dilim 5 buna bağlı değildir.
+Pilot soruların Türkçe alanları (çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri, şekil tarifleri) 2026-10-15'te
+İngilizceye çevrildi; Türkçe harfli içerik artık kaydedilmez ([M1G-EN-INGILIZCE.md](M1G-EN-INGILIZCE.md)). Açıklamaların cevapla
+birlikte öğrenciye açılması öğrenci yanıt tipini değiştirdiği için dilim 8'dedir; o zamana kadar öğrenci görünümü aşağıdaki gibi kalır.
 
 ## 4. Öğrenci görünümü
 
@@ -87,7 +83,7 @@ maddeleri ve notlar İngilizcedir.
 - **Girer:** soru metni, seçenekler (çoktan seçmelide), parçaların etiket, gövde, puan ve komut sözcüğü, tablolar, şekil yer tutucusu
   (şekli olan soru zaten yayınlanamaz), sınav bölümü, düzey, toplam puan.
 - **Hiç girmez:** personel hesap kimlikleri, şekil tarifleri, çözüm modeli, kontrol sonuçları, kaynak anahtarı, kazanım cümlesi,
-  kuralla doldurulan üst veri (seçenek türü, cevap türü, ölçme hedefi), Türkçe metinler (§3.1).
+  kuralla doldurulan üst veri (seçenek türü, cevap türü, ölçme hedefi), çözüm açıklaması ve çeldirici gerekçeleri (§3.1).
 - **Yalnızca cevap gönderildikten sonra:** doğru seçenek; yazılı parçada o parçanın puan maddeleri ve notları (§3).
 - Sunucu zorlar: görünüm sunucuda kurulur; istemcinin süzmesine bırakılmaz. Her uç nokta × rol testi, öğrenci rolüne dönen yanıtta
   cevap alanlarının bulunmadığını da doğrular.
@@ -114,7 +110,7 @@ maddeleri ve notlar İngilizcedir.
 - Öğrenci rolüne dönen hiçbir yanıt, cevap gönderilmeden doğru cevabı ya da markscheme'i içermez; gönderilen cevap hiçbir tabloya
   yazılmaz.
 - Türkçe yazılmış bir cevap dil uyarısı alır; İngilizce bir cevap, yalnızca sayı ve formülden oluşan bir cevap almaz.
-- Öğrenci rolüne dönen hiçbir yanıtta Türkçe içerik alanı (açıklama, gerekçe, kazanım, şekil tarifi) bulunmaz.
+- Öğrenci rolüne dönen hiçbir yanıtta açıklama, gerekçe, kazanım ya da şekil tarifi alanı bulunmaz (dilim 8'e kadar).
 - Onaylanmamış, kontrolü eksik ya da görseli olan soru API doğrudan çağrılsa da yayınlanamaz.
 - Yerel geliştirme anahtarıyla imzalanmış token, yerel ortam dışında kabul edilmez; süresi dolmuş, başka hedefe kesilmiş ya da imzası
   bozuk token 401 alır.

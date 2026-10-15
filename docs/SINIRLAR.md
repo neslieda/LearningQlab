@@ -13,7 +13,7 @@
 | Giriş, hesaplar ve roller | Yalnızca yerelde, geliştirme hesaplarıyla (her rol için bir hesap). Kimin neyi yapabileceği API'de denetleniyor (dilim 5); gerçek giriş ekranı ve kayıt yok, web'e açılışla (dilim 9) gelir |
 | Öğrenci görünümü | API'de var (dilim 5): öğrenci yalnızca yayınlanmış soruyu görür, doğru cevabı ancak cevabını gönderdikten sonra. Ekranı dilim 8'de gelir |
 | Öğrenci cevabının saklanması ve puanlanması | Yok. Cevap sunucuya gider, doğru cevap ya da markscheme döner; cevap saklanmaz, puanlanmaz |
-| Türkçe açıklamaların öğrenciye gösterimi | Yok. Çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri İngilizceye çevrilene kadar öğrenci görünümüne girmez (D-59) |
+| Çözüm açıklamalarının öğrenciye gösterimi | Yok. Açıklamalar, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri İngilizceye çevrildi (D-60) ama öğrenci yanıt tipine henüz girmedi; dilim 8'de açılır |
 | Soruların sisteme yüklenmiş hali | 130 pilot soru şemaya çevrildi ve **taslak** olarak içe aktarılabiliyor (§7.1); görüntüleyecek arayüz henüz yok |
 | Şekil, grafik ve diyagram | Üretilemiyor ve yüklenemiyor |
 | Sayısal cevapların kodla doğrulanması | Yok (formül yorumlayıcısı M3'te) |
@@ -116,9 +116,8 @@ Sorular Markdown'dan kurallı bir betikle çevrildi ([pilot/IMPORT_RULES.md](pil
   sonuç değerleri aktarılmadı, 61 adımın 14'ünün birimi boş, sabitler sabit tablosuna bağlı değil ve hiçbiri hesaplanarak doğrulanmadı.
 - **Aktarılmayanlar**: markscheme ve formül zincirinden sonraki serbest yazar notları (12 paragraf; bazıları incelemeci için
   yararlı gerekçeler içerir) ve beş veri temelli sorudaki "Şekil notu" metni (cevabı içerebildiği için). Bunlar yalnızca Markdown'dadır.
-- **Türkçe içerik**: çözüm açıklamaları, çeldirici gerekçeleri, kazanım cümleleri ve şekil tarifleri Türkçedir; soru metni,
-  markscheme ve notlar İngilizcedir. Karar (D-59): sistemdeki her içerik İngilizce olacak; bu alanlar çevrilene kadar öğrenciye
-  hiç gösterilmez. Çeviri ayrı bir iştir ve zamanı henüz belirlenmedi.
+- **Dil**: pilot soruların tamamı (açıklamalar, gerekçeler, kazanım cümleleri, şekil tarifleri dahil) İngilizceye çevrildi (D-60).
+  Çeviri Sonnet alt ajanlarıyla yapıldı ve yapısal olarak doğrulandı; eğitmen incelemesinden geçmedi. Türkçe harfli içerik kaydedilmez.
 - **24 soru yayınlanamaz**: şekil ya da grafik gerektiriyor ve yalnızca tarifi var (§2).
 - Altı sorunun kazanım cümlesinde ham `*` işaretleri kaldı.
 

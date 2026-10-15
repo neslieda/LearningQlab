@@ -3,6 +3,13 @@
 > **Durum: TASLAK.** Tarih: 2026-10-11. Pilot setlerin tüm konularda aynı ölçütlerle yazılmasını sağlar. Örnek uygulama:
 > [a1-kinematics-pilot-questions.md](a1-kinematics-pilot-questions.md).
 
+## 0. Dil kuralı (2026-10-15, D-60)
+
+Soru dosyasının **tamamı İngilizce** yazılır: soru metni, seçenekler, cevap anahtarı, markscheme ve notlar, çözüm açıklaması,
+çeldirici gerekçeleri, kazanım cümleleri, şekil tarifleri ve notları, durum notu, kapsam ve biçim uyumu tabloları, yapı işaretleri.
+Eğitmenin sisteme yazdığı her içerik de İngilizcedir. Türkçeye özgü harf (`ğ ı İ ş`) taşıyan içerik sistem tarafından kaydedilmez ve
+dönüştürülmez. Bu belge sahibine yazıldığı için Türkçedir; yapı işaretleri aşağıda İngilizce verilir.
+
 ## 1. Kaynak kuralı
 
 - Girdi yalnızca şunlardır: [müfredat analizi](../syllabus/dp-physics-2025-analysis.md), [biçim profili](../formats/dp-physics-2025-format-profile.md)
@@ -15,10 +22,12 @@
 
 Dosya adı: `<düğüm>-<kısa-ad>-pilot-questions.md` (ör. `b3-gas-laws-pilot-questions.md`). Bölümler, A.1 dosyasındaki sırayla:
 
-1. Başlık ve durum notu ("İNCELENMEMİŞ TASLAK", tarih, kaynak, sayısal doğrulama, doğrulanmayanlar).
-2. Kapsam tablosu: # · bölüm · düzey (SL / HL) · kazanım · hedef (AO) · komut sözcüğü · puan · zorluk. Altında kapsanmayan kazanımlar.
-3. Sorular: `## Soru N — Paper …` başlığı; soru metni İngilizce; ardından `**Cevap: X**` (çoktan seçmeli) ya da `### Markscheme`.
-4. Biçim uyumu tablosu.
+1. Başlık (`# Pilot question set: …`) ve durum notu (`Status: UNREVIEWED DRAFT`, tarih, `Source`, `Numerical check`, `Not verified`).
+2. Kapsam tablosu (`## Scope table`): `# | Section | Level | Outcome | Objective | Command terms | Marks | Difficulty`; zorluk
+   `Easy`, `Easy–medium`, `Medium`, `Medium–hard`, `Hard`. Altında kapsanmayan kazanımlar.
+3. Sorular: `## Question N — Paper …` başlığı (puanlıysa `(n marks)`); ardından `**Answer: X**` ve `**Solution.**` (çoktan seçmeli)
+   ya da `### Markscheme`.
+4. Biçim uyumu tablosu (`## Format conformance`, `| Rule | Status |`).
 
 Konu başına en az: **3 Paper 1A** sorusu + **1 Paper 2 kısa sorusu** (SL kâğıdında kullanılacaksa 4–6 puan; yalnızca HL için 4–9 puan;
 kaynak: müfredat analizi §2.1). Tema başına ayrıca **1 Paper 1B** sorusu (8–12 puan).
@@ -45,9 +54,9 @@ kaynak: müfredat analizi §2.1). Tema başına ayrıca **1 Paper 1B** sorusu (8
 
 - Yapı: bağlam → (varsa şekil tarifi) → ayrı satırda tek soru cümlesi → A–D.
 - Dört seçenek aynı türde ve aynı birimde; sayısalsa büyüklük sırasında.
-- Her yanlış seçenek belirli bir kavram yanılgısına ya da tipik hataya dayanır; tabloda yanılgı ve onu veren hesap yazılır.
+- Her yanlış seçenek belirli bir kavram yanılgısına ya da tipik hataya dayanır; tabloda (`| Option | Misconception |`) yanılgı ve onu veren hesap yazılır.
 - Bir konu dosyasındaki doğru cevapların konumu dengelenir (hepsi aynı harf olmaz).
-- Şekil gerekiyorsa metinle tarif edilir: `> **Şekil:** …`. Şekil olmadan çözülemeyen soru yazılmaz.
+- Şekil gerekiyorsa metinle tarif edilir: `> **Figure:** …`. Şekil olmadan çözülemeyen soru yazılmaz.
 
 ## 6. Yapılandırılmış sorular (Paper 2 ve 1B)
 
@@ -57,7 +66,8 @@ kaynak: müfredat analizi §2.1). Tema başına ayrıca **1 Paper 1B** sorusu (8
 - Uygun yerde "Show that" kalıbı: yaklaşık değer verilir, sonraki parça o değeri kullanır.
 - Markscheme dört sütunlu tablo: `Question | | | Answers | Notes | Total`; her madde `✓` ile biter; `« »`, `OR`, `AND`, `OWTTE`,
   `Allow ECF from (…)` gösterimleri biçim profilindeki anlamlarıyla kullanılır.
-- Sayısal parçaların ardından "Formül zinciri" tablosu: parametreler, adım adı, ifade, sonuç.
+- Sayısal parçaların ardından `### Formula chain (solution model)` tablosu (`| Step | Expression | Result |`): parametreler,
+  adım adı, ifade, sonuç; sabitler `constant` sözcüğüyle işaretlenir.
 - Paper 1B: deney bağlamı, "büyüklük / birim ± belirsizlik" başlıklı veri tablosu; belirsizlik, grafik ve değerlendirme becerileri.
   Grafik gerekiyorsa veriden üretilecek grafik tarif edilir ve bu eksik "Biçim uyumu" tablosunda yazılır.
 
@@ -85,6 +95,6 @@ durur ya da bilgi kaybolur.
 - Notlar: `OWTTE`, `Allow ECF from (b).`, `Accept …`, `Do not accept …`, `Award [n] max …` kalıplarıyla başlar.
 - Formül zinciri tablosunda yalnızca parametre ve adım satırları bulunur; denetim ve karşılaştırma satırları tablonun altına düz
   metin olarak yazılır (tabloda kalırlarsa çözüm modeli aktarılmaz). Her parametre ters tırnak içinde `ad = değer birim` biçimindedir.
-- "Şekil notu" yazarın çalışma notudur ve sisteme alınmaz; öğrencinin görmesi gereken her şey soru metninde olmalıdır.
+- `### Figure note` yazarın çalışma notudur ve sisteme alınmaz; öğrencinin görmesi gereken her şey soru metninde olmalıdır.
 - Soru bloğunun içinde `---` çizgisi kullanılmaz.
 - Komut sözcüğü parçanın ilk sözcüğüdür ve müfredat analizindeki listeden seçilir.

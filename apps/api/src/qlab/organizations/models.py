@@ -10,7 +10,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, Text, text
+from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, Text, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from qlab.database import Base, created_at_column, new_id
@@ -51,3 +51,45 @@ class RoleAssignment(Base):
     created_at: Mapped[datetime] = created_at_column()
     revoked_at: Mapped[datetime | None]
     revoked_by: Mapped[str | None] = mapped_column(Text)
+
+
+class Invite(Base):
+    """A link that gives its user an account and one role (D-63). Only the code's SHA-256 is
+    stored; the code is shown once to whoever created the invite."""
+
+    __tablename__ = "invite"
+    __table_args__ = (
+        UniqueConstraint("code_sha256"),
+        CheckConstraint("code_sha256 ~ '^[0-9a-f]{64}$'", name="code_sha256"),
+        CheckConstraint(f"role IN ({', '.join(repr(r) for r in ROLES)})", name="role"),
+        CheckConstraint(f"created_by {_ACTOR_CHECK}", name="created_by"),
+        CheckConstraint("expires_at > created_at", name="expires_at"),
+        CheckConstraint("max_uses BETWEEN 1 AND 200", name="max_uses"),
+        CheckConstraint("uses BETWEEN 0 AND max_uses", name="uses"),
+        CheckConstraint(
+            f"(revoked_at IS NULL) = (revoked_by IS NULL) "
+            f"AND (revoked_by IS NULL OR revoked_by {_ACTOR_CHECK})",
+            name="revoked",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=new_id)
+    code_sha256: Mapped[str] = mapped_column(Text)
+    role: Mapped[str] = mapped_column(Text)
+    created_by: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = created_at_column()
+    expires_at: Mapped[datetime]
+    max_uses: Mapped[int] = mapped_column(Integer)
+    uses: Mapped[int] = mapped_column(Integer, server_default="0")
+    revoked_at: Mapped[datetime | None]
+    revoked_by: Mapped[str | None] = mapped_column(Text)
+
+
+class InviteRedemption(Base):
+    """Who used an invite. The same person using it twice counts once."""
+
+    __tablename__ = "invite_redemption"
+
+    invite_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("invite.id"), primary_key=True)
+    account_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("account.id"), primary_key=True)
+    redeemed_at: Mapped[datetime] = created_at_column()

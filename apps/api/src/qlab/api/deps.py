@@ -14,10 +14,11 @@ from fastapi import Depends, Request
 from sqlalchemy import text
 from sqlalchemy.orm import Session, sessionmaker
 
-from qlab.api.policy import Principal, principal
+from qlab.api.policy import Principal, SignedInCaller, principal, signed_in
 from qlab.api.settings import Settings
 
 Caller = Annotated[Principal, Depends(principal)]
+SignedInUser = Annotated[SignedInCaller, Depends(signed_in)]
 
 
 def settings(request: Request) -> Settings:

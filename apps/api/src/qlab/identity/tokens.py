@@ -36,6 +36,10 @@ class Claims:
     issuer: str
     subject: str
     expires_at: datetime
+    # The identity provider organisation the person signed in through, when the token says so
+    # (M1-G slice 9: staff roles count only for the staff organisation, where two-step
+    # verification is enforced). None for development tokens.
+    organization: str | None = None
 
 
 class TokenVerifier:

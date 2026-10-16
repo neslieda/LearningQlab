@@ -19,7 +19,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import Response
 
 from qlab.api import errors, policy
-from qlab.api.routers import admin, learner, system
+from qlab.api.routers import admin, invites, learner, system
 from qlab.api.settings import Settings, build_verifier, check_verifier
 from qlab.content import math
 from qlab.database import make_engine
@@ -75,7 +75,7 @@ def create_app(
         separate_input_output_schemas=False,
     )
     app.router.route_class = policy.PolicyRoute
-    for module in (system, learner, admin):
+    for module in (system, learner, admin, invites):
         module.router.register(app)
     errors.install(app)
 
@@ -91,6 +91,9 @@ def create_app(
 
     app.state.settings = settings
     app.state.verifier = verifier
+    # Outside the local environment: the identity provider organisation whose sign-ins carry
+    # two-step verification; staff roles count only for it (qlab.api.policy).
+    app.state.staff_organization = settings.staff_organization
     app.state.session_factory = session_factory or sessionmaker(make_engine())
     return app
 

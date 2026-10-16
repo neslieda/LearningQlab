@@ -12,7 +12,14 @@ who is not allowed learns nothing from the shape of the answer:
 
 - no token, or a token that is not acceptable, or an unknown or disabled account: 401;
 - an account without a role the endpoint allows: 404, the same response as for a resource that
-  does not exist.
+  does not exist;
+- outside the local environment, staff roles count only when the token comes from the staff
+  organisation of the identity provider, where two-step verification is enforced (M1-G slice
+  9, docs/SECURITY.md section 2): a caller whose only allowing roles are staff roles gets 403
+  `mfa_required`.
+
+`SIGNED_IN` endpoints need a valid token but no account: they are how an account comes to
+exist (an invite is redeemed, D-63). Their handlers receive a `SignedInCaller`.
 """
 
 from __future__ import annotations
@@ -44,12 +51,20 @@ class Public:
     """Marker for an endpoint that needs no token. It must return no content."""
 
 
+class SignedIn:
+    """Marker for an endpoint that needs a valid token and nothing else (no account, no role)."""
+
+
 PUBLIC: Final = Public()
-Access = Public | frozenset[Role]
+SIGNED_IN: Final = SignedIn()
+Access = Public | SignedIn | frozenset[Role]
 
 EVERYONE: Final = frozenset(Role)
 STAFF: Final = frozenset({Role.REVIEWER, Role.CONTENT_ADMIN, Role.PLATFORM_ADMIN})
 PUBLISHERS: Final = frozenset({Role.CONTENT_ADMIN, Role.PLATFORM_ADMIN})
+INVITERS: Final = frozenset({Role.TEACHER, Role.PLATFORM_ADMIN})
+# Roles that need two-step verification (docs/SECURITY.md section 2).
+MFA_ROLES: Final = STAFF
 
 _QV = "/v1/admin/question-versions/{version_id}"
 
@@ -58,6 +73,10 @@ ENDPOINT_POLICY: Final[Mapping[tuple[str, str], Access]] = MappingProxyType(
     {
         ("GET", "/healthz"): PUBLIC,
         ("GET", "/v1/me"): EVERYONE,
+        ("POST", "/v1/invites/redeem"): SIGNED_IN,
+        ("POST", "/v1/admin/invites"): INVITERS,
+        ("GET", "/v1/admin/invites"): INVITERS,
+        ("POST", "/v1/admin/invites/{invite_id}/revoke"): INVITERS,
         ("GET", "/v1/programs"): EVERYONE,
         ("GET", "/v1/programs/{program}/subjects/{subject}/syllabus"): EVERYONE,
         ("GET", "/v1/questions"): EVERYONE,
@@ -83,6 +102,14 @@ ENDPOINT_POLICY: Final[Mapping[tuple[str, str], Access]] = MappingProxyType(
 
 class PolicyError(RuntimeError):
     """The routes and the policy table do not agree; the application must not start."""
+
+
+@dataclass(frozen=True)
+class SignedInCaller:
+    """A caller with a valid token, who may not have an account yet."""
+
+    issuer: str
+    subject: str
 
 
 @dataclass(frozen=True)
@@ -117,9 +144,9 @@ def _load_principal(
             session.rollback()
 
 
-async def authorize(request: Request, access: Access | None) -> Principal | None:
+async def authorize(request: Request, access: Access | None) -> Principal | SignedInCaller | None:
     """Decide whether the request may reach its handler. Returns the caller, or None for a
-    public endpoint; otherwise raises the 401 or 404 response."""
+    public endpoint; otherwise raises the 401, 403 or 404 response."""
     if access is None:
         # Not reachable when the application was built by `create_app`; refuse all the same.
         raise errors.not_found()
@@ -131,6 +158,8 @@ async def authorize(request: Request, access: Access | None) -> Principal | None
     except InvalidToken as error:
         _log.info("token refused: %s", error)
         raise errors.unauthenticated() from None
+    if isinstance(access, SignedIn):
+        return SignedInCaller(issuer=claims.issuer, subject=claims.subject)
     principal = await run_in_threadpool(
         _load_principal, request.app.state.session_factory, claims.issuer, claims.subject
     )
@@ -138,6 +167,16 @@ async def authorize(request: Request, access: Access | None) -> Principal | None
         raise errors.unauthenticated()
     if not principal.roles & access:
         raise errors.not_found()
+    staff_organization = request.app.state.staff_organization
+    if staff_organization is not None and claims.organization != staff_organization:
+        # Staff roles need the staff sign-in, where two-step verification is enforced.
+        principal = Principal(principal.account_id, principal.roles - MFA_ROLES)
+        if not principal.roles & access:
+            raise errors.ApiError(
+                403,
+                "mfa_required",
+                "Staff access needs a staff sign-in with two-step verification",
+            )
     return principal
 
 
@@ -184,6 +223,14 @@ def principal(request: Request) -> Principal:
     """The authenticated caller of a non-public endpoint (FastAPI dependency)."""
     caller = getattr(request.state, "principal", None)
     if not isinstance(caller, Principal):
+        raise errors.not_found()
+    return caller
+
+
+def signed_in(request: Request) -> SignedInCaller:
+    """The caller of a `SIGNED_IN` endpoint (FastAPI dependency)."""
+    caller = getattr(request.state, "principal", None)
+    if not isinstance(caller, SignedInCaller):
         raise errors.not_found()
     return caller
 

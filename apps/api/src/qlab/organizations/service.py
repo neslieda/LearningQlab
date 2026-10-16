@@ -20,6 +20,15 @@ from qlab.organizations.models import RoleAssignment
 _ACTOR = re.compile(r"[A-Za-z0-9_.:|-]{1,200}")
 
 
+class InviteNotFound(Exception):
+    """The invite code is unknown, expired, revoked or used up; or the invite is not the
+    caller's to see. Deliberately one error for all of these (D-63)."""
+
+
+class InviteRoleForbidden(Exception):
+    """The caller's roles do not allow inviting someone to this role."""
+
+
 class Role(StrEnum):
     """docs/DOMAIN_MODEL.md section 3."""
 

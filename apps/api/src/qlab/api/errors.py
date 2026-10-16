@@ -18,6 +18,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from qlab.content import math
 from qlab.content import service as content
+from qlab.organizations import service as organizations
 from qlab.rights import service as rights
 
 PROBLEM_MEDIA_TYPE = "application/problem+json"
@@ -99,6 +100,10 @@ def from_service_error(error: Exception) -> ApiError | None:
         # A write that the rights record does not permit looks like a missing resource, as a
         # read already does (fail-closed, CLAUDE.md rule 2).
         return not_found()
+    if isinstance(error, organizations.InviteNotFound):
+        return ApiError(404, "invite_not_found", "This invite is not valid")
+    if isinstance(error, organizations.InviteRoleForbidden):
+        return ApiError(403, "invite_role_forbidden", "You cannot invite someone to this role")
     if isinstance(error, content.InvalidDocument):
         return ApiError(
             422,

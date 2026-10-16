@@ -40,6 +40,9 @@ class Settings:
     forbid_self_approval: bool
     # Where the development signing key is. None outside the local environment.
     dev_key_file: Path | None = None
+    # Identity provider organisation of staff sign-ins (two-step verification enforced there).
+    # Required outside the local environment; None locally.
+    staff_organization: str | None = None
 
     @classmethod
     def from_env(cls, environ: Mapping[str, str] | None = None) -> Settings:

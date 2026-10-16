@@ -2745,13 +2745,20 @@
       },
       "UpdateDraftRequest": {
         "additionalProperties": false,
+        "description": "Replace the content the caller started editing from (`stale_content` if it changed).",
         "properties": {
           "document": {
             "$ref": "#/components/schemas/QuestionDocument"
+          },
+          "expected_content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Expected Content Sha256",
+            "type": "string"
           }
         },
         "required": [
-          "document"
+          "document",
+          "expected_content_sha256"
         ],
         "title": "UpdateDraftRequest",
         "type": "object"
@@ -3006,7 +3013,7 @@
         ]
       },
       "put": {
-        "description": "Replace the content of a `draft` or `needs_fix` version; the result is `draft`.\n422 `invalid_document` when the document uses unknown labels or math that does not render;\n409 `invalid_transition` in any other status.",
+        "description": "Replace the content of a `draft` or `needs_fix` version; the result is `draft`.\n422 `invalid_document` when the document uses unknown labels or math that does not render,\nor is not written in English; 409 `stale_content` when the stored content is no longer the\none the caller started from; 409 `invalid_transition` in any other status.",
         "operationId": "adminUpdateDraft",
         "parameters": [
           {

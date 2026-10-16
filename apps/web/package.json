@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@qlab/api-client": "0.0.0",
+    "@qlab/question-editor": "0.0.0",
     "@qlab/question-renderer": "0.0.0",
     "@tanstack/react-query": "5.104.2",
     "next": "16.4.0",

@@ -647,9 +647,18 @@ def create_question(
 
 @_atomic
 def update_draft(
-    session: Session, *, actor: str, version_id: uuid.UUID, document: QuestionDocument
+    session: Session,
+    *,
+    actor: str,
+    version_id: uuid.UUID,
+    document: QuestionDocument,
+    expected_content_sha256: str | None = None,
 ) -> QuestionVersionView:
     """Replace the content of a `draft` or `needs_fix` version; the result is `draft`.
+
+    When `expected_content_sha256` is given it must be the hash of the stored content (the
+    content the editor started from), else StaleContent: two editors never overwrite each
+    other silently. The API always passes it; internal callers such as the pilot import may not.
 
     Any other status raises InvalidTransition (a published version is corrected with
     `start_revision`). Same rights and document rules as `create_question`. The derived rows
@@ -661,6 +670,8 @@ def update_draft(
     version, question = _locked(session, version_id)
     _require_rights(session, question)
     _expect(version, VersionStatus.DRAFT, VersionStatus.NEEDS_FIX)
+    if expected_content_sha256 is not None:
+        _expect_content(version, expected_content_sha256)
     previous_status, previous_hash = version.status, version.content_sha256
     version.status = VersionStatus.DRAFT.value
     _write_content(session, version, question, document)

@@ -32,9 +32,10 @@ class MarkType(StrEnum):
     ESSENTIAL = "essential"
 
 
-_EXCLUSIVE_MARKS = (
-    {MarkType.SUB, MarkType.SUP},
-    {MarkType.OPTIONAL, MarkType.ESSENTIAL},
+# Single source for pairs that cannot share a text run; the editor manifest derives from it too.
+EXCLUSIVE_MARKS: tuple[tuple[MarkType, MarkType], ...] = (
+    (MarkType.SUB, MarkType.SUP),
+    (MarkType.OPTIONAL, MarkType.ESSENTIAL),
 )
 
 
@@ -50,8 +51,8 @@ class MarkedNode(Node):
         types = [m.type for m in self.marks]
         if len(types) != len(set(types)):
             raise ValueError("duplicate mark on a node")
-        for pair in _EXCLUSIVE_MARKS:
-            if pair <= set(types):
+        for pair in EXCLUSIVE_MARKS:
+            if set(pair) <= set(types):
                 raise ValueError("mutually exclusive marks on a node")
         return self
 

@@ -1753,6 +1753,57 @@ def test_publishing_content_that_changed_since_it_was_read_is_refused(
     assert publish(session, version.id).status is svc.VersionStatus.PUBLISHED
 
 
+@pytest.mark.parametrize("wrong", [NO_HASH, "f" * 64, "not a hash", ""])
+def test_update_draft_with_a_stale_expected_hash_is_refused_and_changes_nothing(
+    session: Session, connection: Connection, env: Env, wrong: str
+) -> None:
+    version = create(session, env)
+    before = snapshot(session, connection, version.question_id)
+
+    with pytest.raises(svc.StaleContent):
+        svc.update_draft(
+            session,
+            actor=OP_ACTOR,
+            version_id=version.id,
+            document=other_document(),
+            expected_content_sha256=wrong,
+        )
+
+    assert snapshot(session, connection, version.question_id) == before
+    assert stored_hash(session, version.id) == version.content_sha256
+
+
+def test_update_draft_with_the_current_hash_saves_and_without_one_behaves_as_before(
+    session: Session, connection: Connection, env: Env
+) -> None:
+    version = create(session, env)
+    saved = svc.update_draft(
+        session,
+        actor=OP_ACTOR,
+        version_id=version.id,
+        document=other_document(),
+        expected_content_sha256=version.content_sha256,
+    )
+    assert saved.content_sha256 == svc.content_sha256(other_document())
+    again = svc.update_draft(
+        session,
+        actor=OP_ACTOR,
+        version_id=version.id,
+        document=document(),
+        expected_content_sha256=None,
+    )
+    assert again.content_sha256 == svc.content_sha256(document())
+    # the first hash is now stale
+    with pytest.raises(svc.StaleContent):
+        svc.update_draft(
+            session,
+            actor=OP_ACTOR,
+            version_id=version.id,
+            document=other_document(),
+            expected_content_sha256=saved.content_sha256,
+        )
+
+
 @pytest.mark.parametrize("operation", ["approve", "publish", "republish"])
 @pytest.mark.parametrize("wrong", [NO_HASH, "f" * 64, "not a hash", ""])
 def test_a_hash_that_is_not_the_current_one_changes_nothing(

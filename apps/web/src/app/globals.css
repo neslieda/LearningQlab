@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@qlab/question-renderer/styles.css";
+@import "@qlab/question-editor/styles.css";
 
 :root {
   --page-bg: #ffffff;

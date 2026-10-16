@@ -1,0 +1,224 @@
+{
+  "mark_exclusions": [
+    [
+      "sub",
+      "sup"
+    ],
+    [
+      "optional",
+      "essential"
+    ]
+  ],
+  "marks": [
+    {
+      "name": "bold"
+    },
+    {
+      "name": "italic"
+    },
+    {
+      "name": "sub"
+    },
+    {
+      "name": "sup"
+    },
+    {
+      "name": "optional"
+    },
+    {
+      "name": "essential"
+    }
+  ],
+  "nodes": {
+    "bullet_list": {
+      "atom": false,
+      "attrs": {},
+      "content": "list_item+",
+      "group": "block",
+      "marks": false
+    },
+    "doc": {
+      "atom": false,
+      "attrs": {},
+      "content": "block+",
+      "group": null,
+      "marks": false
+    },
+    "figure": {
+      "atom": true,
+      "attrs": {
+        "stimulus_id": {
+          "default": null,
+          "minLength": 1,
+          "pattern": null,
+          "required": true,
+          "type": "string"
+        }
+      },
+      "content": null,
+      "group": "block",
+      "marks": false
+    },
+    "hard_break": {
+      "atom": true,
+      "attrs": {},
+      "content": null,
+      "group": "inline",
+      "marks": false
+    },
+    "list_item": {
+      "atom": false,
+      "attrs": {},
+      "content": "paragraph+",
+      "group": null,
+      "marks": false
+    },
+    "math_block": {
+      "atom": true,
+      "attrs": {
+        "latex": {
+          "default": null,
+          "minLength": 1,
+          "pattern": null,
+          "required": true,
+          "type": "string"
+        }
+      },
+      "content": null,
+      "group": "block",
+      "marks": false
+    },
+    "math_inline": {
+      "atom": true,
+      "attrs": {
+        "latex": {
+          "default": null,
+          "minLength": 1,
+          "pattern": null,
+          "required": true,
+          "type": "string"
+        }
+      },
+      "content": null,
+      "group": "inline",
+      "marks": true
+    },
+    "ordered_list": {
+      "atom": false,
+      "attrs": {},
+      "content": "list_item+",
+      "group": "block",
+      "marks": false
+    },
+    "paragraph": {
+      "atom": false,
+      "attrs": {},
+      "content": "inline*",
+      "group": "block",
+      "marks": false
+    },
+    "quantity": {
+      "atom": true,
+      "attrs": {
+        "param": {
+          "default": null,
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+          "required": false,
+          "type": "string"
+        },
+        "uncertainty": {
+          "default": null,
+          "pattern": "^[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+          "required": false,
+          "type": "string"
+        },
+        "unit": {
+          "default": "",
+          "pattern": "^([A-Za-zµΩ°%]([A-Za-zµΩ°%0-9 /*^().-]*[A-Za-zµΩ°%0-9/*^().-])?)?$",
+          "required": false,
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?$",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "content": null,
+      "group": "inline",
+      "marks": true
+    },
+    "table": {
+      "atom": false,
+      "attrs": {},
+      "content": "table_row+",
+      "group": "block",
+      "marks": false
+    },
+    "table_cell": {
+      "atom": false,
+      "attrs": {
+        "colspan": {
+          "default": 1,
+          "maximum": 12,
+          "minimum": 1,
+          "pattern": null,
+          "required": false,
+          "type": "integer"
+        },
+        "rowspan": {
+          "default": 1,
+          "maximum": 50,
+          "minimum": 1,
+          "pattern": null,
+          "required": false,
+          "type": "integer"
+        }
+      },
+      "content": "paragraph+",
+      "group": null,
+      "marks": false
+    },
+    "table_header": {
+      "atom": false,
+      "attrs": {
+        "colspan": {
+          "default": 1,
+          "maximum": 12,
+          "minimum": 1,
+          "pattern": null,
+          "required": false,
+          "type": "integer"
+        },
+        "rowspan": {
+          "default": 1,
+          "maximum": 50,
+          "minimum": 1,
+          "pattern": null,
+          "required": false,
+          "type": "integer"
+        }
+      },
+      "content": "paragraph+",
+      "group": null,
+      "marks": false
+    },
+    "table_row": {
+      "atom": false,
+      "attrs": {},
+      "content": "(table_cell|table_header)+",
+      "group": null,
+      "marks": false
+    },
+    "text": {
+      "atom": false,
+      "attrs": {},
+      "content": null,
+      "group": "inline",
+      "marks": true
+    }
+  },
+  "schema_version": "1.0",
+  "top": "doc"
+}

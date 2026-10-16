@@ -134,12 +134,17 @@ def update_draft(
     request: Request, caller: Caller, version_id: str, body: UpdateDraftRequest
 ) -> AdminVersion:
     """Replace the content of a `draft` or `needs_fix` version; the result is `draft`.
-    422 `invalid_document` when the document uses unknown labels or math that does not render;
-    409 `invalid_transition` in any other status."""
+    422 `invalid_document` when the document uses unknown labels or math that does not render,
+    or is not written in English; 409 `stale_content` when the stored content is no longer the
+    one the caller started from; 409 `invalid_transition` in any other status."""
     with deps.writing(request) as session:
         uid = version_id_(version_id)
         updated = content.update_draft(
-            session, actor=caller.actor, version_id=uid, document=body.document
+            session,
+            actor=caller.actor,
+            version_id=uid,
+            document=body.document,
+            expected_content_sha256=body.expected_content_sha256,
         )
         return admin_view.version(updated, content.get_checks(session, uid))
 

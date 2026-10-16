@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
+import { config } from "@/lib/config";
 
-// Development only: absent from production builds. The component is imported only inside the
-// non-production branch so that production bundles contain neither the page nor the token storage code.
+// Local only (NEXT_PUBLIC_QLAB_ENV=local, inlined at build time): any other build answers 404. The component is
+// imported only inside the local branch so that other bundles contain no development sign-in UI.
 export default async function SignInPage() {
-  if (process.env.NODE_ENV !== "production") {
+  if (config.local) {
     const { SignIn } = await import("./sign-in");
     return (
       <div className="space-y-4">

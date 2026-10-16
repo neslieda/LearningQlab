@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ApiError } from "@/lib/admin";
+import { signInHref } from "@/lib/config";
 import { problemMessage } from "@/lib/decisions";
 
 /** Shows the text for a failed request, with the follow-up the code calls for. */
@@ -24,7 +25,7 @@ export function ProblemView({ error, questionId, onReload }: { error: unknown; q
         </button>
       ) : null}
       {m.followUp === "sign-in" ? (
-        <Link href="/dev/sign-in" className="underline">
+        <Link href={signInHref()} className="underline">
           Sign in
         </Link>
       ) : null}

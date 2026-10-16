@@ -1,0 +1,49 @@
+// The invite code survives the sign-in round trip in sessionStorage (tab-scoped). It is cleared once used.
+const KEY = "qlab.invite.code";
+const CODE = /^[A-Za-z0-9_-]{1,200}$/;
+
+export function isValidCode(code: string): boolean {
+  return CODE.test(code);
+}
+
+export function storeInviteCode(code: string, storage: Pick<Storage, "setItem"> | null = safeStorage()): void {
+  if (!storage || !isValidCode(code)) return;
+  try {
+    storage.setItem(KEY, code);
+  } catch {
+    /* storage full or blocked: the code is still in the invite URL */
+  }
+}
+
+export function readInviteCode(storage: Pick<Storage, "getItem"> | null = safeStorage()): string | null {
+  if (!storage) return null;
+  try {
+    const v = storage.getItem(KEY);
+    return v && isValidCode(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearInviteCode(storage: Pick<Storage, "removeItem"> | null = safeStorage()): void {
+  if (!storage) return;
+  try {
+    storage.removeItem(KEY);
+  } catch {
+    /* nothing to clear */
+  }
+}
+
+function safeStorage(): Storage | null {
+  try {
+    return typeof window === "undefined" ? null : window.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+/** A same-site path only (no scheme, no `//`), so a crafted `next` value cannot send the user elsewhere. */
+export function safeReturnPath(path: string | null | undefined): string {
+  if (!path || !path.startsWith("/") || path.startsWith("//") || path.includes("\\") || /[\u0000-\u001f]/.test(path)) return "/";
+  return path;
+}

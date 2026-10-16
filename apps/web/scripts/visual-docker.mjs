@@ -19,7 +19,7 @@ const image = `mcr.microsoft.com/playwright:v${installed}-noble`;
 const inner = `
 set -euo pipefail
 mkdir -p /work
-tar -C /src --exclude=node_modules --exclude=.next --exclude=.next-dev --exclude=.git --exclude=test-results --exclude=.venv --exclude='apps/api' --exclude='.env*' -cf - . | tar -C /work -xf -
+tar -C /src --exclude=node_modules --exclude=.next --exclude=.next-dev --exclude=.next-oidc --exclude=.git --exclude=test-results --exclude=.venv --exclude='apps/api' --exclude='.env*' -cf - . | tar -C /work -xf -
 cd /work
 npm ci --ignore-scripts --no-audit --no-fund
 npm run build -w @qlab/web

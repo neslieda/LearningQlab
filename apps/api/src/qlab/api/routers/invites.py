@@ -60,7 +60,12 @@ def redeem(request: Request, caller: SignedInUser, body: RedeemInviteRequest) ->
         403: {
             "model": AUTH_ERRORS[404]["model"],
             "description": "A teacher may invite students only (`invite_role_forbidden`).",
-        }
+        },
+        422: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "A staff invite (reviewer, content_admin, platform_admin) allows at "
+            "most 5 uses (`invite_uses_too_many`), or the body is not valid.",
+        },
     },
     operation_id="createInvite",
 )

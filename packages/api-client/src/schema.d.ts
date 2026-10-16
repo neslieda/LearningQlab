@@ -1874,13 +1874,13 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The request is not valid (`validation_failed`). */
+            /** @description A staff invite (reviewer, content_admin, platform_admin) allows at most 5 uses (`invite_uses_too_many`), or the body is not valid. */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["Problem"];
+                    "application/json": components["schemas"]["Problem"];
                 };
             };
         };

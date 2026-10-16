@@ -62,13 +62,19 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
   rolleri döner; sayılmaz, audit yazılmaz. Biçimi bozuk kod 422.
 - Personel rolü veren davet, Staff organizasyonu dışından girişle de kullanılabilir (`SIGNED_IN` MFA denetlemez); rol verilir ama
   Staff girişi yapılana kadar kullanılamaz (§3.2).
+- Personel rolü veren davet (`reviewer`, `content_admin`, `platform_admin`) en çok 5 kişi tarafından kullanılabilir; fazlası 422
+  `invite_uses_too_many` (sızan bir bağlantı çok kişiye personel rolü vermesin; güvenlik incelemesi 2026-10-16).
+- Davet bağlantısının biçimi `<web>/invite#<kod>`: kod adresin `#` sonrasındadır, sunucuya, günlüklere ve yönlendiren başlığına
+  hiç gitmez (güvenlik incelemesi 2026-10-16). Sayfa kodu tarayıcıda okur.
 - Kod: 32 bayt rastgele, base64url; veritabanında yalnızca SHA-256 özeti. Kaba kuvvete karşı ayrıca sınır gerekmez (2^256).
 - Tablolar (migration 0006): `invite` (`id`, `code_sha256` tekil, `role`, `created_by`, `created_at`, `expires_at`, `max_uses`,
   `uses`, `revoked_at`, `revoked_by`) ve `invite_redemption` (`invite_id`, `account_id`, `redeemed_at`; ikisi birlikte tekil: aynı
   kişi aynı daveti iki kez saymaz). Kullanım sayımı satır kilidiyle (eşzamanlı iki kullanım `max_uses`'u aşamaz).
 - Audit: `invite.created`, `invite.revoked`, `invite.redeemed` (davet kimliği, rol, hesap kimliği; kod asla).
 - **İlk yönetici:** `python -m qlab.api.admin invite --role platform_admin --base-url <web adresi>` sahibin bilgisayarından,
-  `QLAB_DATABASE_URL` ile çalışır; tek kullanımlık, 1 günlük davet bağlantısı yazar. Audit actor `cli:owner`.
+  `QLAB_DATABASE_URL` ile çalışır; varsayılan olarak tek kullanımlık, 1 günlük davet bağlantısı yazar. Audit actor `cli:owner`.
+- **Hesap kimliği:** web'de `/account` sayfası giriş yapan kişinin hesap kimliğini (`acc_…`) ve rollerini gösterir (içe aktarma
+  komutu `--operator` için bunu ister).
 
 ### 3.4 Veritabanı rolleri (D-54)
 
@@ -80,7 +86,7 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
 
 - `/sign-in`: "Sign in" (Learners organizasyonu) ve "Staff sign-in" (Staff organizasyonu). `oidc-client-ts` (sabit sürüm), tarayıcıda
   PKCE, token'lar `sessionStorage`'da, yenileme token'ıyla sessiz yenileme. `/auth/callback`, "Sign out".
-- `/invite/[code]`: giriş yoksa önce giriş (kod korunur), sonra `redeem`; sonuç: "You now have the <role> role" + uygun sayfaya
+- `/invite` (kod `#` sonrasında; eski `/invite/<kod>` biçimi kabul edilmez): giriş yoksa önce giriş (kod korunur), sonra `redeem`; sonuç: "You now have the <role> role" + uygun sayfaya
   bağlantı. 404 → "This invite link is not valid. Ask for a new one."
 - `/admin/invites`: rol, süre, kullanım sayısı seçilip davet üretilir; bağlantı bir kez gösterilir, "Copy link"; liste ve "Revoke".
 - 403 `mfa_required` → "Staff access needs two-step verification. Sign out and use Staff sign-in."

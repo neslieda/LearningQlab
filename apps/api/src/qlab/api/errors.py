@@ -102,6 +102,12 @@ def from_service_error(error: Exception) -> ApiError | None:
         return not_found()
     if isinstance(error, organizations.InviteNotFound):
         return ApiError(404, "invite_not_found", "This invite is not valid")
+    if isinstance(error, organizations.InviteTooManyUses):
+        return ApiError(
+            422,
+            "invite_uses_too_many",
+            f"A staff invite can be used by at most {organizations.MAX_STAFF_INVITE_USES} people",
+        )
     if isinstance(error, organizations.InviteRoleForbidden):
         return ApiError(403, "invite_role_forbidden", "You cannot invite someone to this role")
     if isinstance(error, content.InvalidDocument):
@@ -208,6 +214,7 @@ def install(app: FastAPI) -> None:
         math.RendererUnavailable,
         organizations.InviteNotFound,
         organizations.InviteRoleForbidden,
+        organizations.InviteTooManyUses,
     ):
         app.add_exception_handler(service_error, _service)
 

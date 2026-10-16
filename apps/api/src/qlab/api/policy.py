@@ -154,7 +154,9 @@ async def authorize(request: Request, access: Access | None) -> Principal | Sign
         return None
     verifier: TokenVerifier = request.app.state.verifier
     try:
-        claims = verifier.verify(_bearer_token(request))
+        # In a worker thread: verifying may fetch the provider's keys (network, up to seconds),
+        # which must not block the event loop for every other request.
+        claims = await run_in_threadpool(verifier.verify, _bearer_token(request))
     except InvalidToken as error:
         _log.info("token refused: %s", error)
         raise errors.unauthenticated() from None

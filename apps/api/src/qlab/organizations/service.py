@@ -34,6 +34,14 @@ class InviteRoleForbidden(Exception):
     """The caller's roles do not allow inviting someone to this role."""
 
 
+MAX_STAFF_INVITE_USES = 5
+
+
+class InviteTooManyUses(Exception):
+    """A staff invite may be used by at most `MAX_STAFF_INVITE_USES` people: a leaked link must
+    not hand a staff role to many."""
+
+
 class AccountDisabled(Exception):
     """The account that wanted to use an invite is disabled."""
 

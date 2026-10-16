@@ -9,7 +9,6 @@ replaced with ones made for this test: the roles a developer already has are nev
 
 from __future__ import annotations
 
-import re
 import uuid
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -31,13 +30,15 @@ BACKUP_PASSWORD = "backup-test-password"  # noqa: S105
 
 
 def run_psql_script(engine: Engine, source: str, variables: dict[str, str]) -> None:
-    """Run the script's constructs: comment lines, `\\set`, statements ending in `;`, and
-    queries ending in `\\gexec` (each value of the first column is run as a statement)."""
+    """Run the script's constructs: comment lines, psql meta-commands (`\\set`, `\\if`, `\\else`,
+    `\\endif`: every variable the script reads is passed in `variables`, so its defaults are
+    skipped), statements ending in `;`, and queries ending in `\\gexec` (each value of the first
+    column is run as a statement)."""
     buffer: list[str] = []
     with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
         for line in source.splitlines():
             stripped = line.strip()
-            if not stripped or stripped.startswith(("--", "\\set")):
+            if not stripped or stripped.startswith(("--", "\\set", "\\if", "\\else", "\\endif")):
                 continue
             for name, value in variables.items():
                 line = line.replace(f":'{name}'", "'" + value.replace("'", "''") + "'")
@@ -68,11 +69,16 @@ def roles(throwaway_url: URL) -> Iterator[Roles]:
     tag = uuid.uuid4().hex[:8]
     app_name, backup_name = f"qlab_app_{tag}", f"qlab_backup_{tag}"
     source = SCRIPT.read_text()
-    source = re.sub(r"\bqlab_app\b", app_name, source)
-    source = re.sub(r"\bqlab_backup\b", backup_name, source)
     owner = create_engine(throwaway_url)
     run_psql_script(
-        owner, source, {"app_password": APP_PASSWORD, "backup_password": BACKUP_PASSWORD}
+        owner,
+        source,
+        {
+            "app_password": APP_PASSWORD,
+            "backup_password": BACKUP_PASSWORD,
+            "app_role": app_name,
+            "backup_role": backup_name,
+        },
     )
     app = create_engine(throwaway_url.set(username=app_name, password=APP_PASSWORD))
     backup = create_engine(throwaway_url.set(username=backup_name, password=BACKUP_PASSWORD))

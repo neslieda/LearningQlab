@@ -106,10 +106,10 @@ olduğunu söyleyen `urn:zitadel:iam:user:resourceowner:id` alanı bulunmalı. B
 2. <https://jwt.io> kullanmak yerine (token'ı bir siteye yapıştırmamak için) kendi bilgisayarınızda çözün. Terminalde:
 
    ```
-   pbpaste | cut -d. -f2 | tr '_-' '/+' | base64 -D 2>/dev/null | python3 -m json.tool
+   pbpaste | python3 -c "import sys,json,base64; p=sys.stdin.read().strip().split('.')[1]; print(json.dumps(json.loads(base64.urlsafe_b64decode(p+'='*(-len(p)%4))),indent=2))"
    ```
 
-   (Önce token'ı kopyalayın; `pbpaste` panodaki metni verir.) Çıktıda şunu arayın:
+   (Önce token'ı kopyalayın; `pbpaste` panodaki metni verir. Komut base64 dolgusunu kendisi tamamlar.) Çıktıda şunu arayın:
    `"urn:zitadel:iam:user:resourceowner:id": "<Staff organizasyon kimliği>"`. Aynı kimliğin 2. adımda not ettiğiniz Staff
    organizasyon kimliğiyle **aynı** olduğunu kontrol edin. Ayrıca `"aud"` içinde proje kimliği, `"azp"` yerinde Client ID
    görünmelidir.
@@ -131,8 +131,8 @@ Resmi belgeler: <https://render.com/docs/blueprint-spec> , <https://render.com/d
 
    | Servis | Değişken | Değer |
    |---|---|---|
-   | qlab-api | `QLAB_DATABASE_URL` | Neon **uygulama adresi** (qlab_app) |
-   | qlab-api | `QLAB_MIGRATION_DATABASE_URL` | Neon **sahip adresi** (`postgresql+psycopg://` ile başlayan) |
+   | qlab-api | `QLAB_DATABASE_URL` | **MUTLAKA** Neon **uygulama adresi** (qlab_app). Sahip adresi yazarsanız API bilerek başlamaz: sahip rolü ya da `public` şemasında CREATE yetkisi olan rol reddedilir. |
+   | qlab-api | `QLAB_MIGRATION_DATABASE_URL` | Neon **sahip adresi** (`postgresql+psycopg://` ile başlayan); yalnızca açılışta migration için kullanılır |
    | qlab-api | `QLAB_OIDC_ISSUER` | issuer |
    | qlab-api | `QLAB_OIDC_AUDIENCE` | proje kimliği |
    | qlab-api | `QLAB_OIDC_CLIENT_ID` | Client ID |
@@ -167,12 +167,13 @@ Hesap yalnızca davetle açılır (D-63). İlk daveti kendi bilgisayarınızdan 
    uv run python -m qlab.api.admin invite --role platform_admin --base-url https://<web-adresi>
    ```
 
-   (Sahip adresini de kullanabilirsiniz; uygulama adresi yeterlidir.) Komut `https://<web-adresi>/invite/...` biçiminde tek
-   kullanımlık, 1 günlük bir bağlantı yazar. ❓ `QLAB_ENV` gerekmiyorsa komut bunu söyler; hata verirse mesajı okuyun.
+   Burada yalnızca **uygulama adresi** (qlab_app) kullanın. Komut `https://<web-adresi>/invite#<kod>` biçiminde (kod `#`'den
+   sonra gelir; sunucuya gönderilmez), varsayılan olarak 1 gün geçerli bir bağlantı yazar. Staff rolleri için bir davet en
+   fazla 5 kez kullanılabilir. ❓ `QLAB_ENV` gerekmiyorsa komut bunu söyler; hata verirse mesajı okuyun.
 2. Bağlantıyı tarayıcıda açın. Giriş yapmanız istenir: **Staff sign-in** ile Staff hesabınızla girin (iki adımlı doğrulama
    kodunu girin). Giriş sonrası bağlantı kendiliğinden kullanılır ve "You now have the platform_admin role" yazar.
-3. Hesap kimliğinizi öğrenin (yükleme komutunda lazım): girişliyken `https://<web-adresi>/api/v1/me` adresini açın; yanıtta
-   `id` alanındaki `acc_...` benzeri değer hesap kimliğinizdir.
+3. Hesap kimliğinizi öğrenin (yükleme komutunda lazım): girişliyken `https://<web-adresi>/account` sayfasını açın;
+   **"Your account ID"** satırındaki `acc_...` değeri hesap kimliğinizdir.
 
 ## 5. Müfredat, haklar ve pilot soruları yükleme
 
@@ -191,6 +192,13 @@ uv run python -m qlab.content.pilot load --operator <HESAP_KIMLIGINIZ> --create-
 Yaklaşık 130 pilot soru **taslak** olarak yüklenir. Ardından web uygulamasında yönetim ekranlarından bunları görürsünüz.
 
 ## 6. Davetler ve roller
+
+Davet bağlantısı `https://<web-adresi>/invite#<kod>` biçimindedir. Staff rolleri için bir davet en fazla 5 kez kullanılabilir.
+
+**Zitadel kontrol listesi (davet vermeden önce işaretleyin):**
+- [ ] Staff organizasyonunda kendi kendine kayıt **kapalı**, **Force MFA açık**.
+- [ ] Learners organizasyonunun kullanıcıları Staff organizasyonuna üyelik/yetki veremez (Staff'a yalnızca siz kullanıcı eklersiniz;
+  Learners'taki hiçbir kullanıcıya Staff organizasyonunda yönetici (Org Owner vb.) rolü vermeyin).
 
 Yönetim ekranından (`/admin/invites`) davet bağlantısı üretilir: rolü, geçerlilik süresini (1-30 gün) ve kaç kişi kullanabileceğini
 seçersiniz. Bağlantı yalnızca üretildiği anda gösterilir; kopyalayıp kişiye gönderin. Yanlış kişiye gittiyse listeden **Revoke**.
@@ -212,17 +220,25 @@ iletisi görünür.
 Her gece 02:30'da (UTC) GitHub, veritabanının şifreli bir kopyasını alır ve 14 gün saklar (`.github/workflows/backup.yml`).
 Kopya GitHub'ın ABD'deki sunucularında durur ⚖️; içinde soru metinleri ve opak hesap kimlikleri vardır, ad ve e-posta yoktur.
 
-1. GitHub'da depo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. İki tane:
+1. Önce şifreleme anahtar çiftini **kendi bilgisayarınızda** üretin (`brew install age`):
+
+   ```
+   age-keygen -o qlab-yedek-anahtar.txt
+   ```
+
+   Ekrana `Public key: age1...` yazar. Bu `age1...` değeri **herkese açıktır** (GitHub'a girer). `qlab-yedek-anahtar.txt` dosyasındaki
+   `AGE-SECRET-KEY-...` satırı **özel anahtardır**: GitHub'a, sohbete, e-postaya asla koymayın; çevrimdışı (parola yöneticisi
+   ve USB bellek gibi) en az iki yerde saklayın. Kaybederseniz yedekler açılamaz.
+2. GitHub'da depo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. İki tane:
    - `NEON_BACKUP_URL` = Neon **yedek adresi** (`postgresql://qlab_backup:...`)
-   - `BACKUP_PASSPHRASE` = uzun rastgele bir parola (en az 20 karakter). **Bir kopyasını parola yöneticinizde saklayın;
-     kaybederseniz yedekler açılamaz.**
-2. Deneme: depo → **Actions** → **backup** → **Run workflow**. Yeşil biterse çalışmıştır. Çalıştırmanın sayfasının altında
+   - `BACKUP_AGE_RECIPIENT` = yukarıdaki **açık** anahtar (`age1...`). (İsterseniz "Variables" sekmesine de koyabilirsiniz.)
+3. Deneme: depo → **Actions** → **backup** → **Run workflow**. Yeşil biterse çalışmıştır. Çalıştırmanın sayfasının altında
    **Artifacts** bölümünde `qlab-<tarih>` dosyası görünür.
-3. **Geri yükleme:** artifact'i indirin ve açın (`qlab-....dump.gpg`). Boş bir Neon veritabanı (ya da yeni bir Neon projesi)
+4. **Geri yükleme:** artifact'i indirin ve açın (`qlab-....dump.age`). Boş bir Neon veritabanı (ya da yeni bir Neon projesi)
    hazırlayın, bölüm 1.4'teki `CREATE EXTENSION vector` ve 1.5'teki rol komutunu orada çalıştırın, sonra:
 
    ```
-   gpg --decrypt qlab-XXXX.dump.gpg > geri.dump          # BACKUP_PASSPHRASE sorulur
+   age --decrypt -i qlab-yedek-anahtar.txt -o geri.dump qlab-XXXX.dump.age   # özel anahtar dosyanız gerekir
    pg_restore --no-owner --no-privileges --dbname "NEON_SAHIBI_ADRESI" geri.dump
    ```
 
@@ -267,7 +283,8 @@ sırasında pakete gömülür: bunlardan biri değişirse **Manual Deploy** ile 
 # --- qlab-api (Render) ---
 QLAB_ENV=staging                       # render.yaml'da hazır
 QLAB_FORBID_SELF_APPROVAL=true         # render.yaml'da hazır; staging/production'da true olmak zorunda
-QLAB_DATABASE_URL=                     # postgresql+psycopg://qlab_app:...@HOST/DB?sslmode=require
+QLAB_DATABASE_URL=                     # MUTLAKA qlab_app adresi: postgresql+psycopg://qlab_app:...@HOST/DB?sslmode=require
+                                       # (sahip rolü ya da public'te CREATE yetkisi olan rol ise API açılışı reddeder)
 QLAB_MIGRATION_DATABASE_URL=           # postgresql+psycopg://<sahip>:...@HOST/DB?sslmode=require (yalnız açılışta migration)
 QLAB_OIDC_ISSUER=                      # Zitadel keşif belgesindeki issuer, birebir
 QLAB_OIDC_AUDIENCE=                    # Zitadel proje kimliği
@@ -286,7 +303,7 @@ NEXT_PUBLIC_OIDC_LEARNER_ORG_ID=
 
 # --- GitHub Actions secrets (backup) ---
 NEON_BACKUP_URL=                       # postgresql://qlab_backup:...@HOST/DB?sslmode=require
-BACKUP_PASSPHRASE=                     # en az 20 karakter; kopyası parola yöneticisinde
+BACKUP_AGE_RECIPIENT=                  # age1... AÇIK anahtar; özel anahtar yalnızca sizde, çevrimdışı
 
 # --- Yalnızca kendi bilgisayarınızda (yükleme komutları) ---
 QLAB_DATABASE_URL=                     # Neon uygulama adresi

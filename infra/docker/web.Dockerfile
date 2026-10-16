@@ -38,7 +38,7 @@ WORKDIR /repo/apps/web
 RUN npx next build
 
 FROM node:24.22.0-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5 AS runtime
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0 PORT=3000
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000
 WORKDIR /app
 # The "node" user (uid 1000) ships with the image; it is not root.
 COPY --from=build --chown=node:node /repo/apps/web/.next/standalone ./
@@ -48,4 +48,5 @@ USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
   CMD ["node", "-e", "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"]
-CMD ["node", "apps/web/server.js"]
+# HOSTNAME is set per process: a platform-provided HOSTNAME (the container id) would make Next bind to that name only.
+CMD ["sh", "-c", "HOSTNAME=0.0.0.0 exec node apps/web/server.js"]

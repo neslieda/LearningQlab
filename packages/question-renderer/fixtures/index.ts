@@ -19,7 +19,7 @@ export type Fixture =
       data: { markPoints: MarkPointOut[]; notes: NoteOut[]; marks: number; marksCapped: boolean };
     }
   | { id: string; title: string; kind: "staff_question"; data: { document: QuestionDocument; showAnswers: boolean } }
-  | { id: string; title: string; kind: "mcq_result"; data: { result: S["McqCheckResult"]; question: LearnerQuestion } };
+  | { id: string; title: string; kind: "mcq_result"; data: { result: S["McqResult"]; question: LearnerQuestion } };
 
 const mcqBase = { exam_section: "paper_1a", levels: ["sl", "hl"] as const, parts: [], total_marks: 1 };
 
@@ -462,6 +462,6 @@ export const fixtures: Fixture[] = [
     id: "mcq-result",
     title: "MCQ result, correct option marked",
     kind: "mcq_result",
-    data: { result: { kind: "mcq", correct: true, correct_key: "C", version_id: "fx-v-mcq-single" }, question: mcqSingleValue },
+    data: { result: { kind: "mcq", correct: true, correct_key: "C", version_id: "fx-v-mcq-single", response_id: "fx-r-1", explanation: null, rationales: [] }, question: mcqSingleValue },
   },
 ];

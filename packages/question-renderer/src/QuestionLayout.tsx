@@ -88,6 +88,38 @@ function docsOf(question: LayoutQuestion): Doc[] {
   return docs;
 }
 
+/** Makes the options selectable (the learner's solve screen). */
+export interface McqSelect {
+  value: OptionKey | null;
+  onChange: (key: OptionKey) => void;
+  disabled?: boolean;
+}
+
+/** The reason an option is wrong, shown with the option after an answer was submitted. */
+function WrongBecause({ optionKey, doc }: { optionKey: OptionKey; doc: Doc }) {
+  return (
+    <div className="qr-wrong-why" role="group" aria-label={`Why option ${optionKey} is wrong`}>
+      <p className="qr-wrong-why-title">Why this is wrong</p>
+      <DocView doc={doc} />
+    </div>
+  );
+}
+
+function OptionRadio({ optionKey, select }: { optionKey: OptionKey; select: McqSelect }) {
+  return (
+    <input
+      type="radio"
+      className="qr-radio"
+      name="qr-mcq-answer"
+      value={optionKey}
+      aria-label={`Option ${optionKey}`}
+      checked={select.value === optionKey}
+      disabled={select.disabled}
+      onChange={() => select.onChange(optionKey)}
+    />
+  );
+}
+
 /** "A" ... "D" label plus the correct-answer marker. */
 function OptionKeyLabel({ optionKey, correct }: { optionKey: OptionKey; correct: boolean }) {
   return (
@@ -98,7 +130,17 @@ function OptionKeyLabel({ optionKey, correct }: { optionKey: OptionKey; correct:
   );
 }
 
-export function McqBlock({ mcq, correctKey }: { mcq: LayoutMcq; correctKey?: OptionKey | null }) {
+export function McqBlock({
+  mcq,
+  correctKey,
+  select,
+  rationales,
+}: {
+  mcq: LayoutMcq;
+  correctKey?: OptionKey | null;
+  select?: McqSelect;
+  rationales?: Partial<Record<OptionKey, Doc>>;
+}) {
   const statements = mcq.layout === "roman_statements" && mcq.statements.length > 0 && (
     <ol className="qr-statements" aria-label="Statements">
       {mcq.statements.map((statement, index) => (
@@ -113,9 +155,8 @@ export function McqBlock({ mcq, correctKey }: { mcq: LayoutMcq; correctKey?: Opt
   );
 
   if (mcq.layout === "two_column_table") {
-    return (
-      <div className="qr-mcq qr-mcq-table">
-        <div className="qr-scroll" tabIndex={0} role="group" aria-label="Answer options">
+    const table = (
+        <div className="qr-scroll" tabIndex={0} role="group" aria-label={select ? "Options table" : "Answer options"}>
           <table className="qr-table qr-options-table">
             <thead>
               <tr>
@@ -131,39 +172,70 @@ export function McqBlock({ mcq, correctKey }: { mcq: LayoutMcq; correctKey?: Opt
             </thead>
             <tbody>
               {mcq.options.map((option) => (
-                <tr key={option.key} className={option.key === correctKey ? "qr-option-correct" : undefined}>
-                  <th scope="row">
-                    <OptionKeyLabel optionKey={option.key} correct={option.key === correctKey} />
-                  </th>
-                  {option.cells.map((cell, index) => (
-                    <td key={index}>
-                      <DocView doc={cell} />
-                    </td>
-                  ))}
-                </tr>
+                <Fragment key={option.key}>
+                  <tr className={option.key === correctKey ? "qr-option-correct" : undefined}>
+                    <th scope="row">
+                      {select && <OptionRadio optionKey={option.key} select={select} />}
+                      <OptionKeyLabel optionKey={option.key} correct={option.key === correctKey} />
+                    </th>
+                    {option.cells.map((cell, index) => (
+                      <td key={index}>
+                        <DocView doc={cell} />
+                      </td>
+                    ))}
+                  </tr>
+                  {rationales?.[option.key] && (
+                    <tr className="qr-wrong-why-row">
+                      <td colSpan={option.cells.length + 1}>
+                        <WrongBecause optionKey={option.key} doc={rationales[option.key]!} />
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               ))}
             </tbody>
           </table>
         </div>
+    );
+    return (
+      <div className="qr-mcq qr-mcq-table">
+        {select ? (
+          <div role="radiogroup" aria-label="Answer options">
+            {table}
+          </div>
+        ) : (
+          table
+        )}
       </div>
     );
   }
 
+  const list = (
+    <ol className="qr-options" aria-label={select ? undefined : "Answer options"}>
+      {mcq.options.map((option) => (
+        <li key={option.key} className={option.key === correctKey ? "qr-option qr-option-correct" : "qr-option"}>
+          {select && <OptionRadio optionKey={option.key} select={select} />}
+          <OptionKeyLabel optionKey={option.key} correct={option.key === correctKey} />
+          <div className="qr-option-body">
+            {option.cells.map((cell, index) => (
+              <DocView key={index} doc={cell} />
+            ))}
+          </div>
+          {rationales?.[option.key] && <WrongBecause optionKey={option.key} doc={rationales[option.key]!} />}
+        </li>
+      ))}
+    </ol>
+  );
   return (
     <div className={`qr-mcq qr-mcq-${mcq.layout.replace(/_/g, "-")}`}>
       {statements}
-      <ol className="qr-options" aria-label="Answer options">
-        {mcq.options.map((option) => (
-          <li key={option.key} className={option.key === correctKey ? "qr-option qr-option-correct" : "qr-option"}>
-            <OptionKeyLabel optionKey={option.key} correct={option.key === correctKey} />
-            <div className="qr-option-body">
-              {option.cells.map((cell, index) => (
-                <DocView key={index} doc={cell} />
-              ))}
-            </div>
-          </li>
-        ))}
-      </ol>
+      {select ? (
+        <div role="radiogroup" aria-label="Answer options">
+          {list}
+        </div>
+      ) : (
+        list
+      )}
     </div>
   );
 }
@@ -241,6 +313,8 @@ export interface QuestionLayoutProps {
   /** After everything else (staff answers). */
   after?: ReactNode;
   correctKey?: OptionKey | null;
+  mcqSelect?: McqSelect;
+  rationales?: Partial<Record<OptionKey, Doc>>;
 }
 
 export function QuestionLayout({
@@ -250,6 +324,8 @@ export function QuestionLayout({
   mcqFooter,
   after,
   correctKey,
+  mcqSelect,
+  rationales,
 }: QuestionLayoutProps) {
   const titleId = useId();
   const context = useMemo(
@@ -297,7 +373,7 @@ export function QuestionLayout({
 
         {question.mcq && (
           <>
-            <McqBlock mcq={question.mcq} correctKey={correctKey} />
+            <McqBlock mcq={question.mcq} correctKey={correctKey} select={mcqSelect} rationales={rationales} />
             {mcqFooter}
           </>
         )}

@@ -171,3 +171,26 @@ describe("QuestionDocumentView, MCQ (3.1, staff view)", () => {
     expect(pos.every((p, i) => p >= 0 && (i === 0 || p > pos[i - 1]!))).toBe(true);
   });
 });
+
+describe("learner answer presentation (slice 8)", () => {
+  const rationales = [
+    { key: "A" as const, content: d("WHY-A") },
+    { key: "B" as const, content: d("WHY-B") },
+    { key: "D" as const, content: d("WHY-D") },
+  ];
+
+  it.each(["single_value", "two_column_table"] as const)("McqResultView shows explanation and per-option rationales (%s)", (layout) => {
+    const result = { ...mcqResult("C", false), explanation: d("EXPLAIN"), rationales };
+    render(<McqResultView result={result} question={mcqQuestion(layout)} />);
+    expect(screen.getByRole("region", { name: "Explanation" }).textContent).toContain("EXPLAIN");
+    for (const k of ["A", "B", "D"]) {
+      expect(screen.getByRole("group", { name: `Why option ${k} is wrong` }).textContent).toContain(`WHY-${k}`);
+    }
+    expect(screen.queryByRole("group", { name: "Why option C is wrong" })).toBeNull();
+  });
+
+  it("renders no explanation block when there is none", () => {
+    render(<McqResultView result={mcqResult("A")} question={mcqQuestion("single_value")} />);
+    expect(screen.queryByRole("region", { name: "Explanation" })).toBeNull();
+  });
+});

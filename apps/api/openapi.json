@@ -655,6 +655,20 @@
         "title": "DecisionRequest",
         "type": "object"
       },
+      "DeletedOut": {
+        "additionalProperties": false,
+        "properties": {
+          "deleted": {
+            "title": "Deleted",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deleted"
+        ],
+        "title": "DeletedOut",
+        "type": "object"
+      },
       "Difficulty": {
         "enum": [
           "easy",
@@ -1857,43 +1871,6 @@
         "title": "McqAnswer",
         "type": "object"
       },
-      "McqCheckResult": {
-        "additionalProperties": false,
-        "properties": {
-          "correct": {
-            "title": "Correct",
-            "type": "boolean"
-          },
-          "correct_key": {
-            "enum": [
-              "A",
-              "B",
-              "C",
-              "D"
-            ],
-            "title": "Correct Key",
-            "type": "string"
-          },
-          "kind": {
-            "const": "mcq",
-            "title": "Kind",
-            "type": "string"
-          },
-          "version_id": {
-            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
-            "title": "Version Id",
-            "type": "string"
-          }
-        },
-        "required": [
-          "kind",
-          "version_id",
-          "correct",
-          "correct_key"
-        ],
-        "title": "McqCheckResult",
-        "type": "object"
-      },
       "McqOption": {
         "additionalProperties": false,
         "properties": {
@@ -1932,6 +1909,96 @@
           "cells"
         ],
         "title": "McqOption",
+        "type": "object"
+      },
+      "McqRationale": {
+        "additionalProperties": false,
+        "description": "Why a wrong option is wrong. Sent only after an answer was submitted.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "content"
+        ],
+        "title": "McqRationale",
+        "type": "object"
+      },
+      "McqResult": {
+        "additionalProperties": false,
+        "description": "What a learner sees after submitting a multiple-choice answer (D-66).",
+        "properties": {
+          "correct": {
+            "title": "Correct",
+            "type": "boolean"
+          },
+          "correct_key": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Correct Key",
+            "type": "string"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Doc"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The worked solution, if the question has one."
+          },
+          "kind": {
+            "const": "mcq",
+            "title": "Kind",
+            "type": "string"
+          },
+          "rationales": {
+            "description": "One per wrong option.",
+            "items": {
+              "$ref": "#/components/schemas/McqRationale"
+            },
+            "title": "Rationales",
+            "type": "array"
+          },
+          "response_id": {
+            "pattern": "^rsp_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Response Id",
+            "type": "string"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "response_id",
+          "version_id",
+          "correct",
+          "correct_key",
+          "explanation",
+          "rationales"
+        ],
+        "title": "McqResult",
         "type": "object"
       },
       "Me": {
@@ -2672,6 +2739,134 @@
         "title": "RepublishRequest",
         "type": "object"
       },
+      "ResponseOut": {
+        "additionalProperties": false,
+        "description": "One stored answer of the caller. `selected_key` for multiple choice, `text` for written.",
+        "properties": {
+          "correct": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Multiple choice only; written answers are not marked.",
+            "title": "Correct"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^rsp_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "mcq",
+              "written"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "part_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Part Id"
+          },
+          "question_id": {
+            "pattern": "^q_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Question Id",
+            "type": "string"
+          },
+          "selected_key": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Key"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "version_id": {
+            "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "question_id",
+          "version_id",
+          "kind",
+          "part_id",
+          "selected_key",
+          "text",
+          "correct",
+          "created_at"
+        ],
+        "title": "ResponseOut",
+        "type": "object"
+      },
+      "ResponsePage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "description": "Newest first.",
+            "items": {
+              "$ref": "#/components/schemas/ResponseOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "ResponsePage",
+        "type": "object"
+      },
       "Role": {
         "description": "docs/DOMAIN_MODEL.md section 3.",
         "enum": [
@@ -3234,9 +3429,9 @@
         "title": "WrittenAnswer",
         "type": "object"
       },
-      "WrittenCheckResult": {
+      "WrittenResult": {
         "additionalProperties": false,
-        "description": "The mark scheme of one part. The answer is not marked (AI marking is M4).",
+        "description": "The mark scheme of one part. The answer is stored but not marked (AI marking is M4).",
         "properties": {
           "kind": {
             "const": "written",
@@ -3279,6 +3474,11 @@
             "title": "Part Id",
             "type": "string"
           },
+          "response_id": {
+            "pattern": "^rsp_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Response Id",
+            "type": "string"
+          },
           "version_id": {
             "pattern": "^qv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
             "title": "Version Id",
@@ -3287,6 +3487,7 @@
         },
         "required": [
           "kind",
+          "response_id",
           "version_id",
           "part_id",
           "marks",
@@ -3295,7 +3496,7 @@
           "notes",
           "language_warning"
         ],
-        "title": "WrittenCheckResult",
+        "title": "WrittenResult",
         "type": "object"
       }
     },
@@ -4945,6 +5146,167 @@
         ]
       }
     },
+    "/v1/me/responses": {
+      "delete": {
+        "description": "Delete every answer the caller has stored (docs/SECURITY.md 5.4). Cannot be undone. The\naudit log records the count and the account, never the answers.",
+        "operationId": "deleteMyResponses",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletedOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete My Responses",
+        "tags": [
+          "responses"
+        ]
+      },
+      "get": {
+        "description": "The caller's stored answers, newest first. `question_id` narrows them to one question.",
+        "operationId": "listMyResponses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "question_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Question Id"
+            }
+          },
+          {
+            "description": "`next_cursor` of the last page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "`next_cursor` of the last page.",
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsePage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List My Responses",
+        "tags": [
+          "responses"
+        ]
+      }
+    },
     "/v1/programs": {
       "get": {
         "description": "Programmes, subjects and syllabus versions that questions can be written against.",
@@ -5331,10 +5693,10 @@
         ]
       }
     },
-    "/v1/questions/{question_id}/check": {
+    "/v1/questions/{question_id}/answers": {
       "post": {
-        "description": "Send an answer and see the correct one. The answer is not stored and not marked.\n\n- `mcq`: whether the selected option is correct, and the correct option.\n- `written`: the mark points and notes of that part, and a language warning when the\n  answer does not look English.\n\nAn `mcq` answer to a structured question, a `written` answer to a multiple-choice\nquestion or an unknown `part_id`: 422 `answer_does_not_fit`.",
-        "operationId": "checkAnswer",
+        "description": "Send an answer. It is stored for the caller (D-66) and the correct answer comes back.\n\n- `mcq`: whether the selected option is correct, the correct option, the explanation and\n  the reason each wrong option is wrong.\n- `written`: the mark points and notes of that part, and a language warning when the\n  answer does not look English. The answer is not marked.\n\nAn `mcq` answer to a structured question, a `written` answer to a multiple-choice\nquestion or an unknown `part_id`: 422 `answer_does_not_fit`.",
+        "operationId": "submitAnswer",
         "parameters": [
           {
             "in": "path",
@@ -5372,26 +5734,26 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "content": {
               "application/json": {
                 "schema": {
                   "discriminator": {
                     "mapping": {
-                      "mcq": "#/components/schemas/McqCheckResult",
-                      "written": "#/components/schemas/WrittenCheckResult"
+                      "mcq": "#/components/schemas/McqResult",
+                      "written": "#/components/schemas/WrittenResult"
                     },
                     "propertyName": "kind"
                   },
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/McqCheckResult"
+                      "$ref": "#/components/schemas/McqResult"
                     },
                     {
-                      "$ref": "#/components/schemas/WrittenCheckResult"
+                      "$ref": "#/components/schemas/WrittenResult"
                     }
                   ],
-                  "title": "Response Checkanswer"
+                  "title": "Response Submitanswer"
                 }
               }
             },
@@ -5419,13 +5781,23 @@
           },
           "422": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Problem"
                 }
               }
             },
-            "description": "The request is not valid (`validation_failed`)."
+            "description": "The answer does not fit the question (`answer_does_not_fit`)."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "200 answers to this question are stored already (`too_many_answers`)."
           }
         },
         "security": [
@@ -5433,7 +5805,7 @@
             "bearer": []
           }
         ],
-        "summary": "Check Answer",
+        "summary": "Submit Answer",
         "tags": [
           "questions"
         ]

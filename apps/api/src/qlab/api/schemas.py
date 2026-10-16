@@ -43,6 +43,7 @@ QuestionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_ID_PATTERN)]
 QuestionVersionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_VERSION_ID_PATTERN)]
 AccountId = Annotated[str, StringConstraints(pattern=ids.ACCOUNT_ID_PATTERN)]
 InviteId = Annotated[str, StringConstraints(pattern=ids.INVITE_ID_PATTERN)]
+ResponseId = Annotated[str, StringConstraints(pattern=ids.RESPONSE_ID_PATTERN)]
 ContentHash = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
 # Codes of programmes, subjects, syllabus versions, exam sections and nodes.
 CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.]*$"
@@ -194,14 +195,26 @@ class WrittenAnswer(Api):
         return value
 
 
-CheckRequest = Annotated[McqAnswer | WrittenAnswer, Field(discriminator="kind")]
+AnswerRequest = Annotated[McqAnswer | WrittenAnswer, Field(discriminator="kind")]
 
 
-class McqCheckResult(Api):
+class McqRationale(Api):
+    """Why a wrong option is wrong. Sent only after an answer was submitted."""
+
+    key: OptionKey
+    content: Doc
+
+
+class McqResult(Api):
+    """What a learner sees after submitting a multiple-choice answer (D-66)."""
+
     kind: Literal["mcq"]
+    response_id: ResponseId
     version_id: QuestionVersionId
     correct: bool
     correct_key: OptionKey
+    explanation: Doc | None = Field(description="The worked solution, if the question has one.")
+    rationales: tuple[McqRationale, ...] = Field(description="One per wrong option.")
 
 
 class MarkPointOut(Api):
@@ -226,10 +239,11 @@ class LanguageWarning(Api):
     message: str
 
 
-class WrittenCheckResult(Api):
-    """The mark scheme of one part. The answer is not marked (AI marking is M4)."""
+class WrittenResult(Api):
+    """The mark scheme of one part. The answer is stored but not marked (AI marking is M4)."""
 
     kind: Literal["written"]
+    response_id: ResponseId
     version_id: QuestionVersionId
     part_id: str
     marks: int
@@ -239,7 +253,32 @@ class WrittenCheckResult(Api):
     language_warning: LanguageWarning | None
 
 
-CheckResult = Annotated[McqCheckResult | WrittenCheckResult, Field(discriminator="kind")]
+AnswerResult = Annotated[McqResult | WrittenResult, Field(discriminator="kind")]
+
+
+class ResponseOut(Api):
+    """One stored answer of the caller. `selected_key` for multiple choice, `text` for written."""
+
+    id: ResponseId
+    question_id: QuestionId
+    version_id: QuestionVersionId
+    kind: Literal["mcq", "written"]
+    part_id: str | None
+    selected_key: OptionKey | None
+    text: str | None
+    correct: bool | None = Field(
+        description="Multiple choice only; written answers are not marked."
+    )
+    created_at: datetime
+
+
+class ResponsePage(Api):
+    items: tuple[ResponseOut, ...] = Field(description="Newest first.")
+    next_cursor: str | None
+
+
+class DeletedOut(Api):
+    deleted: int
 
 
 # --- staff view ---------------------------------------------------------------------------

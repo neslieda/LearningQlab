@@ -7,7 +7,7 @@ from typing import Annotated
 
 from fastapi import Path, Query, Request
 
-from qlab.api import deps, errors, ids, learner_view
+from qlab.api import deps, errors, ids, learner_view, responses_view
 from qlab.api.deps import Caller
 from qlab.api.routers.common import AUTH_ERRORS, Routes
 from qlab.api.routers.common import question_id as decode_question_id
@@ -15,11 +15,11 @@ from qlab.api.schemas import (
     CODE_PATTERN,
     DEFAULT_PAGE_SIZE,
     MAX_PAGE_SIZE,
+    AnswerRequest,
+    AnswerResult,
     CatalogOut,
     CatalogSubjectOut,
     CatalogVersionOut,
-    CheckRequest,
-    CheckResult,
     ExamSectionOut,
     LearnerQuestion,
     LearnerQuestionPage,
@@ -153,22 +153,35 @@ def get_question(request: Request, caller: Caller, question_id: str) -> LearnerQ
 
 
 @router.post(
-    "/v1/questions/{question_id}/check",
-    response_model=CheckResult,
-    operation_id="checkAnswer",
+    "/v1/questions/{question_id}/answers",
+    status_code=201,
+    response_model=AnswerResult,
+    responses={
+        422: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "The answer does not fit the question (`answer_does_not_fit`).",
+        },
+        429: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "200 answers to this question are stored already (`too_many_answers`).",
+        },
+    },
+    operation_id="submitAnswer",
 )
-def check_answer(
-    request: Request, caller: Caller, question_id: str, answer: CheckRequest
-) -> CheckResult:
-    """Send an answer and see the correct one. The answer is not stored and not marked.
+def submit_answer(
+    request: Request, caller: Caller, question_id: str, answer: AnswerRequest
+) -> AnswerResult:
+    """Send an answer. It is stored for the caller (D-66) and the correct answer comes back.
 
-    - `mcq`: whether the selected option is correct, and the correct option.
+    - `mcq`: whether the selected option is correct, the correct option, the explanation and
+      the reason each wrong option is wrong.
     - `written`: the mark points and notes of that part, and a language warning when the
-      answer does not look English.
+      answer does not look English. The answer is not marked.
 
     An `mcq` answer to a structured question, a `written` answer to a multiple-choice
     question or an unknown `part_id`: 422 `answer_does_not_fit`.
     """
-    with deps.reading(request) as session:
-        view = content.get_published_version(session, decode_question_id(question_id))
-    return learner_view.check(view, answer)
+    with deps.writing(request) as session:
+        return responses_view.submit(
+            session, caller=caller, question_id=decode_question_id(question_id), answer=answer
+        )

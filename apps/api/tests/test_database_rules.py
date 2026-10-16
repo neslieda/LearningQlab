@@ -86,6 +86,8 @@ def test_guard_triggers_fire_even_in_replica_mode(connection: Connection) -> Non
         # record (created, revoked, redeemed) is in the audit log (D-63).
         "invite",
         "invite_redemption",
+        # Learner answers: the learner deletes their own, and they go with the account (D-66).
+        "response",
     }
     # Every guarded table refuses TRUNCATE.
     assert {r.table for r in rows if r.tgname.endswith("truncate")} == guarded

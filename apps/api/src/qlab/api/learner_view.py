@@ -9,7 +9,6 @@ stays out of the learner view until someone adds it here on purpose.
 from __future__ import annotations
 
 from qlab.api import errors, ids
-from qlab.api.language import looks_non_english
 from qlab.api.schemas import (
     LanguageWarning,
     LearnerMcq,
@@ -18,12 +17,6 @@ from qlab.api.schemas import (
     LearnerQuestion,
     LearnerQuestionSummary,
     LearnerStimulus,
-    MarkPointOut,
-    McqAnswer,
-    McqCheckResult,
-    NoteOut,
-    WrittenAnswer,
-    WrittenCheckResult,
 )
 from qlab.content import service as content
 from qlab.content.schema import Mcq, Part
@@ -82,49 +75,4 @@ def to_learner_question(view: content.QuestionVersionView) -> LearnerQuestion:
         stimuli=tuple(LearnerStimulus(id=s.id, kind=s.kind) for s in document.stimuli),
         mcq=_mcq(document.mcq) if document.mcq is not None else None,
         parts=tuple(_part(p) for p in document.parts),
-    )
-
-
-def check(
-    view: content.QuestionVersionView, answer: McqAnswer | WrittenAnswer
-) -> McqCheckResult | WrittenCheckResult:
-    """Show the correct answer or the mark scheme of one part. Nothing is stored or marked."""
-    document = view.document
-    version_id = ids.encode(ids.QUESTION_VERSION, view.id)
-    if isinstance(answer, McqAnswer):
-        if document.mcq is None:
-            raise _does_not_fit()
-        return McqCheckResult(
-            kind="mcq",
-            version_id=version_id,
-            correct=answer.selected_key == document.mcq.correct_key,
-            correct_key=document.mcq.correct_key,
-        )
-    if document.mcq is not None:
-        raise _does_not_fit()
-    part = next((p for p in document.parts if p.id == answer.part_id), None)
-    if part is None:
-        raise _does_not_fit()
-    return WrittenCheckResult(
-        kind="written",
-        version_id=version_id,
-        part_id=part.id,
-        marks=part.marks,
-        marks_capped=part.marks_capped,
-        mark_points=tuple(
-            MarkPointOut(
-                id=p.id,
-                content=p.content,
-                kind=p.kind,
-                alternative_group=p.alternative_group,
-                route=p.route,
-                accept_range=p.accept_range,
-            )
-            for p in part.mark_points
-        ),
-        notes=tuple(
-            NoteOut(kind=n.kind, content=n.content, mark_point_id=n.mark_point_id)
-            for n in part.notes
-        ),
-        language_warning=_NOT_ENGLISH if looks_non_english(answer.text) else None,
     )

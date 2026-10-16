@@ -4,6 +4,7 @@ from logging.config import fileConfig
 
 from alembic import context
 
+import qlab.attempts.models
 import qlab.audit.models
 import qlab.content.models
 import qlab.identity.models

@@ -37,6 +37,11 @@ export function SiteHeader() {
               Invites
             </Link>
           ) : null}
+          {hasSession || me ? (
+            <Link href="/account" className="underline">
+              Account
+            </Link>
+          ) : null}
           {me ? <span>Signed in: {me.roles.join(", ") || "no roles"}</span> : null}
           {!config.local && hasSession ? (
             <button type="button" onClick={() => void onSignOut()} disabled={leaving} className="rounded border border-[var(--page-border)] px-2 py-1">

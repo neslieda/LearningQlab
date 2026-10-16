@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { clearInviteCode, isValidCode, readInviteCode, safeReturnPath, storeInviteCode } from "@/lib/invite-code";
-import { INVITE_INVALID_MESSAGE, MFA_MESSAGE, canInvite, invitableRoles, problemMessage } from "@/lib/decisions";
+import { clearInviteCode, isValidCode, readInviteCode, safeReturnPath, storeInviteCode, takeCodeFromHash } from "@/lib/invite-code";
+import { INVITE_INVALID_MESSAGE, MFA_MESSAGE, canInvite, invitableRoles, maxUsesFor, problemMessage } from "@/lib/decisions";
 
 beforeEach(() => window.sessionStorage.clear());
 
@@ -65,5 +65,41 @@ describe("invite roles and messages", () => {
     expect(MFA_MESSAGE).toBe("Staff access needs two-step verification. Sign out and use Staff sign-in.");
     expect(problemMessage({ status: 403, code: "invite_role_forbidden" }).message).toBe("You cannot invite someone to this role.");
     expect(problemMessage({ status: 404, code: "invite_not_found" }).message).toBe(INVITE_INVALID_MESSAGE);
+  });
+});
+
+describe("invite code in the URL fragment", () => {
+  it("reads a valid code, stores it and removes the fragment", () => {
+    window.history.replaceState(null, "", "/invite#abc_DEF-123");
+    expect(takeCodeFromHash()).toBe("abc_DEF-123");
+    expect(window.location.hash).toBe("");
+    expect(window.location.pathname).toBe("/invite");
+    expect(readInviteCode()).toBe("abc_DEF-123");
+  });
+
+  it("removes an invalid fragment and returns null without storing", () => {
+    window.history.replaceState(null, "", "/invite#bad code!");
+    expect(takeCodeFromHash()).toBeNull();
+    expect(window.location.hash).toBe("");
+    expect(readInviteCode()).toBeNull();
+  });
+
+  it("returns null when there is no fragment", () => {
+    window.history.replaceState(null, "", "/invite");
+    expect(takeCodeFromHash()).toBeNull();
+  });
+});
+
+describe("staff invite limits", () => {
+  it("limits staff roles to 5 uses and others to 200", () => {
+    expect(maxUsesFor("reviewer")).toBe(5);
+    expect(maxUsesFor("content_admin")).toBe(5);
+    expect(maxUsesFor("platform_admin")).toBe(5);
+    expect(maxUsesFor("student")).toBe(200);
+    expect(maxUsesFor("teacher")).toBe(200);
+  });
+
+  it("maps invite_uses_too_many", () => {
+    expect(problemMessage({ status: 422, code: "invite_uses_too_many" }).message).toBe("A staff invite can be used by at most 5 people.");
   });
 });

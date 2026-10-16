@@ -9,7 +9,7 @@ import { useMe } from "@/lib/use-me";
 
 const subscribeNever = () => () => {};
 
-function SessionGate({
+export function SessionGate({
   allowed,
   denied,
   children,

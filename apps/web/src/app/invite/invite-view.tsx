@@ -8,11 +8,11 @@ import { ApiError } from "@/lib/admin";
 import { useApi } from "@/lib/api";
 import { config, signInHref } from "@/lib/config";
 import { INVITE_INVALID_MESSAGE, isStaff, problemMessage } from "@/lib/decisions";
-import { clearInviteCode, isValidCode, storeInviteCode } from "@/lib/invite-code";
+import { clearInviteCode, readInviteCode, storeInviteCode, takeCodeFromHash } from "@/lib/invite-code";
 import { ME_KEY, useHasSession } from "@/lib/use-me";
-import { SignInButtons } from "../../sign-in/sign-in-buttons";
+import { SignInButtons } from "../sign-in/sign-in-buttons";
 
-type Outcome = { kind: "done"; roles: Role[] } | { kind: "invalid" } | { kind: "error"; message: string };
+type Outcome = { kind: "done"; roles: Role[]; accountId: string } | { kind: "invalid" } | { kind: "error"; message: string };
 
 function roleSentence(roles: readonly string[]): string {
   return roles.length === 1 ? `the ${roles[0]} role` : `the ${roles.join(", ")} roles`;
@@ -20,20 +20,23 @@ function roleSentence(roles: readonly string[]): string {
 
 const subscribeNever = () => () => {};
 
-export function InviteView({ code }: { code: string }) {
+export function InviteView() {
   const api = useApi();
   const queryClient = useQueryClient();
   const { hasSession, isLoading: sessionLoading } = useHasSession();
   // The session lives in the browser; render the same placeholder on the server and on the first client pass.
   const hydrated = useSyncExternalStore(subscribeNever, () => true, () => false);
   const isLoading = !hydrated || sessionLoading;
-  const [result, setOutcome] = useState<Outcome | null>(null);
   const started = useRef(false);
-  const valid = isValidCode(code);
+  const [result, setOutcome] = useState<Outcome | null>(null);
 
   useEffect(() => {
-    if (!valid) {
+    if (started.current) return;
+    // The code comes from the URL fragment (removed from the address bar at once), or from the tab's storage after sign-in.
+    const code = takeCodeFromHash() ?? readInviteCode();
+    if (!code) {
       clearInviteCode();
+      void Promise.resolve().then(() => setOutcome({ kind: "invalid" }));
       return;
     }
     if (isLoading || config.local || !config.oidc) return;
@@ -47,7 +50,7 @@ export function InviteView({ code }: { code: string }) {
       try {
         const { data, response, error } = await api.POST("/v1/invites/redeem", { body: { code } });
         if (data) {
-          setOutcome({ kind: "done", roles: data.roles });
+          setOutcome({ kind: "done", roles: data.roles, accountId: data.account_id });
           await queryClient.invalidateQueries({ queryKey: ME_KEY });
         } else {
           const problem = new ApiError(response.status, error).problem;
@@ -59,9 +62,9 @@ export function InviteView({ code }: { code: string }) {
         clearInviteCode();
       }
     })();
-  }, [api, code, hasSession, isLoading, queryClient, valid]);
+  }, [api, hasSession, isLoading, queryClient]);
 
-  const outcome = !valid ? ({ kind: "invalid" } as const) : result;
+  const outcome = result;
   const heading = <h1 className="text-2xl font-semibold">Invitation</h1>;
 
   if (outcome?.kind === "invalid") {
@@ -89,6 +92,9 @@ export function InviteView({ code }: { code: string }) {
       <div className="space-y-3">
         {heading}
         <p role="status">You now have {roleSentence(outcome.roles)}.</p>
+        <p>
+          Your account ID: <code className="break-all">{outcome.accountId}</code>
+        </p>
         <Link href={staff ? "/admin/questions" : "/"} className="underline">
           {staff ? "Go to the questions" : "Go to the home page"}
         </Link>
@@ -129,7 +135,7 @@ export function InviteView({ code }: { code: string }) {
     <div className="space-y-4">
       {heading}
       <p>Sign in to use this invitation. You will return to this page afterwards.</p>
-      <SignInButtons returnTo={`/invite/${code}`} />
+      <SignInButtons returnTo="/invite" />
     </div>
   );
 }

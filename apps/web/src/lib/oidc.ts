@@ -55,7 +55,7 @@ export function completeSignIn(): Promise<string> {
       const state = user?.state as { returnTo?: unknown } | undefined;
       if (typeof state?.returnTo === "string" && state.returnTo !== "/") return safeReturnPath(state.returnTo);
       const code = readInviteCode();
-      return code ? `/invite/${code}` : "/";
+      return code ? "/invite" : "/";
     })();
     pendingCallback.catch(() => {
       pendingCallback = null;

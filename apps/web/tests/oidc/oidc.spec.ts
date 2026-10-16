@@ -242,12 +242,27 @@ test.describe("sign-in", () => {
 });
 
 test.describe("invite page", () => {
+  test("the old path-based invite link no longer exists", async ({ page }) => {
+    const response = await page.goto(`/invite/${CODE}`);
+    expect(response?.status()).toBe(404);
+  });
+
+  test("a link without a usable code shows the one message", async ({ page }) => {
+    await mockIssuer(page, false);
+    await mockApi(page, ["student"]);
+    await injectUser(page);
+    await page.goto("/invite");
+    await expect(alerts(page)).toHaveText("This invite link is not valid. Ask for a new one.");
+  });
+
   test("redeems the code and links to the home page for a student", async ({ page }) => {
     await mockIssuer(page, false);
     const log = await mockApi(page, ["student"], (r) => (r.path === "/invites/redeem" ? { json: { account_id: ACCOUNT, roles: ["student"] } } : undefined));
     await injectUser(page);
-    await page.goto(`/invite/${CODE}`);
+    await page.goto(`/invite#${CODE}`);
     await expect(page.getByText("You now have the student role")).toBeVisible();
+    await expect(page.getByText(`Your account ID: ${ACCOUNT}`)).toBeVisible();
+    expect(new URL(page.url()).hash).toBe("");
     await expect(page.getByRole("link", { name: "Go to the home page" })).toHaveAttribute("href", "/");
     const redeem = log.filter((r) => r.path === "/invites/redeem");
     expect(redeem).toHaveLength(1);
@@ -260,7 +275,7 @@ test.describe("invite page", () => {
     await mockIssuer(page, false);
     await mockApi(page, ["reviewer"], (r) => (r.path === "/invites/redeem" ? { json: { account_id: ACCOUNT, roles: ["reviewer"] } } : undefined));
     await injectUser(page);
-    await page.goto(`/invite/${CODE}`);
+    await page.goto(`/invite#${CODE}`);
     await expect(page.getByText("You now have the reviewer role")).toBeVisible();
     await expect(page.getByRole("link", { name: "Go to the questions" })).toHaveAttribute("href", "/admin/questions");
   });
@@ -269,7 +284,7 @@ test.describe("invite page", () => {
     await mockIssuer(page, false);
     await mockApi(page, ["student"], (r) => (r.path === "/invites/redeem" ? { problem: { status: 404, code: "invite_not_found" } } : undefined));
     await injectUser(page);
-    await page.goto(`/invite/${CODE}`);
+    await page.goto(`/invite#${CODE}`);
     await expect(alerts(page)).toHaveText("This invite link is not valid. Ask for a new one.");
     expect(await page.evaluate(() => sessionStorage.getItem("qlab.invite.code"))).toBeNull();
   });
@@ -277,12 +292,12 @@ test.describe("invite page", () => {
   test("without a session the code is kept, sign-in is offered and the user returns to the invite", async ({ page }) => {
     const issuer = await mockIssuer(page, true);
     const log = await mockApi(page, ["student"], (r) => (r.path === "/invites/redeem" ? { json: { account_id: ACCOUNT, roles: ["student"] } } : undefined));
-    await page.goto(`/invite/${CODE}`);
+    await page.goto(`/invite#${CODE}`);
     await expect(page.getByRole("button", { name: "Staff sign-in" })).toBeVisible();
     expect(await page.evaluate(() => sessionStorage.getItem("qlab.invite.code"))).toBe(CODE);
     expect(log.filter((r) => r.path === "/invites/redeem")).toHaveLength(0);
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/invite/${CODE}$`));
+    await expect(page).toHaveURL(/\/invite$/);
     await expect(page.getByText("You now have the student role")).toBeVisible();
     expect(issuer.authorizeUrls).toHaveLength(1);
     expect(log.filter((r) => r.path === "/invites/redeem")).toHaveLength(1);
@@ -337,12 +352,12 @@ test.describe("invite administration", () => {
     const post = log.find((r) => r.method === "POST" && r.path === "/admin/invites");
     expect(post?.body).toEqual({ role: "teacher", expires_in_days: 3, max_uses: 5 });
     const linkBox = page.getByRole("textbox", { name: "Invite link" });
-    await expect(linkBox).toHaveValue(new RegExp(`/invite/${CODE}$`));
+    await expect(linkBox).toHaveValue(new RegExp(`/invite#${CODE}$`));
     await expect(page.getByText("will not be shown again")).toBeVisible();
     await page.getByRole("button", { name: "Copy link" }).click();
     await expect(page.getByText("Link copied.")).toBeVisible();
     const clip = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clip).toMatch(new RegExp(`/invite/${CODE}$`));
+    expect(clip).toMatch(new RegExp(`/invite#${CODE}$`));
 
     // The list never carries a code; the new row is there.
     const table = page.getByRole("table", { name: "Invites" });
@@ -398,6 +413,24 @@ test.describe("invite administration", () => {
     expect(log.filter((r) => r.method === "POST")).toHaveLength(0);
   });
 
+  test("a staff role limits Uses to 5 and the server message is mapped", async ({ page }) => {
+    await mockIssuer(page, false);
+    const log = await adminApi(page, ["platform_admin"], () => ({ problem: { status: 422, code: "invite_uses_too_many" } }));
+    await injectUser(page);
+    await page.goto("/admin/invites");
+    await expect(page.getByRole("heading", { name: "Invites", exact: true, level: 1 })).toBeVisible();
+    await expect(page.getByLabel("Uses")).toHaveAttribute("max", "200");
+    await page.getByLabel("Role").selectOption("reviewer");
+    await expect(page.getByLabel("Uses")).toHaveAttribute("max", "5");
+    await page.getByLabel("Uses").fill("6");
+    await page.getByRole("button", { name: "Create invite" }).click();
+    await expect(alerts(page)).toContainText("Uses must be a whole number from 1 to 5.");
+    expect(log.filter((r) => r.method === "POST")).toHaveLength(0);
+    await page.getByLabel("Uses").fill("5");
+    await page.getByRole("button", { name: "Create invite" }).click();
+    await expect(alerts(page)).toHaveText("A staff invite can be used by at most 5 people.");
+  });
+
   test("invite_role_forbidden shows the plain message", async ({ page }) => {
     await mockIssuer(page, false);
     await adminApi(page, ["teacher"], () => ({ problem: { status: 403, code: "invite_role_forbidden" } }));
@@ -426,11 +459,38 @@ test("mfa_required while checking the session shows the two-step message", async
   await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
 });
 
+test.describe("account page", () => {
+  test("shows the account ID with a copy button and the roles", async ({ page, context }) => {
+    await grantClipboard(context);
+    await mockIssuer(page, false);
+    await mockApi(page, ["student"]);
+    await injectUser(page);
+    await page.goto("/account");
+    await expect(page.getByRole("heading", { name: "Your account ID" })).toBeVisible();
+    await expect(page.getByText(ACCOUNT, { exact: true })).toBeVisible();
+    await expect(page.getByText("student", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Copy account ID" }).click();
+    await expect(page.getByText("Account ID copied.")).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(ACCOUNT);
+    await expect(page.getByRole("navigation", { name: "Account" }).getByRole("link", { name: "Account" })).toBeVisible();
+  });
+
+  test("mfa_required shows the two-step message", async ({ page }) => {
+    await mockIssuer(page, false);
+    await mockApi(page, { problem: { status: 403, code: "mfa_required" } });
+    await injectUser(page);
+    await page.goto("/account");
+    await expect(alerts(page)).toHaveText("Staff access needs two-step verification. Sign out and use Staff sign-in.");
+  });
+});
+
 test("responses carry the security headers", async ({ request }) => {
   const response = await request.get("/sign-in");
   const h = response.headers();
   expect(h["referrer-policy"]).toBe("no-referrer");
   expect(h["x-content-type-options"]).toBe("nosniff");
+  expect(h["permissions-policy"]).toBe("camera=(), microphone=(), geolocation=()");
+  expect(h["cross-origin-opener-policy"]).toBe("same-origin");
   const csp = h["content-security-policy"] ?? "";
   expect(csp).toContain("default-src 'self'");
   expect(csp).toContain(`connect-src 'self' ${ISSUER}`);

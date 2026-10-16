@@ -5,7 +5,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-q
 import type { components } from "@qlab/api-client";
 import { formatTime, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
-import { invitableRoles, type InviteRole } from "@/lib/decisions";
+import { invitableRoles, maxUsesFor, type InviteRole } from "@/lib/decisions";
 import { InviterGate } from "../staff-gate";
 import { ProblemView } from "../problem-view";
 import { ScrollBox } from "../status-badge";
@@ -50,7 +50,8 @@ function Inner({ roles }: { roles: readonly string[] }) {
   const [copied, setCopied] = useState<"yes" | "no" | null>(null);
 
   const daysValue = parseWhole(days, 1, 30);
-  const usesValue = parseWhole(uses, 1, 200);
+  const maxUses = maxUsesFor(role);
+  const usesValue = parseWhole(uses, 1, maxUses);
 
   const list = useInfiniteQuery({
     queryKey: ["admin", "invites"],
@@ -87,7 +88,7 @@ function Inner({ roles }: { roles: readonly string[] }) {
     create.mutate();
   }
 
-  const link = created ? `${window.location.origin}/invite/${created.code}` : "";
+  const link = created ? `${window.location.origin}/invite#${created.code}` : "";
 
   async function copyLink() {
     try {
@@ -142,7 +143,7 @@ function Inner({ roles }: { roles: readonly string[] }) {
             type="number"
             inputMode="numeric"
             min={1}
-            max={200}
+            max={maxUses}
             step={1}
             value={uses}
             onChange={(e) => setUses(e.target.value)}
@@ -157,7 +158,7 @@ function Inner({ roles }: { roles: readonly string[] }) {
         {invalid ? (
           <div role="alert" className="w-full text-red-700 dark:text-red-300">
             {daysValue === null ? <p id="days-error">Expires in must be a whole number from 1 to 30.</p> : null}
-            {usesValue === null ? <p id="uses-error">Uses must be a whole number from 1 to 200.</p> : null}
+            {usesValue === null ? <p id="uses-error">Uses must be a whole number from 1 to {maxUses}.</p> : null}
           </div>
         ) : null}
       </form>

@@ -1,7 +1,7 @@
 import path from "node:path";
 import type { NextConfig } from "next";
 
-const apiUrl = (process.env.QLAB_API_URL ?? "http://127.0.0.1:8000").replace(/\/+$/, "");
+const apiUrl = (process.env.QLAB_API_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
 const isProduction = process.env.NODE_ENV === "production";
 
 // `next dev` without an explicit environment is the local one (development sign-in). Builds never default to local.
@@ -36,6 +36,9 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: csp },
   { key: "Referrer-Policy", value: "no-referrer" },
   { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+  // The sign-in is a top-level redirect, not a popup, so isolating the browsing context group is safe.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   ...(isProduction ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }] : []),
 ];
 

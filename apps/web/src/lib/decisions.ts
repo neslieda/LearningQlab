@@ -47,6 +47,14 @@ export function invitableRoles(roles: readonly Role[] | readonly string[]): Invi
   return [];
 }
 
+export const STAFF_INVITE_MAX_USES = 5;
+export const INVITE_MAX_USES = 200;
+
+/** Most uses an invite for this role may have (the server enforces it; this is the form's hint). */
+export function maxUsesFor(role: InviteRole): number {
+  return isStaff([role]) ? STAFF_INVITE_MAX_USES : INVITE_MAX_USES;
+}
+
 export function canPublish(roles: readonly Role[] | readonly string[]): boolean {
   return roles.some((r) => PUBLISHERS.includes(r));
 }
@@ -162,6 +170,8 @@ export function problemMessage(problem: ProblemLike): ProblemMessage {
       return { message: MFA_MESSAGE, reasons: [], followUp: null };
     case "invite_role_forbidden":
       return { message: "You cannot invite someone to this role.", reasons: [], followUp: null };
+    case "invite_uses_too_many":
+      return { message: "A staff invite can be used by at most 5 people.", reasons: [], followUp: null };
     case "invite_not_found":
       return { message: INVITE_INVALID_MESSAGE, reasons: [], followUp: null };
     case "not_found":

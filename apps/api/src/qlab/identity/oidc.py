@@ -2,7 +2,9 @@
 
 The verification keys come from the provider's JWKS, found through
 `<issuer>/.well-known/openid-configuration`. They are kept in memory; a token with an unknown
-`kid` makes the verifier fetch the key set again, at most once a minute. Allowed algorithms:
+`kid` makes the verifier fetch the key set again, at most once a minute, and the next
+verification after the keys are an hour old fetches them again (a failure keeps the old
+keys). Allowed algorithms:
 RS256, ES256, EdDSA. Never `none`, never an HMAC algorithm. Checked: signature, `iss` (exact),
 `aud` (contains the configured audience; it may be a list), `azp` (the client id), `exp`, `iat`,
 a lifetime of at most 24 hours, and the same `sub` / `iss` rules as for development tokens.
@@ -14,6 +16,7 @@ it a fake.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import threading
 import time
@@ -37,6 +40,8 @@ ALGORITHMS = ("RS256", "ES256", "EdDSA")
 FETCH_TIMEOUT_SECONDS = 5.0
 MAX_RESPONSE_BYTES = 1024 * 1024
 REFETCH_INTERVAL_SECONDS = 60.0
+MAX_KEY_AGE_SECONDS = 3600.0  # keys are fetched again on the next verification after this
+IAT_LEEWAY_SECONDS = 10  # a token "issued" this far ahead of our clock is still accepted
 _KEY_TYPES = ("RSA", "EC", "OKP")  # never "oct": no shared secrets
 _LOCAL_HOSTS = ("localhost", "127.0.0.1")
 
@@ -120,6 +125,8 @@ class OidcTokenVerifier(TokenVerifier):
         if not isinstance(jwks_uri, str):
             raise OidcUnavailable("the discovery document has no jwks_uri")
         _checked_url(jwks_uri)
+        if urlparse(jwks_uri).hostname != urlparse(issuer).hostname:
+            raise OidcUnavailable("the key set is not on the issuer's host")
         self._jwks_uri = jwks_uri
         self._refresh()
         if not self._jwks:
@@ -154,6 +161,12 @@ class OidcTokenVerifier(TokenVerifier):
         self._declared = declared
 
     def _key_for(self, kid: str) -> jwt.PyJWK:
+        if self._clock() - self._last_fetch >= MAX_KEY_AGE_SECONDS:
+            with self._lock:
+                if self._clock() - self._last_fetch >= MAX_KEY_AGE_SECONDS:
+                    # On failure keep the keys we have; the next attempt is an hour away.
+                    with contextlib.suppress(OidcUnavailable):
+                        self._refresh()
         key = self._jwks.get(kid)
         if key is not None:
             return key
@@ -192,11 +205,13 @@ class OidcTokenVerifier(TokenVerifier):
                 algorithms=[algorithm],
                 audience=self.audience,
                 issuer=self.issuer,
-                leeway=0,
+                leeway=IAT_LEEWAY_SECONDS,  # applies to iat only: exp is checked strictly below
                 options={"require": list(_REQUIRED_CLAIMS), "verify_iat": True},
             )
         except jwt.PyJWTError as caught:
             raise InvalidToken(type(caught).__name__) from None
+        if payload["exp"] <= time.time():
+            raise InvalidToken("ExpiredSignatureError")
         if payload.get("azp") != self.client_id:
             raise InvalidToken("wrong authorised party")
         return self._claims(payload)

@@ -21,6 +21,10 @@ from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
 
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session, sessionmaker
+
 from qlab.identity import devkey
 from qlab.identity.oidc import OidcTokenVerifier, OidcUnavailable
 from qlab.identity.tokens import DEV_AUDIENCE, DEV_ISSUER, TokenVerifier
@@ -96,6 +100,8 @@ class Settings:
             ]
             if missing:
                 raise StartupError(f"missing settings: {', '.join(missing)}")
+            if not environ[OIDC_ISSUER_ENV].strip().startswith("https://"):
+                raise StartupError(f"{OIDC_ISSUER_ENV} must be an https address")
             oidc = {
                 "oidc_issuer": environ[OIDC_ISSUER_ENV].strip(),
                 "oidc_audience": environ[OIDC_AUDIENCE_ENV].strip(),
@@ -148,6 +154,8 @@ def build_verifier(settings: Settings) -> TokenVerifier:
     if settings.environment is not Environment.LOCAL:
         if not (settings.oidc_issuer and settings.oidc_audience and settings.oidc_client_id):
             raise StartupError("the identity provider is not configured")
+        if not settings.oidc_issuer.startswith("https://"):
+            raise StartupError(f"{OIDC_ISSUER_ENV} must be an https address")
         try:
             return OidcTokenVerifier(
                 issuer=settings.oidc_issuer,
@@ -165,3 +173,32 @@ def build_verifier(settings: Settings) -> TokenVerifier:
             f"{error}. Create the local accounts and key with `python -m qlab.api.dev init`."
         ) from None
     return TokenVerifier(public_keys=[key.public_key()], issuer=DEV_ISSUER, audience=DEV_AUDIENCE)
+
+
+_ROLE_QUERY = text(
+    """
+    SELECT
+      EXISTS (SELECT 1 FROM pg_class c
+              WHERE c.relname = 'audit_log' AND c.relnamespace = 'public'::regnamespace
+                AND pg_has_role(current_user, c.relowner, 'MEMBER')),
+      has_schema_privilege(current_user, 'public', 'CREATE')
+    """
+)
+
+
+def check_database_role(factory: sessionmaker[Session]) -> None:
+    """StartupError when the connected database role could change history or the schema: it
+    owns (or is a member of the role that owns) `audit_log`, or may create objects in `public`.
+    The application connects as a role with data rights only (infra/sql/app-role.sql); the
+    owner role is for migrations. Called outside the local environment only."""
+    try:
+        with factory() as session:
+            owns, can_create = session.execute(_ROLE_QUERY).one()
+    except SQLAlchemyError as error:
+        raise StartupError(f"the database role cannot be checked: {type(error).__name__}") from None
+    if owns:
+        raise StartupError("the database role owns audit_log: connect as the application role")
+    if can_create:
+        raise StartupError(
+            "the database role may create objects in schema public: connect as the application role"
+        )

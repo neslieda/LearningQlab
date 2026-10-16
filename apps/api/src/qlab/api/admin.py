@@ -18,7 +18,12 @@ from urllib.parse import urlparse
 from sqlalchemy.orm import Session
 
 from qlab.api import invites_view
-from qlab.organizations.service import INVITABLE_ROLES, InviteRoleForbidden, Role
+from qlab.organizations.service import (
+    INVITABLE_ROLES,
+    InviteRoleForbidden,
+    InviteTooManyUses,
+    Role,
+)
 
 _LOCAL_HOSTS = ("localhost", "127.0.0.1")
 
@@ -51,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     invite = commands.add_parser("invite", help="create an invite link")
     invite.add_argument("--role", required=True, choices=sorted(r.value for r in INVITABLE_ROLES))
     invite.add_argument("--base-url", required=True, type=_base_url)
-    invite.add_argument("--expires-in-days", type=_bounded(1, 30), default=7)
+    invite.add_argument("--expires-in-days", type=_bounded(1, 30), default=1)
     invite.add_argument("--max-uses", type=_bounded(1, 200), default=1)
     return parser
 
@@ -76,12 +81,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                 expires_in_days=args.expires_in_days,
                 max_uses=args.max_uses,
             )
-    except (InviteRoleForbidden, ValueError) as error:
+    except (InviteRoleForbidden, InviteTooManyUses, ValueError) as error:
         print(f"refused: {error}", file=sys.stderr)
         return 2
     finally:
         engine.dispose()
-    print(f"{args.base_url}/invite/{created.code}")
+    print(f"{args.base_url}/invite#{created.code}")
     print(
         f"role: {created.role}; uses: {created.max_uses}; expires: {created.expires_at.isoformat()}"
     )

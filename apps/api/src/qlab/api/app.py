@@ -20,7 +20,13 @@ from starlette.responses import Response
 
 from qlab.api import errors, policy
 from qlab.api.routers import admin, invites, learner, system
-from qlab.api.settings import Settings, build_verifier, check_verifier
+from qlab.api.settings import (
+    Environment,
+    Settings,
+    build_verifier,
+    check_database_role,
+    check_verifier,
+)
 from qlab.content import math
 from qlab.database import make_engine
 from qlab.identity.tokens import TokenVerifier
@@ -48,6 +54,8 @@ def create_app(
     - `qlab.api.settings.StartupError`: the settings are unsafe for the environment, there is
       no token verifier for it, or the verifier accepts local development tokens outside the
       local environment;
+    - `qlab.api.settings.StartupError` also when, outside local, the application's own database
+      connection belongs to a role that owns `audit_log` or may create objects in `public`;
     - `qlab.api.policy.PolicyError`: a route is missing from the policy table (or the reverse);
     - `qlab.content.math.RendererUnavailable`: the pinned KaTeX cannot be run (D-57).
 
@@ -94,7 +102,11 @@ def create_app(
     # Outside the local environment: the identity provider organisation whose sign-ins carry
     # two-step verification; staff roles count only for it (qlab.api.policy).
     app.state.staff_organization = settings.staff_organization
-    app.state.session_factory = session_factory or sessionmaker(make_engine())
+    if session_factory is None:
+        session_factory = sessionmaker(make_engine())
+        if settings.environment is not Environment.LOCAL:
+            check_database_role(session_factory)
+    app.state.session_factory = session_factory
     return app
 
 

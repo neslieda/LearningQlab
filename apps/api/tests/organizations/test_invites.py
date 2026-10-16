@@ -159,3 +159,26 @@ def test_listing_is_newest_first_and_scoped(session: Session) -> None:
     )
     assert [v.id for v in page] == [mine[1].id, mine[0].id]
     assert all(v.expires_at - v.created_at >= timedelta(days=6) for v in everything)
+
+
+@pytest.mark.parametrize("role", [Role.REVIEWER, Role.CONTENT_ADMIN, Role.PLATFORM_ADMIN])
+def test_a_staff_invite_has_at_most_five_uses(session: Session, role: Role) -> None:
+    assert organizations.MAX_STAFF_INVITE_USES == 5
+    new_invite(session, role=role, max_uses=5)
+    with pytest.raises(organizations.InviteTooManyUses):
+        new_invite(session, role=role, max_uses=6)
+    with pytest.raises(organizations.InviteTooManyUses):
+        new_invite(session, role=role, max_uses=200)
+    assert session.execute(text("SELECT count(*) FROM invite")).scalar_one() == 1
+
+
+def test_the_use_limit_is_checked_after_the_role_permission(session: Session) -> None:
+    teacher = frozenset({Role.TEACHER})
+    with pytest.raises(organizations.InviteRoleForbidden):
+        new_invite(session, roles=teacher, role=Role.REVIEWER, max_uses=200, created_by=TEACHER)
+
+
+def test_student_and_teacher_invites_may_have_many_uses(session: Session) -> None:
+    new_invite(session, role=Role.STUDENT, max_uses=200)
+    new_invite(session, role=Role.TEACHER, max_uses=200)
+    new_invite(session, roles=frozenset({Role.TEACHER}), max_uses=200, created_by=TEACHER)

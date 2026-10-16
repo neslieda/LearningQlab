@@ -611,9 +611,11 @@ def test_refused_requests_write_no_audit_entry(api: ApiHarness) -> None:
 
 
 @pytest.fixture
-def committed(engine: Engine) -> Iterator[tuple[Engine, TestClient, list[str]]]:
+def committed(throwaway_engine: Engine) -> Iterator[tuple[Engine, TestClient, list[str]]]:
     """The application on real, committed connections (the harness shares one transaction, which
-    cannot show a race). Cleans up what it created, audit entries included."""
+    cannot show a race), on a database made for this test and dropped after it, so nothing it
+    commits (audit entries are append-only) reaches other tests."""
+    engine = throwaway_engine
     key = Ed25519PrivateKey.generate()
     settings = Settings(environment=Environment.LOCAL, forbid_self_approval=False)
     factory = sessionmaker(bind=engine)
@@ -647,38 +649,7 @@ def committed(engine: Engine) -> Iterator[tuple[Engine, TestClient, list[str]]]:
     client = TestClient(app, raise_server_exceptions=False)
     client.token = token  # type: ignore[attr-defined]
     client.tag = tag  # type: ignore[attr-defined]
-    try:
-        yield engine, client, [tag]
-    finally:
-        with engine.begin() as connection:
-            pattern = f"conc-{tag}-%"
-            accounts = "(SELECT id FROM account WHERE subject LIKE :p)"
-            # The test database is owned by this role: lift the append-only guard for this
-            # transaction only, so the entries these accounts wrote do not leak into tests that
-            # count audit rows.
-            actors = [
-                ids.actor(row[0])
-                for row in connection.execute(
-                    text(f"SELECT id FROM account WHERE id IN {accounts}"), {"p": pattern}
-                )
-            ]
-            connection.execute(
-                text("ALTER TABLE audit_log DISABLE TRIGGER audit_log_no_update_delete")
-            )
-            connection.execute(
-                text("DELETE FROM audit_log WHERE actor = ANY(:actors)"), {"actors": actors}
-            )
-            connection.execute(
-                text("ALTER TABLE audit_log ENABLE ALWAYS TRIGGER audit_log_no_update_delete")
-            )
-            connection.execute(
-                text(f"DELETE FROM invite_redemption WHERE account_id IN {accounts}"),
-                {"p": pattern},
-            )
-            connection.execute(
-                text(f"DELETE FROM role_assignment WHERE account_id IN {accounts}"), {"p": pattern}
-            )
-            connection.execute(text("DELETE FROM account WHERE subject LIKE :p"), {"p": pattern})
+    yield engine, client, [tag]
 
 
 def run_race(client: TestClient, code: str, tag: str, contenders: int) -> list[int]:
@@ -709,26 +680,18 @@ def test_parallel_redemptions_never_exceed_max_uses(
     )
     assert created.status_code == 201, created.text
     body = created.json()
-    try:
-        statuses = run_race(client, body["code"], tag, contenders)
-        assert sorted(statuses) == sorted([200] * max_uses + [404] * (contenders - max_uses))
-        with engine.connect() as connection:
-            uses = connection.execute(
-                text("SELECT uses FROM invite WHERE id = :id"),
-                {"id": ids.decode(ids.INVITE, body["id"])},
-            ).scalar_one()
-            redemptions = connection.execute(
-                text("SELECT count(*) FROM invite_redemption WHERE invite_id = :id"),
-                {"id": ids.decode(ids.INVITE, body["id"])},
-            ).scalar_one()
-        assert uses == redemptions == max_uses
-    finally:
-        with engine.begin() as connection:
-            invite_id = ids.decode(ids.INVITE, body["id"])
-            connection.execute(
-                text("DELETE FROM invite_redemption WHERE invite_id = :id"), {"id": invite_id}
-            )
-            connection.execute(text("DELETE FROM invite WHERE id = :id"), {"id": invite_id})
+    statuses = run_race(client, body["code"], tag, contenders)
+    assert sorted(statuses) == sorted([200] * max_uses + [404] * (contenders - max_uses))
+    with engine.connect() as connection:
+        uses = connection.execute(
+            text("SELECT uses FROM invite WHERE id = :id"),
+            {"id": ids.decode(ids.INVITE, body["id"])},
+        ).scalar_one()
+        redemptions = connection.execute(
+            text("SELECT count(*) FROM invite_redemption WHERE invite_id = :id"),
+            {"id": ids.decode(ids.INVITE, body["id"])},
+        ).scalar_one()
+    assert uses == redemptions == max_uses
 
 
 # --- staff two-step check --------------------------------------------------------------------

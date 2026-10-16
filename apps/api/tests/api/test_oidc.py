@@ -44,14 +44,15 @@ class FakeProvider:
         self.calls: list[str] = []
         self.down = False
         self.issuer = ISSUER
+        self.jwks_uri = JWKS_URI
 
     def fetch(self, url: str) -> bytes:
         self.calls.append(url)
         if self.down:
             raise OidcUnavailable("down")
         if url == DISCOVERY:
-            return json.dumps({"issuer": self.issuer, "jwks_uri": JWKS_URI}).encode()
-        if url == JWKS_URI:
+            return json.dumps({"issuer": self.issuer, "jwks_uri": self.jwks_uri}).encode()
+        if url == self.jwks_uri:
             return json.dumps({"keys": self.keys}).encode()
         raise OidcUnavailable("404")
 
@@ -266,6 +267,48 @@ def test_start_fails_without_usable_keys(provider: FakeProvider) -> None:
         OidcTokenVerifier(issuer=ISSUER, audience=AUDIENCE, client_id=CLIENT, fetch=provider.fetch)
 
 
+def test_a_little_clock_difference_on_iat_is_tolerated_but_exp_is_strict(
+    verifier: OidcTokenVerifier,
+) -> None:
+    now = int(datetime.now(tz=UTC).timestamp())
+    assert verifier.verify(make(claims(iat=now + 5, exp=now + 300))).subject == "user-1"
+    refused(verifier, make(claims(iat=now + 60, exp=now + 300)))
+    refused(verifier, make(claims(iat=now - 100, exp=now - 3)))  # expired 3 seconds ago
+
+
+def test_keys_are_fetched_again_when_an_hour_old(
+    verifier: OidcTokenVerifier, provider: FakeProvider, clock: Clock
+) -> None:
+    start = len(provider.calls)
+    clock.now += 3599
+    verifier.verify(make())
+    assert len(provider.calls) == start  # a known key, not yet an hour: no fetch
+    replacement = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    provider.keys = [jwk(replacement.public_key(), "rsa-2", "RS256")]
+    clock.now += 2
+    refused(verifier, make())  # the key was withdrawn: the hourly refresh dropped it
+    assert len(provider.calls) == start + 1
+    assert verifier.verify(make(key=replacement, kid="rsa-2")).subject == "user-1"
+    assert len(provider.calls) == start + 1
+
+
+def test_an_hourly_refresh_that_fails_keeps_the_known_keys(
+    verifier: OidcTokenVerifier, provider: FakeProvider, clock: Clock
+) -> None:
+    provider.down = True
+    clock.now += 7200
+    assert verifier.verify(make()).subject == "user-1"
+    start = len(provider.calls)
+    assert verifier.verify(make()).subject == "user-1"
+    assert len(provider.calls) == start  # not retried on every request
+
+
+def test_start_fails_when_the_key_set_is_on_another_host(provider: FakeProvider) -> None:
+    provider.jwks_uri = "https://keys.elsewhere.invalid/keys"
+    with pytest.raises(OidcUnavailable, match="host"):
+        OidcTokenVerifier(issuer=ISSUER, audience=AUDIENCE, client_id=CLIENT, fetch=provider.fetch)
+
+
 # --- settings ------------------------------------------------------------------------------------
 
 OIDC_ENV = {
@@ -296,6 +339,23 @@ def test_a_missing_provider_setting_outside_local_stops_start_up(env: str, missi
     environ[missing] = "  "
     with pytest.raises(StartupError, match=missing):
         Settings.from_env(environ)
+
+
+@pytest.mark.parametrize("env", ["staging", "production"])
+def test_an_http_issuer_is_refused_outside_local(env: str) -> None:
+    environ = {"QLAB_ENV": env, **OIDC_ENV, "QLAB_OIDC_ISSUER": "http://idp.example.invalid"}
+    with pytest.raises(StartupError, match="https"):
+        Settings.from_env(environ)
+    settings = Settings(
+        Environment.PRODUCTION,
+        True,
+        staff_organization=STAFF_ORG,
+        oidc_issuer="http://idp.example.invalid",
+        oidc_audience=AUDIENCE,
+        oidc_client_id=CLIENT,
+    )
+    with pytest.raises(StartupError, match="https"):
+        build_verifier(settings)
 
 
 def test_local_needs_no_provider_and_has_no_staff_organization() -> None:

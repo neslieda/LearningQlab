@@ -57,6 +57,9 @@ class Role(StrEnum):
     PLATFORM_ADMIN = "platform_admin"
 
 
+_STAFF_ROLES = frozenset({Role.REVIEWER, Role.CONTENT_ADMIN, Role.PLATFORM_ADMIN})
+
+
 def roles_of(session: Session, account_id: uuid.UUID) -> frozenset[Role]:
     """The roles the account holds right now. Read from the database on every call. An unknown
     account has none."""
@@ -195,6 +198,8 @@ def create_invite(
         raise InviteRoleForbidden(role.value)
     if not 1 <= expires_in_days <= 30 or not 1 <= max_uses <= 200:
         raise ValueError("organizations: expiry or number of uses out of range")
+    if role in _STAFF_ROLES and max_uses > MAX_STAFF_INVITE_USES:
+        raise InviteTooManyUses(role.value)
     code = base64.urlsafe_b64encode(secrets.token_bytes(CODE_BYTES)).rstrip(b"=").decode()
     row = Invite(
         code_sha256=hash_code(code),
@@ -271,6 +276,14 @@ def redeem_invite(session: Session, *, issuer: str, subject: str, code: str) -> 
     if row.uses >= row.max_uses:
         raise InviteNotFound("invite")
     account = identity.ensure_account(session, issuer=issuer, subject=subject)
+    # Two first-time requests of the same new person can both pass the check above before
+    # either has an account; the one that waited for the row lock re-checks here.
+    if session.get(InviteRedemption, (row.id, account.id)) is not None:
+        return RedeemResult(
+            account.id, roles_of(session, account.id), row.id, Role(row.role), False, False
+        )
+    if not account.is_active:
+        raise AccountDisabled(str(account.id))
     session.add(InviteRedemption(invite_id=row.id, account_id=account.id))
     row.uses += 1
     role = Role(row.role)

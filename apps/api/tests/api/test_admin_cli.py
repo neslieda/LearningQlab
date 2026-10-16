@@ -19,7 +19,7 @@ from tests.conftest import DEFAULT_TEST_URL, LOCAL_HOSTS, alembic_config
 
 pytestmark = pytest.mark.db
 
-LINK = re.compile(r"^(?P<base>\S+)/invite/(?P<code>[A-Za-z0-9_-]{43})$")
+LINK = re.compile(r"^(?P<base>\S+)/invite#(?P<code>[A-Za-z0-9_-]{43})$")
 
 
 @pytest.fixture
@@ -74,6 +74,10 @@ def test_it_writes_an_invite_and_an_audit_entry(
     assert (actor, action) == ("cli:owner", "invite.created")
     assert match["code"] not in data
     assert "expires" in out
+    [(days,)] = rows(
+        database, "SELECT round(extract(epoch FROM expires_at - created_at) / 86400) FROM invite"
+    )
+    assert int(days) == 1  # the default is one day
 
 
 def test_options(database: URL, capsys: pytest.CaptureFixture[str]) -> None:
@@ -127,3 +131,19 @@ def test_without_a_database_it_refuses(
     code = admin.main(["invite", "--role", "student", "--base-url", "https://qlab.example.invalid"])
     assert code == 2
     assert "refused" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("role", ["reviewer", "content_admin", "platform_admin"])
+def test_a_staff_invite_for_many_people_is_refused(
+    database: URL, capsys: pytest.CaptureFixture[str], role: str
+) -> None:
+    base = ["invite", "--role", role, "--base-url", "https://qlab.example.invalid"]
+    assert admin.main([*base, "--max-uses", "6"]) == 2
+    assert "refused" in capsys.readouterr().err
+    assert rows(database, "SELECT 1 FROM invite") == []
+    assert admin.main([*base, "--max-uses", "5"]) == 0
+
+
+def test_a_student_invite_may_have_many_uses(database: URL) -> None:
+    args = ["invite", "--role", "student", "--base-url", "https://qlab.example.invalid"]
+    assert admin.main([*args, "--max-uses", "200"]) == 0

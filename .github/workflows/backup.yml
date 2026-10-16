@@ -1,0 +1,68 @@
+# Nightly encrypted database backup (D-61). Critical area (CI): changes need the owner's approval.
+# Secrets (repository secrets, never printed):
+#   NEON_BACKUP_URL    connection string of the read-only role qlab_backup (infra/sql/app-role.sql), plain postgresql:// form
+#   BACKUP_AGE_RECIPIENT  PUBLIC age key ("age1...", a repository variable or secret). The matching private key
+#                      stays with the owner, offline; GitHub never holds anything that can decrypt a dump.
+# Restore: docs/KURULUM_DENEME.md.
+name: backup
+
+on:
+  schedule:
+    - cron: "30 2 * * *" # 02:30 UTC every day
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  dump:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions: {}
+    steps:
+      - name: Install PostgreSQL 17 client and age
+        run: |
+          set -euo pipefail
+          # The PGDG signing key is pinned by fingerprint (B97B 0AFC AA1A 47F0 44F2 44A0 7FCC 7D46 ACCC 4CF8).
+          expected="B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8"
+          curl -fsSL -o pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          actual="$(gpg --show-keys --with-colons pgdg.asc | awk -F: '$1=="fpr"{print $10; exit}')"
+          [ "$actual" = "$expected" ] || { echo "PGDG key fingerprint mismatch: $actual" >&2; exit 1; }
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo install -m 0644 pgdg.asc /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc
+          rm -f pgdg.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq
+          # age comes from the Ubuntu archive (signed by the distribution's own key).
+          sudo apt-get install -y -qq postgresql-client-17 age
+          /usr/lib/postgresql/17/bin/pg_dump --version
+          age --version
+
+      - name: Dump and encrypt
+        env:
+          NEON_BACKUP_URL: ${{ secrets.NEON_BACKUP_URL }}
+          BACKUP_AGE_RECIPIENT: ${{ secrets.BACKUP_AGE_RECIPIENT || vars.BACKUP_AGE_RECIPIENT }}
+          PGSSLMODE: require
+        run: |
+          set -euo pipefail
+          umask 077
+          case "$BACKUP_AGE_RECIPIENT" in age1*) ;; *) echo "BACKUP_AGE_RECIPIENT must be an age public key (age1...)" >&2; exit 1;; esac
+          stamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          # Custom format is compressed; --no-owner/--no-privileges keep the dump restorable under any role.
+          # The plaintext dump never touches disk: it is piped straight into age.
+          /usr/lib/postgresql/17/bin/pg_dump --format=custom --no-owner --no-privileges \
+            --dbname="$NEON_BACKUP_URL" | age --encrypt --recipient "$BACKUP_AGE_RECIPIENT" \
+            --output "qlab-${stamp}.dump.age"
+          echo "ARTIFACT_NAME=qlab-${stamp}" >> "$GITHUB_ENV"
+          ls -l ./*.age
+
+      - name: Upload encrypted dump
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: "*.dump.age"
+          retention-days: 14
+          if-no-files-found: error

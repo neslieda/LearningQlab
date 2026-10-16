@@ -1,0 +1,56 @@
+# Render Blueprint (D-61): two free web services in Frankfurt, built from the Dockerfiles in infra/docker.
+# Field names checked against https://render.com/docs/blueprint-spec (2026-10-16); build args behaviour against
+# https://render.com/docs/docker ("Render automatically translates those values to Docker build arguments").
+# `sync: false` values are asked for once, when the Blueprint is first created, and never stored in this file.
+# Setup guide for the owner: docs/KURULUM_DENEME.md.
+services:
+  - type: web
+    name: qlab-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./infra/docker/api.Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeployTrigger: "off" # deploys are started by hand from the dashboard until the owner decides otherwise
+    envVars:
+      - key: QLAB_ENV
+        value: staging
+      - key: QLAB_FORBID_SELF_APPROVAL
+        value: "true"
+      - key: QLAB_DATABASE_URL # Neon, role qlab_app (infra/sql/app-role.sql)
+        sync: false
+      - key: QLAB_MIGRATION_DATABASE_URL # Neon, owner role; used by Alembic at start-up only
+        sync: false
+      - key: QLAB_OIDC_ISSUER
+        sync: false
+      - key: QLAB_OIDC_AUDIENCE # Zitadel project id
+        sync: false
+      - key: QLAB_OIDC_CLIENT_ID
+        sync: false
+      - key: QLAB_OIDC_STAFF_ORG_ID
+        sync: false
+
+  - type: web
+    name: qlab-web
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./infra/docker/web.Dockerfile
+    dockerContext: .
+    autoDeployTrigger: "off"
+    envVars:
+      - key: NEXT_PUBLIC_QLAB_ENV
+        value: staging
+      - key: QLAB_API_URL # public https address of qlab-api, e.g. https://qlab-api-xxxx.onrender.com (no trailing slash)
+        sync: false # the Blueprint spec lists host/port/hostport for fromService but not a public URL, so it is typed once
+      - key: NEXT_PUBLIC_OIDC_ISSUER
+        sync: false
+      - key: NEXT_PUBLIC_OIDC_CLIENT_ID
+        sync: false
+      - key: NEXT_PUBLIC_OIDC_PROJECT_ID
+        sync: false
+      - key: NEXT_PUBLIC_OIDC_STAFF_ORG_ID
+        sync: false
+      - key: NEXT_PUBLIC_OIDC_LEARNER_ORG_ID
+        sync: false

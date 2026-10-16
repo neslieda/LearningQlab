@@ -29,6 +29,51 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/invites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Invites
+         * @description Invites, newest first, without their codes. A teacher sees only their own.
+         */
+        get: operations["listInvites"];
+        put?: never;
+        /**
+         * Create
+         * @description A new invite link. The code is in this response only; only its SHA-256 is stored.
+         */
+        post: operations["createInvite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/invites/{invite_id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Revoke
+         * @description Stop an invite from being used. A teacher may revoke only their own (another's: 404).
+         *     Revoking twice keeps the first revocation.
+         */
+        post: operations["revokeInvite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/question-versions/{version_id}": {
         parameters: {
             query?: never;
@@ -281,6 +326,28 @@ export interface paths {
          *     (CLAUDE.md rule 7). 409 `working_version_exists` when one is already being worked on.
          */
         post: operations["adminStartRevision"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invites/redeem": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Redeem
+         * @description Use an invite: the caller's account is created if it does not exist and the invite's
+         *     role is granted (an existing role is kept as it is). Using the same invite twice counts
+         *     once. A disabled account: 401.
+         */
+        post: operations["redeemInvite"];
         delete?: never;
         options?: never;
         head?: never;
@@ -637,6 +704,28 @@ export interface components {
             ref: string;
         };
         /**
+         * CreateInviteRequest
+         * @description `teacher` may invite `student` only (403 `invite_role_forbidden`); `platform_admin` any
+         *     role. `org_admin` is not invitable before organisations exist (M2).
+         */
+        CreateInviteRequest: {
+            /**
+             * Expires In Days
+             * @default 7
+             */
+            expires_in_days: number;
+            /**
+             * Max Uses
+             * @default 1
+             */
+            max_uses: number;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "student" | "teacher" | "reviewer" | "content_admin" | "platform_admin";
+        };
+        /**
          * CreateQuestionRequest
          * @description A new `authored` question under the platform's own-content rights record (D-52, D-58).
          *     Without `version`, the subject's newest syllabus version is used.
@@ -760,6 +849,77 @@ export interface components {
             status: components["schemas"]["VersionStatus"];
             /** Superseded By */
             superseded_by: string | null;
+        };
+        /** InviteCreated */
+        InviteCreated: {
+            /**
+             * Code
+             * @description Shown once. Only its SHA-256 is stored.
+             */
+            code: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Created By */
+            created_by: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Id */
+            id: string;
+            /** Max Uses */
+            max_uses: number;
+            /** Revoked At */
+            revoked_at: string | null;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "student" | "teacher" | "reviewer" | "content_admin" | "platform_admin";
+            /** Uses */
+            uses: number;
+        };
+        /** InviteOut */
+        InviteOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Created By */
+            created_by: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Id */
+            id: string;
+            /** Max Uses */
+            max_uses: number;
+            /** Revoked At */
+            revoked_at: string | null;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "student" | "teacher" | "reviewer" | "content_admin" | "platform_admin";
+            /** Uses */
+            uses: number;
+        };
+        /** InvitePage */
+        InvitePage: {
+            /**
+             * Items
+             * @description Newest first.
+             */
+            items: components["schemas"]["InviteOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
         };
         /**
          * LanguageWarning
@@ -1294,6 +1454,21 @@ export interface components {
              */
             reason: string;
         };
+        /** RedeemInviteRequest */
+        RedeemInviteRequest: {
+            /** Code */
+            code: string;
+        };
+        /**
+         * RedeemOut
+         * @description The caller's account and roles after the invite was used.
+         */
+        RedeemOut: {
+            /** Account Id */
+            account_id: string;
+            /** Roles */
+            roles: components["schemas"]["Role"][];
+        };
         /** RepublishRequest */
         RepublishRequest: {
             /** Expected Content Sha256 */
@@ -1595,6 +1770,166 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    listInvites: {
+        parameters: {
+            query?: {
+                /** @description `next_cursor` of the last page. */
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitePage"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    createInvite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateInviteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteCreated"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description A teacher may invite students only (`invite_role_forbidden`). */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description A staff invite (reviewer, content_admin, platform_admin) allows at most 5 uses (`invite_uses_too_many`), or the body is not valid. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    revokeInvite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteOut"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
                 };
             };
         };
@@ -2410,6 +2745,57 @@ export interface operations {
                 };
                 content: {
                     "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    redeemInvite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RedeemInviteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RedeemOut"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description Unknown, expired, revoked or used-up invite (`invite_not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
                 };
             };
             /** @description The request is not valid (`validation_failed`). */

@@ -18,6 +18,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from qlab.content import math
 from qlab.content import service as content
+from qlab.organizations import service as organizations
 from qlab.rights import service as rights
 
 PROBLEM_MEDIA_TYPE = "application/problem+json"
@@ -99,6 +100,16 @@ def from_service_error(error: Exception) -> ApiError | None:
         # A write that the rights record does not permit looks like a missing resource, as a
         # read already does (fail-closed, CLAUDE.md rule 2).
         return not_found()
+    if isinstance(error, organizations.InviteNotFound):
+        return ApiError(404, "invite_not_found", "This invite is not valid")
+    if isinstance(error, organizations.InviteTooManyUses):
+        return ApiError(
+            422,
+            "invite_uses_too_many",
+            f"A staff invite can be used by at most {organizations.MAX_STAFF_INVITE_USES} people",
+        )
+    if isinstance(error, organizations.InviteRoleForbidden):
+        return ApiError(403, "invite_role_forbidden", "You cannot invite someone to this role")
     if isinstance(error, content.InvalidDocument):
         return ApiError(
             422,
@@ -197,7 +208,14 @@ def install(app: FastAPI) -> None:
             known = ApiError(500, "internal_error", "Internal error")
         return _response(known)
 
-    for service_error in (content.ContentError, rights.RightsDenied, math.RendererUnavailable):
+    for service_error in (
+        content.ContentError,
+        rights.RightsDenied,
+        math.RendererUnavailable,
+        organizations.InviteNotFound,
+        organizations.InviteRoleForbidden,
+        organizations.InviteTooManyUses,
+    ):
         app.add_exception_handler(service_error, _service)
 
     @app.exception_handler(Exception)

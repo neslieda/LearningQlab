@@ -562,6 +562,42 @@
         "title": "Constant",
         "type": "object"
       },
+      "CreateInviteRequest": {
+        "additionalProperties": false,
+        "description": "`teacher` may invite `student` only (403 `invite_role_forbidden`); `platform_admin` any\nrole. `org_admin` is not invitable before organisations exist (M2).",
+        "properties": {
+          "expires_in_days": {
+            "default": 7,
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Expires In Days",
+            "type": "integer"
+          },
+          "max_uses": {
+            "default": 1,
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Max Uses",
+            "type": "integer"
+          },
+          "role": {
+            "enum": [
+              "student",
+              "teacher",
+              "reviewer",
+              "content_admin",
+              "platform_admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role"
+        ],
+        "title": "CreateInviteRequest",
+        "type": "object"
+      },
       "CreateQuestionRequest": {
         "additionalProperties": false,
         "description": "A new `authored` question under the platform's own-content rights record (D-52, D-58).\nWithout `version`, the subject's newest syllabus version is used.",
@@ -954,6 +990,177 @@
           "approver_is_last_editor"
         ],
         "title": "HistoryEntry",
+        "type": "object"
+      },
+      "InviteCreated": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "description": "Shown once. Only its SHA-256 is stored.",
+            "pattern": "^[A-Za-z0-9_-]{43}$",
+            "title": "Code",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^inv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "max_uses": {
+            "title": "Max Uses",
+            "type": "integer"
+          },
+          "revoked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revoked At"
+          },
+          "role": {
+            "enum": [
+              "student",
+              "teacher",
+              "reviewer",
+              "content_admin",
+              "platform_admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "uses": {
+            "title": "Uses",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "created_by",
+          "created_at",
+          "expires_at",
+          "max_uses",
+          "uses",
+          "revoked_at",
+          "code"
+        ],
+        "title": "InviteCreated",
+        "type": "object"
+      },
+      "InviteOut": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^inv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "max_uses": {
+            "title": "Max Uses",
+            "type": "integer"
+          },
+          "revoked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revoked At"
+          },
+          "role": {
+            "enum": [
+              "student",
+              "teacher",
+              "reviewer",
+              "content_admin",
+              "platform_admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "uses": {
+            "title": "Uses",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "created_by",
+          "created_at",
+          "expires_at",
+          "max_uses",
+          "uses",
+          "revoked_at"
+        ],
+        "title": "InviteOut",
+        "type": "object"
+      },
+      "InvitePage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "description": "Newest first.",
+            "items": {
+              "$ref": "#/components/schemas/InviteOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "InvitePage",
         "type": "object"
       },
       "LanguageWarning": {
@@ -2404,6 +2611,45 @@
         "title": "ReasonRequest",
         "type": "object"
       },
+      "RedeemInviteRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "pattern": "^[A-Za-z0-9_-]{43}$",
+            "title": "Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "RedeemInviteRequest",
+        "type": "object"
+      },
+      "RedeemOut": {
+        "additionalProperties": false,
+        "description": "The caller's account and roles after the invite was used.",
+        "properties": {
+          "account_id": {
+            "pattern": "^acc_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+            "title": "Account Id",
+            "type": "string"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "title": "Roles",
+            "type": "array"
+          }
+        },
+        "required": [
+          "account_id",
+          "roles"
+        ],
+        "title": "RedeemOut",
+        "type": "object"
+      },
       "RepublishRequest": {
         "additionalProperties": false,
         "properties": {
@@ -3087,6 +3333,240 @@
         "summary": "Health",
         "tags": [
           "system"
+        ]
+      }
+    },
+    "/v1/admin/invites": {
+      "get": {
+        "description": "Invites, newest first, without their codes. A teacher sees only their own.",
+        "operationId": "listInvites",
+        "parameters": [
+          {
+            "description": "`next_cursor` of the last page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "`next_cursor` of the last page.",
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitePage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List Invites",
+        "tags": [
+          "invites"
+        ]
+      },
+      "post": {
+        "description": "A new invite link. The code is in this response only; only its SHA-256 is stored.",
+        "operationId": "createInvite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInviteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteCreated"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "A teacher may invite students only (`invite_role_forbidden`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "A staff invite (reviewer, content_admin, platform_admin) allows at most 5 uses (`invite_uses_too_many`), or the body is not valid."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create",
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/v1/admin/invites/{invite_id}/revoke": {
+      "post": {
+        "description": "Stop an invite from being used. A teacher may revoke only their own (another's: 404).\nRevoking twice keeps the first revocation.",
+        "operationId": "revokeInvite",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "invite_id",
+            "required": true,
+            "schema": {
+              "pattern": "^inv_[0-7][0123456789abcdefghjkmnpqrstvwxyz]{25}$",
+              "title": "Invite Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Revoke",
+        "tags": [
+          "invites"
         ]
       }
     },
@@ -4338,6 +4818,73 @@
         "summary": "Start Revision",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/v1/invites/redeem": {
+      "post": {
+        "description": "Use an invite: the caller's account is created if it does not exist and the invite's\nrole is granted (an existing role is kept as it is). Using the same invite twice counts\nonce. A disabled account: 401.",
+        "operationId": "redeemInvite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedeemInviteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedeemOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unknown, expired, revoked or used-up invite (`invite_not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Redeem",
+        "tags": [
+          "invites"
         ]
       }
     },

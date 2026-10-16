@@ -61,6 +61,18 @@ TABLE: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
 ]
 NON_PUBLIC = [row for row in TABLE if row[3] is not None]
 
+# Slice 9 (docs/slices/M1G-9-ACILIS.md 3.3). Rows 22 to 25 differ from the rest: redeeming needs
+# a valid token and nothing else (SIGNED_IN), and the invite endpoints are for teachers and
+# platform admins, so a teacher is not in the student column. They are checked over HTTP in
+# test_invites_api.py.
+INVITERS: Final = frozenset({R.TEACHER, R.PLATFORM_ADMIN})
+INVITE_ROWS: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
+    (22, "POST", "/v1/invites/redeem", None),  # None here: SIGNED_IN, see the test below
+    (23, "POST", "/v1/admin/invites", INVITERS),
+    (24, "GET", "/v1/admin/invites", INVITERS),
+    (25, "POST", "/v1/admin/invites/{invite_id}/revoke", INVITERS),
+]
+
 
 def allowed(roles: frozenset[Role] | None, role: Role) -> bool:
     return roles is None or role in roles
@@ -89,7 +101,14 @@ def test_the_specification_table_has_twenty_one_distinct_endpoints() -> None:
 
 
 def test_the_policy_has_exactly_the_endpoints_of_the_specification() -> None:
-    assert set(policy.ENDPOINT_POLICY) == {(m, t) for _, m, t, _ in TABLE}
+    assert set(policy.ENDPOINT_POLICY) == {(m, t) for _, m, t, _ in [*TABLE, *INVITE_ROWS]}
+
+
+def test_the_invite_rows() -> None:
+    assert [row[0] for row in INVITE_ROWS] == [22, 23, 24, 25]
+    assert isinstance(policy.ENDPOINT_POLICY[("POST", "/v1/invites/redeem")], policy.SignedIn)
+    for _, method, template, roles in INVITE_ROWS[1:]:
+        assert policy.ENDPOINT_POLICY[(method, template)] == roles
 
 
 @pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
@@ -101,7 +120,7 @@ def test_policy_cell(
     if roles is None:
         assert isinstance(access, policy.Public)
         return
-    assert not isinstance(access, policy.Public)
+    assert isinstance(access, frozenset)
     assert (role in access) == allowed(roles, role), f"#{number} {method} {template} {role}"
 
 
@@ -118,7 +137,7 @@ def test_policy_row_is_exactly_the_specified_set(
 
 def test_student_teacher_and_org_admin_share_a_column() -> None:
     for (_method, _template), access in policy.ENDPOINT_POLICY.items():
-        if isinstance(access, policy.Public):
+        if not isinstance(access, frozenset) or access == INVITERS:
             continue
         assert len({role in access for role in USER_ROLES}) == 1
 
@@ -130,9 +149,16 @@ def test_no_endpoint_but_the_health_check_is_public() -> None:
     assert public == [("GET", "/healthz")]
 
 
+def test_only_redeeming_an_invite_is_signed_in() -> None:
+    signed_in = [
+        key for key, access in policy.ENDPOINT_POLICY.items() if isinstance(access, policy.SignedIn)
+    ]
+    assert signed_in == [("POST", "/v1/invites/redeem")]
+
+
 def test_every_non_public_endpoint_allows_platform_admin() -> None:
     for access in policy.ENDPOINT_POLICY.values():
-        if not isinstance(access, policy.Public):
+        if isinstance(access, frozenset):
             assert Role.PLATFORM_ADMIN in access
 
 
@@ -148,7 +174,7 @@ def test_the_running_application_serves_exactly_the_table(api: ApiHarness) -> No
         assert isinstance(route, policy.PolicyRoute)
         for method in route.methods or ():
             served.add((method, route.path_format))
-    assert served == {(m, t) for _, m, t, _ in TABLE}
+    assert served == {(m, t) for _, m, t, _ in [*TABLE, *INVITE_ROWS]}
 
 
 # --- over HTTP, cell by cell -------------------------------------------------------------------

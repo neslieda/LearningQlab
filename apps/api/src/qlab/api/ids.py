@@ -11,6 +11,7 @@ import uuid
 QUESTION = "q"
 QUESTION_VERSION = "qv"
 ACCOUNT = "acc"
+INVITE = "inv"
 
 _ALPHABET = "0123456789abcdefghjkmnpqrstvwxyz"
 _VALUES = {character: value for value, character in enumerate(_ALPHABET)}
@@ -19,6 +20,7 @@ _LENGTH = 26
 QUESTION_ID_PATTERN = rf"^{QUESTION}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
 QUESTION_VERSION_ID_PATTERN = rf"^{QUESTION_VERSION}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
 ACCOUNT_ID_PATTERN = rf"^{ACCOUNT}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
+INVITE_ID_PATTERN = rf"^{INVITE}_[0-7][{_ALPHABET}]{{{_LENGTH - 1}}}$"
 
 
 def encode(prefix: str, value: uuid.UUID) -> str:

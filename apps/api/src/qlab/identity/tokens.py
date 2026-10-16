@@ -24,6 +24,8 @@ DEV_AUDIENCE = "qlab-api-local"
 MAX_TOKEN_LENGTH = 4096
 MAX_LIFETIME = timedelta(hours=24)
 MAX_NAME_LENGTH = 200
+# Zitadel: the organisation the user belongs to (M1-G slice 9, docs/slices/M1G-9-ACILIS.md 2).
+ORGANIZATION_CLAIM = "urn:zitadel:iam:user:resourceowner:id"
 _REQUIRED_CLAIMS = ("iss", "sub", "aud", "exp", "iat")
 
 
@@ -36,6 +38,10 @@ class Claims:
     issuer: str
     subject: str
     expires_at: datetime
+    # The identity provider organisation the person signed in through, when the token says so
+    # (M1-G slice 9: staff roles count only for the staff organisation, where two-step
+    # verification is enforced). None for development tokens.
+    organization: str | None = None
 
 
 class TokenVerifier:
@@ -108,8 +114,12 @@ class TokenVerifier:
             raise InvalidToken("iat is not a number")
         if expires - issued > MAX_LIFETIME.total_seconds():
             raise InvalidToken("lifetime too long")
+        organization = payload.get(ORGANIZATION_CLAIM)
         return Claims(
-            issuer=issuer, subject=subject, expires_at=datetime.fromtimestamp(expires, tz=UTC)
+            issuer=issuer,
+            subject=subject,
+            expires_at=datetime.fromtimestamp(expires, tz=UTC),
+            organization=organization if isinstance(organization, str) and organization else None,
         )
 
 

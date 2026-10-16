@@ -18,7 +18,10 @@
 
 - Managed identity provider (OIDC). Şifre uygulamada saklanmaz.
 - API her istekte token imzasını, süresini ve hedefini doğrular.
-- Personel rollerinde iki adımlı doğrulama zorunlu; sağlayıcıda zorlanır, API ayrıca token'daki doğrulama düzeyini kontrol eder.
+- Personel rollerinde iki adımlı doğrulama zorunlu; sağlayıcıda zorlanır. Zitadel erişim token'ı doğrulama yöntemini (`amr`) taşımadığı
+  için API, personel rollerini yalnızca iki adımlı doğrulamanın zorunlu olduğu personel organizasyonundan gelen token'da tanır
+  (M1-G dilim 9; organizasyon alanı yoksa ya da farklıysa personel rolü sayılmaz). Güvence, o organizasyonun yapılandırmasına
+  (kayıt kapalı, MFA zorunlu) dayanır; kurulum rehberinde denetim maddesidir.
 - Oturum süreleri kısa, yenileme sağlayıcıda.
 
 ## 3. Yetkilendirme

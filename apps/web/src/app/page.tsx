@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { config, signInHref } from "@/lib/config";
 import { isStaff } from "@/lib/decisions";
 import { useMe } from "@/lib/use-me";
 
@@ -14,7 +15,11 @@ export default function HomePage() {
           <>Signed in with role: {me.roles.join(", ") || "none"}.</>
         ) : enabled ? (
           <>
-            You are not signed in. <Link href="/dev/sign-in" className="underline">Sign in with a development token</Link>.
+            You are not signed in.{" "}
+            <Link href={signInHref()} className="underline">
+              {config.local ? "Sign in with a development token" : "Sign in"}
+            </Link>
+            .
           </>
         ) : (
           <>You are not signed in.</>

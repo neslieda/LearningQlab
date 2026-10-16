@@ -42,6 +42,7 @@ MAX_PAGE_SIZE = 100
 QuestionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_ID_PATTERN)]
 QuestionVersionId = Annotated[str, StringConstraints(pattern=ids.QUESTION_VERSION_ID_PATTERN)]
 AccountId = Annotated[str, StringConstraints(pattern=ids.ACCOUNT_ID_PATTERN)]
+InviteId = Annotated[str, StringConstraints(pattern=ids.INVITE_ID_PATTERN)]
 ContentHash = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
 # Codes of programmes, subjects, syllabus versions, exam sections and nodes.
 CODE_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9_.]*$"
@@ -376,3 +377,48 @@ class ReasonRequest(Api):
 class RepublishRequest(Api):
     expected_content_sha256: ContentHash
     reason: Reason
+
+
+InvitableRole = Literal["student", "teacher", "reviewer", "content_admin", "platform_admin"]
+# 32 random bytes in base64url without padding.
+InviteCode = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9_-]{43}$")]
+
+
+class CreateInviteRequest(Api):
+    """`teacher` may invite `student` only (403 `invite_role_forbidden`); `platform_admin` any
+    role. `org_admin` is not invitable before organisations exist (M2)."""
+
+    role: InvitableRole
+    expires_in_days: int = Field(default=7, ge=1, le=30)
+    max_uses: int = Field(default=1, ge=1, le=200)
+
+
+class InviteOut(Api):
+    id: InviteId
+    role: InvitableRole
+    created_by: str
+    created_at: datetime
+    expires_at: datetime
+    max_uses: int
+    uses: int
+    revoked_at: datetime | None
+
+
+class InviteCreated(InviteOut):
+    code: InviteCode = Field(description="Shown once. Only its SHA-256 is stored.")
+
+
+class InvitePage(Api):
+    items: tuple[InviteOut, ...] = Field(description="Newest first.")
+    next_cursor: str | None
+
+
+class RedeemInviteRequest(Api):
+    code: InviteCode
+
+
+class RedeemOut(Api):
+    """The caller's account and roles after the invite was used."""
+
+    account_id: AccountId
+    roles: tuple[Role, ...]

@@ -1,11 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { isStaff } from "@/lib/decisions";
-import { useMe } from "@/lib/use-me";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { config, signInHref } from "@/lib/config";
+import { canInvite, isStaff } from "@/lib/decisions";
+import { signOut } from "@/lib/oidc";
+import { useHasSession, useMe } from "@/lib/use-me";
 
 export function SiteHeader() {
   const { me, enabled } = useMe();
+  const { hasSession } = useHasSession();
+  const queryClient = useQueryClient();
+  const [leaving, setLeaving] = useState(false);
+
+  async function onSignOut() {
+    setLeaving(true);
+    queryClient.clear();
+    await signOut();
+  }
+
   return (
     <header className="border-b border-[var(--page-border)]">
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-3">
@@ -18,11 +32,25 @@ export function SiteHeader() {
               Questions
             </Link>
           ) : null}
-          {me ? (
-            <span>Signed in: {me.roles.join(", ") || "no roles"}</span>
-          ) : enabled ? (
-            <Link href="/dev/sign-in" className="underline">
-              Sign in (development)
+          {me && canInvite(me.roles) ? (
+            <Link href="/admin/invites" className="underline">
+              Invites
+            </Link>
+          ) : null}
+          {hasSession || me ? (
+            <Link href="/account" className="underline">
+              Account
+            </Link>
+          ) : null}
+          {me ? <span>Signed in: {me.roles.join(", ") || "no roles"}</span> : null}
+          {!config.local && hasSession ? (
+            <button type="button" onClick={() => void onSignOut()} disabled={leaving} className="rounded border border-[var(--page-border)] px-2 py-1">
+              Sign out
+            </button>
+          ) : null}
+          {!me && !hasSession && enabled ? (
+            <Link href={signInHref()} className="underline">
+              {config.local ? "Sign in (development)" : "Sign in"}
             </Link>
           ) : null}
         </nav>

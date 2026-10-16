@@ -31,6 +31,30 @@ export function isStaff(roles: readonly Role[] | readonly string[]): boolean {
   return roles.some((r) => STAFF.includes(r));
 }
 
+const INVITERS: readonly string[] = ["teacher", "platform_admin"];
+
+/** Who may open the invite screen (the API enforces it too). */
+export function canInvite(roles: readonly Role[] | readonly string[]): boolean {
+  return roles.some((r) => INVITERS.includes(r));
+}
+
+export type InviteRole = "student" | "teacher" | "reviewer" | "content_admin" | "platform_admin";
+
+/** The roles the caller may put on an invite: a teacher only students, a platform admin any role. */
+export function invitableRoles(roles: readonly Role[] | readonly string[]): InviteRole[] {
+  if (roles.includes("platform_admin")) return ["student", "teacher", "reviewer", "content_admin", "platform_admin"];
+  if (roles.includes("teacher")) return ["student"];
+  return [];
+}
+
+export const STAFF_INVITE_MAX_USES = 5;
+export const INVITE_MAX_USES = 200;
+
+/** Most uses an invite for this role may have (the server enforces it; this is the form's hint). */
+export function maxUsesFor(role: InviteRole): number {
+  return isStaff([role]) ? STAFF_INVITE_MAX_USES : INVITE_MAX_USES;
+}
+
 export function canPublish(roles: readonly Role[] | readonly string[]): boolean {
   return roles.some((r) => PUBLISHERS.includes(r));
 }
@@ -103,6 +127,9 @@ export interface ProblemMessage {
   followUp: FollowUp;
 }
 
+export const MFA_MESSAGE = "Staff access needs two-step verification. Sign out and use Staff sign-in.";
+export const INVITE_INVALID_MESSAGE = "This invite link is not valid. Ask for a new one.";
+
 const REASONS: Record<string, string> = {
   critical_checks_failed: "A required check has not passed",
   unverified_visuals: "Figures are not verified yet",
@@ -139,6 +166,14 @@ export function problemMessage(problem: ProblemLike): ProblemMessage {
         reasons: [],
         followUp: null,
       };
+    case "mfa_required":
+      return { message: MFA_MESSAGE, reasons: [], followUp: null };
+    case "invite_role_forbidden":
+      return { message: "You cannot invite someone to this role.", reasons: [], followUp: null };
+    case "invite_uses_too_many":
+      return { message: "A staff invite can be used by at most 5 people.", reasons: [], followUp: null };
+    case "invite_not_found":
+      return { message: INVITE_INVALID_MESSAGE, reasons: [], followUp: null };
     case "not_found":
       return { message: "Not found or not visible to you", reasons: [], followUp: null };
     default:

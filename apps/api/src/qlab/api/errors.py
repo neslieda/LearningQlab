@@ -202,7 +202,13 @@ def install(app: FastAPI) -> None:
             known = ApiError(500, "internal_error", "Internal error")
         return _response(known)
 
-    for service_error in (content.ContentError, rights.RightsDenied, math.RendererUnavailable):
+    for service_error in (
+        content.ContentError,
+        rights.RightsDenied,
+        math.RendererUnavailable,
+        organizations.InviteNotFound,
+        organizations.InviteRoleForbidden,
+    ):
         app.add_exception_handler(service_error, _service)
 
     @app.exception_handler(Exception)

@@ -54,6 +54,19 @@ def build(settings: Settings, **kwargs: Any) -> FastAPI:
     return create_app(settings, session_factory=FACTORY, check_renderer=False, **kwargs)
 
 
+OIDC = {
+    "QLAB_OIDC_ISSUER": "https://idp.example.invalid",
+    "QLAB_OIDC_AUDIENCE": "aud",
+    "QLAB_OIDC_CLIENT_ID": "client",
+    "QLAB_OIDC_STAFF_ORG_ID": "org-1",
+}
+
+
+def non_local(env: Environment, **extra: str) -> dict[str, str]:
+    """A complete non-local environment mapping."""
+    return {"QLAB_ENV": env.value, "QLAB_FORBID_SELF_APPROVAL": "true", **OIDC, **extra}
+
+
 # --- Settings.from_env ---------------------------------------------------------------------------
 
 
@@ -61,7 +74,7 @@ def build(settings: Settings, **kwargs: Any) -> FastAPI:
 def test_each_environment_name_parses(env: Environment) -> None:
     environ = {"QLAB_ENV": env.value}
     if env is not Environment.LOCAL:
-        environ["QLAB_FORBID_SELF_APPROVAL"] = "true"
+        environ = non_local(env)
     assert Settings.from_env(environ).environment is env
 
 
@@ -95,8 +108,8 @@ def test_from_env_reads_the_process_environment_by_default(monkeypatch: pytest.M
 
 def test_self_approval_defaults_to_off_locally_and_on_elsewhere() -> None:
     assert Settings.from_env({"QLAB_ENV": "local"}).forbid_self_approval is False
-    assert Settings.from_env({"QLAB_ENV": "staging"}).forbid_self_approval is True
-    assert Settings.from_env({"QLAB_ENV": "production"}).forbid_self_approval is True
+    assert Settings.from_env(non_local(Environment.STAGING)).forbid_self_approval is True
+    assert Settings.from_env(non_local(Environment.PRODUCTION)).forbid_self_approval is True
 
 
 @pytest.mark.parametrize(("flag", "expected"), [("true", True), ("false", False)])
@@ -107,10 +120,10 @@ def test_the_flag_is_honoured_locally(flag: str, expected: bool) -> None:
 
 @pytest.mark.parametrize("env", NON_LOCAL)
 def test_outside_local_the_flag_must_be_true(env: Environment) -> None:
-    ok = Settings.from_env({"QLAB_ENV": env.value, "QLAB_FORBID_SELF_APPROVAL": "true"})
+    ok = Settings.from_env(non_local(env))
     assert ok.forbid_self_approval is True
     with pytest.raises(StartupError, match="QLAB_FORBID_SELF_APPROVAL"):
-        Settings.from_env({"QLAB_ENV": env.value, "QLAB_FORBID_SELF_APPROVAL": "false"})
+        Settings.from_env(non_local(env, QLAB_FORBID_SELF_APPROVAL="false"))
 
 
 @pytest.mark.parametrize(
@@ -155,8 +168,23 @@ def test_the_dev_key_file_defaults_to_the_home_directory_locally(
 
 @pytest.mark.parametrize("env", NON_LOCAL)
 def test_outside_local_there_is_no_dev_key_file(env: Environment) -> None:
-    settings = Settings.from_env({"QLAB_ENV": env.value, "QLAB_FORBID_SELF_APPROVAL": "true"})
+    settings = Settings.from_env(non_local(env))
     assert settings.dev_key_file is None
+
+
+@pytest.mark.parametrize("env", NON_LOCAL)
+@pytest.mark.parametrize("name", sorted(OIDC))
+@pytest.mark.parametrize("blank", [False, True])
+def test_outside_local_a_missing_oidc_setting_is_refused(
+    env: Environment, name: str, blank: bool
+) -> None:
+    environ = non_local(env)
+    if blank:
+        environ[name] = "  "
+    else:
+        del environ[name]
+    with pytest.raises(StartupError, match=name):
+        Settings.from_env(environ)
 
 
 @pytest.mark.parametrize("env", NON_LOCAL)

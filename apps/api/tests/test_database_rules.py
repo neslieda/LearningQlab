@@ -82,6 +82,10 @@ def test_guard_triggers_fire_even_in_replica_mode(connection: Connection) -> Non
         # in the audit log.
         "account",
         "role_assignment",
+        # Invites go with them: a redemption names the account, and an invite's lasting
+        # record (created, revoked, redeemed) is in the audit log (D-63).
+        "invite",
+        "invite_redemption",
     }
     # Every guarded table refuses TRUNCATE.
     assert {r.table for r in rows if r.tgname.endswith("truncate")} == guarded

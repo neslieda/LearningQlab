@@ -41,8 +41,10 @@ Kritik alan: evet (yetki, migration, CI, kimlik). Sahibinin onayı gerekir.
 ### 3.2 İki adımlı doğrulama (SECURITY §2)
 
 - `STAFF` rolleri (`reviewer`, `content_admin`, `platform_admin`) yalnızca token'ın organizasyon alanı `QLAB_OIDC_STAFF_ORG_ID` ise
-  geçerlidir. Değilse bu roller o istek için yok sayılır; yalnızca o rollerle açılan bir uç noktada 403 `mfa_required` döner ("Staff
-  access needs a staff sign-in with two-step verification").
+  geçerlidir. Değilse bu roller o istek için yok sayılır. Çağıranın rolleri uç noktaya yetiyor ama kalan (personel dışı) rolleri
+  yetmiyorsa 403 `mfa_required` döner ("Staff access needs a staff sign-in with two-step verification"); herkese açık uç noktalar
+  (`/v1/me` dahil) bunun dışında değildir: yalnızca personel rolü olan biri Staff girişi yapmadan hiçbir uç noktayı kullanamaz.
+  Rolleri zaten yetmeyen çağıran eskisi gibi 404 alır.
 - Yerelde bu denetim yoktur (geliştirme token'ı).
 
 ### 3.3 Davetler (D-63)
@@ -56,6 +58,10 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
 | `GET /v1/admin/invites` | `teacher`, `platform_admin` | Davetler (kodsuz), en yeni önce; `teacher` yalnızca kendi davetlerini görür. Sayfalama 7a listesi gibi |
 | `POST /v1/admin/invites/{invite_id}/revoke` | `teacher`, `platform_admin` | 200; `teacher` yalnızca kendisininkini. Başkasının: 404 |
 
+- Bu daveti daha önce kullanmış aynı kişi tekrar kullanırsa (davet dolmuş, süresi geçmiş ya da geri alınmış olsa bile) 200 ve güncel
+  rolleri döner; sayılmaz, audit yazılmaz. Biçimi bozuk kod 422.
+- Personel rolü veren davet, Staff organizasyonu dışından girişle de kullanılabilir (`SIGNED_IN` MFA denetlemez); rol verilir ama
+  Staff girişi yapılana kadar kullanılamaz (§3.2).
 - Kod: 32 bayt rastgele, base64url; veritabanında yalnızca SHA-256 özeti. Kaba kuvvete karşı ayrıca sınır gerekmez (2^256).
 - Tablolar (migration 0006): `invite` (`id`, `code_sha256` tekil, `role`, `created_by`, `created_at`, `expires_at`, `max_uses`,
   `uses`, `revoked_at`, `revoked_by`) ve `invite_redemption` (`invite_id`, `account_id`, `redeemed_at`; ikisi birlikte tekil: aynı

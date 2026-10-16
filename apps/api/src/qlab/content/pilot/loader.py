@@ -26,9 +26,7 @@ from qlab.syllabus import service as syllabus
 ACTOR = "system:pilot_import"
 # The pilot sets were written for this syllabus version (codes of the reference file).
 PILOT_SYLLABUS = {"program": "ib_dp", "subject": "physics", "version": "2025"}
-# Licence reference of the platform's own-content rights record, and what that record permits
-# (owner decision D-58).
-OWN_CONTENT_LICENSE_REF = "platform:own-content"
+OWN_CONTENT_LICENSE_REF = content.OWN_CONTENT_LICENSE_REF
 _IMPORT_ACTIONS = ("question_version.created", "question_version.updated")
 
 
@@ -92,40 +90,17 @@ def verify_sources(root: Path, files: Sequence[PilotFile]) -> None:
 
 def find_own_content_rights(session: Session, *, holder: str) -> uuid.UUID | None:
     """Id of the platform's own-content rights record, or None when no record with the licence
-    reference `OWN_CONTENT_LICENSE_REF` exists at all.
+    reference `OWN_CONTENT_LICENSE_REF` exists at all (`content.own_content_rights_id`).
 
     Raises OwnContentRightsError when records with that reference exist but the import must
-    not go on: any of them is revoked, expired or not yet valid (a revocation is a takedown
-    decision and is not worked around with a new record); there is more than one; or the one
-    record is not exactly what is expected — the given `holder`, display to everyone, AI
-    processing and commercial use permitted, no end of validity.
+    not go on: any of them is revoked, expired or not yet valid; there is more than one; or the
+    one record is not what is expected (the given `holder`, display to everyone, AI processing
+    and commercial use permitted, no end of validity).
     """
-    records = rights.find_by_license_ref(session, OWN_CONTENT_LICENSE_REF)
-    if not records:
-        return None
-    now = datetime.now(UTC)
-    if any(r.revoked_at is not None or not (r.valid_from <= now) for r in records) or any(
-        r.valid_until is not None for r in records
-    ):
-        raise OwnContentRightsError(
-            f"a {OWN_CONTENT_LICENSE_REF} rights record is revoked, expired or limited in time; "
-            "the import does not replace it"
-        )
-    if len(records) > 1:
-        raise OwnContentRightsError(f"more than one {OWN_CONTENT_LICENSE_REF} rights record")
-    record = records[0]
-    expected = (
-        record.holder == holder
-        and record.display_scope is rights.DisplayScope.ALL
-        and record.allows_ai_processing is True
-        and record.allows_commercial_use is True
-    )
-    if not expected:
-        raise OwnContentRightsError(
-            f"the {OWN_CONTENT_LICENSE_REF} rights record does not have the expected holder "
-            "and permissions"
-        )
-    return record.id
+    try:
+        return content.own_content_rights_id(session, holder=holder)
+    except content.OwnContentRightsUnavailable as error:
+        raise OwnContentRightsError(str(error)) from None
 
 
 def create_own_content_rights(

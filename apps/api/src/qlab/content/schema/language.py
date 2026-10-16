@@ -6,6 +6,7 @@ read, so rows stored before the rule keep loading.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from qlab.content.schema.question import QuestionDocument
@@ -32,6 +33,11 @@ def non_english_paths(document: QuestionDocument) -> list[str]:
     found: list[str] = []
     _walk(document.model_dump(mode="json"), "", found)
     return found
+
+
+def dotted(path: str) -> str:
+    """`mcq.options[1].rationale` as `mcq.options.1.rationale`."""
+    return re.sub(r"\[(\d+)\]", r".\1", path)
 
 
 def non_english_message(paths: list[str]) -> str:

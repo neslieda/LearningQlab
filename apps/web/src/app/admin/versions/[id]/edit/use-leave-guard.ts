@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const MARKER = "__qlabLeaveGuard";
 
@@ -16,8 +16,9 @@ const marked = (state: unknown) => !!(state && typeof state === "object" && (sta
  * is removed again when the guard switches off (after a save) and when the user confirms leaving through a link, so
  * Back never needs a second press and no duplicate of the edit URL is left behind.
  */
-export function useLeaveGuard(active: boolean): void {
+export function useLeaveGuard(active: boolean): () => Promise<void> {
   const mounted = useRef(true);
+  const releaseRef = useRef<((done: () => void) => void) | null>(null);
   // Declared before the guard effect so that on unmount it has already cleared the flag when the guard cleans up.
   useEffect(() => {
     mounted.current = true;
@@ -84,10 +85,23 @@ export function useLeaveGuard(active: boolean): void {
       }
     };
 
+    // Lets the page leave on its own (a navigation it starts itself): no prompt from here on, and the marker entry is
+    // taken off the history first, so that the navigation that follows is not undone by the step back.
+    releaseRef.current = (done) => {
+      confirmed = true;
+      if (marked(window.history.state)) {
+        window.addEventListener("popstate", () => done(), { once: true });
+        window.history.back();
+      } else {
+        done();
+      }
+    };
+
     window.addEventListener("beforeunload", onBeforeUnload);
     document.addEventListener("click", onClick, true);
     window.addEventListener("popstate", onPopState, true);
     return () => {
+      releaseRef.current = null;
       window.removeEventListener("beforeunload", onBeforeUnload);
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("popstate", onPopState, true);
@@ -95,4 +109,7 @@ export function useLeaveGuard(active: boolean): void {
       if (mounted.current && !confirmed && marked(window.history.state)) window.history.back();
     };
   }, [active]);
+
+  /** Resolves once the guard is out of the way (immediately when it is off or has no marker on the history). */
+  return useCallback(() => new Promise<void>((resolve) => (releaseRef.current ? releaseRef.current(resolve) : resolve())), []);
 }

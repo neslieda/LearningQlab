@@ -539,7 +539,7 @@ def test_a_version_has_the_whole_document_exactly_as_stored(api: ApiHarness, ban
     response = api.client.get(vurl(bank.review_data.id), headers=api.headers(Role.REVIEWER))
     assert response.status_code == 200
     body = response.json()
-    assert set(body) == VERSION_KEYS | {"document", "checks"}
+    assert set(body) == VERSION_KEYS | {"document", "checks", "syllabus"}
     assert QuestionDocument.model_validate(body["document"]) == bank.review_data.document
     assert body["id"] == vid(bank.review_data.id)
     assert body["question_id"] == qid(bank.review_data.question_id)

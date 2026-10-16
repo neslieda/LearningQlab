@@ -84,7 +84,7 @@ def test_every_operation_except_healthz_requires_a_bearer_token(committed: dict[
 def test_the_paths_and_methods_are_exactly_the_policy_table(committed: dict[str, Any]) -> None:
     documented = {(method, path) for method, path, _ in operations(committed)}
     assert documented == set(ENDPOINT_POLICY)
-    assert len(documented) == 19
+    assert len(documented) == 21
 
 
 def test_operation_ids_are_present_and_unique(committed: dict[str, Any]) -> None:

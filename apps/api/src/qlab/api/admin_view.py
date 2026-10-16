@@ -7,7 +7,9 @@ import uuid
 from collections.abc import Mapping
 from typing import Any
 
-from qlab.api import ids
+from sqlalchemy.orm import Session
+
+from qlab.api import errors, ids
 from qlab.api.schemas import (
     AdminQuestion,
     AdminQuestionSummary,
@@ -15,10 +17,13 @@ from qlab.api.schemas import (
     AdminVersionSummary,
     CheckOut,
     HistoryEntry,
+    SyllabusRef,
     VersionStateOut,
 )
 from qlab.audit.service import AuditEntry
 from qlab.content import service as content
+from qlab.content.schema import QuestionDocument
+from qlab.syllabus import service as syllabus
 
 _ACTION_PREFIX = "question_version."
 
@@ -84,12 +89,55 @@ def check(result: content.CheckResult) -> CheckOut:
     )
 
 
-def version(view: content.QuestionVersionView, checks: list[content.CheckResult]) -> AdminVersion:
+def version(
+    session: Session, view: content.QuestionVersionView, checks: list[content.CheckResult]
+) -> AdminVersion:
+    codes = syllabus.get_codes(session, content.get_syllabus_version_id(session, view.id))
     return AdminVersion(
         **version_summary(content.summarize(view)).model_dump(),
+        syllabus=SyllabusRef(program=codes.program, subject=codes.subject, version=codes.version),
         document=view.document,
         checks=tuple(check(c) for c in checks),
     )
+
+
+_version = version
+
+
+def create_question(
+    session: Session,
+    *,
+    actor: str,
+    program: str,
+    subject: str,
+    version: str | None,
+    document: QuestionDocument,
+) -> AdminVersion:
+    """A new authored question under the platform's own-content rights record. Unknown
+    programme, subject or version: NotFound (the API's 404). No usable own-content record:
+    content.OwnContentRightsUnavailable (409). Nothing is written in either case."""
+    syllabus_version_id = syllabus.resolve_version(
+        session, program=program, subject=subject, version=version
+    )
+    if syllabus_version_id is None:
+        raise errors.not_found()
+    rights_record_id = content.own_content_rights_id(session)
+    if rights_record_id is None:
+        raise content.OwnContentRightsUnavailable("no own-content rights record exists")
+    try:
+        syllabus.get_vocabulary(session, syllabus_version_id)
+    except LookupError:  # a version without an exam format has no vocabulary
+        raise errors.not_found() from None
+    created = content.create_question(
+        session,
+        actor=actor,
+        document=document,
+        rights_record_id=rights_record_id,
+        syllabus_version_id=syllabus_version_id,
+        origin=content.Origin.AUTHORED,
+        source_ref=None,
+    )
+    return _version(session, created, content.get_checks(session, created.id))
 
 
 def state(value: content.VersionState) -> VersionStateOut:

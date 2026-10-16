@@ -23,7 +23,7 @@ import re
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from functools import wraps
 from typing import Any
@@ -50,6 +50,7 @@ from qlab.content.schema import (
     non_english_message,
     non_english_paths,
 )
+from qlab.content.schema.language import dotted
 from qlab.rights import service as rights
 from qlab.syllabus import service as syllabus
 
@@ -107,11 +108,86 @@ class OriginClosed(ContentError):
     """The origin is not accepted yet: only `authored` content is (D-52)."""
 
 
-class InvalidDocument(ContentError):
-    """The document uses labels the syllabus version does not define. `errors` lists them."""
+@dataclass(frozen=True)
+class DocumentProblem:
+    """One reason a document was refused. `location` is the dotted path inside the document
+    (list indices as numbers, e.g. `parts.0.mark_points.1.content.content.0.content.2.attrs.latex`),
+    or None when the problem is about the document as a whole (size, NUL character)."""
 
-    def __init__(self, errors: tuple[str, ...]) -> None:
-        super().__init__("; ".join(errors))
+    message: str
+    location: str | None = None
+
+
+MAX_PROBLEMS = 50
+MAX_LOCATION_CHARS = 500
+
+
+class OwnContentRightsUnavailable(ContentError):
+    """The platform's own-content rights record is missing, ambiguous or does not permit display:
+    a new question cannot be created (fail-closed, D-58)."""
+
+
+# Licence reference of the platform's own-content rights record (owner decision D-58).
+OWN_CONTENT_LICENSE_REF = "platform:own-content"
+
+
+def own_content_rights_id(session: Session, *, holder: str | None = None) -> uuid.UUID | None:
+    """Id of the platform's own-content rights record, or None when no record with the licence
+    reference `OWN_CONTENT_LICENSE_REF` exists at all.
+
+    Raises OwnContentRightsUnavailable when records with that reference exist but must not be
+    used: any of them is revoked, expired or not yet valid (a revocation is a takedown decision
+    and is not worked around with a new record); there is more than one; or the one record is
+    not exactly what is expected: display to everyone, AI processing and commercial use
+    permitted, no end of validity, and the given `holder` when one is given.
+    """
+    records = rights.find_by_license_ref(session, OWN_CONTENT_LICENSE_REF)
+    if not records:
+        return None
+    now = datetime.now(UTC)
+    if any(r.revoked_at is not None or not (r.valid_from <= now) for r in records) or any(
+        r.valid_until is not None for r in records
+    ):
+        raise OwnContentRightsUnavailable(
+            f"a {OWN_CONTENT_LICENSE_REF} rights record is revoked, expired or limited in time; "
+            "the import does not replace it"
+        )
+    if len(records) > 1:
+        raise OwnContentRightsUnavailable(f"more than one {OWN_CONTENT_LICENSE_REF} rights record")
+    record = records[0]
+    expected = (
+        (holder is None or record.holder == holder)
+        and record.display_scope is rights.DisplayScope.ALL
+        and record.allows_ai_processing is True
+        and record.allows_commercial_use is True
+    )
+    if not expected:
+        raise OwnContentRightsUnavailable(
+            f"the {OWN_CONTENT_LICENSE_REF} rights record does not have the expected holder "
+            "and permissions"
+        )
+    return record.id
+
+
+class InvalidDocument(ContentError):
+    """The document was refused (vocabulary, math, language, size). `errors` lists every problem
+    with where it is."""
+
+    def __init__(self, errors: tuple[DocumentProblem, ...]) -> None:
+        # Bounded however hostile the document: at most MAX_PROBLEMS items, short locations.
+        if len(errors) > MAX_PROBLEMS:
+            more = len(errors) - (MAX_PROBLEMS - 1)
+            errors = (
+                *errors[: MAX_PROBLEMS - 1],
+                DocumentProblem(f"... and {more} more problems", None),
+            )
+        errors = tuple(
+            DocumentProblem(e.message, e.location[:MAX_LOCATION_CHARS])
+            if e.location is not None and len(e.location) > MAX_LOCATION_CHARS
+            else e
+            for e in errors
+        )
+        super().__init__("; ".join(e.message for e in errors))
         self.errors = errors
 
 
@@ -375,17 +451,30 @@ def _move(
 
 def _vocabulary_errors(
     document: QuestionDocument, vocabulary: syllabus.Vocabulary
-) -> tuple[str, ...]:
-    errors: list[str] = []
+) -> tuple[DocumentProblem, ...]:
+    errors: list[DocumentProblem] = []
     if document.exam_section not in vocabulary.exam_sections:
-        errors.append(f"unknown exam section {document.exam_section!r}")
-    nodes = (document.primary_syllabus_node, *document.secondary_syllabus_nodes)
-    for node in nodes:
+        errors.append(
+            DocumentProblem(f"unknown exam section {document.exam_section!r}", "exam_section")
+        )
+    nodes = (
+        ("primary_syllabus_node", document.primary_syllabus_node),
+        *(
+            (f"secondary_syllabus_nodes.{i}", node)
+            for i, node in enumerate(document.secondary_syllabus_nodes)
+        ),
+    )
+    for location, node in nodes:
         if node not in vocabulary.leaf_node_codes:
-            errors.append(f"unknown or non-leaf syllabus node {node!r}")
-    for part in document.parts:
+            errors.append(DocumentProblem(f"unknown or non-leaf syllabus node {node!r}", location))
+    for index, part in enumerate(document.parts):
         if part.command_term is not None and part.command_term not in vocabulary.command_terms:
-            errors.append(f"part {part.label}: unknown command term {part.command_term!r}")
+            errors.append(
+                DocumentProblem(
+                    f"part {part.label}: unknown command term {part.command_term!r}",
+                    f"parts.{index}.command_term",
+                )
+            )
     return tuple(errors)
 
 
@@ -400,20 +489,23 @@ def _write_content(
     """Store the document on the version and rebuild every row derived from it."""
     encoded = document.model_dump_json()
     if len(encoded.encode()) > MAX_DOCUMENT_BYTES:
-        raise InvalidDocument((f"document is larger than {MAX_DOCUMENT_BYTES} bytes",))
+        raise InvalidDocument(
+            (DocumentProblem(f"document is larger than {MAX_DOCUMENT_BYTES} bytes"),)
+        )
     if "\\u0000" in encoded:
-        raise InvalidDocument(("document contains a NUL character",))
+        raise InvalidDocument((DocumentProblem("document contains a NUL character"),))
     foreign = non_english_paths(document)
     if foreign:
-        raise InvalidDocument((non_english_message(foreign),))
+        message = non_english_message(foreign)
+        raise InvalidDocument(tuple(DocumentProblem(message, dotted(path)) for path in foreign))
     vocabulary = syllabus.get_vocabulary(session, question.syllabus_version_id)
     errors = _vocabulary_errors(document, vocabulary)
     if errors:
         raise InvalidDocument(errors)
     # Every math node must render now, or the document is not stored (CLAUDE.md rule 6).
-    errors = math.check(document) if check_math else ()
-    if errors:
-        raise InvalidDocument(errors)
+    math_problems = math.check_located(document) if check_math else ()
+    if math_problems:
+        raise InvalidDocument(tuple(DocumentProblem(p.message, p.location) for p in math_problems))
     nodes = (document.primary_syllabus_node, *document.secondary_syllabus_nodes)
     node_ids = syllabus.node_ids(session, question.syllabus_version_id, frozenset(nodes))
 
@@ -545,7 +637,9 @@ def _check_vocabulary(
         document, syllabus.get_vocabulary(session, question.syllabus_version_id)
     )
     outcome = Outcome.FAILED if errors else Outcome.PASSED
-    return CheckResult("vocabulary_valid", Severity.CRITICAL, outcome, {"errors": list(errors)})
+    return CheckResult(
+        "vocabulary_valid", Severity.CRITICAL, outcome, {"errors": [e.message for e in errors]}
+    )
 
 
 def _check_math(session: Session, version: QuestionVersion, question: Question) -> CheckResult:
@@ -1052,6 +1146,20 @@ def get_published_version(session: Session, question_id: uuid.UUID) -> QuestionV
     if row is None:
         raise NotFound(f"question {question_id} has no published version")
     return _view(row)
+
+
+def get_syllabus_version_id(session: Session, version_id: uuid.UUID) -> uuid.UUID:
+    """Id of the syllabus version the version's question belongs to. NotFound as in
+    `get_version`."""
+    get_version(session, version_id)
+    found = session.scalar(
+        select(Question.syllabus_version_id)
+        .join(QuestionVersion, QuestionVersion.question_id == Question.id)
+        .where(QuestionVersion.id == version_id)
+    )
+    if found is None:
+        raise NotFound(f"question version {version_id}")
+    return found
 
 
 def get_checks(session: Session, version_id: uuid.UUID) -> list[CheckResult]:

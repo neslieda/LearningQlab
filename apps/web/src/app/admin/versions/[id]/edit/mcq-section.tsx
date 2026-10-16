@@ -8,6 +8,8 @@ export interface SectionProps {
   doc: QuestionDocument;
   update: (fn: (d: QuestionDocument) => QuestionDocument) => void;
   problems: readonly EditProblem[];
+  /** A new question chooses the option kind and layout above; they are shown as text only when editing. */
+  hideShape?: boolean;
 }
 
 const AO_OPTIONS = [
@@ -17,7 +19,7 @@ const AO_OPTIONS = [
   { value: 3 as const, text: "3" },
 ];
 
-export function McqSection({ doc, update, problems }: SectionProps) {
+export function McqSection({ doc, update, problems, hideShape }: SectionProps) {
   const mcq = doc.mcq;
   if (!mcq) return null;
   return (
@@ -25,7 +27,7 @@ export function McqSection({ doc, update, problems }: SectionProps) {
       <h2 id="options-heading" className="text-lg font-medium">
         Options
       </h2>
-      <div className="space-y-1">
+      <div className="space-y-1" hidden={hideShape}>
         <ReadOnly label="Option kind" value={mcq.option_kind.replace(/_/g, " ")} />
         <ReadOnly label="Option layout" value={mcq.option_layout.replace(/_/g, " ")} />
       </div>

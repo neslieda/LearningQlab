@@ -54,9 +54,11 @@ export interface PartSectionProps {
   commandTerms: readonly string[];
   /** Announces something the user should know about (visible and read out). */
   notify: (message: string) => void;
+  /** Removes or moves the lettered part at this index (with its sub-parts). */
+  onChangeParts: (index: number, kind: "move-up" | "move-down" | "remove") => void;
 }
 
-export function PartSection({ doc, index, update, problems, commandTerms, notify }: PartSectionProps) {
+export function PartSection({ doc, index, update, problems, commandTerms, notify, onChangeParts }: PartSectionProps) {
   const part = doc.parts[index];
   if (!part) return null;
   const tag = partTag(part.label);
@@ -64,12 +66,29 @@ export function PartSection({ doc, index, update, problems, commandTerms, notify
   const patch = (p: Partial<Part>) => update((d) => updatePart(d, index, p));
   const terms = part.command_term && !commandTerms.includes(part.command_term) ? [part.command_term, ...commandTerms] : commandTerms;
   const earlier = doc.parts.slice(0, index);
+  // Sub-parts move and go with their letter: only the lettered part carries the buttons.
+  const topLevel = !part.label.includes(".");
+  const topLevelIndexes = doc.parts.flatMap((p, i) => (p.label.includes(".") ? [] : [i]));
+  const position = topLevelIndexes.indexOf(index);
 
   return (
-    <section aria-labelledby={`part-${index}-heading`} className="space-y-4 rounded border border-[var(--page-border)] p-4">
-      <h2 id={`part-${index}-heading`} className="text-lg font-medium">
+    <section aria-labelledby={`part-${part.id}-heading`} className="space-y-4 rounded border border-[var(--page-border)] p-4">
+      <h2 id={`part-${part.id}-heading`} tabIndex={-1} className="text-lg font-medium">
         Part {tag}
       </h2>
+      {topLevel && doc.question_class !== "mcq" ? (
+        <div className="flex flex-wrap gap-2">
+          <button type="button" className={BTN} disabled={position <= 0} aria-label={`Move part ${tag} up`} onClick={() => onChangeParts(index, "move-up")}>
+            Up
+          </button>
+          <button type="button" className={BTN} disabled={position < 0 || position >= topLevelIndexes.length - 1} aria-label={`Move part ${tag} down`} onClick={() => onChangeParts(index, "move-down")}>
+            Down
+          </button>
+          <button type="button" className={BTN} disabled={topLevelIndexes.length <= 1} aria-label={`Remove part ${tag}`} onClick={() => onChangeParts(index, "remove")}>
+            Remove
+          </button>
+        </div>
+      ) : null}
       <DocField path={`${base}.lead_in`} label={`Part ${tag} lead-in`} optional value={part.lead_in} blocks={TABLE_BLOCKS} problems={problems} onChange={(d) => patch({ lead_in: d })} />
       <DocField path={`${base}.body`} label={`Part ${tag} body`} value={part.body} blocks={TABLE_BLOCKS} problems={problems} onChange={(d) => d && patch({ body: d })} />
 

@@ -232,7 +232,14 @@ export interface paths {
          */
         get: operations["adminListQuestions"];
         put?: never;
-        post?: never;
+        /**
+         * Create Question
+         * @description A new `authored` question whose first version is a `draft`, under the platform's
+         *     own-content rights record (D-52, D-58). 422 `invalid_document` as for `PUT`; 409
+         *     `own_content_rights_unavailable` when that rights record is missing or does not permit
+         *     display (fail-closed: nothing is created).
+         */
+        post: operations["adminCreateQuestion"];
         delete?: never;
         options?: never;
         head?: never;
@@ -292,6 +299,26 @@ export interface paths {
          * @description The caller's account identifier and roles.
          */
         get: operations["getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/programs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Programs
+         * @description Programmes, subjects and syllabus versions that questions can be written against.
+         */
+        get: operations["listPrograms"];
         put?: never;
         post?: never;
         delete?: never;
@@ -481,6 +508,7 @@ export interface components {
             /** Question Id */
             question_id: string;
             status: components["schemas"]["VersionStatus"];
+            syllabus: components["schemas"]["SyllabusRef"];
             /** Total Marks */
             total_marks: number;
             /**
@@ -546,6 +574,37 @@ export interface components {
              */
             type: "bullet_list";
         };
+        /** CatalogOut */
+        CatalogOut: {
+            /** Items */
+            items: components["schemas"]["CatalogSubjectOut"][];
+        };
+        /**
+         * CatalogSubjectOut
+         * @description A subject questions can be written for, and its syllabus versions.
+         */
+        CatalogSubjectOut: {
+            /** Program */
+            program: string;
+            /** Program Name */
+            program_name: string;
+            /** Subject */
+            subject: string;
+            /** Subject Name */
+            subject_name: string;
+            /**
+             * Versions
+             * @description Newest first.
+             */
+            versions: components["schemas"]["CatalogVersionOut"][];
+        };
+        /** CatalogVersionOut */
+        CatalogVersionOut: {
+            /** Code */
+            code: string;
+            /** Title */
+            title: string;
+        };
         /** CellAttrs */
         CellAttrs: {
             /**
@@ -576,6 +635,20 @@ export interface components {
             name: string;
             /** Ref */
             ref: string;
+        };
+        /**
+         * CreateQuestionRequest
+         * @description A new `authored` question under the platform's own-content rights record (D-52, D-58).
+         *     Without `version`, the subject's newest syllabus version is used.
+         */
+        CreateQuestionRequest: {
+            document: components["schemas"]["QuestionDocument"];
+            /** Program */
+            program: string;
+            /** Subject */
+            subject: string;
+            /** Version */
+            version?: string | null;
         };
         /**
          * DecisionRequest
@@ -1347,6 +1420,19 @@ export interface components {
             subject: string;
             /** Title */
             title: string;
+            /** Version */
+            version: string;
+        };
+        /**
+         * SyllabusRef
+         * @description The syllabus version a question belongs to; its vocabulary (exam sections, command terms,
+         *     nodes) is the one the document is checked against.
+         */
+        SyllabusRef: {
+            /** Program */
+            program: string;
+            /** Subject */
+            subject: string;
             /** Version */
             version: string;
         };
@@ -2170,6 +2256,66 @@ export interface operations {
             };
         };
     };
+    adminCreateQuestion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateQuestionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminVersion"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such programme, subject or syllabus version (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The platform's own-content rights record is missing or does not permit display (`own_content_rights_unavailable`); nothing was created. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     adminGetQuestion: {
         parameters: {
             query?: never;
@@ -2293,6 +2439,53 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    listPrograms: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogOut"];
                 };
             };
             /** @description No acceptable token (`unauthenticated`). */

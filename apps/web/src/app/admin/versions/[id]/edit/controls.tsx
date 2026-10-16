@@ -18,7 +18,8 @@ export function fieldDomId(path: string): string {
 export function focusField(path: string): void {
   const root = document.getElementById(fieldDomId(path));
   root?.scrollIntoView?.({ block: "center" });
-  root?.querySelector<HTMLElement>('[contenteditable="true"], input, select, textarea, button')?.focus();
+  // The text box before the toolbar buttons that sit in front of it.
+  (root?.querySelector<HTMLElement>('[contenteditable="true"]') ?? root?.querySelector<HTMLElement>("input, select, textarea, button") ?? root)?.focus();
 }
 
 /** Wraps one field: an anchor for the error summary and the field's own problems, written next to it. */
@@ -168,10 +169,60 @@ export function TextControl({
   );
 }
 
-export function ReadOnly({ label, value }: { label: string; value: ReactNode }) {
-  return (
+export function ReadOnly({ label, value, path, problems }: { label: string; value: ReactNode; path?: string; problems?: readonly EditProblem[] }) {
+  const line = (
     <p>
       <span className="font-medium">{label}:</span> <span>{value}</span>
     </p>
+  );
+  if (!path || !problems) return line;
+  // Not editable here, but a problem reported for it is still written beside it and the summary link lands on it.
+  return (
+    <FieldShell path={path} problems={problems}>
+      {(describedBy) => (
+        <div tabIndex={-1} aria-describedby={describedBy}>
+          {line}
+        </div>
+      )}
+    </FieldShell>
+  );
+}
+
+/** A text box with a searchable list of the allowed values (a native datalist: typing filters it). */
+export function ChoiceInput({
+  path,
+  label,
+  value,
+  choices,
+  onChange,
+  problems,
+}: {
+  path: string;
+  label: string;
+  value: string;
+  choices: ReadonlyArray<{ value: string; text: string }>;
+  onChange: (value: string) => void;
+  problems: readonly EditProblem[];
+}) {
+  const id = useId();
+  const listId = `${id}-list`;
+  return (
+    <FieldShell path={path} problems={problems}>
+      {(describedBy) => (
+        <div className="flex flex-col gap-1">
+          <label htmlFor={id} className="font-medium">
+            {label}
+          </label>
+          <input id={id} type="text" list={listId} value={value} autoComplete="off" aria-describedby={describedBy} onChange={(e) => onChange(e.target.value.trim())} className={INPUT} />
+          <datalist id={listId}>
+            {choices.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.text}
+              </option>
+            ))}
+          </datalist>
+        </div>
+      )}
+    </FieldShell>
   );
 }

@@ -41,6 +41,7 @@ function version(over: Partial<S["AdminVersion"]> = {}): S["AdminVersion"] {
     exam_section: DOCUMENT.exam_section,
     levels: DOCUMENT.levels,
     total_marks: DOCUMENT.total_marks,
+    syllabus: { program: "prog", subject: "subj", version: "v1" },
     has_unverified_visuals: false,
     created_by: OTHER,
     created_at: "2026-10-01T09:00:00Z",

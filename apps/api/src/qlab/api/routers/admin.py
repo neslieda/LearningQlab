@@ -21,6 +21,7 @@ from qlab.api.schemas import (
     AdminQuestion,
     AdminQuestionPage,
     AdminVersion,
+    CreateQuestionRequest,
     DecisionRequest,
     History,
     ReasonRequest,
@@ -108,7 +109,7 @@ def start_revision(request: Request, caller: Caller, question_id: str) -> AdminV
         created = content.start_revision(
             session, actor=caller.actor, question_id=question_id_(question_id)
         )
-        return admin_view.version(created, content.get_checks(session, created.id))
+        return admin_view.version(session, created, content.get_checks(session, created.id))
 
 
 @router.get(_QV, response_model=AdminVersion, operation_id="adminGetVersion")
@@ -117,8 +118,42 @@ def get_version(request: Request, caller: Caller, version_id: str) -> AdminVersi
     with deps.reading(request) as session:
         uid = version_id_(version_id)
         return admin_view.version(
-            content.get_version(session, uid), content.get_checks(session, uid)
+            session, content.get_version(session, uid), content.get_checks(session, uid)
         )
+
+
+@router.post(
+    "/v1/admin/questions",
+    status_code=201,
+    response_model=AdminVersion,
+    responses={
+        409: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "The platform's own-content rights record is missing or does not "
+            "permit display (`own_content_rights_unavailable`); nothing was created.",
+        },
+        404: {
+            "model": AUTH_ERRORS[404]["model"],
+            "description": "No such programme, subject or syllabus version (`not_found`).",
+        },
+    },
+    operation_id="adminCreateQuestion",
+)
+def create_question(request: Request, caller: Caller, body: CreateQuestionRequest) -> AdminVersion:
+    """A new `authored` question whose first version is a `draft`, under the platform's
+    own-content rights record (D-52, D-58). 422 `invalid_document` as for `PUT`; 409
+    `own_content_rights_unavailable` when that rights record is missing or does not permit
+    display (fail-closed: nothing is created)."""
+    with deps.writing(request) as session:
+        created = admin_view.create_question(
+            session,
+            actor=caller.actor,
+            program=body.program,
+            subject=body.subject,
+            version=body.version,
+            document=body.document,
+        )
+        return created
 
 
 @router.get(f"{_QV}/history", response_model=History, operation_id="adminGetVersionHistory")
@@ -146,7 +181,7 @@ def update_draft(
             document=body.document,
             expected_content_sha256=body.expected_content_sha256,
         )
-        return admin_view.version(updated, content.get_checks(session, uid))
+        return admin_view.version(session, updated, content.get_checks(session, uid))
 
 
 @router.post(

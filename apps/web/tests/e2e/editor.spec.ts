@@ -137,6 +137,7 @@ function adminVersion(over: Json = {}): Json {
     exam_section: document.exam_section,
     levels: document.levels,
     total_marks: document.total_marks,
+    syllabus: { program: "prog", subject: "subj", version: "v1" },
     has_unverified_visuals: false,
     created_by: OTHER,
     created_at: "2026-10-01T09:00:00Z",

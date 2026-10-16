@@ -234,6 +234,9 @@
           "status": {
             "$ref": "#/components/schemas/VersionStatus"
           },
+          "syllabus": {
+            "$ref": "#/components/schemas/SyllabusRef"
+          },
           "total_marks": {
             "title": "Total Marks",
             "type": "integer"
@@ -262,6 +265,7 @@
           "created_by",
           "created_at",
           "updated_at",
+          "syllabus",
           "document",
           "checks"
         ],
@@ -413,6 +417,81 @@
         "title": "BulletList",
         "type": "object"
       },
+      "CatalogOut": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogSubjectOut"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CatalogOut",
+        "type": "object"
+      },
+      "CatalogSubjectOut": {
+        "additionalProperties": false,
+        "description": "A subject questions can be written for, and its syllabus versions.",
+        "properties": {
+          "program": {
+            "title": "Program",
+            "type": "string"
+          },
+          "program_name": {
+            "title": "Program Name",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "subject_name": {
+            "title": "Subject Name",
+            "type": "string"
+          },
+          "versions": {
+            "description": "Newest first.",
+            "items": {
+              "$ref": "#/components/schemas/CatalogVersionOut"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "program",
+          "program_name",
+          "subject",
+          "subject_name",
+          "versions"
+        ],
+        "title": "CatalogSubjectOut",
+        "type": "object"
+      },
+      "CatalogVersionOut": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "title"
+        ],
+        "title": "CatalogVersionOut",
+        "type": "object"
+      },
       "CellAttrs": {
         "additionalProperties": false,
         "properties": {
@@ -481,6 +560,47 @@
           "ref"
         ],
         "title": "Constant",
+        "type": "object"
+      },
+      "CreateQuestionRequest": {
+        "additionalProperties": false,
+        "description": "A new `authored` question under the platform's own-content rights record (D-52, D-58).\nWithout `version`, the subject's newest syllabus version is used.",
+        "properties": {
+          "document": {
+            "$ref": "#/components/schemas/QuestionDocument"
+          },
+          "program": {
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+            "title": "Program",
+            "type": "string"
+          },
+          "subject": {
+            "maxLength": 120,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+            "title": "Subject",
+            "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.]*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "required": [
+          "program",
+          "subject",
+          "document"
+        ],
+        "title": "CreateQuestionRequest",
         "type": "object"
       },
       "DecisionRequest": {
@@ -2590,6 +2710,31 @@
         "title": "SyllabusOut",
         "type": "object"
       },
+      "SyllabusRef": {
+        "additionalProperties": false,
+        "description": "The syllabus version a question belongs to; its vocabulary (exam sections, command terms,\nnodes) is the one the document is checked against.",
+        "properties": {
+          "program": {
+            "title": "Program",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "program",
+          "subject",
+          "version"
+        ],
+        "title": "SyllabusRef",
+        "type": "object"
+      },
       "Table": {
         "additionalProperties": false,
         "properties": {
@@ -3973,6 +4118,81 @@
         "tags": [
           "admin"
         ]
+      },
+      "post": {
+        "description": "A new `authored` question whose first version is a `draft`, under the platform's\nown-content rights record (D-52, D-58). 422 `invalid_document` as for `PUT`; 409\n`own_content_rights_unavailable` when that rights record is missing or does not permit\ndisplay (fail-closed: nothing is created).",
+        "operationId": "adminCreateQuestion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuestionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminVersion"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such programme, subject or syllabus version (`not_found`)."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The platform's own-content rights record is missing or does not permit display (`own_content_rights_unavailable`); nothing was created."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create Question",
+        "tags": [
+          "admin"
+        ]
       }
     },
     "/v1/admin/questions/{question_id}": {
@@ -4175,6 +4395,63 @@
         "summary": "Me",
         "tags": [
           "system"
+        ]
+      }
+    },
+    "/v1/programs": {
+      "get": {
+        "description": "Programmes, subjects and syllabus versions that questions can be written against.",
+        "operationId": "listPrograms",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No acceptable token (`unauthenticated`)."
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "No such resource, or the caller may not know of it (`not_found`)."
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "The request is not valid (`validation_failed`)."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List Programs",
+        "tags": [
+          "questions"
         ]
       }
     },

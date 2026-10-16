@@ -86,7 +86,12 @@ function Inner() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">Questions</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-semibold">Questions</h1>
+        <Link href="/admin/questions/new" className="rounded border border-[var(--page-border)] px-3 py-1.5">
+          New question
+        </Link>
+      </div>
       <form
         aria-label="Filters"
         className="flex flex-wrap items-end gap-3"

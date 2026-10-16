@@ -515,6 +515,10 @@ def test_authored_is_the_default_origin(session: Session, env: Env) -> None:
 # =============================================================================================
 
 
+def messages(error: svc.InvalidDocument) -> tuple[str, ...]:
+    return tuple(problem.message for problem in error.errors)
+
+
 def mentions(errors: tuple[str, ...], value: str) -> bool:
     pattern = re.compile(rf"(?<![\w.]){re.escape(value)}(?![\w.])")
     return any(pattern.search(error) for error in errors)
@@ -552,7 +556,7 @@ def test_create_rejects_labels_the_syllabus_version_does_not_define(
     with pytest.raises(svc.InvalidDocument) as caught:
         create(session, env, doc)
     for value in offending:
-        assert mentions(caught.value.errors, value), (value, caught.value.errors)
+        assert mentions(messages(caught.value), value), (value, messages(caught.value))
     assert table_counts(connection) == before
     usable(session)
 
@@ -561,8 +565,8 @@ def test_every_problem_is_listed_as_its_own_error(session: Session, env: Env) ->
     build, offending = BAD_VOCABULARY["several_problems"]
     with pytest.raises(svc.InvalidDocument) as caught:
         create(session, env, document(build()))
-    assert len(caught.value.errors) >= len(offending)
-    assert str(caught.value) == "; ".join(caught.value.errors)
+    assert len(messages(caught.value)) >= len(offending)
+    assert str(caught.value) == "; ".join(messages(caught.value))
 
 
 @pytest.mark.parametrize("case", list(BAD_VOCABULARY))
@@ -576,7 +580,7 @@ def test_update_draft_with_such_a_document_changes_nothing(
     with pytest.raises(svc.InvalidDocument) as caught:
         svc.update_draft(session, actor=OP_ACTOR, version_id=version.id, document=document(build()))
     for value in offending:
-        assert mentions(caught.value.errors, value)
+        assert mentions(messages(caught.value), value)
     assert snapshot(session, connection, version.question_id) == before
     assert len(audit_for(session, version.id)) == entries
     assert svc.get_version(session, version.id).content_sha256 == version.content_sha256
@@ -2316,7 +2320,7 @@ def test_create_refuses_math_that_is_not_allowed_or_does_not_render(
     before = table_counts(connection)
     with pytest.raises(svc.InvalidDocument) as caught:
         create(session, env, math_document(latex, block=block))
-    assert any(latex[:50] in error for error in caught.value.errors), caught.value.errors
+    assert any(latex[:50] in error for error in messages(caught.value)), caught.value.errors
     assert table_counts(connection) == before
     usable(session)
 
@@ -2337,7 +2341,7 @@ def test_update_draft_refuses_such_math_and_changes_nothing(
             session, actor=OP_ACTOR, version_id=version.id, document=math_document(latex)
         )
 
-    assert any(latex[:50] in error for error in caught.value.errors), caught.value.errors
+    assert any(latex[:50] in error for error in messages(caught.value)), caught.value.errors
     assert snapshot(session, connection, version.question_id) == before
     assert len(audit_for(session, version.id)) == entries
     assert svc.get_version(session, version.id).content_sha256 == version.content_sha256
@@ -2353,7 +2357,7 @@ def test_every_bad_node_is_named_and_good_ones_are_not(session: Session, env: En
     )
     with pytest.raises(svc.InvalidDocument) as caught:
         create(session, env, math_document(bad_one, good, bad_two))
-    errors = " | ".join(caught.value.errors)
+    errors = " | ".join(messages(caught.value))
     assert bad_one in errors and bad_two in errors
     assert f"`{good}`" not in errors
 
@@ -2376,7 +2380,7 @@ def test_math_and_vocabulary_problems_together_are_reported_as_observed(
     before = table_counts(connection)
     with pytest.raises(svc.InvalidDocument) as caught:
         create(session, env, document(d))
-    assert mentions(caught.value.errors, "paper_9")  # the vocabulary problem is always reported
+    assert mentions(messages(caught.value), "paper_9")  # the vocabulary problem is always reported
     # Whether the math problem is listed as well is not promised by the contract.
     assert table_counts(connection) == before
 
@@ -2495,7 +2499,7 @@ def test_submit_sends_such_a_revision_to_needs_fix_and_it_is_corrected_by_saving
     before = snapshot(session, connection, question_id)
     with pytest.raises(svc.InvalidDocument) as caught:
         svc.update_draft(session, actor=OP_ACTOR, version_id=revision.id, document=doc)
-    assert any("href" in error for error in caught.value.errors)
+    assert any("href" in error for error in messages(caught.value))
     assert snapshot(session, connection, question_id) == before
     usable(session)
 

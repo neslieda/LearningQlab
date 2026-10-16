@@ -58,7 +58,7 @@ def upgrade() -> None:
         ),
     )
     op.create_index(
-        "ix_response_account_created", "response", ["account_id", "created_at", "id"], unique=False
+        "ix_response_account_id", "response", ["account_id", sa.text("id DESC")], unique=False
     )
     op.create_index(
         "ix_response_account_version",
@@ -73,5 +73,5 @@ def downgrade() -> None:
     if op.get_bind().exec_driver_sql("SELECT 1 FROM response LIMIT 1").first():
         raise RuntimeError("refusing to downgrade: learner answers exist")
     op.drop_index("ix_response_account_version", table_name="response")
-    op.drop_index("ix_response_account_created", table_name="response")
+    op.drop_index("ix_response_account_id", table_name="response")
     op.drop_table("response")

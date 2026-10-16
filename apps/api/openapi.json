@@ -1326,6 +1326,11 @@
         "additionalProperties": false,
         "description": "The published version of a question as a learner sees it before answering.",
         "properties": {
+          "answered": {
+            "description": "The caller has at least one stored answer to it (D-66).",
+            "title": "Answered",
+            "type": "boolean"
+          },
           "exam_section": {
             "title": "Exam Section",
             "type": "string"
@@ -1372,6 +1377,9 @@
             "title": "Stimuli",
             "type": "array"
           },
+          "topic": {
+            "$ref": "#/components/schemas/TopicOut"
+          },
           "total_marks": {
             "title": "Total Marks",
             "type": "integer"
@@ -1389,6 +1397,8 @@
           "exam_section",
           "levels",
           "total_marks",
+          "topic",
+          "answered",
           "stem",
           "stimuli",
           "mcq",
@@ -1429,6 +1439,11 @@
       "LearnerQuestionSummary": {
         "additionalProperties": false,
         "properties": {
+          "answered": {
+            "description": "The caller has at least one stored answer to it (D-66).",
+            "title": "Answered",
+            "type": "boolean"
+          },
           "exam_section": {
             "title": "Exam Section",
             "type": "string"
@@ -1448,6 +1463,9 @@
           "question_class": {
             "$ref": "#/components/schemas/QuestionClass"
           },
+          "topic": {
+            "$ref": "#/components/schemas/TopicOut"
+          },
           "total_marks": {
             "title": "Total Marks",
             "type": "integer"
@@ -1464,7 +1482,9 @@
           "question_class",
           "exam_section",
           "levels",
-          "total_marks"
+          "total_marks",
+          "topic",
+          "answered"
         ],
         "title": "LearnerQuestionSummary",
         "type": "object"
@@ -3327,6 +3347,26 @@
           "text"
         ],
         "title": "Text",
+        "type": "object"
+      },
+      "TopicOut": {
+        "additionalProperties": false,
+        "description": "The question's primary syllabus node: what it is about.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "title"
+        ],
+        "title": "TopicOut",
         "type": "object"
       },
       "UpdateDraftRequest": {
@@ -5797,7 +5837,7 @@
                 }
               }
             },
-            "description": "200 answers to this question are stored already (`too_many_answers`)."
+            "description": "200 answers to this question are stored already (`too_many_answers`), or 5000 answers in all (`answer_limit_reached`)."
           }
         },
         "security": [

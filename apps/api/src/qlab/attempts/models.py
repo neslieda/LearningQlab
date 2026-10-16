@@ -12,13 +12,15 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import Boolean, CheckConstraint, ForeignKey, Index, Text
+from sqlalchemy import Boolean, CheckConstraint, ForeignKey, Index, Text, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from qlab.database import Base, created_at_column, new_id
 
 MAX_ANSWERS_PER_QUESTION = 200
+# All questions together: a bound on what one account can store on a small database.
+MAX_ANSWERS_PER_ACCOUNT = 5000
 MAX_PAYLOAD_BYTES = 66_000
 
 
@@ -36,7 +38,7 @@ class Response(Base):
             "part_id IS NULL OR (part_id <> '' AND length(part_id) <= 200)", name="part_id"
         ),
         CheckConstraint(f"pg_column_size(payload) <= {MAX_PAYLOAD_BYTES}", name="payload_size"),
-        Index("ix_response_account_created", "account_id", "created_at", "id"),
+        Index("ix_response_account_id", "account_id", text("id DESC")),
         Index("ix_response_account_version", "account_id", "question_version_id"),
     )
 

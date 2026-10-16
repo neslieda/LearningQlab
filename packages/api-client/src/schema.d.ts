@@ -1005,6 +1005,11 @@ export interface components {
          * @description The published version of a question as a learner sees it before answering.
          */
         LearnerQuestion: {
+            /**
+             * Answered
+             * @description The caller has at least one stored answer to it (D-66).
+             */
+            answered: boolean;
             /** Exam Section */
             exam_section: string;
             /** Id */
@@ -1018,6 +1023,7 @@ export interface components {
             stem: components["schemas"]["Doc"];
             /** Stimuli */
             stimuli: components["schemas"]["LearnerStimulus"][];
+            topic: components["schemas"]["TopicOut"];
             /** Total Marks */
             total_marks: number;
             /** Version Id */
@@ -1032,6 +1038,11 @@ export interface components {
         };
         /** LearnerQuestionSummary */
         LearnerQuestionSummary: {
+            /**
+             * Answered
+             * @description The caller has at least one stored answer to it (D-66).
+             */
+            answered: boolean;
             /** Exam Section */
             exam_section: string;
             /** Id */
@@ -1039,6 +1050,7 @@ export interface components {
             /** Levels */
             levels: components["schemas"]["Level"][];
             question_class: components["schemas"]["QuestionClass"];
+            topic: components["schemas"]["TopicOut"];
             /** Total Marks */
             total_marks: number;
             /** Version Id */
@@ -1777,6 +1789,16 @@ export interface components {
              * @enum {string}
              */
             type: "text";
+        };
+        /**
+         * TopicOut
+         * @description The question's primary syllabus node: what it is about.
+         */
+        TopicOut: {
+            /** Code */
+            code: string;
+            /** Title */
+            title: string;
         };
         /**
          * UpdateDraftRequest
@@ -3311,7 +3333,7 @@ export interface operations {
                     "application/json": components["schemas"]["Problem"];
                 };
             };
-            /** @description 200 answers to this question are stored already (`too_many_answers`). */
+            /** @description 200 answers to this question are stored already (`too_many_answers`), or 5000 answers in all (`answer_limit_reached`). */
             429: {
                 headers: {
                     [name: string]: unknown;

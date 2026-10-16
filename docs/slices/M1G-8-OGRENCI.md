@@ -51,6 +51,11 @@ Hepsi `EVERYONE` (giriş yapmış, rolü olan her hesap); yalnızca kendi verisi
 - Cevap boyutu `MAX_ANSWER_LENGTH`; gövde sınırı 64 KiB (var olan).
 - Her gönderim yeni bir satırdır (öğrenci aynı soruyu tekrar çözebilir); bir hesabın bir soruya en çok 200 cevabı olur, fazlası 429
   `too_many_answers` (kötüye kullanım ve depolama sınırı).
+- **İncelemelerden sonra (2026-10-16):** soru listesi ve sorusu (`LearnerQuestionSummary`) iki alan kazanır: `topic {code, title}` (ana
+  müfredat düğümü) ve `answered` (çağıranın bu soruya saklı cevabı var mı; sunucu hesaplar, ekran 1000 cevap okumaz). Hesap başına
+  toplam 5000 cevap sınırı: aşılırsa 429 `answer_limit_reached` ("You have reached the limit of 5000 saved answers. Delete your answers
+  to continue."). Yazılı cevapta sekme, satır sonu dışındaki denetim karakterleri (NUL dahil) 422. Veritabanı hataları günlüğe yalnızca
+  türüyle yazılır (cevap metni günlüğe girmez). Silinecek cevap yoksa (`deleted: 0`) audit yazılmaz.
 - 200 sınırı bir sorunun **tüm sürümlerindeki** cevapları sayar (yeni sürüm sınırı sıfırlamaz). Reddedilen (422) cevap saklanmaz ve
   sayılmaz. Listeleme sırası UUIDv7 kimliğidir (zaman sırasıyla aynı yöndedir); `cursor` bu kimliktir, çözülemeyen cursor 422
   `invalid_cursor`.
@@ -74,7 +79,10 @@ Hepsi `EVERYONE` (giriş yapmış, rolü olan her hesap); yalnızca kendi verisi
 - **`/account`**: mevcut sayfaya "My answers" bölümü: sayı, `/learn/history` bağlantısı, **"Delete all my answers"** (onay penceresi,
   geri alınamaz uyarısı).
 - **Gizlilik bildirimi** (İngilizce; `/learn` ve `/account` altında kısa bölüm, ayrıntı `/privacy`): ne saklanıyor, kim göremez,
-  nasıl silinir. Metin sahibin incelemesine bırakılır ⚖️.
+  nasıl silinir. `/privacy` ayrıca şunları söyler: uygulamada yalnızca siz görürsünüz, ama platform sahibi ve veritabanı sağlayıcısı
+  veritabanına teknik olarak erişebilir; gecelik şifreli yedekler 14 gün GitHub'da (ABD) tutulur ve sildiğiniz cevaplar en çok 14 gün
+  yedeklerde kalır; silme işlemi hesap kimliğinizi ve silinen cevap sayısını kayıt altına alır (cevapları değil). Metin sahibin
+  incelemesine bırakılır ⚖️.
 - Ana sayfa ve başlık: giriş yapmış herkes için "Practice" bağlantısı. Rol önemli değil; personel de çözebilir (cevapları saklanır).
 - Erişilebilirlik: seçenekler `radiogroup`, odak yönetimi, sonuç `aria-live`, klavye ile tam kullanım; 375 px'te yatay kaydırma yok.
 - Hata eşlemesi: `answer_does_not_fit` → "This answer does not fit the question"; `too_many_answers` → "You have reached the limit of

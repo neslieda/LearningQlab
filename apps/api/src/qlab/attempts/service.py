@@ -15,6 +15,10 @@ from qlab.attempts.models import MAX_ANSWERS_PER_QUESTION, Response
 from qlab.content.models import QuestionVersion
 
 
+class AccountAnswerLimit(Exception):
+    """The account already has MAX_ANSWERS_PER_ACCOUNT stored answers in all."""
+
+
 class TooManyAnswers(Exception):
     """The account already has MAX_ANSWERS_PER_QUESTION answers to this question."""
 

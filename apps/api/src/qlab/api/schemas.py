@@ -154,6 +154,13 @@ class LearnerPart(Api):
     stimulus_refs: tuple[str, ...]
 
 
+class TopicOut(Api):
+    """The question's primary syllabus node: what it is about."""
+
+    code: str
+    title: str
+
+
 class LearnerQuestionSummary(Api):
     id: QuestionId
     version_id: QuestionVersionId
@@ -161,6 +168,8 @@ class LearnerQuestionSummary(Api):
     exam_section: str
     levels: tuple[Level, ...]
     total_marks: int
+    topic: TopicOut
+    answered: bool = Field(description="The caller has at least one stored answer to it (D-66).")
 
 
 class LearnerQuestion(LearnerQuestionSummary):
@@ -192,6 +201,9 @@ class WrittenAnswer(Api):
     def _not_blank(cls, value: str) -> str:
         if not value.strip():
             raise ValueError("an empty answer is not accepted")
+        # NUL cannot be stored (JSONB) and other control characters have no place in an answer.
+        if any(ord(c) < 32 and c not in "\t\n\r" or ord(c) == 127 for c in value):
+            raise ValueError("the answer contains a control character")
         return value
 
 

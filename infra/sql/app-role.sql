@@ -34,6 +34,10 @@ WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'backup_role') \gexec
 SELECT format('ALTER ROLE %I WITH PASSWORD %L', :'backup_role', :'backup_password')
 WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'backup_role') \gexec
 
+-- A role that exists already keeps its attributes (re-running only resets the password): refuse to go on if
+-- either is more powerful than it should be (made by hand, or by a provider default).
+SELECT format($f$DO $$ BEGIN IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname IN (%L, %L) AND (rolsuper OR rolcreatedb OR rolcreaterole OR rolbypassrls)) THEN RAISE EXCEPTION 'the application and backup roles must not be superuser, createdb, createrole or bypassrls'; END IF; END $$$f$, :'app_role', :'backup_role') \gexec
+
 -- Connection and schema access.
 SELECT format('GRANT CONNECT ON DATABASE %I TO %I, %I', current_database(), :'app_role', :'backup_role') \gexec
 SELECT format('GRANT USAGE ON SCHEMA public TO %I, %I', :'app_role', :'backup_role') \gexec

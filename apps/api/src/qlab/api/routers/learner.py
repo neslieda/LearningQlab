@@ -163,7 +163,8 @@ def get_question(request: Request, caller: Caller, question_id: str) -> LearnerQ
         },
         429: {
             "model": AUTH_ERRORS[404]["model"],
-            "description": "200 answers to this question are stored already (`too_many_answers`).",
+            "description": "200 answers to this question are stored already "
+            "(`too_many_answers`), or 5000 answers in all (`answer_limit_reached`).",
         },
     },
     operation_id="submitAnswer",

@@ -11,7 +11,7 @@ Amaç: sisteme giren ve sistemin ürettiği her içerik metni İngilizce olsun; 
 
 Kapsam:
 
-1. **Pilot kaynak dosyaları** (`docs/pilot/*-pilot-questions.md`, 25 dosya) baştan sona İngilizceye çevrilir: çözüm açıklamaları,
+1. **Pilot kaynak dosyaları** (`docs/pilot/*-pilot-questions.md`, 24 dosya) baştan sona İngilizceye çevrilir: çözüm açıklamaları,
    çeldirici gerekçeleri, kazanım cümleleri, şekil tarifleri, şekil notları, serbest notlar, dosya başlığı ve durum notu, kapsam
    tablosu, biçim uyumu ve bağımsız kontrol bölümleri, yapı işaretleri (§3).
 2. **Dönüştürücü** (`qlab.content.pilot`) İngilizce işaretleri okur; Türkçe işaretler artık tanınmaz (tek kaynak, iki dil yok).
@@ -90,7 +90,7 @@ Kritik alan: kısmen. Şema kuralı (§4) yayın kapısını etkilemez ama her y
 
 ## 5. Kabul testleri
 
-1. 25 kaynak dosyada `ç ğ ı ş İ Ğ Ş Ç` yok.
+1. 24 kaynak dosyada `ç ğ ı ş İ Ğ Ş Ç` yok.
 2. Dönüştürme hatasız; `convert --check` temiz; kaynak karşılaştırma testi (görünen metin) geçer.
 3. **Yapı değişmez:** yeni JSON ile eski JSON karşılaştırıldığında yalnızca şu alanlar farklıdır: `outcome`, `mcq.explanation`,
    `mcq.options[].rationale`, `stimuli[].description`. Soru sayısı, kimlikler, kaynak anahtarları, sınıf, bölüm, düzey, zorluk, puanlar,

@@ -1,0 +1,59 @@
+# Nightly encrypted database backup (D-61). Critical area (CI): changes need the owner's approval.
+# Secrets (repository secrets, never printed):
+#   NEON_BACKUP_URL    connection string of the read-only role qlab_backup (infra/sql/app-role.sql), plain postgresql:// form
+#   BACKUP_PASSPHRASE  long random passphrase for the symmetric encryption; keep a copy outside GitHub
+# Restore: docs/KURULUM_DENEME.md.
+name: backup
+
+on:
+  schedule:
+    - cron: "30 2 * * *" # 02:30 UTC every day
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  dump:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions: {}
+    steps:
+      - name: Install PostgreSQL 17 client and gpg
+        run: |
+          set -euo pipefail
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -fsSL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17 gnupg
+          /usr/lib/postgresql/17/bin/pg_dump --version
+
+      - name: Dump and encrypt
+        env:
+          NEON_BACKUP_URL: ${{ secrets.NEON_BACKUP_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          umask 077
+          stamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          # Custom format is compressed; --no-owner/--no-privileges keep the dump restorable under any role.
+          /usr/lib/postgresql/17/bin/pg_dump --format=custom --no-owner --no-privileges \
+            --dbname="$NEON_BACKUP_URL" --file=backup.dump
+          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-fd 0 --symmetric --cipher-algo AES256 \
+            --output "qlab-${stamp}.dump.gpg" backup.dump
+          rm -f backup.dump
+          echo "ARTIFACT_NAME=qlab-${stamp}" >> "$GITHUB_ENV"
+          ls -l ./*.gpg
+
+      - name: Upload encrypted dump
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: "*.dump.gpg"
+          retention-days: 14
+          if-no-files-found: error

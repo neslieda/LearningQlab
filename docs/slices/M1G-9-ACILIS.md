@@ -95,8 +95,7 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
 - `infra/docker/web.Dockerfile`: Next.js standalone çıktısı.
 - `render.yaml`: Frankfurt, ücretsiz iki web servisi; gizli değerler `sync: false` (sahibi panelden girer).
 - Gecelik yedek: GitHub Actions zamanlanmış iş, salt okunur rolle `pg_dump`, şifreli yapıt, 14 gün saklama (CI kritik alan).
-- `QLAB_FORBID_SELF_APPROVAL` yerel dışında zorunlu açık (D-59); sahibin kararına göre deneme ortamı için ayrı bir ayar
-  gerekebilir (§7.3).
+- `QLAB_FORBID_SELF_APPROVAL` yerel dışında zorunlu açık (D-59); deneme ortamında da açık kalır (§7.3).
 
 ## 6. Kabul testleri
 
@@ -115,5 +114,5 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
 
 1. Personel MFA'sı organizasyon ayrımıyla zorlanır; API organizasyon alanını denetler (fail-closed).
 2. `teacher` yalnızca öğrenci daveti üretir; diğer davetleri yalnızca `platform_admin` üretir.
-3. Görev ayrımı kuralı (D-59) deneme ortamında: sahibinin kararı bekleniyor.
+3. Görev ayrımı kuralı (D-59) deneme ortamında da açık (sahibinin kararı, 2026-10-16: ekipte birden çok düzenleyici var). Soru düzenleyen eğitmenler `reviewer` rolü alır (Staff organizasyonu, iki adımlı doğrulama).
 4. Gecelik yedek GitHub Actions yapıtı olarak (ABD'de saklanır ⚖️; içerik soru metinleri ve opak hesap kimlikleri, ad/e-posta yok).

@@ -1,31 +1,31 @@
-# Pilot soru seti: A.1 Kinematik
+# Pilot question set: A.1 Kinematics
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set, müfredat analizinden ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)) özgün soru üretme yaklaşımının
-> elle yapılmış bir denemesidir. Ürün hattı kurulduğunda aynı iş Blueprint → üretim → kod kontrolü → kör çözüm → inceleme adımlarından geçer.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set is a hand-made trial of the approach of generating original questions from the syllabus analysis ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)).
+> When the product pipeline is ready, the same work goes through the steps Blueprint → generation → code check → blind solve → review.
 >
-> **Kaynak:** yalnızca müfredat düğümü A.1 ve genel fizik. Hiçbir sınav sorusu girdi olarak kullanılmadı.
-> **Sayısal doğrulama:** tüm sonuçlar ayrı bir hesapla yeniden üretildi (g = 9.8 m s⁻² alındı; veri kitapçığı değeri uzmanca teyit edilmeli).
-> **Bağımsız kontrol:** beş soru da yazarından farklı bir kör çözücü tarafından cevaplar görülmeden çözüldü; anahtarlar, çeldirici
-> hesapları ve markscheme değerleri uyuştu ([review/recheck-2026-10-11.md](review/recheck-2026-10-11.md)).
-> **Doğrulanmayan:** uzman incelemesinden geçmedi; bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle bakılmadı.
+> **Source:** only syllabus node A.1 and general physics. No exam question was used as input.
+> **Numerical check:** all results were reproduced with a separate calculation (g = 9.8 m s⁻² was used; the data booklet value must be confirmed by an expert).
+> **Independent check:** all five questions were solved by a blind solver other than the author, without seeing the answers; the keys, distractor
+> calculations and markscheme values matched ([review/recheck-2026-10-11.md](review/recheck-2026-10-11.md)).
+> **Not verified:** it has not passed expert review; it has not been checked by an expert for resemblance to any known exam question.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (A.1) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (A.1) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Yol ile yer değiştirme farkı; ortalama hız | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Aşağı açılı eğik atışın bileşenlerle çözümü | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Akışkan direncinin ivmeye nitel etkisi | AO2 | — | 1 | Orta |
-| 4 | Paper 2 | SL | Yatay atış; hız bileşenleri; dirençli hareketin nitel etkisi | AO1–AO3 | State, Calculate, Determine, Explain | 9 | Orta |
-| 5 | Paper 1B | SL | Serbest düşme verisinin işlenmesi; belirsizlik; sistematik hata | AO2–AO3 | Outline, Calculate, Determine, Explain | 10 | Orta–zor |
+| 1 | Paper 1A | SL | Distance vs displacement; average velocity | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Solving projectile motion launched below the horizontal using components | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Qualitative effect of fluid resistance on acceleration | AO2 | — | 1 | Medium |
+| 4 | Paper 2 | SL | Horizontal projection; velocity components; qualitative effect of resistive motion | AO1–AO3 | State, Calculate, Determine, Explain | 9 | Medium |
+| 5 | Paper 1B | SL | Processing free-fall data; uncertainty; systematic error | AO2–AO3 | Outline, Calculate, Determine, Explain | 10 | Medium–hard |
 
-Bu set A.1'in tamamını kapsamaz. Eksik kalanlar: anlık hızın grafikten belirlenmesi, değişken ivmeli hareketin grafik yorumu, yukarı
-açılı atış, limit hız.
+This set does not cover all of A.1. Missing: determining instantaneous velocity from a graph, interpreting graphs of motion with variable acceleration, projectile motion launched
+above the horizontal, terminal speed.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A cyclist rides 600 m due east in 60 s and then 800 m due north in 140 s.
 
@@ -36,19 +36,19 @@ B. 7.0 m s⁻¹
 C. 7.9 m s⁻¹
 D. 10 m s⁻¹
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Yer değiştirme = √(600² + 800²) = 1000 m. Toplam süre = 200 s. Ortalama hızın büyüklüğü = 1000 / 200 = 5.0 m s⁻¹.
+**Solution.** Displacement = √(600² + 800²) = 1000 m. Total time = 200 s. Magnitude of average velocity = 1000 / 200 = 5.0 m s⁻¹.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Yer değiştirme yerine toplam yol kullanılır: 1400 / 200 (ortalama sürat) |
-| C | İki bölümün süratlerinin (10 ve 5.7 m s⁻¹) aritmetik ortalaması alınır |
-| D | Yalnızca ilk bölümün sürati alınır |
+| B | Uses total distance instead of displacement: 1400 / 200 (average speed) |
+| C | Takes the arithmetic mean of the speeds of the two stages (10 and 5.7 m s⁻¹) |
+| D | Takes only the speed of the first stage |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A stone is thrown from the top of a vertical cliff with a speed of 12 m s⁻¹ at an angle of 30° **below** the horizontal. The stone
 is released 15 m above the sea. Air resistance is negligible.
@@ -60,20 +60,20 @@ B. 15 m
 C. 18 m
 D. 26 m
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Aşağı yön pozitif. Düşey ilk hız = 12 sin 30° = 6.0 m s⁻¹; yatay hız = 12 cos 30° = 10.4 m s⁻¹.
-15 = 6.0t + 4.9t² → t = 1.24 s. Yatay uzaklık = 10.4 × 1.24 = 12.9 m ≈ 13 m.
+**Solution.** Downward positive. Initial vertical velocity = 12 sin 30° = 6.0 m s⁻¹; horizontal velocity = 12 cos 30° = 10.4 m s⁻¹.
+15 = 6.0t + 4.9t² → t = 1.24 s. Horizontal distance = 10.4 × 1.24 = 12.9 m ≈ 13 m.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Yatay bileşen yerine hızın tamamı kullanılır: 12 × 1.24 = 14.9 m |
-| C | Düşey ilk hız yok sayılır (yatay atış gibi çözülür): t = 1.75 s, 10.4 × 1.75 = 18.2 m |
-| D | Taş yukarı açıyla atılmış gibi çözülür: t = 2.47 s, 10.4 × 2.47 = 25.6 m |
+| B | Uses the whole velocity instead of the horizontal component: 12 × 1.24 = 14.9 m |
+| C | Ignores the initial vertical velocity (solves it like a horizontal projection): t = 1.75 s, 10.4 × 1.75 = 18.2 m |
+| D | Solves as if the stone were thrown upwards at an angle: t = 2.47 s, 10.4 × 2.47 = 25.6 m |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A ball is thrown vertically upwards. Air resistance is **not** negligible.
 
@@ -84,20 +84,20 @@ B. less than *g*
 C. *g*
 D. greater than *g*
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Yukarı çıkarken direnç kuvveti aşağı yönlüdür, yani ağırlıkla aynı yöndedir. Bileşke kuvvet ağırlıktan büyüktür; ivmenin
-büyüklüğü *g*'den büyüktür.
+**Solution.** While the ball rises, the resistive force acts downwards, that is, in the same direction as the weight. The resultant force is greater than the weight; the
+magnitude of the acceleration is greater than *g*.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | "Atıldığı anda hızı en büyük, ivmesi yok" düşüncesi; hız ile ivmenin karıştırılması |
-| B | Direncin her durumda ivmeyi azalttığı varsayılır (iniş için doğru, çıkış için yanlış) |
-| C | Direnç yok sayılır; serbest düşme ivmesi alınır |
+| A | Thinks "its speed is greatest at the moment of release, and it has no acceleration"; confuses velocity with acceleration |
+| B | Assumes resistance always reduces the acceleration (true for the descent, false for the ascent) |
+| C | Ignores resistance; takes the acceleration of free fall |
 
 ---
 
-## Soru 4 — Paper 2 (9 puan)
+## Question 4 — Paper 2 (9 marks)
 
 A drone flies horizontally at a constant speed of 18 m s⁻¹ at a height of 44 m above level ground. It releases a small package.
 Air resistance on the package is negligible in parts (a) to (c).
@@ -124,11 +124,11 @@ In practice, air resistance on the package is not negligible.
 | 4. | d | i | air resistance has an upward / vertical component «opposing the fall» ✓<br>vertical acceleration is less than *g* so the time is longer ✓ | *OWTTE* | 2 |
 | 4. | d | ii | less «than 18 m s⁻¹» ✓ | | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `u = 18 m/s`, `H = 44 m`, sabit `g = 9.8 m/s^2` | |
+| Parameters | `u = 18 m/s`, `H = 44 m`, constant `g = 9.8 m/s^2` | |
 | `t` | `sqrt(2*H/g)` | 3.00 s |
 | `v_y` | `g*t` | 29.4 m s⁻¹ |
 | `v` | `sqrt(u**2 + v_y**2)` | 34.4 m s⁻¹ |
@@ -136,7 +136,7 @@ In practice, air resistance on the package is not negligible.
 
 ---
 
-## Soru 5 — Paper 1B (10 puan)
+## Question 5 — Paper 1B (10 marks)
 
 A student investigates free fall. A steel ball is held by an electromagnet. When the current is switched off, a timer starts and
 the ball falls a height *h* onto a trapdoor switch that stops the timer. The student repeats the measurement for each height and
@@ -176,37 +176,37 @@ on the value of *g* obtained. [2]
 | 5. | d | | consistent, as 9.8 m s⁻² lies within the range 9.2–10.8 m s⁻² ✓ | *Allow ECF from (c): the conclusion must follow from the candidate's own range.* | 1 |
 | 5. | e | | measured times are greater than the true times of fall / this is a systematic error ✓<br>the gradient is smaller so the value of *g* obtained is too small ✓ | *OWTTE* | 2 |
 
-### Şekil notu
+### Figure note
 
-Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu *h*–*t*² grafiği yer alır. Grafik aynı veriden kodla üretilir
-(D-14). Tablodaki veriden hesaplanan en küçük kareler eğimi 4.98 m s⁻²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri
-5.35 ve 4.56 m s⁻²'dir; soruda verilen 5.0, 5.4 ve 4.6 değerleri bunların iki anlamlı basamağa yuvarlanmış halidir.
+In the version shown to the student, an *h*–*t*² graph with uncertainty bars accompanies the table. The graph is generated by code from the same data
+(D-14). The least-squares gradient calculated from the data in the table is 4.98 m s⁻²; the gradients of the lines through the ends of the uncertainty bars are
+5.35 and 4.56 m s⁻²; the values 5.0, 5.4 and 4.6 given in the question are these rounded to two significant figures.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+Questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–3 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–2 uygun (artan); Soru 3 sözel sıralı ölçek |
-| 1A: olumsuzluk sözcüğü koyu | Soru 2 ("below") ve Soru 3 ("not") uygun |
-| 1A: tablo seçenekli biçim örnekte doğrulanamadı | Soru 3 bu yüzden tek kavramlı, kısa seçenekli biçime çevrildi |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 4 uygun (1, 2, 3, 2, 1; toplam 9) |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 4 ve Soru 5 uygun |
-| 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 5 uygun (2, 2, 3, 1, 2; toplam 10) |
-| 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 5 uygun |
-| 1B: öğrenci verilen grafiğe en uygun doğruyu çizer ve eğimi kendisi bulur | **Soru 5 uygun değil:** grafik üretilemediği için eğimler metinde verildi. Grafik şablonu hazır olunca (c) parçası yeniden yazılmalı |
-| Değer–birim yazımı (m s⁻¹), 2 anlamlı basamak | Uygun |
+| 1A: context + separate single question sentence ("What is …?") + A–D one below the other | Questions 1–3 conform |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Questions 1–2 conform (ascending); Question 3 is a verbal ordered scale |
+| 1A: negation word in bold | Question 2 ("below") and Question 3 ("not") conform |
+| 1A: table-style options could not be verified in the example | Question 3 was therefore changed to a single-concept format with short options |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 4 conforms (1, 2, 3, 2, 1; total 9) |
+| Markscheme: four-column table, ✓, « », OR, ECF, OWTTE | Questions 4 and 5 conform |
+| 1B: experiment question of about 10 marks, sub-parts 1–3 marks | Question 5 conforms (2, 2, 3, 1, 2; total 10) |
+| 1B: table header "quantity / unit ± uncertainty" | Question 5 conforms |
+| 1B: the student draws the best-fit line on a given graph and finds its gradient themselves | **Question 5 does not conform:** because the graph could not be generated, the gradients are given in the text. Part (c) must be rewritten when the graph template is ready |
+| Value–unit notation (m s⁻¹), 2 significant figures | Conforms |
 
-## Bu denemeden çıkan gözlemler
+## Observations from this trial
 
-1. **Formül zinciri sayısal sorularda çalışıyor** (Soru 2, 4, 5). Nitel sorularda (Soru 3) kodla doğrulanacak bir şey yok; güvence
-   eleştirmen ve uzmandan gelmeli.
-2. **Çeldiriciler hesaplanabilir.** Soru 1 ve 2'de her yanlış seçenek belirli bir yanılgının formülünden çıkıyor; şemada çeldirici
-   başına "yanılgı + formül" tutulursa kod bunları da doğrular.
-3. **Veri temelli soru şekle bağlı.** Soru 5, grafik olmadan eksik kalıyor; şablondan grafik üretimi bu soru türü için ön koşul.
-4. **Kapsam dengesi elle zor.** Beş soru A.1'in yarısını bile kapsamıyor; düğüm başına kazanım × hedef × soru türü tablosu Blueprint
-   aşamasında tutulmalı.
+1. **The formula chain works for numerical questions** (Questions 2, 4, 5). For qualitative questions (Question 3) there is nothing to verify with code; assurance
+   must come from the critic and the expert.
+2. **Distractors are computable.** In Questions 1 and 2 each wrong option follows from the formula of a specific misconception; if the schema keeps a
+   "misconception + formula" per distractor, code can verify these too.
+3. **A data-based question depends on the figure.** Question 5 is incomplete without the graph; generating the graph from a template is a prerequisite for this question type.
+4. **Coverage balance is hard by hand.** Five questions do not even cover half of A.1; an outcome × objective × question type table per node must be kept at the
+   Blueprint stage.

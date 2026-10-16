@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/b4-thermodynamics-pilot-questions.md",
- "source_sha256": "27bcdaf7234a9218650f2b632ddcad5acd7b4149d451cd5450c404cdbe338a70",
+ "source_sha256": "c9c140b085bd702e65435069d0fd9df8f71047e38dc79d4ea9b447b43980b6cd",
  "questions": [
   {
    "source_ref": "pilot/b4-thermodynamics#1",
@@ -17,7 +17,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Birinci yasa ve işaret kuralı (Q = ΔU + W)",
+    "outcome": "First law and sign convention (Q = ΔU + W)",
     "stem": {
      "type": "doc",
      "content": [
@@ -92,7 +92,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Büyüklük doğru, işaret ters: iki enerji girişi de iç enerjiyi azaltıyor sayılır: −700 J"
+            "text": "The magnitude is right but the sign is reversed: both energy inputs are taken to decrease the internal energy: −700 J"
            }
           ]
          }
@@ -127,7 +127,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hem "
+            "text": "The sign of "
            },
            {
             "marks": [],
@@ -139,7 +139,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "'nin işareti yanlış alınır hem sonuç ters çevrilir (Δ"
+            "text": " is taken wrongly and the result is also reversed (Δ"
            },
            {
             "marks": [],
@@ -210,7 +210,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Gazın üzerine yapılan iş, gazın yaptığı iş gibi alınır ("
+            "text": "Work done on the gas is treated as work done by the gas ("
            },
            {
             "marks": [],
@@ -261,7 +261,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Clausius işaret kuralı: "
+          "text": "Clausius sign convention: "
          },
          {
           "marks": [],
@@ -273,7 +273,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = +500 J (sisteme verilen), "
+          "text": " = +500 J (supplied to the system), "
          },
          {
           "marks": [],
@@ -285,7 +285,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = −200 J (iş gazın üzerine yapıldı, gazın yaptığı iş negatif). Δ"
+          "text": " = −200 J (work is done on the gas, so the work done by the gas is negative). Δ"
          },
          {
           "marks": [],
@@ -351,7 +351,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Adyabatik süreç, PV^(5/3) = sabit",
+    "outcome": "Adiabatic process, PV^(5/3) = constant",
     "stem": {
      "type": "doc",
      "content": [
@@ -445,7 +445,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Üs 5⁄3 yerine 3 alınır: 8³ = 512"
+            "text": "The exponent is taken as 3 instead of 5⁄3: 8³ = 512"
            }
           ]
          }
@@ -515,7 +515,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Süreç izotermal sayılır ("
+            "text": "The process is taken to be isothermal ("
            },
            {
             "marks": [],
@@ -527,7 +527,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": " = sabit): 8"
+            "text": " = constant): 8"
            },
            {
             "marks": [],
@@ -576,7 +576,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık oranı basınç oranı sanılır ("
+            "text": "The temperature ratio is taken to be the pressure ratio ("
            },
            {
             "marks": [],
@@ -588,7 +588,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": " = sabit): 8"
+            "text": " = constant): 8"
            },
            {
             "marks": [
@@ -627,7 +627,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = sabit → "
+          "text": " = constant → "
          },
          {
           "marks": [],
@@ -769,7 +769,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Entropi ve mikrodurum sayısı, S = k ln Ω (basit sayma modeli)",
+    "outcome": "Entropy and the number of microstates, S = k ln Ω (simple counting model)",
     "stem": {
      "type": "doc",
      "content": [
@@ -887,7 +887,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Mikrodurum sayısı olarak bölme sayısı (2) alınır"
+            "text": "The number of compartments (2) is taken as the number of microstates"
            }
           ]
          }
@@ -929,7 +929,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Mikrodurum sayısı olarak parçacık sayısı (4) alınır"
+            "text": "The number of particles (4) is taken as the number of microstates"
            }
           ]
          }
@@ -999,7 +999,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Son makrodurumun değil, tüm olası mikrodurumların sayısı alınır: 2⁴ = 16 (serbest genleşme okuması, 4"
+            "text": "The number of all possible microstates is taken instead of that of the final macrostate: 2⁴ = 16 (the free-expansion reading, 4"
            },
            {
             "marks": [],
@@ -1011,7 +1011,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": " ln 2; soru metni makrodurumu açıkça tanımladığı için bu okuma dışlanır)"
+            "text": " ln 2; this reading is excluded because the question text defines the macrostate explicitly)"
            }
           ]
          }
@@ -1029,7 +1029,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Başlangıç makrodurumu (4 solda) tek mikroduruma sahiptir: Ω₁ = 1, "
+          "text": "The initial macrostate (4 on the left) has a single microstate: Ω₁ = 1, "
          },
          {
           "marks": [],
@@ -1053,7 +1053,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " ln 1 = 0. Son makrodurum (2 solda, 2 sağda) için soldaki iki parçacığı seçmenin yolu sayısı Ω₂ = 4! / (2! 2!) = 6. Δ"
+          "text": " ln 1 = 0. For the final macrostate (2 on the left, 2 on the right), the number of ways of choosing the two particles on the left is Ω₂ = 4! / (2! 2!) = 6. Δ"
          },
          {
           "marks": [],
@@ -1131,7 +1131,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "Isı makinesinin verimi; Carnot veriminden ayrımı",
+    "outcome": "Efficiency of a heat engine; distinction from Carnot efficiency",
     "stem": {
      "type": "doc",
      "content": [
@@ -1213,7 +1213,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İş, alınan enerji yerine atılan enerjiye oranlanır: 200 / 600 = 0.33"
+            "text": "The work is divided by the energy rejected instead of the energy absorbed: 200 / 600 = 0.33"
            }
           ]
          }
@@ -1248,7 +1248,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Gerçek verim yerine Carnot verimi hesaplanır: 1 − 300 / 500 = 0.40"
+            "text": "The Carnot efficiency is calculated instead of the actual efficiency: 1 − 300 / 500 = 0.40"
            }
           ]
          }
@@ -1283,7 +1283,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Atılan enerjinin alınana oranı verim sanılır: 600 / 800 = 0.75"
+            "text": "The ratio of the energy rejected to the energy absorbed is taken as the efficiency: 600 / 800 = 0.75"
            }
           ]
          }
@@ -1301,7 +1301,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Çevrim başına yapılan iş = 800 − 600 = 200 J. Verim = yararlı iş / alınan enerji = 200 / 800 = 0.25."
+          "text": "Work done per cycle = 800 − 600 = 200 J. Efficiency = useful work / energy absorbed = 200 / 800 = 0.25."
          }
         ]
        }
@@ -1331,7 +1331,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "İzotermal süreçte birinci yasa ve ΔS = ΔQ/T",
+    "outcome": "First law in an isothermal process and ΔS = ΔQ/T",
     "stem": {
      "type": "doc",
      "content": [
@@ -1392,7 +1392,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Gaz iş yaptığı için enerji kaybettiği düşünülür; "
+            "text": "Since the gas does work it is thought to lose energy; "
            },
            {
             "marks": [],
@@ -1404,7 +1404,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": " negatif alınır: −600 / 300 = −2.0"
+            "text": " is taken as negative: −600 / 300 = −2.0"
            }
           ]
          }
@@ -1439,7 +1439,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "\"Sıcaklık değişmiyor, öyleyse enerji alışverişi ve entropi değişimi yok\" düşüncesi (izotermal ile adyabatik karıştırılır)"
+            "text": "The thought \"the temperature does not change, so there is no energy exchange and no entropy change\" (isothermal is confused with adiabatic)"
            }
           ]
          }
@@ -1474,7 +1474,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur: 300 / 600 = 0.50"
+            "text": "The ratio is set up the wrong way round: 300 / 600 = 0.50"
            }
           ]
          }
@@ -1513,7 +1513,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "İzotermal süreçte ideal gazın iç enerjisi değişmez: Δ"
+          "text": "In an isothermal process the internal energy of an ideal gas does not change: Δ"
          },
          {
           "marks": [],
@@ -1525,7 +1525,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 0, bu yüzden "
+          "text": " = 0, so "
          },
          {
           "marks": [],
@@ -1549,7 +1549,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = +600 J (gaza verilen). Δ"
+          "text": " = +600 J (supplied to the gas). Δ"
          },
          {
           "marks": [],
@@ -1615,7 +1615,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.4",
     "secondary_syllabus_nodes": [],
-    "outcome": "İzobarik, adyabatik ve izotermal adımlı çevrim; W = PΔV; birinci yasa; verim; Carnot sınırı ve ikinci yasa",
+    "outcome": "Cycle with isobaric, adiabatic and isothermal steps; W = PΔV; first law; efficiency; Carnot limit and the second law",
     "stem": {
      "type": "doc",
      "content": [
@@ -1652,7 +1652,7 @@
       "id": "fig1",
       "kind": "graph",
       "use": "read_only",
-      "description": "Basınç–hacim (P–V) diyagramı; ölçekli değil. A'dan B'ye sağa doğru yatay doğru (sabit basınç). B'den C'ye sağa ve aşağı inen dik eğri (adyabatik). C'den A'ya sola ve yukarı çıkan, daha az dik eğri (izotermal). Çevrim saat yönünde dolaşılır.",
+      "description": "Pressure–volume (P–V) graph; not to scale. From A to B a straight horizontal line to the right (constant pressure). From B to C a steep curve going to the right and downwards (adiabatic). From C to A a less steep curve going to the left and upwards (isothermal). The cycle is traversed clockwise.",
       "asset_id": null,
       "alt_text": null
      }

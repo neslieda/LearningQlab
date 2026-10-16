@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/b1-thermal-energy-transfers-pilot-questions.md",
- "source_sha256": "70566010196f9b910aea57cef6243f0f48f0db159c40474c4803cd7640b2f3f1",
+ "source_sha256": "aea7affcafc740836b87366ce3930a28a984613115391d590407808576846207",
  "questions": [
   {
    "source_ref": "pilot/b1-thermal-energy-transfers#1",
@@ -18,7 +18,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Q = mcΔT ile ısıl denge (iki cisim)",
+    "outcome": "Thermal equilibrium using Q = mcΔT (two bodies)",
     "stem": {
      "type": "doc",
      "content": [
@@ -110,7 +110,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Özgül ısı kapasiteleri yok sayılır, yalnızca kütleyle ağırlıklı ortalama alınır: (0.20 × 90 + 0.30 × 20) / 0.50 = 48 °C"
+            "text": "Specific heat capacities are ignored and only a mass-weighted average is taken: (0.20 × 90 + 0.30 × 20) / 0.50 = 48 °C"
            }
           ]
          }
@@ -145,7 +145,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İki sıcaklığın aritmetik ortalaması alınır: (90 + 20) / 2 = 55 °C"
+            "text": "The arithmetic mean of the two temperatures is taken: (90 + 20) / 2 = 55 °C"
            }
           ]
          }
@@ -180,7 +180,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Özgül ısı kapasiteleri yer değiştirilir: (0.20 × 4200 × 90 + 0.30 × 900 × 20) / (840 + 270) = 73.0 °C"
+            "text": "The specific heat capacities are swapped: (0.20 × 4200 × 90 + 0.30 × 900 × 20) / (840 + 270) = 73.0 °C"
            }
           ]
          }
@@ -198,7 +198,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Bloğun verdiği enerji suyun aldığına eşittir: 0.20 × 900 × (90 − "
+          "text": "The energy given out by the block equals the energy gained by the water: 0.20 × 900 × (90 − "
          },
          {
           "marks": [],
@@ -289,7 +289,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "B.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "İletimle enerji aktarım hızı (nicel)",
+    "outcome": "Rate of energy transfer by conduction (quantitative)",
     "stem": {
      "type": "doc",
      "content": [
@@ -350,7 +350,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kalınlığa bölmek yerine kalınlıkla çarpılır: 2.2 × 8.0 × 0.050 = 0.88 W"
+            "text": "Multiplies by the thickness instead of dividing by it: 2.2 × 8.0 × 0.050 = 0.88 W"
            }
           ]
          }
@@ -385,7 +385,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kalınlık metreye çevrilmez: 2.2 × 8.0 / 5.0 = 3.52 W"
+            "text": "The thickness is not converted to metres: 2.2 × 8.0 / 5.0 = 3.52 W"
            }
           ]
          }
@@ -441,7 +441,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sıcaklık farkı yerine kelvine çevrilmiş tek bir sıcaklık kullanılır: 2.2 × 265 / 0.050 = 1.17 × 10⁴ W"
+            "text": "A single temperature converted to kelvin is used instead of the temperature difference: 2.2 × 265 / 0.050 = 1.17 × 10⁴ W"
            }
           ]
          }
@@ -550,7 +550,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "B.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Wien yasası ile Stefan-Boltzmann yasasının birleştirilmesi; ışınım gücü",
+    "outcome": "Combining Wien's law and the Stefan-Boltzmann law; radiated power",
     "stem": {
      "type": "doc",
      "content": [
@@ -625,7 +625,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Wien yasası ters uygulanır (kısa dalga boyu daha soğuk sayılır): 9 × (1⁄2)⁴ = 9⁄16"
+            "text": "Wien's law is applied the wrong way round (the shorter wavelength is treated as cooler): 9 × (1⁄2)⁴ = 9⁄16"
            }
           ]
          }
@@ -660,7 +660,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Işınım gücü "
+            "text": "Radiated power is taken as proportional to "
            },
            {
             "marks": [],
@@ -672,7 +672,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "⁴ yerine "
+            "text": "² instead of "
            },
            {
             "marks": [],
@@ -684,7 +684,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "² ile orantılı alınır: 9 × 2² = 36"
+            "text": "⁴: 9 × 2² = 36"
            }
           ]
          }
@@ -719,7 +719,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yüzey alanı "
+            "text": "Surface area is taken as proportional to "
            },
            {
             "marks": [],
@@ -731,7 +731,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "² yerine "
+            "text": " instead of "
            },
            {
             "marks": [],
@@ -743,7 +743,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": " ile orantılı alınır: 3 × 2⁴ = 48"
+            "text": "²: 3 × 2⁴ = 48"
            }
           ]
          }
@@ -782,7 +782,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Wien yasası: λ"
+          "text": "Wien's law: λ"
          },
          {
           "marks": [
@@ -803,7 +803,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = sabit, bu yüzden "
+          "text": " = constant, so "
          },
          {
           "marks": [],
@@ -851,7 +851,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "⁴ ve "
+          "text": "⁴ and "
          },
          {
           "marks": [],
@@ -906,7 +906,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Hâl değişimi; Q = mcΔT ile Q = mL'nin sabit güçte birleştirilmesi",
+    "outcome": "Change of state; combining Q = mcΔT and Q = mL at constant power",
     "stem": {
      "type": "doc",
      "content": [
@@ -967,7 +967,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yalnızca kütle başına güç hesaplanır, süreyle çarpılmaz: 800 × 0.50 = 400"
+            "text": "Only the power per unit mass is calculated and it is not multiplied by the time: 800 × 0.50 = 400"
            }
           ]
          }
@@ -1023,7 +1023,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Isınma hızı kullanılmaz: 800 × 300 = 2.4 × 10⁵"
+            "text": "The heating rate is not used: 800 × 300 = 2.4 × 10⁵"
            }
           ]
          }
@@ -1058,7 +1058,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Isınma hızıyla çarpmak yerine bölünür: 800 × 300 / 0.50 = 4.8 × 10⁵"
+            "text": "Divides by the heating rate instead of multiplying by it: 800 × 300 / 0.50 = 4.8 × 10⁵"
            }
           ]
          }
@@ -1076,7 +1076,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Güç sabittir: "
+          "text": "The power is constant: "
          },
          {
           "marks": [],
@@ -1148,7 +1148,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": ". Erime: "
+          "text": ". Melting: "
          },
          {
           "marks": [],
@@ -1184,7 +1184,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " = 400 × 300 = 1.2 × 10⁵ J kg⁻¹. Kütle sadeleşir; verilmemesi eksik değildir."
+          "text": " = 400 × 300 = 1.2 × 10⁵ J kg⁻¹. The mass cancels, so it is deliberately not given."
          }
         ]
        }
@@ -1215,7 +1215,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "B.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Q = mcΔT, Q = mL; hâl değişiminde molekül modeli ve iç enerji; çevreye enerji kaybı",
+    "outcome": "Q = mcΔT, Q = mL; molecular model and internal energy in a change of state; energy loss to the surroundings",
     "stem": {
      "type": "doc",
      "content": [

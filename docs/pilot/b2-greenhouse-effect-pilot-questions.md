@@ -1,37 +1,37 @@
-# Pilot soru seti: B.2 Sera etkisi
+# Pilot question set: B.2 The greenhouse effect
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written following the [authoring standard](AUTHORING_STANDARD.md), with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü B.2 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı; PDF açılmadı.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile ayrı bir hesapla
-> yeniden üretildi ve dosyadaki değerlerle eşleşti. Stefan-Boltzmann sabiti σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴ alındı ve gereken soruda
-> verildi; veri kitapçığı değeri uzmanca teyit edilmeli.
-> **Doğrulanmayan:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; nitel sorular (Soru 3, Soru 5a ve 5c) kodla denetlenemez;
-> gezegenler kurgusaldır, verileri gerçek bir gök cismine ait değildir; Soru 5(d)'deki "etkin yayıcılık" modelinin rehberin beklediği
-> enerji dengesi modeliyle örtüştüğü uzmanca teyit edilmedi; bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle bakılmadı.
+> **Source:** only syllabus node B.2 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook question or internet source was used as input; no PDF was opened.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced by a separate calculation in `python3` (standard library only)
+> and matched the values in the file. The Stefan-Boltzmann constant σ = 5.67 × 10⁻⁸ W m⁻² K⁻⁴ was used and is given in the question where
+> needed; the data booklet value must be confirmed by an expert.
+> **Not verified:** passed an independent blind solver; has not passed expert review; qualitative questions (Question 3, Questions 5a and 5c) cannot be checked by code;
+> the planets are fictional and their data do not belong to a real celestial body; it has not been confirmed by an expert that the "effective emissivity" model in Question 5(d) matches the
+> energy balance model expected by the guide; no expert check was made for resemblance to a known exam question.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (B.2) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (B.2) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Güneş sabiti, S/4 ortalaması ve albedo ile soğurulan ortalama şiddet | AO2 | — | 1 | Orta |
-| 2 | Paper 1A | SL | Denge sıcaklığı için enerji dengesi; orantı akıl yürütmesi | AO3 | — | 1 | Orta–zor |
-| 3 | Paper 1A | SL | Sera gazlarının kızılötesi soğurması (rezonans modeli) | AO1 | — | 1 | Kolay |
-| 4 | Paper 1A | SL | Albedonun enerji dengesinden belirlenmesi | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | SL | S/4 ortalaması; denge sıcaklığı; sera etkisi mekanizması; yayıcılık | AO2–AO3 | Explain, Show that, Determine | 9 | Orta–zor |
+| 1 | Paper 1A | SL | Solar constant, the S/4 average and albedo; mean absorbed intensity | AO2 | — | 1 | Medium |
+| 2 | Paper 1A | SL | Energy balance for the equilibrium temperature; proportional reasoning | AO3 | — | 1 | Medium–hard |
+| 3 | Paper 1A | SL | Infrared absorption by greenhouse gases (resonance model) | AO1 | — | 1 | Easy |
+| 4 | Paper 1A | SL | Determining albedo from the energy balance | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | SL | The S/4 average; equilibrium temperature; mechanism of the greenhouse effect; emissivity | AO2–AO3 | Explain, Show that, Determine | 9 | Medium–hard |
 
-Bu set B.2'nin tamamını kapsamaz. Eksik kalanlar: başlıca sera gazlarının adları ve doğal / insan kaynaklı kaynakları; molekül enerji
-düzeyleri modeliyle soğurma; artmış sera etkisinin nedenleri; yayıcılığın tanımdan doğrudan hesabı; yüzey–atmosfer alışverişini
-ayrı ayrı içeren iki katmanlı enerji dengesi; albedonun günlük ve mevsimlik değişimi.
+This set does not cover all of B.2. Not covered: names of the main greenhouse gases and their natural / anthropogenic sources; absorption using the molecular energy
+level model; causes of the enhanced greenhouse effect; direct calculation of emissivity from its definition; a two-layer energy balance
+that treats the surface–atmosphere exchange separately; daily and seasonal variation of albedo.
 
-Kapsam sınırı kontrolü: enerji dengesi soruları tek katmanlı (Soru 1, 2, 4, 5b) ya da yüzey + etkin yayıcılık (Soru 5d) düzeyinde;
-sınırın izin verdiği yüzey–atmosfer alışverişinin ötesine geçilmiyor. Türev ya da integral yok.
+Scope boundary check: the energy balance questions are at the single-layer level (Questions 1, 2, 4, 5b) or surface + effective emissivity (Question 5d);
+they do not go beyond the surface–atmosphere exchange that the boundary allows. No derivatives or integrals.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A planet orbits a star. At the orbit of the planet, the intensity of the radiation from the star is 600 W m⁻². The albedo of the
 planet is 0.30.
@@ -43,20 +43,20 @@ B. 105 W m⁻²
 C. 150 W m⁻²
 D. 420 W m⁻²
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Gezegen ışınımı π*R*² kesitiyle yakalar, enerji 4π*R*² yüzeye dağılır: ortalama gelen şiddet 600 / 4 = 150 W m⁻².
-Soğurulan kesir 1 − 0.30 = 0.70. Soğurulan ortalama şiddet = 150 × 0.70 = 105 W m⁻².
+**Solution.** The planet intercepts the radiation over a cross-section π*R*², and the energy is spread over a surface 4π*R*²: the mean incident intensity is 600 / 4 = 150 W m⁻².
+The absorbed fraction is 1 − 0.30 = 0.70. Mean absorbed intensity = 150 × 0.70 = 105 W m⁻².
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Albedo soğurulan kesir sanılır (yansıyan kısım hesaplanır): 600 × 0.30 / 4 = 45 |
-| C | Albedo hesaba katılmaz: 600 / 4 = 150 |
-| D | Yüzey üzerinde ortalama alınmaz (4'e bölünmez): 600 × 0.70 = 420 |
+| A | Albedo is taken to be the absorbed fraction (the reflected part is calculated): 600 × 0.30 / 4 = 45 |
+| C | Albedo is not taken into account: 600 / 4 = 150 |
+| D | The average over the surface is not taken (no division by 4): 600 × 0.70 = 420 |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A planet without an atmosphere radiates as a black body and has a uniform equilibrium surface temperature *T*. The planet is
 moved to an orbit at **twice** the distance from its star. The albedo of the planet does not change.
@@ -68,20 +68,20 @@ B. *T* ⁄ 2
 C. *T* ⁄ √2
 D. *T* ⁄ ⁴√2
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Yıldız ışınımının şiddeti uzaklığın karesiyle ters orantılıdır: yeni şiddet *S*/4. Enerji dengesi: (1 − α)*S*/4 = σ*T*⁴,
-yani *T* ∝ *S*<sup>1/4</sup>. Yeni sıcaklık = *T* × (1⁄4)<sup>1/4</sup> = *T* / √2 (≈ 0.71*T*).
+**Solution.** The intensity of the star's radiation is inversely proportional to the square of the distance: the new intensity is *S*/4. Energy balance: (1 − α)*S*/4 = σ*T*⁴,
+so *T* ∝ *S*<sup>1/4</sup>. New temperature = *T* × (1⁄4)<sup>1/4</sup> = *T* / √2 (≈ 0.71*T*).
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Sıcaklık şiddetle doğru orantılı alınır (*T* ∝ *S*): *T* / 4 |
-| B | Sıcaklık uzaklıkla ters orantılı alınır (*T* ∝ 1/*d*): *T* / 2 |
-| D | Şiddet uzaklığın karesiyle değil kendisiyle ters orantılı alınır (*S* ∝ 1/*d*): *T* × (1⁄2)<sup>1/4</sup> ≈ 0.84*T* |
+| A | Temperature is taken as directly proportional to intensity (*T* ∝ *S*): *T* / 4 |
+| B | Temperature is taken as inversely proportional to distance (*T* ∝ 1/*d*): *T* / 2 |
+| D | Intensity is taken as inversely proportional to the distance rather than the distance squared (*S* ∝ 1/*d*): *T* × (1⁄2)<sup>1/4</sup> ≈ 0.84*T* |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 Carbon dioxide in the atmosphere absorbs infrared radiation emitted by the surface of the Earth.
 
@@ -92,20 +92,20 @@ B. The photons of the radiation have enough energy to ionize the molecules.
 C. The photons of the radiation have more energy than photons of visible light.
 D. The molecules reflect the radiation back towards the surface.
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Rezonans modeli: kızılötesi ışınımın frekansı molekülün doğal titreşim frekansına yakın olduğunda enerji aktarımı en
-büyüktür; molekül ışınımı soğurur ve sonra her yöne yeniden yayar.
+**Solution.** Resonance model: the energy transfer is greatest when the frequency of the infrared radiation is close to the natural vibration frequency of the molecule;
+the molecule absorbs the radiation and then re-emits it in all directions.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Soğurma iyonlaşmayla karıştırılır; kızılötesi fotonun enerjisi iyonlaşma için çok küçüktür |
-| C | Kızılötesi ile görünür ışığın foton enerjileri ters sıralanır (kızılötesinin frekansı daha düşüktür) |
-| D | "Sera gazları ısıyı yansıtır" yanılgısı; süreç yansıma değil, soğurma ve her yöne yeniden yaymadır |
+| B | Absorption is confused with ionization; the energy of an infrared photon is far too small for ionization |
+| C | The photon energies of infrared and visible light are put in the wrong order (the frequency of infrared is lower) |
+| D | The "greenhouse gases reflect heat" misconception; the process is absorption and re-emission in all directions, not reflection |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 The mean intensity of the radiation from a star that is incident on a planet, averaged over the whole surface of the planet, is
 340 W m⁻². The planet is in thermal equilibrium and radiates a mean intensity of 238 W m⁻² into space.
@@ -117,20 +117,20 @@ B. 0.30
 C. 0.43
 D. 0.70
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Dengede soğurulan şiddet yayılana eşittir: 238 W m⁻². Yansıyan (saçılan) şiddet = 340 − 238 = 102 W m⁻².
-Albedo = yansıyan / gelen = 102 / 340 = 0.30.
+**Solution.** In equilibrium the absorbed intensity equals the emitted intensity: 238 W m⁻². Reflected (scattered) intensity = 340 − 238 = 102 W m⁻².
+Albedo = reflected / incident = 102 / 340 = 0.30.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Yansıyan güç, gelen ile yayılan şiddetlerin toplamına oranlanır: 102 / (340 + 238) = 0.18 |
-| C | Yansıyan güç gelen yerine soğurulan güce oranlanır: 102 / 238 = 0.43 |
-| D | Soğurulan kesir albedo sanılır: 238 / 340 = 0.70 |
+| A | The reflected power is divided by the sum of the incident and emitted intensities: 102 / (340 + 238) = 0.18 |
+| C | The reflected power is divided by the absorbed power instead of the incident power: 102 / 238 = 0.43 |
+| D | The absorbed fraction is taken to be the albedo: 238 / 340 = 0.70 |
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A planet orbits a star. At the orbit of the planet, the intensity of the radiation from the star is 880 W m⁻². The albedo of the
 planet is 0.28.
@@ -160,51 +160,51 @@ In a simple model, the planet together with its atmosphere radiates into space a
 | 5. | c | | carbon dioxide absorbs «some of» the infrared radiation emitted by the surface ✓<br>and re-emits it in all directions, so part of it returns to the surface ✓<br>the surface receives more power «than from the star alone» and must be at a higher temperature to radiate enough for equilibrium ✓ | *OWTTE*<br>*Do not accept "reflects" or "traps heat" for the second mark.* | 2 max |
 | 5. | d | | *e* × 5.67 × 10⁻⁸ × 260⁴ = 158 **OR** *e* = (230 / 260)⁴ ✓<br>*e* = 0.61 ✓ | *Allow ECF from (b).*<br>*Both routes give 0.61. Accept 0.62 from the absorbed intensity rounded to 160 W m⁻².*<br>*Do not award marks for e = 1 − albedo = 0.72.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `S = 880 W/m^2`, `albedo = 0.28`, `T_s = 260 K`; sabit `sigma = 5.67e-8 W/(m^2 K^4)` | |
+| Parameters | `S = 880 W/m^2`, `albedo = 0.28`, `T_s = 260 K`; constant `sigma = 5.67e-8 W/(m^2 K^4)` | |
 | `I_mean` | `S/4` | 220 W m⁻² |
 | `I_abs` | `(1 - albedo)*I_mean` | 158.4 W m⁻² |
 | `T_eq` | `(I_abs/sigma)**0.25` | 229.9 K |
 | `I_bb` | `sigma*T_s**4` | 259.1 W m⁻² |
-| `e` | `I_abs/I_bb` | 0.611 (`(230/T_s)**4` yolu 0.612) |
+| `e` | `I_abs/I_bb` | 0.611 (the `(230/T_s)**4` route gives 0.612) |
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–4 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1 artan; Soru 2 artan (0.25*T*, 0.50*T*, 0.71*T*, 0.84*T*); Soru 4 artan; Soru 3 cümle seçenekli (profilde azınlık biçimi) |
-| 1A: olumsuzluk / kritik sözcük koyu | Soru 2 ("twice") uygun; olumsuz kök yok |
-| 1A: doğru cevap konumu dengeli | B, C, A, B (D yok; Soru 4'teki çeldirici değişikliğinin sonucu, aşağıda "Bağımsız kontrol") |
-| 1A: şekil olmadan çözülebilir | Soru 1–4 şekil gerektirmiyor |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 3, 2, 2; toplam 9) |
-| Paper 2: en az bir AO3 parçası; "Show that" kalıbı | Soru 5 uygun: (a), (c) Explain; (b) Show that; (d) Determine |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, max, ECF, OWTTE | Soru 5 uygun; (c) "2 max" (üç maddeden ikisi) |
-| Değer–birim yazımı (W m⁻²), 2–3 anlamlı basamak | Uygun |
-| Paper 2: şekil | Soru 5(a) için kesit alanı / küre yüzeyi şeması yararlı olur ama gerekli değil; üretilmedi |
-| Paper 2: cevap kutusu, noktalı satırlar | Bu taslakta yok; yayın şablonunda eklenecek |
+| 1A: context + a separate single question sentence ("What is …?") + A–D listed one under another | Questions 1–4 conform |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Question 1 ascending; Question 2 ascending (0.25*T*, 0.50*T*, 0.71*T*, 0.84*T*); Question 4 ascending; Question 3 has sentence options (a minority format in the profile) |
+| 1A: negation / key word in bold | Question 2 ("twice") conforms; no negative stem |
+| 1A: position of the correct answer balanced | B, C, A, B (no D; a result of the distractor change in Question 4, see "Independent check" below) |
+| 1A: solvable without a figure | Questions 1–4 need no figure |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 3, 2, 2; total 9) |
+| Paper 2: at least one AO3 part; "Show that" pattern | Question 5 conforms: (a), (c) Explain; (b) Show that; (d) Determine |
+| Markscheme: four-column table, ✓, « », OR, max, ECF, OWTTE | Question 5 conforms; (c) "2 max" (two of three points) |
+| Value–unit notation (W m⁻²), 2–3 significant figures | Conforms |
+| Paper 2: figure | For Question 5(a) a diagram of the cross-sectional area / sphere surface would be useful but is not required; not produced |
+| Paper 2: answer box, dotted lines | Not in this draft; will be added in the publication template |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, yazarından bağımsız bir kör çözücü tarafından cevaplar görülmeden çözüldü; tüm cevap anahtarları ve
-markscheme sonuçları bağımsız olarak yeniden üretildi (KRİTİK bulgu yok). Ayrıntı: [review/b2-review.md](review/b2-review.md).
-Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by a blind solver independent of its author, without seeing the answers; all answer keys and
+markscheme results were reproduced independently (no CRITICAL findings). Detail: [review/b2-review.md](review/b2-review.md).
+This check does not replace expert review.
 
-İnceleme sonucu yapılan değişiklikler (değişen her sayı `python3` ile yeniden hesaplandı):
+Changes made as a result of the review (every changed number was recalculated with `python3`):
 
-- **Soru 5, ORTA-1 ve ORTA-2:** veri yeniden tasarlandı: albedo 0.25 → 0.28, ölçülen yüzey sıcaklığı 250 K → 260 K. Sonuçlar:
-  soğurulan şiddet 165 → 158.4 W m⁻²; (b) 232.3 K → 229.9 K ("about 230 K" artık neredeyse tam); (d) 0.745 / 0.716 (yola bağlı) →
-  her iki yoldan 0.61 (0.611 ve 0.612). Yanlış yöntem "e = 1 − albedo" artık 0.72 veriyor ve doğru cevapla çakışmıyor; markscheme
-  notuna açıkça yazıldı. 0.72–0.75 kabul aralığı kaldırıldı. (a) değişmedi.
-- **Soru 4, DÜŞÜK-1:** fiziksel olarak olanaksız 1.4 çeldiricisi 0.18 ile değiştirildi (102 / 578 = 0.176). Seçenekler artan sıraya
-  alındı (0.18, 0.30, 0.43, 0.70); doğru cevap D → B. Tek doğru seçenek var; hiçbir iki seçenek yuvarlamadan sonra eşit değil.
-  Yan etki: dosyadaki doğru cevap konumları B, C, A, D → B, C, A, B oldu.
-- **DÜŞÜK-2 (SL kısa soruda 9 puan) ve DÜŞÜK-3 (etkin yayıcılık modelinin rehberle uyumu):** değişiklik yapılmadı; ikisi de uzman
-  teyidi bekleyen kayıtlar.
+- **Question 5, MEDIUM-1 and MEDIUM-2:** the data were redesigned: albedo 0.25 → 0.28, measured surface temperature 250 K → 260 K. Results:
+  absorbed intensity 165 → 158.4 W m⁻²; (b) 232.3 K → 229.9 K ("about 230 K" is now nearly exact); (d) 0.745 / 0.716 (depending on the route) →
+  0.61 by both routes (0.611 and 0.612). The wrong method "e = 1 − albedo" now gives 0.72 and no longer coincides with the correct answer; this is stated explicitly in the markscheme
+  note. The 0.72–0.75 accept range was removed. (a) unchanged.
+- **Question 4, LOW-1:** the physically impossible distractor 1.4 was replaced by 0.18 (102 / 578 = 0.176). The options were put in
+  ascending order (0.18, 0.30, 0.43, 0.70); the correct answer changed from D to B. There is a single correct option; no two options are equal after rounding.
+  Side effect: the positions of the correct answers in the file changed from B, C, A, D to B, C, A, B.
+- **LOW-2 (9 marks in an SL short question) and LOW-3 (agreement of the effective emissivity model with the guide):** no change made; both are
+  records awaiting expert confirmation.

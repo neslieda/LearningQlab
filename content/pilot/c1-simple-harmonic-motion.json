@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/c1-simple-harmonic-motion-pilot-questions.md",
- "source_sha256": "32ee37f5de622cbeb478bfe163857ea23cd81aca3e5f97526558f4d144ff65f4",
+ "source_sha256": "1677c524385881f9c360685354da20dc28d793844755627ed8e6773f22048813",
  "questions": [
   {
    "source_ref": "pilot/c1-simple-harmonic-motion#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kütle–yay sisteminin periyodu; T ∝ √m",
+    "outcome": "Period of a mass–spring system; T ∝ √m",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Orantı ters çevrilir (T ∝ 1/√m): 0.60 / 2 = 0.30 s"
+            "text": "Inverts the proportionality (T ∝ 1/√m): 0.60 / 2 = 0.30 s"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Periyodun kütleden bağımsız olduğu düşünülür (basit sarkaçla karıştırma): 0.60 s"
+            "text": "Assumes the period is independent of mass (confusion with the simple pendulum): 0.60 s"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Karekök unutulur (T ∝ m): 0.60 × 4 = 2.4 s"
+            "text": "Forgets the square root (T ∝ m): 0.60 × 4 = 2.4 s"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "T = 2π√(m/k), yani T ∝ √m. Kütle 4 katına çıkar; periyot √4 = 2 katına çıkar: 2 × 0.60 = 1.2 s."
+          "text": "T = 2π√(m/k), so T ∝ √m. The mass increases by a factor of 4; the period increases by a factor of √4 = 2: 2 × 0.60 = 1.2 s."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "a = −ω²x; frekans–açısal frekans ilişkisi",
+    "outcome": "a = −ω²x; relation between frequency and angular frequency",
     "stem": {
      "type": "doc",
      "content": [
@@ -280,7 +280,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "ω'nın karesi alınmaz: ωx = 3.14 × 0.20 = 0.63"
+            "text": "Does not square ω: ωx = 3.14 × 0.20 = 0.63"
            }
           ]
          }
@@ -336,7 +336,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yer değiştirme yerine genlik kullanılır (en büyük ivme): 3.14² × 0.40 = 3.9"
+            "text": "Uses the amplitude instead of the displacement (the maximum acceleration): 3.14² × 0.40 = 3.9"
            }
           ]
          }
@@ -371,7 +371,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "0.50 değeri periyot sanılır: ω = 2π / 0.50 = 12.6 rad s⁻¹; 12.6² × 0.20 = 31.6 ≈ 32"
+            "text": "Takes 0.50 to be the period: ω = 2π / 0.50 = 12.6 rad s⁻¹; 12.6² × 0.20 = 31.6 ≈ 32"
            }
           ]
          }
@@ -420,7 +420,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Enerji değişiminin nitel anlatımı (kinetik–potansiyel dönüşümünün zamanlaması)",
+    "outcome": "Qualitative description of energy changes (timing of the kinetic–potential conversion)",
     "stem": {
      "type": "doc",
      "content": [
@@ -528,7 +528,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Bir uçtan öbür uca geçiş süresi alınır (bu, potansiyel enerjinin art arda iki en büyük değeri arasındaki süredir)"
+            "text": "Takes the time to go from one extreme to the other (this is the time between two successive maximum values of the potential energy)"
            }
           ]
          }
@@ -565,7 +565,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Enerji dönüşümünün yer değiştirmeyle aynı periyotta olduğu ve dönüşümün tam bir periyot sürdüğü düşünülür"
+            "text": "Assumes the energy conversion has the same period as the displacement and that the conversion takes a full period"
            }
           ]
          }
@@ -607,7 +607,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Enerjinin periyodunun hareketin periyodunun iki katı olduğu sanılır (doğrusu yarısıdır)"
+            "text": "Assumes the period of the energy is twice the period of the motion (it is actually half)"
            }
           ]
          }
@@ -625,7 +625,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kinetik enerji denge konumunda, potansiyel enerji en büyük yer değiştirmede en büyüktür. Denge konumundan uç noktaya gidiş çeyrek periyot sürer: T/4."
+          "text": "Kinetic energy is greatest at the equilibrium position, and potential energy is greatest at the largest displacement. Moving from the equilibrium position to an extreme takes a quarter of a period: T/4."
          }
         ]
        }
@@ -716,7 +716,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hızın yer değiştirmeyle doğrusal azaldığı varsayılır: 2.0 × (1 − 0.60) = 0.80"
+            "text": "Assumes the speed decreases linearly with displacement: 2.0 × (1 − 0.60) = 0.80"
            }
           ]
          }
@@ -751,7 +751,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hız yer değiştirmeyle doğru orantılı alınır (ivme ile karıştırma): 2.0 × 0.60 = 1.2"
+            "text": "Takes the speed to be directly proportional to displacement (confusion with acceleration): 2.0 × 0.60 = 1.2"
            }
           ]
          }
@@ -786,7 +786,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kareler alınmaz: 2.0 × √(1 − 0.60) = 1.26 ≈ 1.3"
+            "text": "Does not square the terms: 2.0 × √(1 − 0.60) = 1.26 ≈ 1.3"
            }
           ]
          }
@@ -869,7 +869,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Faz açısı; x = x₀ sin(ωt + φ)",
+    "outcome": "Phase angle; x = x₀ sin(ωt + φ)",
     "stem": {
      "type": "doc",
      "content": [
@@ -1059,7 +1059,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Sinüs yerine kosinüs kullanılır: cos φ = 0.50 → φ = π/3 (sin(π/3) = 0.87, yer değiştirme koşulunu sağlamaz)"
+            "text": "Uses cosine instead of sine: cos φ = 0.50 → φ = π/3 (sin(π/3) = 0.87, does not satisfy the displacement condition)"
            }
           ]
          }
@@ -1094,7 +1094,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "B'deki hatanın üzerine yön için π − π/3 alınır (sin(2π/3) = 0.87, yer değiştirme koşulunu sağlamaz)"
+            "text": "Builds on the error in B by taking π − π/3 for the direction (sin(2π/3) = 0.87, does not satisfy the displacement condition)"
            }
           ]
          }
@@ -1129,7 +1129,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Yer değiştirme koşulu sağlanır (sin(5π/6) = 0.50) ama hareket yönü denetlenmez; bu fazda parçacık negatif yönde gider"
+            "text": "Satisfies the displacement condition (sin(5π/6) = 0.50) but does not check the direction of motion; at this phase the particle moves in the negative direction"
            }
           ]
          }
@@ -1147,7 +1147,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "t = 0'da sin φ = 0.50 → φ = π/6 ya da 5π/6. Hız ωx₀ cos φ ile orantılıdır; pozitif yönde hareket için cos φ > 0 olmalıdır. Bu yalnızca φ = π/6 için sağlanır (cos(5π/6) < 0)."
+          "text": "At t = 0, sin φ = 0.50 → φ = π/6 or 5π/6. The velocity is proportional to ωx₀ cos φ; for motion in the positive direction cos φ > 0 is required. This is satisfied only for φ = π/6 (cos(5π/6) < 0)."
          }
         ]
        }
@@ -1178,7 +1178,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "BHH koşulları; basit sarkaç periyodu; a = −ω²x; nitel enerji; küçük açı sınırı",
+    "outcome": "Conditions for SHM; period of a simple pendulum; a = −ω²x; qualitative energy; small-angle limit",
     "stem": {
      "type": "doc",
      "content": [
@@ -1910,7 +1910,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "C.1",
     "secondary_syllabus_nodes": [],
-    "outcome": "Kütle–yay periyodu verisinin işlenmesi; belirsizlik; doğrusallaştırma; sistematik hata",
+    "outcome": "Processing mass–spring period data; uncertainty; linearization; systematic error",
     "stem": {
      "type": "doc",
      "content": [
@@ -2272,7 +2272,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Bir destek çubuğuna bağlı düşey yay; yayın alt ucunda bir askı (hanger) ve üzerinde dilimli kütleler; yanında düşey cetvel ve denge konumunu gösteren işaret. \"diagram not to scale\".",
+      "description": "A vertical spring attached to a support rod; a hanger at the lower end of the spring with slotted masses on it; beside it a vertical ruler and a mark showing the equilibrium position. \"diagram not to scale\".",
       "asset_id": null,
       "alt_text": null
      },
@@ -2280,7 +2280,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
+      "description": "Graph to be generated from data; details in the Figure note of the source file.",
       "asset_id": null,
       "alt_text": null
      }

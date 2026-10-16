@@ -1,35 +1,35 @@
-# Pilot soru seti: C.1 Basit harmonik hareket
+# Pilot question set: C.1 Simple harmonic motion
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneği](a1-kinematics-pilot-questions.md) ile aynı yapıda yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written to the [authoring standard](AUTHORING_STANDARD.md), with the same structure as the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü C.1 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; senaryolar özgündür.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile yeniden hesaplandı;
-> Soru 7'deki eğimler tablodaki veriden hesaplandı. g = 9.8 m s⁻² alındı (veri kitapçığı değeri uzmanca teyit edilmeli).
-> **Doğrulanmayan:** (1) bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; (2) bilinen bir sınav sorusuna benzerlik açısından uzman
-> gözüyle bakılmadı; (3) veri kitapçığındaki BHH denklemlerinin yazımı (x = x₀ sin(ωt + φ)) kitapçıktan teyit edilmedi, bu yüzden Soru 5'te
-> denklem soru içinde verildi; (4) nitel sorular (Soru 3, Soru 6 d–e, Soru 7 a ve d) kodla doğrulanamaz; (5) Soru 7'nin grafiği
-> üretilmedi.
+> **Source:** only syllabus node C.1 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook or internet question was used as input; the scenarios are original.
+> **Numerical check:** all numerical answers and all numerical distractors were recomputed with `python3` (standard library only);
+> the gradients in Question 7 were computed from the data in the table. g = 9.8 m s⁻² was used (the data booklet value should be confirmed by an expert).
+> **Not verified:** (1) it was solved by an independent blind solver; it has not been through expert review; (2) it has not been
+> checked by an expert for similarity to a known exam question; (3) the wording of the SHM equations in the data booklet (x = x₀ sin(ωt + φ)) was not confirmed from the booklet, so in Question 5 the
+> equation is given in the question; (4) qualitative questions (Question 3, Question 6 d–e, Question 7 a and d) cannot be verified by code; (5) the graph of Question 7 was not
+> generated.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (C.1) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (C.1) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Kütle–yay sisteminin periyodu; T ∝ √m | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | a = −ω²x; frekans–açısal frekans ilişkisi | AO2 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Enerji değişiminin nitel anlatımı (kinetik–potansiyel dönüşümünün zamanlaması) | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | HL | v = ±ω√(x₀² − x²) | AO2 | — | 1 | Orta |
-| 5 | Paper 1A | HL | Faz açısı; x = x₀ sin(ωt + φ) | AO3 | — | 1 | Zor |
-| 6 | Paper 2 | SL | BHH koşulları; basit sarkaç periyodu; a = −ω²x; nitel enerji; küçük açı sınırı | AO1–AO3 | State, Show that, Calculate, Describe, Suggest | 9 | Orta |
-| 7 | Paper 1B | SL | Kütle–yay periyodu verisinin işlenmesi; belirsizlik; doğrusallaştırma; sistematik hata | AO2–AO3 | State, Calculate, Determine, Suggest, Explain | 10 | Orta–zor |
+| 1 | Paper 1A | SL | Period of a mass–spring system; T ∝ √m | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | a = −ω²x; relation between frequency and angular frequency | AO2 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Qualitative description of energy changes (timing of the kinetic–potential conversion) | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | HL | v = ±ω√(x₀² − x²) | AO2 | — | 1 | Medium |
+| 5 | Paper 1A | HL | Phase angle; x = x₀ sin(ωt + φ) | AO3 | — | 1 | Hard |
+| 6 | Paper 2 | SL | Conditions for SHM; period of a simple pendulum; a = −ω²x; qualitative energy; small-angle limit | AO1–AO3 | State, Show that, Calculate, Describe, Suggest | 9 | Medium |
+| 7 | Paper 1B | SL | Processing mass–spring period data; uncertainty; linearization; systematic error | AO2–AO3 | State, Calculate, Determine, Suggest, Explain | 10 | Medium–hard |
 
-Bu set C.1'in tamamını kapsamaz. Eksik kalanlar: yer değiştirme–zaman ve ivme–yer değiştirme grafiklerinin yorumu; hız denklemi
-v = ωx₀ cos(ωt + φ); toplam ve potansiyel enerjinin nicel hesabı (HL); sarkaç periyodunun g'ye bağlılığı; iki salınıcı arasındaki faz farkı.
+This set does not cover all of C.1. Not covered: interpretation of displacement–time and acceleration–displacement graphs; the velocity equation
+v = ωx₀ cos(ωt + φ); quantitative calculation of total and potential energy (HL); the dependence of pendulum period on g; the phase difference between two oscillators.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A block of mass 0.20 kg hangs from a light vertical spring and oscillates with a period of 0.60 s. The block is replaced by a
 block of mass 0.80 kg on the same spring.
@@ -41,19 +41,19 @@ B. 0.60 s
 C. 1.2 s
 D. 2.4 s
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** T = 2π√(m/k), yani T ∝ √m. Kütle 4 katına çıkar; periyot √4 = 2 katına çıkar: 2 × 0.60 = 1.2 s.
+**Solution.** T = 2π√(m/k), so T ∝ √m. The mass increases by a factor of 4; the period increases by a factor of √4 = 2: 2 × 0.60 = 1.2 s.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Orantı ters çevrilir (T ∝ 1/√m): 0.60 / 2 = 0.30 s |
-| B | Periyodun kütleden bağımsız olduğu düşünülür (basit sarkaçla karıştırma): 0.60 s |
-| D | Karekök unutulur (T ∝ m): 0.60 × 4 = 2.4 s |
+| A | Inverts the proportionality (T ∝ 1/√m): 0.60 / 2 = 0.30 s |
+| B | Assumes the period is independent of mass (confusion with the simple pendulum): 0.60 s |
+| D | Forgets the square root (T ∝ m): 0.60 × 4 = 2.4 s |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A buoy floating on the sea moves vertically with simple harmonic motion of frequency 0.50 Hz and amplitude 0.40 m.
 
@@ -64,19 +64,19 @@ B. 2.0 m s⁻²
 C. 3.9 m s⁻²
 D. 32 m s⁻²
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** ω = 2πf = 2π × 0.50 = 3.14 rad s⁻¹. |a| = ω²x = 3.14² × 0.20 = 1.97 ≈ 2.0 m s⁻².
+**Solution.** ω = 2πf = 2π × 0.50 = 3.14 rad s⁻¹. |a| = ω²x = 3.14² × 0.20 = 1.97 ≈ 2.0 m s⁻².
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | ω'nın karesi alınmaz: ωx = 3.14 × 0.20 = 0.63 |
-| C | Yer değiştirme yerine genlik kullanılır (en büyük ivme): 3.14² × 0.40 = 3.9 |
-| D | 0.50 değeri periyot sanılır: ω = 2π / 0.50 = 12.6 rad s⁻¹; 12.6² × 0.20 = 31.6 ≈ 32 |
+| A | Does not square ω: ωx = 3.14 × 0.20 = 0.63 |
+| C | Uses the amplitude instead of the displacement (the maximum acceleration): 3.14² × 0.40 = 3.9 |
+| D | Takes 0.50 to be the period: ω = 2π / 0.50 = 12.6 rad s⁻¹; 12.6² × 0.20 = 31.6 ≈ 32 |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A trolley attached to a horizontal spring oscillates on a frictionless track with simple harmonic motion of period *T*.
 
@@ -88,20 +88,20 @@ B. *T*/2
 C. *T*
 D. 2*T*
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Kinetik enerji denge konumunda, potansiyel enerji en büyük yer değiştirmede en büyüktür. Denge konumundan uç noktaya gidiş
-çeyrek periyot sürer: T/4.
+**Solution.** Kinetic energy is greatest at the equilibrium position, and potential energy is greatest at the largest displacement. Moving from the equilibrium position to an extreme
+takes a quarter of a period: T/4.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Bir uçtan öbür uca geçiş süresi alınır (bu, potansiyel enerjinin art arda iki en büyük değeri arasındaki süredir) |
-| C | Enerji dönüşümünün yer değiştirmeyle aynı periyotta olduğu ve dönüşümün tam bir periyot sürdüğü düşünülür |
-| D | Enerjinin periyodunun hareketin periyodunun iki katı olduğu sanılır (doğrusu yarısıdır) |
+| B | Takes the time to go from one extreme to the other (this is the time between two successive maximum values of the potential energy) |
+| C | Assumes the energy conversion has the same period as the displacement and that the conversion takes a full period |
+| D | Assumes the period of the energy is twice the period of the motion (it is actually half) |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 A particle moves with simple harmonic motion of amplitude 0.10 m. The maximum speed of the particle is 2.0 m s⁻¹.
 
@@ -112,19 +112,19 @@ B. 1.2 m s⁻¹
 C. 1.3 m s⁻¹
 D. 1.6 m s⁻¹
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** v<sub>max</sub> = ωx₀ → ω = 2.0 / 0.10 = 20 rad s⁻¹. v = ω√(x₀² − x²) = 20 × √(0.10² − 0.060²) = 20 × 0.080 = 1.6 m s⁻¹.
+**Solution.** v<sub>max</sub> = ωx₀ → ω = 2.0 / 0.10 = 20 rad s⁻¹. v = ω√(x₀² − x²) = 20 × √(0.10² − 0.060²) = 20 × 0.080 = 1.6 m s⁻¹.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Hızın yer değiştirmeyle doğrusal azaldığı varsayılır: 2.0 × (1 − 0.60) = 0.80 |
-| B | Hız yer değiştirmeyle doğru orantılı alınır (ivme ile karıştırma): 2.0 × 0.60 = 1.2 |
-| C | Kareler alınmaz: 2.0 × √(1 − 0.60) = 1.26 ≈ 1.3 |
+| A | Assumes the speed decreases linearly with displacement: 2.0 × (1 − 0.60) = 0.80 |
+| B | Takes the speed to be directly proportional to displacement (confusion with acceleration): 2.0 × 0.60 = 1.2 |
+| C | Does not square the terms: 2.0 × √(1 − 0.60) = 1.26 ≈ 1.3 |
 
 ---
 
-## Soru 5 — Paper 1A
+## Question 5 — Paper 1A
 
 The displacement *x* of a particle that moves with simple harmonic motion is given by *x* = *x*₀ sin(*ωt* + *φ*), where *x*₀ is the
 amplitude. At time *t* = 0 the displacement of the particle is +*x*₀/2 and the particle is moving in the positive direction.
@@ -136,20 +136,20 @@ B. π/3 rad
 C. 2π/3 rad
 D. 5π/6 rad
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** t = 0'da sin φ = 0.50 → φ = π/6 ya da 5π/6. Hız ωx₀ cos φ ile orantılıdır; pozitif yönde hareket için cos φ > 0 olmalıdır.
-Bu yalnızca φ = π/6 için sağlanır (cos(5π/6) < 0).
+**Solution.** At t = 0, sin φ = 0.50 → φ = π/6 or 5π/6. The velocity is proportional to ωx₀ cos φ; for motion in the positive direction cos φ > 0 is required.
+This is satisfied only for φ = π/6 (cos(5π/6) < 0).
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Sinüs yerine kosinüs kullanılır: cos φ = 0.50 → φ = π/3 (sin(π/3) = 0.87, yer değiştirme koşulunu sağlamaz) |
-| C | B'deki hatanın üzerine yön için π − π/3 alınır (sin(2π/3) = 0.87, yer değiştirme koşulunu sağlamaz) |
-| D | Yer değiştirme koşulu sağlanır (sin(5π/6) = 0.50) ama hareket yönü denetlenmez; bu fazda parçacık negatif yönde gider |
+| B | Uses cosine instead of sine: cos φ = 0.50 → φ = π/3 (sin(π/3) = 0.87, does not satisfy the displacement condition) |
+| C | Builds on the error in B by taking π − π/3 for the direction (sin(2π/3) = 0.87, does not satisfy the displacement condition) |
+| D | Satisfies the displacement condition (sin(5π/6) = 0.50) but does not check the direction of motion; at this phase the particle moves in the negative direction |
 
 ---
 
-## Soru 6 — Paper 2 (9 puan)
+## Question 6 — Paper 2 (9 marks)
 
 A lamp of mass 1.5 kg hangs from the ceiling of a hall on a long light cable. The lamp is pulled a small distance to one side and
 released. The lamp then swings and the time for 10 complete oscillations is 49 s. The lamp can be modelled as a simple pendulum.
@@ -177,29 +177,29 @@ is negligible. [2]
 | 6. | d | | «gravitational» potential energy is transferred to kinetic energy as the lamp moves to the equilibrium position / lowest point ✓<br>kinetic energy is transferred back to «gravitational» potential energy **AND** the total energy is constant ✓ | *OWTTE* | 2 |
 | 6. | e | | the restoring force / acceleration is not proportional to the displacement «for a large angle» ✓ | *Accept "the small-angle approximation is no longer valid".*<br>*OWTTE* | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `t10 = 49 s`, `N = 10`, `x0 = 0.30 m`, sabit `g = 9.8 m/s^2` | |
+| Parameters | `t10 = 49 s`, `N = 10`, `x0 = 0.30 m`, constant `g = 9.8 m/s^2` | |
 | `T` | `t10/N` | 4.90 s |
 | `L` | `g*T**2/(4*pi**2)` | 5.96 m |
 | `omega` | `2*pi/T` | 1.28 rad s⁻¹ |
 | `a_max` | `omega**2*x0` | 0.493 m s⁻² |
-| Denetim (soruda istenmez) | `asin(x0/L)` ve `asin(3.0/L)` | 2.9° ve 30° |
+| Check (not asked in the question) | `asin(x0/L)` and `asin(3.0/L)` | 2.9° and 30° |
 
-Kütle (1.5 kg) hiçbir hesapta kullanılmaz; bilerek verilen fazladan bilgidir (formül seçme becerisi).
+The mass (1.5 kg) is not used in any calculation; it is deliberately given as extra information (testing the ability to choose the formula).
 
 ---
 
-## Soru 7 — Paper 1B (10 puan)
+## Question 7 — Paper 1B (10 marks)
 
 A student investigates how the period of oscillation of a load on a vertical spring depends on the mass of the load. Slotted
 masses are placed on a hanger that is attached to the lower end of the spring. For each total mass *m* of slotted masses, the load
 is displaced vertically and released, and the time *t* for 10 complete oscillations is measured with a stopwatch.
 
-> **Şekil:** Bir destek çubuğuna bağlı düşey yay; yayın alt ucunda bir askı (hanger) ve üzerinde dilimli kütleler; yanında düşey cetvel
-> ve denge konumunu gösteren işaret. "diagram not to scale".
+> **Figure:** A vertical spring attached to a support rod; a hanger at the lower end of the spring with slotted masses on it; beside it a vertical ruler
+> and a mark showing the equilibrium position. "diagram not to scale".
 
 | *m* / kg | *t* / s ± 0.2 s |
 |---|---|
@@ -240,58 +240,58 @@ The line of best fit is straight but does **not** pass through the origin. Its i
 | 7. | d | i | the mass of the hanger / of the spring also oscillates but is not included in *m* ✓ | *Accept "there is a constant extra mass" OWTTE.* | 1 |
 | 7. | d | ii | the extra mass is constant / is a systematic error, so every point is shifted by the same amount «along the *m* axis» ✓<br>the gradient is unchanged, so *k* is not affected ✓ | *OWTTE*<br>*Second mark requires the reference to the gradient.* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `dt = 0.2 s`, `N = 10`, `t(0.100 kg) = 4.9 s`, `grad = 1.56`, `grad_max = 1.70`, `grad_min = 1.42` (s² kg⁻¹) | |
+| Parameters | `dt = 0.2 s`, `N = 10`, `t(0.100 kg) = 4.9 s`, `grad = 1.56`, `grad_max = 1.70`, `grad_min = 1.42` (s² kg⁻¹) | |
 | `dT` | `dt/N` | 0.02 s |
 | `pct_T2` | `2*dt/t*100` | 8.2 % |
 | `k` | `4*pi**2/grad` | 25.3 N m⁻¹ |
-| `d_grad` | `(grad_max - grad_min)/2` | 0.14 s² kg⁻¹ (%9.0) |
+| `d_grad` | `(grad_max - grad_min)/2` | 0.14 s² kg⁻¹ (9.0 %) |
 | `dk` | `k*d_grad/grad` | 2.3 N m⁻¹ |
-| Aralık denetimi | `4*pi**2/grad_min`, `4*pi**2/grad_max` | 27.8 ve 23.2 N m⁻¹; yarı aralık (27.8 − 23.2)/2 = 2.3 N m⁻¹ |
+| Range check | `4*pi**2/grad_min`, `4*pi**2/grad_max` | 27.8 and 23.2 N m⁻¹; half-range (27.8 − 23.2)/2 = 2.3 N m⁻¹ |
 
-### Şekil notu
+### Figure note
 
-Öğrenciye gösterilecek sürümde tablo ile birlikte belirsizlik çubuklu *T*²–*m* grafiği yer alır; grafik aynı veriden kodla üretilir.
-Tablodaki veriden hesaplanan değerler: *T*² = 0.240, 0.397, 0.548, 0.706, 0.865 s²; *T*² belirsizlikleri (2*T*Δ*T*) 0.020–0.037 s²;
-en küçük kareler eğimi 1.558 s² kg⁻¹, kesim noktası 0.084 s²; belirsizlik çubuklarının uçlarından geçen doğruların eğimleri 1.704 ve
-1.420 s² kg⁻¹. Soruda verilen 1.56, 1.70, 1.42 ve 0.08 değerleri bunların yuvarlanmış halidir. Veri, *k* = 25 N m⁻¹ ve tabloya
-yazılmayan 0.050 kg'lık sabit ek kütle (askı) ile üretilip 0.1 s'ye yuvarlanmıştır; kesim noktası / eğim = 0.054 kg bununla tutarlıdır.
+The version shown to the student includes, together with the table, a *T*²–*m* graph with uncertainty bars; the graph is generated by code from the same data.
+Values calculated from the data in the table: *T*² = 0.240, 0.397, 0.548, 0.706, 0.865 s²; the *T*² uncertainties (2*T*Δ*T*) are 0.020–0.037 s²;
+the least-squares gradient is 1.558 s² kg⁻¹, the intercept 0.084 s²; the gradients of the lines through the ends of the uncertainty bars are 1.704 and
+1.420 s² kg⁻¹. The values 1.56, 1.70, 1.42 and 0.08 given in the question are rounded versions of these. The data were generated with *k* = 25 N m⁻¹ and a constant extra mass
+of 0.050 kg (the hanger) that is not written in the table, and rounded to 0.1 s; the intercept / gradient = 0.054 kg is consistent with this.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–5 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–5 uygun (artan) |
-| 1A: doğru cevap harfleri dengeli | C, B, A, D, A |
-| 1A: şekil olmadan çözülebilir | Soru 1–5 şekil gerektirmez |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 6 uygun (2, 2, 2, 2, 1; toplam 9). SL kâğıdında kısa soru 4–6 puan gözlendi; 9 puan HL aralığının üst sınırıdır — SL kâğıdı için (d) ya da (e) çıkarılabilir |
-| Paper 2: "Show that" kalıbı ve en az bir AO3 parçası | Soru 6 (b) Show that, (e) Suggest |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, AND, ECF, OWTTE | Soru 6 ve Soru 7 uygun |
-| 1B: yaklaşık 10 puanlık deney sorusu, alt parçalar 1–3 puan | Soru 7 uygun (1, 1, 2, 3, 1, 2; toplam 10) |
-| 1B: tablo başlığı "büyüklük / birim ± belirsizlik" | Soru 7 uygun |
-| 1B: öğrenci verilen grafiğe en uygun doğruyu çizer ve eğimi kendisi bulur | **Soru 7 uygun değil:** grafik üretilmediği için eğimler ve kesim noktası metinde verildi. Grafik şablonu hazır olunca (c) ve (d) yeniden yazılmalı |
-| 1B: düzenek şeması | **Eksik:** yalnızca sözle tarif edildi (`> **Şekil:**`) |
-| Müfredat sınırı: SL'de enerji nitel; faz açısı radyan; türev/integral yok | Soru 3 ve 6(d) nitel; Soru 5 radyan; hız ifadesi türevsiz, veri kitapçığı ilişkisi olarak kullanıldı |
-| Düzey etiketi | Soru 4 ve 5 HL (ek HL içeriği); diğerleri SL |
-| Değer–birim yazımı (m s⁻¹), 2 anlamlı basamak | Uygun |
+| 1A: context + a separate single question sentence ("What is …?") + A–D listed one below the other | Questions 1–5 conform |
+| 1A: four options of the same type, same unit, in order of magnitude | Questions 1–5 conform (ascending) |
+| 1A: correct-answer letters balanced | C, B, A, D, A |
+| 1A: solvable without a figure | Questions 1–5 need no figure |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 6 conforms (2, 2, 2, 2, 1; total 9). On an SL paper short questions of 4–6 marks were observed; 9 marks is the top of the HL range — for an SL paper (d) or (e) can be removed |
+| Paper 2: "Show that" pattern and at least one AO3 part | Question 6 (b) Show that, (e) Suggest |
+| Markscheme: four-column table, ✓, « », OR, AND, ECF, OWTTE | Questions 6 and 7 conform |
+| 1B: experiment question of about 10 marks, sub-parts 1–3 marks | Question 7 conforms (1, 1, 2, 3, 1, 2; total 10) |
+| 1B: table header "quantity / unit ± uncertainty" | Question 7 conforms |
+| 1B: student draws the best-fit line on a given graph and finds the gradient themselves | **Question 7 does not conform:** because the graph was not generated, the gradients and intercept are given in the text. When the graph template is ready, (c) and (d) must be rewritten |
+| 1B: apparatus diagram | **Missing:** only described in words (`> **Figure:**`) |
+| Syllabus limit: in SL energy is qualitative; phase angle in radians; no derivatives/integrals | Question 3 and 6(d) are qualitative; Question 5 uses radians; the velocity expression is derivative-free, used as a data booklet relation |
+| Level label | Questions 4 and 5 HL (additional HL content); the others SL |
+| Value–unit notation (m s⁻¹), 2 significant figures | Conforms |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, cevapları görmeyen bağımsız bir kör çözücü tarafından çözüldü; çözücü tüm cevap
-anahtarlarını ve markscheme sonuçlarını bağımsız olarak yeniden üretti (KRİTİK bulgu yok). Bulgular:
-[review/c1-review.md](review/c1-review.md). Bu, uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by an independent blind solver who did not see the answers; the solver independently reproduced all answer
+keys and markscheme results (no CRITICAL findings). Findings:
+[review/c1-review.md](review/c1-review.md). This does not replace expert review.
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile, dosyanın son metni üzerinden yeniden denetlendi):
+Changes made in response to the findings (every changed number was rechecked with `python3` against the final text of the file):
 
-- **Soru 6 (a) (ORTA):** kök, yalnızca tanım koşullarını isteyecek biçimde yeniden yazıldı ("State, in terms of the acceleration of the lamp, …"). Markscheme değişmedi.
-- **Soru 6 (DÜŞÜK):** "Biçim uyumu" tablosuna SL kısa sorusu için 9 puanın uzun olduğu notu eklendi.
-- **Soru 7 (c) (DÜŞÜK):** markscheme notuna ve formül zincirine ± 2.3 değerinin yarı aralık olduğu, (27.8 − 23.2)/2, yazıldı.
-- **Uygulanmayan:** Soru 3'ün D çeldiricisinin (2*T*) 3*T*/4 ile değiştirilmesi. İncelemede "şüphe" olarak geçiyor; 3*T*/4 belirli bir yanılgıya dayanmıyor ve *T*/4 ile aynı fiziksel durumu (denge–uç arası) çağrıştırdığı için daha zayıf bulundu. Uzman kararına bırakıldı.
+- **Question 6 (a) (MEDIUM):** the stem was rewritten to ask only for the defining conditions ("State, in terms of the acceleration of the lamp, …"). The markscheme is unchanged.
+- **Question 6 (LOW):** a note was added to the "Format conformance" table that 9 marks is long for an SL short question.
+- **Question 7 (c) (LOW):** the markscheme note and the formula chain now state that ± 2.3 is the half-range, (27.8 − 23.2)/2.
+- **Not applied:** replacing distractor D of Question 3 (2*T*) with 3*T*/4. The review lists it as "doubtful"; 3*T*/4 is not based on a specific misconception and, because it suggests the same physical situation (equilibrium to extreme) as *T*/4, was judged weaker. Left to the expert's decision.

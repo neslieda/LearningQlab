@@ -90,11 +90,11 @@ _SENTENCE_PUNCTUATION = frozenset(".,;:!?'\"()[]")
 
 # --- Mappings (IMPORT_RULES 3 and 5) -------------------------------------------------------
 _DIFFICULTY = {
-    "Kolay": Difficulty.EASY,
-    "Kolay–orta": Difficulty.MEDIUM,
-    "Orta": Difficulty.MEDIUM,
-    "Orta–zor": Difficulty.HARD,
-    "Zor": Difficulty.HARD,
+    "Easy": Difficulty.EASY,
+    "Easy–medium": Difficulty.MEDIUM,
+    "Medium": Difficulty.MEDIUM,
+    "Medium–hard": Difficulty.HARD,
+    "Hard": Difficulty.HARD,
 }
 _SECTION_CODES = {"1A": "paper_1a", "1B": "paper_1b", "2": "paper_2"}
 _ANSWER_TYPES: dict[str, AnswerType] = {
@@ -110,24 +110,29 @@ _ANSWER_TYPES: dict[str, AnswerType] = {
     "sketch": AnswerType.GRAPH_SKETCH,
 }
 # Staff-only figure descriptions: the keyword found earliest in the text decides the kind.
-# Matching is case-insensitive and starts at a word start (`ışın` is not found in `dışında`).
+# Matching is case-insensitive and starts at a word start (`ray` is not found in `array`).
 _STIMULUS_KEYWORDS: tuple[tuple[str, StimulusKind], ...] = (
-    ("devre", StimulusKind.CIRCUIT_DIAGRAM),
-    ("direnç", StimulusKind.CIRCUIT_DIAGRAM),
-    ("batarya", StimulusKind.CIRCUIT_DIAGRAM),
-    ("voltmetre", StimulusKind.CIRCUIT_DIAGRAM),
-    ("ampermetre", StimulusKind.CIRCUIT_DIAGRAM),
-    ("grafik", StimulusKind.GRAPH),
-    ("eksen", StimulusKind.GRAPH),
+    ("circuit", StimulusKind.CIRCUIT_DIAGRAM),
+    ("resistor", StimulusKind.CIRCUIT_DIAGRAM),
+    ("battery", StimulusKind.CIRCUIT_DIAGRAM),
+    ("cell", StimulusKind.CIRCUIT_DIAGRAM),
+    ("voltmeter", StimulusKind.CIRCUIT_DIAGRAM),
+    ("ammeter", StimulusKind.CIRCUIT_DIAGRAM),
+    ("graph", StimulusKind.GRAPH),
+    ("axis", StimulusKind.GRAPH),
+    ("axes", StimulusKind.GRAPH),
     ("p–v", StimulusKind.GRAPH),
-    ("alan çizgi", StimulusKind.FIELD_DIAGRAM),
-    ("ışın", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
-    ("dalga cephe", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
-    ("enerji düzey", StimulusKind.ENERGY_LEVEL_DIAGRAM),
-    ("uzay-zaman", StimulusKind.SPACETIME_DIAGRAM),
-    ("tablo", StimulusKind.DATA_TABLE),
+    ("field line", StimulusKind.FIELD_DIAGRAM),
+    ("ray", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
+    ("wavefront", StimulusKind.RAY_WAVEFRONT_DIAGRAM),
+    ("energy level", StimulusKind.ENERGY_LEVEL_DIAGRAM),
+    ("spacetime", StimulusKind.SPACETIME_DIAGRAM),
+    ("space-time", StimulusKind.SPACETIME_DIAGRAM),
+    ("table", StimulusKind.DATA_TABLE),
 )
-FIGURE_NOTE_DESCRIPTION = "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda."
+FIGURE_NOTE_DESCRIPTION = (
+    "Graph to be generated from data; details in the Figure note of the source file."
+)
 MAX_FILE_BYTES = 1_048_576
 MAX_LINE_CHARS = 20_000
 MAX_DIGITS = 4
@@ -142,10 +147,10 @@ _MARK_ORDER = (
 _SUPERSCRIPTS = str.maketrans("⁻⁺⁰¹²³⁴⁵⁶⁷⁸⁹", "-+0123456789")
 _SUPERSCRIPT_CHARS = "⁻⁺⁰¹²³⁴⁵⁶⁷⁸⁹"
 _KNOWN_SECTION_TITLES = (
-    "Kapsam tablosu",
-    "Biçim uyumu",
-    "Bağımsız kontrol",
-    "Bu denemeden çıkan gözlemler",
+    "Scope table",
+    "Format conformance",
+    "Independent check",
+    "Observations from this trial",
 )
 _ROMAN = ("i", "ii", "iii", "iv", "v", "vi", "vii", "viii")
 
@@ -166,7 +171,7 @@ ADDITIONS: dict[str, str] = {
         "olmalıdır."
     ),
     "mcq-trailing-note": (
-        "Çoktan seçmelide yanılgı tablosundan sonra gelen serbest paragraflar (`Not: …`) "
+        "Çoktan seçmelide yanılgı tablosundan sonra gelen serbest paragraflar (`Note: …`) "
         "aktarılmaz, raporda sayılır."
     ),
     "italic-word": "Kapalı italik sözcük listesine eklenen belirteçler (aşağıda).",
@@ -700,34 +705,30 @@ def _joined(block: SourceBlock) -> str:
 # --- Stimuli -------------------------------------------------------------------------------
 
 
-def turkish_lower(text: str) -> str:
-    """Lower case with the Turkish pairs I/ı and İ/i (so that `Işın` becomes `ışın`)."""
-    return text.replace("I", "ı").replace("İ", "i").lower()
-
-
 def stimulus_kind(description: str) -> StimulusKind:
-    """Section 3.3: the kind from the keyword that occurs first, at the start of a word."""
-    lowered = turkish_lower(description)
+    """Section 3.3: the kind from the keyword that occurs first, as a whole word (a plural `s` or
+    `es` is allowed: "graphs", but not "graphite")."""
+    lowered = description.casefold()
     best: tuple[int, StimulusKind] | None = None
     for keyword, kind in _STIMULUS_KEYWORDS:
-        found = re.search(rf"(?<![^\W\d_]){re.escape(keyword)}", lowered)
+        found = re.search(rf"(?<![^\W\d_]){re.escape(keyword)}(?:e?s)?(?![^\W\d_])", lowered)
         if found is not None and (best is None or found.start() < best[0]):
             best = (found.start(), kind)
     return best[1] if best is not None else StimulusKind.SCHEMATIC_DIAGRAM
 
 
-_FIGURE_LABEL = re.compile(r"^>\s*\*\*Şekil:\*\*\s*")
+_FIGURE_LABEL = re.compile(r"^>\s*\*\*Figure:\*\*\s*")
 
 
 def figure_block(block: SourceBlock, stimuli: list[Stimulus], env: Env) -> Figure:
-    """A `> **Şekil:** …` quote: a stimulus (fig1, fig2, …) and its placement."""
+    """A `> **Figure:** …` quote: a stimulus (fig1, fig2, …) and its placement."""
     env = env.at(block.first)
     parts: list[str] = []
     for index, line in enumerate(block.lines):
         text = line.text.strip()
         if index == 0:
             if not _FIGURE_LABEL.match(text):
-                raise env.fail("a quote block must start with `> **Şekil:**`")
+                raise env.fail("a quote block must start with `> **Figure:**`")
             text = _FIGURE_LABEL.sub("", text)
         elif text.startswith(">"):
             text = text[1:].strip()
@@ -742,7 +743,7 @@ def figure_block(block: SourceBlock, stimuli: list[Stimulus], env: Env) -> Figur
             description=description,
         )
     )
-    env.tally.stimuli.append((env.ref, stimulus_id, stimuli[-1].kind.value, "Şekil bloğu"))
+    env.tally.stimuli.append((env.ref, stimulus_id, stimuli[-1].kind.value, "Figure block"))
     env.tally.count("stimulus_kind", stimuli[-1].kind.value)
     return Figure(type="figure", attrs=FigureAttrs(stimulus_id=stimulus_id))
 
@@ -786,8 +787,8 @@ class Heading:
 
 
 _HEADING = re.compile(
-    r"^## Soru ([0-9]{1,4}) — Paper (1A|1B|2)"
-    r"(?: \((?:(HL), )?([0-9]{1,4}) puan\)| \((HL)\))?$"
+    r"^## Question ([0-9]{1,4}) — Paper (1A|1B|2)"
+    r"(?: \((?:(HL), )?([0-9]{1,4}) marks\)| \((HL)\))?$"
 )
 
 
@@ -800,13 +801,13 @@ def small_int(text: str) -> int | None:
 
 _SCOPE_HEADER = (
     "#",
-    "Bölüm",
-    "Düzey",
-    "Kazanım",
-    "Hedef",
-    "Komut sözcüğü",
-    "Puan",
-    "Zorluk",
+    "Section",
+    "Level",
+    "Outcome",
+    "Objective",
+    "Command terms",
+    "Marks",
+    "Difficulty",
 )
 
 
@@ -830,7 +831,7 @@ def parse_scope(lines: Sequence[Line], env: Env) -> dict[int, ScopeRow]:
     rows: dict[int, ScopeRow] = {}
     table = [line for line in lines if line.text.strip().startswith("|")]
     if not table:
-        raise env.fail("no scope table (`## Kapsam tablosu`)")
+        raise env.fail("no scope table (`## Scope table`)")
     header = split_row(table[0], env)
     if len(header) != 8 or tuple(cell.split(" (")[0] for cell in header) != _SCOPE_HEADER:
         raise env.at(table[0].no).fail(f"unexpected scope table header {header}")
@@ -930,20 +931,22 @@ def convert_mcq(
 
     rest = blocks[index + 1 :]
     if not rest or rest[0].kind != "para":
-        raise env.at(option_block.first).fail("`**Cevap: X**` is missing after the options")
+        raise env.at(option_block.first).fail("`**Answer: X**` is missing after the options")
     answer = _joined(rest[0])
-    found = re.fullmatch(r"\*\*Cevap: ([A-D])\*\*", answer)
+    found = re.fullmatch(r"\*\*Answer: ([A-D])\*\*", answer)
     if found is None:
-        raise env.at(rest[0].first).fail(f"expected `**Cevap: X**`, found {answer[:40]!r}")
+        raise env.at(rest[0].first).fail(f"expected `**Answer: X**`, found {answer[:40]!r}")
     correct = found.group(1)
 
     table_at = next((i for i, b in enumerate(rest) if b.kind == "table"), None)
     if table_at is None or table_at < 2:
-        raise env.at(rest[0].first).fail("missing `**Çözüm.**` text or the misconception table")
+        raise env.at(rest[0].first).fail("missing `**Solution.**` text or the misconception table")
     explanation_blocks = rest[1:table_at]
     first_text = _joined(explanation_blocks[0])
-    if not first_text.startswith("**Çözüm.**"):
-        raise env.at(explanation_blocks[0].first).fail("explanation must start with `**Çözüm.**`")
+    if not first_text.startswith("**Solution.**"):
+        raise env.at(explanation_blocks[0].first).fail(
+            "explanation must start with `**Solution.**`"
+        )
     if any(b.kind != "para" for b in explanation_blocks):
         raise env.at(explanation_blocks[0].first).fail("explanation may only hold paragraphs")
     trailing = rest[table_at + 1 :]
@@ -953,7 +956,7 @@ def convert_mcq(
         env.add("mcq-trailing-note")
         env.tally.free_paragraphs.append((env.ref, len(trailing)))
     explanation_paragraphs = [
-        paragraph_of(parse_inline(_joined(b).removeprefix("**Çözüm.**"), env.at(b.first)))
+        paragraph_of(parse_inline(_joined(b).removeprefix("**Solution.**"), env.at(b.first)))
         if i == 0
         else paragraph_of(parse_inline(_joined(b), env.at(b.first)))
         for i, b in enumerate(explanation_blocks)
@@ -961,7 +964,7 @@ def convert_mcq(
     explanation = doc_of(explanation_paragraphs, env)
 
     rows = table_rows(rest[table_at], env)
-    if [c for c in rows[0][1]] != ["Seçenek", "Dayandığı yanılgı"]:
+    if [c for c in rows[0][1]] != ["Option", "Misconception"]:
         raise env.at(rows[0][0]).fail(f"unexpected misconception table header {rows[0][1]}")
     rationales: dict[str, Doc] = {}
     for no, cells in rows[1:]:
@@ -1310,7 +1313,7 @@ def ascii_unit(unit: str) -> str:
 
 def _parameters(cell: str, ref: str, tally: Tally) -> list[Parameter]:
     outside = _BACKTICKED.sub(" ", cell)
-    leftover = re.sub(r"\b(sabitler|sabit)\b|[,;]", " ", outside, flags=re.IGNORECASE)
+    leftover = re.sub(r"\b(constants|constant)\b|[,;]", " ", outside, flags=re.IGNORECASE)
     if leftover.strip():
         raise _Omit("ters tırnaksız parametre metni", repr(leftover.strip()))
     if "`" in cell and cell.count("`") % 2:
@@ -1320,7 +1323,7 @@ def _parameters(cell: str, ref: str, tally: Tally) -> list[Parameter]:
     position = 0
     for found in _BACKTICKED.finditer(cell):
         between = cell[position : found.start()]
-        if re.search(r"\bsabit(ler)?\b", between, flags=re.IGNORECASE):
+        if re.search(r"\bconstants?\b", between, flags=re.IGNORECASE):
             after_constant_word = True
         position = found.end()
         item = re.fullmatch(
@@ -1365,7 +1368,7 @@ def solution_model(
     if free:
         env.tally.free_paragraphs.append((env.ref, free))
     rows = table_rows(blocks[0], env)
-    if rows[0][1] != ["Adım", "İfade", "Sonuç"]:
+    if rows[0][1] != ["Step", "Expression", "Result"]:
         raise env.at(rows[0][0]).fail(f"unexpected formula chain header {rows[0][1]}")
     try:
         parameters: list[Parameter] = []
@@ -1375,7 +1378,7 @@ def solution_model(
             if len(cells) != 3:
                 raise _Omit("sütun sayısı", f"line {no}: {len(cells)} instead of 3")
             name_cell, expr_cell, result = cells
-            if name_cell == "Parametreler":
+            if name_cell == "Parameters":
                 if seen_parameters:
                     raise _Omit("yinelenen parametre satırı", f"line {no}")
                 seen_parameters = True
@@ -1450,7 +1453,7 @@ def convert_question(
     unknown = [
         t
         for t in sections
-        if t not in ("Markscheme", "Formül zinciri (çözüm modeli)", "Şekil notu")
+        if t not in ("Markscheme", "Formula chain (solution model)", "Figure note")
     ]
     if unknown:
         raise env.fail(f"unknown section {unknown[0]!r}")
@@ -1502,7 +1505,7 @@ def convert_question(
             sections["Markscheme"], drafts, node, hl, heading.number, vocabulary, stimuli, env
         )
         model: SolutionModel | None = None
-        chain = "Formül zinciri (çözüm modeli)"
+        chain = "Formula chain (solution model)"
         if chain in sections:
             model, reason = solution_model(sections[chain], env)
             if model is None:
@@ -1511,9 +1514,9 @@ def convert_question(
                 env.tally.models_imported.append(env.ref)
         else:
             env.tally.models_omitted.append((env.ref, "bölüm yok", ""))
-        if "Şekil notu" in sections:
-            if not any(line.text.strip() for line in sections["Şekil notu"]):
-                raise env.fail("`### Şekil notu` is empty")
+        if "Figure note" in sections:
+            if not any(line.text.strip() for line in sections["Figure note"]):
+                raise env.fail("`### Figure note` is empty")
             # The note is the author's working text and may hold the answer: it is not imported.
             env.tally.figure_notes_skipped.append(env.ref)
             stimuli.append(
@@ -1524,7 +1527,7 @@ def convert_question(
                     description=FIGURE_NOTE_DESCRIPTION,
                 )
             )
-            env.tally.stimuli.append((env.ref, stimuli[-1].id, "graph", "Şekil notu"))
+            env.tally.stimuli.append((env.ref, stimuli[-1].id, "graph", "Figure note"))
             env.tally.count("stimulus_kind", StimulusKind.GRAPH.value)
         question_class = (
             QuestionClass.DATA_BASED
@@ -1593,18 +1596,16 @@ def convert_markdown(
         elif after is not None:
             after.append(line)
 
-    scope_lines = next(
-        (body for head, body, _ in sections if head.text == "## Kapsam tablosu"), None
-    )
+    scope_lines = next((body for head, body, _ in sections if head.text == "## Scope table"), None)
     if scope_lines is None:
-        raise env.fail("no `## Kapsam tablosu` section")
+        raise env.fail("no `## Scope table` section")
     scope = parse_scope(scope_lines, env)
 
     errors: list[ConversionError] = []
     questions: list[PilotQuestion] = []
     headings_seen: list[int] = []
     for head, body, trailing in sections:
-        if not head.text.startswith("## Soru"):
+        if not head.text.startswith("## Question"):
             if head.text[3:] not in _KNOWN_SECTION_TITLES:
                 raise env.at(head.no).fail(f"unknown section heading {head.text!r}")
             continue

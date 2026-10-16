@@ -1,38 +1,38 @@
-# Pilot soru seti: C.4 Duran dalgalar ve rezonans
+# Pilot question set: C.4 Standing waves and resonance
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneği](a1-kinematics-pilot-questions.md) ile aynı yapıda yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written to the [authoring standard](AUTHORING_STANDARD.md), with the same structure as the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü C.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; senaryolar özgündür.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile yeniden hesaplandı.
-> Sabitler: havada ses hızı 340 m s⁻¹ (soruda verildi). Tel üzerindeki dalga hızları (120 ve 260 m s⁻¹) soruda verilir.
-> **Doğrulanmayan:** (1) bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; (2) bilinen bir sınav sorusuna benzerlik açısından uzman
-> gözüyle bakılmadı; (3) bir ucu kapalı boruda harmoniklerin adlandırılması (yalnızca tek sayılı harmonikler: birinci, üçüncü, beşinci)
-> rehberden teyit edilmedi; bu yüzden Soru 2 harmonik numarası kullanmadan soruldu; (4) Soru 4'teki "sönüm artınca en büyük genliğin
-> görüldüğü frekans biraz düşer" ifadesi genlik rezonansı için doğrudur; rehberin bu ayrıntıyı ne ölçüde beklediği teyit edilmedi;
-> (5) nitel sorular (Soru 3, 4 ve Soru 5 a, d, e) kodla doğrulanamaz.
+> **Source:** only syllabus node C.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook or internet question was used as input; the scenarios are original.
+> **Numerical check:** all numerical answers and all numerical distractors were recomputed with `python3` (standard library only).
+> Constants: speed of sound in air 340 m s⁻¹ (given in the question). The wave speeds on the wire (120 and 260 m s⁻¹) are given in the question.
+> **Not verified:** (1) it was solved by an independent blind solver; it has not been through expert review; (2) it has not been checked by an expert
+> for similarity to a known exam question; (3) the naming of harmonics in a pipe closed at one end (odd harmonics only: first, third, fifth)
+> was not confirmed from the guide, so Question 2 was asked without using a harmonic number; (4) the statement in Question 4 that "as damping increases, the frequency at which the maximum amplitude
+> occurs falls slightly" is correct for amplitude resonance; how far the guide expects this detail was not confirmed;
+> (5) the qualitative questions (Question 3, 4 and Question 5 a, d, e) cannot be verified by code.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (C.4) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (C.4) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | İki ucu sabit telde n. harmoniğin dalga boyu ve frekansı | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Bir ucu kapalı boruda izinli duran dalga desenleri | AO3 | — | 1 | Orta |
-| 3 | Paper 1A | SL | Duran dalgada faz: düğümün iki yanındaki noktalar | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | SL | Sönümün en büyük genliğe ve rezonans frekansına nitel etkisi | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | SL | Duran dalganın oluşumu; birinci harmonik; düğüm–karın deseni; rezonans; sönüm | AO1–AO3 | Outline, Show that, State, Calculate, Explain | 9 | Orta |
+| 1 | Paper 1A | SL | Wavelength and frequency of the nth harmonic on a string fixed at both ends | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Allowed standing wave patterns in a pipe closed at one end | AO3 | — | 1 | Medium |
+| 3 | Paper 1A | SL | Phase in a standing wave: points on either side of a node | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | SL | Qualitative effect of damping on the maximum amplitude and the resonant frequency | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | SL | Formation of a standing wave; first harmonic; node–antinode pattern; resonance; damping | AO1–AO3 | Outline, Show that, State, Calculate, Explain | 9 | Medium |
 
-Bu set C.4'ün tamamını kapsamaz. Eksik kalanlar: iki ucu açık boruda desenler; duran dalgada genliğin konuma göre değişimi; duran dalga
-ile ilerleyen dalganın karşılaştırılması; doğal frekans ile zorlayıcı frekans ilişkisinin grafikle yorumu; hafif, kritik ve ağır sönümün
-yer değiştirme–zaman davranışı; rezonansın yararlı ve zararlı örnekleri.
+This set does not cover all of C.4. Not covered: patterns in a pipe open at both ends; the variation of amplitude with position in a standing wave; comparing a standing wave
+with a travelling wave; interpreting the relationship between natural frequency and driving frequency from a graph; the displacement–time behaviour of light, critical and heavy damping;
+useful and harmful examples of resonance.
 
-Terminoloji denetimi: sette yalnızca "first harmonic", "third harmonic" kullanıldı; rehberin kaçınılmasını istediği "temel ton / üst ton" karşılıkları hiçbir soru metninde ve markscheme'de yer almaz. Uç düzeltmesi,
-basınç düğümü ve ikiden fazla dalganın üst üste binmesi yoktur.
+Terminology check: only "first harmonic" and "third harmonic" are used in the set; the "fundamental / overtone" equivalents that the guide asks to avoid appear in no question text or markscheme. There is no end correction,
+pressure node or superposition of more than two waves.
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A string of length 0.75 m is fixed at both ends. The speed of waves on the string is 120 m s⁻¹.
 
@@ -43,19 +43,19 @@ B. 160 Hz
 C. 240 Hz
 D. 480 Hz
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Üçüncü harmonikte tel üzerinde üç yarım dalga boyu vardır: λ = 2L / 3 = 0.50 m. f = v / λ = 120 / 0.50 = 240 Hz.
+**Solution.** In the third harmonic there are three half-wavelengths on the string: λ = 2L / 3 = 0.50 m. f = v / λ = 120 / 0.50 = 240 Hz.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Birinci harmoniğin frekansı verilir: λ = 2L = 1.5 m → 120 / 1.5 = 80 Hz |
-| B | Dalga boyu telin uzunluğuna eşit alınır (ikinci harmonik): 120 / 0.75 = 160 Hz |
-| D | Üçüncü harmonikte λ = L / 3 alınır (yarım dalga boyu ile tam dalga boyu karıştırılır): 120 / 0.25 = 480 Hz |
+| A | Gives the frequency of the first harmonic: λ = 2L = 1.5 m → 120 / 1.5 = 80 Hz |
+| B | Takes the wavelength to be equal to the length of the string (second harmonic): 120 / 0.75 = 160 Hz |
+| D | Takes λ = L / 3 in the third harmonic (confuses half a wavelength with a full wavelength): 120 / 0.25 = 480 Hz |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A tube of length 0.17 m is closed at one end and open at the other end. The air in the tube vibrates in its first harmonic at a
 frequency of 500 Hz. The speed of sound in air is 340 m s⁻¹.
@@ -67,20 +67,20 @@ B. 1500 Hz
 C. 2500 Hz
 D. 3000 Hz
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Kapalı uçta yer değiştirme düğümü, açık uçta karın vardır. Birinci harmonik: L = λ/4 → f₁ = 340 / (4 × 0.17) = 500 Hz. Bir
-sonraki izinli desen: L = 3λ/4 → λ = 0.227 m → f = 3 × 500 = 1500 Hz.
+**Solution.** There is a displacement node at the closed end and an antinode at the open end. First harmonic: L = λ/4 → f₁ = 340 / (4 × 0.17) = 500 Hz. The
+next allowed pattern: L = 3λ/4 → λ = 0.227 m → f = 3 × 500 = 1500 Hz.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Bir ucu kapalı boruda da birinci harmoniğin tüm tam katlarının oluştuğu sanılır: 2 × 500 = 1000 Hz (bu desen kapalı uçta düğüm koşulunu sağlamaz) |
-| C | Bir izinli desen atlanır (L = 5λ/4): 5 × 500 = 2500 Hz; bu frekansta duran dalga oluşur ama "bir sonraki" değildir |
-| D | İki ucu açık boru bağıntısı üçüncü harmonik için kullanılır: 3 × 340 / (2 × 0.17) = 3000 Hz |
+| A | Assumes that all whole-number multiples of the first harmonic also occur in a pipe closed at one end: 2 × 500 = 1000 Hz (this pattern does not satisfy the node condition at the closed end) |
+| C | Skips an allowed pattern (L = 5λ/4): 5 × 500 = 2500 Hz; a standing wave forms at this frequency but it is not the "next" one |
+| D | Uses the relation for a pipe open at both ends for the third harmonic: 3 × 340 / (2 × 0.17) = 3000 Hz |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A standing wave of wavelength 0.80 m is formed on a string. Point X on the string is 0.10 m to the left of a node. Point Y on the
 string is 0.10 m to the right of the same node.
@@ -92,20 +92,20 @@ B. π/4 rad
 C. π/2 rad
 D. π rad
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Komşu düğümler arası λ/2 = 0.40 m'dir; X ve Y aynı düğümün iki yanındaki komşu ilmeklerdedir. Duran dalgada bir ilmek içindeki
-tüm noktalar eş fazlıdır; komşu ilmekteki noktalar zıt fazlıdır. Faz farkı π rad.
+**Solution.** The separation of adjacent nodes is λ/2 = 0.40 m; X and Y are in neighbouring loops on either side of the same node. In a standing wave all the points within one loop
+are in phase; points in the neighbouring loop are in antiphase. The phase difference is π rad.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Duran dalgadaki tüm noktaların eş fazlı olduğu düşünülür (yalnızca aynı ilmek için doğru) |
-| B | İlerleyen dalga bağıntısı bir noktanın düğüme uzaklığıyla kullanılır: 2π × 0.10 / 0.80 = π/4 |
-| C | İlerleyen dalga bağıntısı X–Y uzaklığıyla kullanılır: 2π × 0.20 / 0.80 = π/2 |
+| A | Assumes all points in a standing wave are in phase (true only within the same loop) |
+| B | Uses the travelling-wave relation with the distance of one point from the node: 2π × 0.10 / 0.80 = π/4 |
+| C | Uses the travelling-wave relation with the distance X–Y: 2π × 0.20 / 0.80 = π/2 |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 A lightly damped system is driven by a periodic force. The frequency of the driving force is varied and the amplitude of the
 system is measured. The damping of the system is then increased, but the damping remains light.
@@ -117,29 +117,29 @@ B. The maximum amplitude decreases and it occurs at a slightly higher frequency.
 C. The maximum amplitude increases and it occurs at a slightly lower frequency.
 D. The maximum amplitude increases and it occurs at a slightly higher frequency.
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Sönüm arttıkça sistem her salınımda daha çok enerji kaybeder; rezonanstaki en büyük genlik küçülür ve rezonans eğrisi
-genişler. En büyük genliğin görüldüğü frekans doğal frekansın biraz altına kayar.
+**Solution.** As damping increases, the system loses more energy in each oscillation; the maximum amplitude at resonance decreases and the resonance curve
+broadens. The frequency at which the maximum amplitude occurs shifts slightly below the natural frequency.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Genlik etkisi doğru, frekans kayması ters yönde düşünülür ("sönüm sistemi sertleştirir") |
-| C | Frekans etkisi doğru; sönümün rezonans tepesini "keskinleştirip yükselttiği" sanılır |
-| D | Her iki etki de ters düşünülür |
+| B | Gets the amplitude effect right but takes the frequency shift to be in the opposite direction ("damping stiffens the system") |
+| C | Gets the frequency effect right; assumes damping "sharpens and raises" the resonance peak |
+| D | Takes both effects to be the other way round |
 
-Not: seçenekler cümle biçimindedir; biçim profiline göre bu tür azınlıktadır ama kullanılır. İki büyüklük birlikte sorulduğu için tablo
-biçimli seçenek yerine cümle tercih edildi (tablo biçimi doğrulanamadı).
+Note: the options are in sentence form; according to the format profile this type is in the minority but is used. Because two quantities are asked together, sentences were preferred to
+table-style options (the table style could not be verified).
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A steel wire is stretched between two fixed supports that are 0.65 m apart. A vibrator attached to the wire close to one support
 is connected to a signal generator. The speed of waves on the wire is 260 m s⁻¹.
 
-> **Şekil:** Bir tezgâh üzerinde iki sabit destek arasına gerilmiş yatay tel; destekler arası 0.65 m olarak işaretli; sol desteğin
-> hemen yanında tele bağlı titreştirici ve ona bağlı sinyal üreteci. "diagram not to scale". Soru şekil olmadan çözülebilir.
+> **Figure:** A horizontal wire stretched between two fixed supports on a bench; the distance between the supports is marked as 0.65 m; close to the left support
+> is a vibrator attached to the wire, connected to a signal generator. "diagram not to scale". The question can be solved without the figure.
 
 **(a)** Outline how a standing wave is formed on the wire. [2]
 
@@ -168,44 +168,44 @@ The frequency of the signal generator is now increased slowly from 150 Hz to 250
 | 5. | d | | the driving frequency equals the natural frequency / first harmonic frequency of the wire «about 200 Hz» ✓<br>resonance occurs **OR** energy is transferred to the wire at the maximum rate, «so the amplitude is a maximum» ✓ | *OWTTE*<br>*Accept "the centre of the wire is an antinode of the first harmonic" as supporting detail, not as a marking point.* | 2 |
 | 5. | e | | the maximum amplitude decreases ✓ | | 1 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `L = 0.65 m`, `v = 260 m/s`, `f_gen = 600 Hz` | |
+| Parameters | `L = 0.65 m`, `v = 260 m/s`, `f_gen = 600 Hz` | |
 | `lam_1` | `2*L` | 1.30 m |
 | `f_1` | `v/lam_1` | 200 Hz |
-| `n` | `f_gen/f_1` | 3 → 3 karın, 4 düğüm (uçlar dahil) |
+| `n` | `f_gen/f_1` | 3 → 3 antinodes, 4 nodes (including the ends) |
 | `node_sep` | `L/n` | 0.217 m |
-| Denetim | `v/f_gen/2` | 0.217 m |
+| Check | `v/f_gen/2` | 0.217 m |
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–4 uygun |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1–3 uygun (artan); Soru 4 cümle biçiminde, dört seçenek aynı kalıpta |
-| 1A: doğru cevap harfleri dengeli | C, B, D, A |
-| 1A: şekil olmadan çözülebilir | Soru 1–4 şekil gerektirmez |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 2, 1, 1, 2, 1; toplam 9). SL kâğıdında kısa soru 4–6 puan gözlendi; SL kâğıdı için (c) ya da (e) çıkarılabilir |
-| Paper 2: "Show that" kalıbı ve en az bir AO3 parçası | Soru 5 (b) Show that (sonuç tam 200 Hz olduğu için "about" kullanılmadı), (d) Explain |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 5 uygun |
-| Paper 2: çizim parçası (Draw / Sketch) | **Eksik:** duran dalga deseni çizdiren parça yazılmadı; şekil şablonu gerektirir |
-| Müfredat sınırı: "first harmonic"; uç düzeltmesi yok; yalnızca yer değiştirme düğümleri; sönüm nitel | Uygun; sönüm etkisi Soru 4 ve 5(e)'de yalnızca nitel |
-| Değer–birim yazımı (m s⁻¹), 2 anlamlı basamak | Uygun; frekans seçenekleri tam sayı Hz |
+| 1A: context + a separate single question sentence ("What is …?") + A–D listed one below the other | Questions 1–4 conform |
+| 1A: four options of the same type, same unit, in order of magnitude | Questions 1–3 conform (ascending); Question 4 is in sentence form, the four options in the same pattern |
+| 1A: correct-answer letters balanced | C, B, D, A |
+| 1A: solvable without a figure | Questions 1–4 need no figure |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 2, 1, 1, 2, 1; total 9). On an SL paper short questions of 4–6 marks were observed; for an SL paper (c) or (e) can be removed |
+| Paper 2: "Show that" pattern and at least one AO3 part | Question 5 (b) Show that ("about" was not used because the result is exactly 200 Hz), (d) Explain |
+| Markscheme: four-column table, ✓, « », OR, ECF, OWTTE | Question 5 conforms |
+| Paper 2: drawing part (Draw / Sketch) | **Missing:** no part asking for a standing wave pattern to be drawn was written; it requires a figure template |
+| Syllabus limit: "first harmonic"; no end correction; displacement nodes only; damping qualitative | Conforms; the effect of damping is only qualitative in Question 4 and 5(e) |
+| Value–unit notation (m s⁻¹), 2 significant figures | Conforms; frequency options are whole numbers of Hz |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, cevapları görmeyen bağımsız bir kör çözücü tarafından çözüldü; çözücü tüm cevap
-anahtarlarını ve markscheme sonuçlarını bağımsız olarak yeniden üretti (KRİTİK bulgu yok). Bulgular:
-[review/c4-review.md](review/c4-review.md). Bu, uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by an independent blind solver who did not see the answers; the solver independently reproduced all answer
+keys and markscheme results (no CRITICAL findings). Findings:
+[review/c4-review.md](review/c4-review.md). This does not replace expert review.
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile, dosyanın son metni üzerinden yeniden denetlendi):
+Changes made in response to the findings (every changed number was rechecked with `python3` against the final text of the file):
 
-- **Soru 5 (b) (DÜŞÜK):** hesap tam 200 Hz verdiği için kökten "about" çıkarıldı ("… is about 200 Hz" → "… is 200 Hz"); markscheme'de ikinci madde yerine koymayı zorunlu kılacak biçimde yazıldı. Veri değiştirilmedi, çünkü hız değişirse 600 Hz üçüncü harmoniğe tam denk gelmez ve (c) bozulur.
-- **Soru 5 (DÜŞÜK):** SL için 9 puanın uzun olduğu notu "Biçim uyumu" tablosunda zaten vardı; soru bölünmedi. Bölme kararı sınav kâğıdı derlenirken verilmeli.
-- **Uygulanmayan:** Soru 3'te faz farkının radyan yerine derece ya da sözel biçimde yazılması. İnceleme "uzman teyit edene kadar değişiklik gerekmez" diyor; müfredat analizinde C.4 satırı "faz"ı SL kazanımı olarak veriyor ve çeldiriciler (π/4, π/2) hesaplanabilir yanılgılara dayanıyor. Uzman teyidine bırakıldı.
+- **Question 5 (b) (LOW):** because the calculation gives exactly 200 Hz, "about" was removed from the stem ("… is about 200 Hz" → "… is 200 Hz"); the second point in the markscheme was written so as to require the substitution. The data were not changed, because if the speed changed, 600 Hz would no longer coincide exactly with the third harmonic and (c) would break.
+- **Question 5 (LOW):** the note that 9 marks is long for SL was already in the "Format conformance" table; the question was not split. The decision to split should be made when the exam paper is assembled.
+- **Not applied:** writing the phase difference in Question 3 in degrees or in words instead of radians. The review says "no change is needed until an expert confirms"; the C.4 row of the syllabus analysis lists "phase" as an SL outcome and the distractors (π/4, π/2) are based on calculable misconceptions. Left for expert confirmation.

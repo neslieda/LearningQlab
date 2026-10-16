@@ -1,39 +1,39 @@
-# Pilot soru seti: C.5 Doppler etkisi
+# Pilot question set: C.5 Doppler effect
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneği](a1-kinematics-pilot-questions.md) ile aynı yapıda yazıldı.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written to the [authoring standard](AUTHORING_STANDARD.md), with the same structure as the [A.1 example](a1-kinematics-pilot-questions.md).
 >
-> **Kaynak:** yalnızca müfredat düğümü C.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı ya da internet sorusu girdi olarak kullanılmadı; senaryolar özgündür.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile yeniden hesaplandı.
-> Sabitler: c = 3.00 × 10⁸ m s⁻¹; havada ses hızı 340 m s⁻¹ (kullanıldığı her soruda verildi). Veri kitapçığı değerleri uzmanca teyit
-> edilmeli.
-> **Doğrulanmayan:** (1) bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi; (2) bilinen bir sınav sorusuna benzerlik açısından uzman
-> gözüyle bakılmadı; (3) Soru 3 ve 4'te çeldiriciler doğru cevaba sayıca yakındır (680 / 671 Hz; 720 / 727 Hz) — bu bilinçli bir
-> seçimdir (iki formülü ayırt etme) ama uzman bunu fazla ince bulabilir; (4) Soru 5'te 40.0 kHz'lik ultrason vericisi ve bir drone için
-> 16 m s⁻¹ (yaklaşık 58 km h⁻¹) makul büyüklüklerdir ama bir kaynaktan teyit edilmedi; (5) Soru 5 (d)'de iki durumun farkı 0.1 kHz'dir
-> ve 3 anlamlı basamakta görünür, ama dedektörün bu çözünürlükte ölçtüğü varsayılır;
-> (6) nitel parçalar (Soru 2, Soru 5 a) kodla doğrulanamaz.
+> **Source:** only syllabus node C.5 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook or internet question was used as input; the scenarios are original.
+> **Numerical check:** all numerical answers and all numerical distractors were recomputed with `python3` (standard library only).
+> Constants: c = 3.00 × 10⁸ m s⁻¹; speed of sound in air 340 m s⁻¹ (given in every question where it is used). Data booklet values should be confirmed
+> by an expert.
+> **Not verified:** (1) it was solved by an independent blind solver; it has not been through expert review; (2) it has not been checked by an expert
+> for similarity to a known exam question; (3) in Questions 3 and 4 the distractors are numerically close to the correct answer (680 / 671 Hz; 720 / 727 Hz) — this is a deliberate
+> choice (distinguishing the two formulae) but an expert may find it too subtle; (4) in Question 5 an ultrasound emitter of 40.0 kHz and, for a drone,
+> 16 m s⁻¹ (about 58 km h⁻¹) are reasonable magnitudes but were not confirmed from a source; (5) in Question 5 (d) the difference between the two cases is 0.1 kHz
+> and is visible at 3 significant figures, but the detector is assumed to measure at this resolution;
+> (6) the qualitative parts (Question 2, Question 5 a) cannot be verified by code.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (C.5) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (C.5) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | SL | Işıkta Doppler: Δλ/λ ≈ v/c; tayf çizgisi kayması | AO2 | — | 1 | Kolay |
-| 2 | Paper 1A | SL | Ses için Doppler etkisinin nitel anlatımı (sabit hızla yaklaşan kaynak) | AO3 | — | 1 | Orta |
-| 3 | Paper 1A | HL | Ses: hareketli kaynak formülü | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | HL | Ses: hareketli gözlemci formülü | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | HL | Dalga cepheleriyle açıklama; hareketli kaynak; hareketli gözlemci ile karşılaştırma | AO2–AO3 | Explain, Show that, Calculate, Discuss | 9 | Orta–zor |
+| 1 | Paper 1A | SL | Doppler effect for light: Δλ/λ ≈ v/c; shift of a spectral line | AO2 | — | 1 | Easy |
+| 2 | Paper 1A | SL | Qualitative description of the Doppler effect for sound (source approaching at constant speed) | AO3 | — | 1 | Medium |
+| 3 | Paper 1A | HL | Sound: moving-source formula | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | HL | Sound: moving-observer formula | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | HL | Explanation using wavefronts; moving source; comparison with a moving observer | AO2–AO3 | Explain, Show that, Calculate, Discuss | 9 | Medium–hard |
 
-Bu set C.5'in tamamını kapsamaz. Eksik kalanlar: dalga cephesi diyagramının çizimi; ışık için frekans kayması (Δf/f) ile hesap;
-maviye kayma; tayf çizgisi kaymasından hız yönünün belirlenmesi; Doppler etkisinin uygulamaları (ör. dönen cisimlerde çizgi genişlemesi).
+This set does not cover all of C.5. Not covered: drawing a wavefront diagram; calculation using the frequency shift for light (Δf/f);
+blueshift; determining the direction of velocity from the shift of a spectral line; applications of the Doppler effect (e.g. line broadening in rotating bodies).
 
-Sınır denetimi: hiçbir soruda kaynak ve gözlemci aynı anda hareket etmez. Soru 5 (d)'de iki ayrı durum karşılaştırılır (önce yalnızca
-kaynak, sonra yalnızca gözlemci hareketli).
+Limit check: in no question do the source and the observer move at the same time. In Question 5 (d) two separate cases are compared (first only
+the source moving, then only the observer moving).
 
 ---
 
-## Soru 1 — Paper 1A
+## Question 1 — Paper 1A
 
 A spectral line has a wavelength of 650 nm when measured in a laboratory on Earth. The same line is observed in the light from a
 galaxy that is moving away from Earth at a speed of 6.0 × 10⁶ m s⁻¹.
@@ -45,20 +45,20 @@ B. 650 nm
 C. 663 nm
 D. 676 nm
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Δλ / λ ≈ v / c = 6.0 × 10⁶ / 3.00 × 10⁸ = 0.020. Δλ = 0.020 × 650 = 13 nm. Kaynak uzaklaştığı için dalga boyu artar:
+**Solution.** Δλ / λ ≈ v / c = 6.0 × 10⁶ / 3.00 × 10⁸ = 0.020. Δλ = 0.020 × 650 = 13 nm. Because the source is receding, the wavelength increases:
 650 + 13 = 663 nm.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Kaymanın yönü ters alınır (yaklaşan kaynak gibi): 650 − 13 = 637 nm |
-| B | Kaynağın hareketinin yalnızca frekansı değiştirdiği, dalga boyunun aynı kaldığı düşünülür |
-| D | Kayma iki katı alınır (ışığın "gidiş–dönüş" yaptığı düşüncesi): 650 + 2 × 13 = 676 nm |
+| A | Takes the direction of the shift the wrong way round (as for an approaching source): 650 − 13 = 637 nm |
+| B | Assumes the motion of the source changes only the frequency and that the wavelength stays the same |
+| D | Doubles the shift (the idea that the light makes a "round trip"): 650 + 2 × 13 = 676 nm |
 
 ---
 
-## Soru 2 — Paper 1A
+## Question 2 — Paper 1A
 
 A train moves at a constant speed directly towards a stationary observer. The train sounds a horn that emits sound of constant
 frequency *f*. The air is still.
@@ -70,21 +70,21 @@ B. Higher than *f* and constant
 C. Equal to *f*
 D. Lower than *f* and constant
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Kaynak gözlemciye doğru hareket ederken ardışık dalga cepheleri öndeki bölgede birbirine yaklaşır; gözlemcideki dalga boyu
-kısalır, ses hızı değişmez, frekans *f*'den büyük olur. Kayma kaynağın hızına bağlıdır, uzaklığına değil; hız sabit ve doğrudan
-gözlemciye yönelik olduğundan duyulan frekans sabittir.
+**Solution.** While the source moves towards the observer, successive wavefronts get closer together in the region ahead; the wavelength at the observer
+decreases, the speed of sound is unchanged, and the frequency is greater than *f*. The shift depends on the speed of the source, not its distance; because the speed is constant and directly
+towards the observer, the frequency heard is constant.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Frekansın uzaklık azaldıkça arttığı sanılır (artan şey ses şiddetidir; frekans ile şiddet karıştırılır) |
-| C | Frekansın yalnızca kaynağa ait olduğu, hareketle değişmediği düşünülür |
-| D | Kaymanın yönü ters alınır (uzaklaşan kaynak) |
+| A | Assumes the frequency increases as the distance decreases (what increases is the loudness; confuses frequency with intensity) |
+| C | Assumes the frequency belongs only to the source and does not change with motion |
+| D | Takes the direction of the shift the wrong way round (receding source) |
 
 ---
 
-## Soru 3 — Paper 1A
+## Question 3 — Paper 1A
 
 A siren on a vehicle emits sound of frequency 600 Hz. The vehicle moves at 40.0 m s⁻¹ directly towards a stationary observer. The
 speed of sound in air is 340 m s⁻¹.
@@ -96,19 +96,19 @@ B. 537 Hz
 C. 671 Hz
 D. 680 Hz
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Hareketli kaynak, yaklaşma: f′ = f v / (v − u<sub>s</sub>) = 600 × 340 / (340 − 40) = 680 Hz.
+**Solution.** Moving source, approaching: f′ = f v / (v − u<sub>s</sub>) = 600 × 340 / (340 − 40) = 680 Hz.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Hareketli gözlemci formülü ve ters yön (uzaklaşma): 600 × (340 − 40) / 340 = 529 Hz |
-| B | Doğru formül, ters yön (uzaklaşan kaynak): 600 × 340 / (340 + 40) = 537 Hz |
-| C | Hareketli gözlemci formülü kullanılır: 600 × (340 + 40) / 340 = 671 Hz. Işık için geçerli yaklaşık bağıntı (Δf/f ≈ v/c) sese uygulanırsa da aynı değer çıkar: 600 + 600 × 40 / 340 = 671 Hz |
+| A | Moving-observer formula and the wrong direction (receding): 600 × (340 − 40) / 340 = 529 Hz |
+| B | Correct formula, wrong direction (receding source): 600 × 340 / (340 + 40) = 537 Hz |
+| C | Uses the moving-observer formula: 600 × (340 + 40) / 340 = 671 Hz. Applying the approximate relation valid for light (Δf/f ≈ v/c) to sound gives the same value: 600 + 600 × 40 / 340 = 671 Hz |
 
 ---
 
-## Soru 4 — Paper 1A
+## Question 4 — Paper 1A
 
 A stationary siren emits sound of frequency 800 Hz. A motorcyclist moves at 34.0 m s⁻¹ directly away from the siren. The speed of sound
 in air is 340 m s⁻¹.
@@ -120,30 +120,30 @@ B. 727 Hz
 C. 880 Hz
 D. 889 Hz
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Hareketli gözlemci, uzaklaşma: f′ = f (v − u<sub>o</sub>) / v = 800 × (340 − 34) / 340 = 720 Hz.
+**Solution.** Moving observer, receding: f′ = f (v − u<sub>o</sub>) / v = 800 × (340 − 34) / 340 = 720 Hz.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Hareketli kaynak formülü kullanılır (uzaklaşma): 800 × 340 / (340 + 34) = 727 Hz |
-| C | Doğru formül, ters yön (yaklaşan gözlemci): 800 × (340 + 34) / 340 = 880 Hz |
-| D | Hareketli kaynak formülü ve ters yön: 800 × 340 / (340 − 34) = 889 Hz |
+| B | Uses the moving-source formula (receding): 800 × 340 / (340 + 34) = 727 Hz |
+| C | Correct formula, wrong direction (approaching observer): 800 × (340 + 34) / 340 = 880 Hz |
+| D | Moving-source formula and the wrong direction: 800 × 340 / (340 − 34) = 889 Hz |
 
-Not: 34.0 m s⁻¹ yaklaşık 122 km h⁻¹'tir; bir motosikletli için gerçekçidir. Hız düşürülmedi, çünkü daha küçük hızlarda anahtar ile
-hareketli kaynak çeldiricisi arasındaki fark %1'in altına iner.
+Note: 34.0 m s⁻¹ is about 122 km h⁻¹; this is realistic for a motorcyclist. The speed was not reduced, because at smaller speeds the difference between the key and
+the moving-source distractor falls below 1 %.
 
 ---
 
-## Soru 5 — Paper 2 (9 puan)
+## Question 5 — Paper 2 (9 marks)
 
 A technician tests a small drone that carries an ultrasound transmitter. The transmitter emits sound of frequency 40.0 kHz. The
 drone flies horizontally at a constant speed directly towards a stationary detector. The detector records a frequency of 42.0 kHz.
 The speed of sound in air is 340 m s⁻¹ and the air is still.
 
-> **Şekil:** Solda drone (kaynak), sağda sabit dedektör; drone'dan dedektöre yönelen hız oku. Drone'un çevresinde, merkezleri sola
-> doğru kaymış çemberler olarak dalga cepheleri: dedektör tarafında sık, arka tarafta seyrek. "diagram not to scale". Soru şekil olmadan
-> çözülebilir.
+> **Figure:** A drone (source) on the left, a stationary detector on the right; a velocity arrow pointing from the drone towards the detector. Around the drone, as wavefronts in the form of circles with their centres shifted to the left:
+> closely spaced on the detector side, widely spaced at the back. "diagram not to scale". The question can be solved without
+> the figure.
 
 **(a)** Explain, with reference to wavefronts, why the frequency recorded by the detector is higher than 40.0 kHz. [2]
 
@@ -165,51 +165,51 @@ the drone at 16 m s⁻¹. Discuss this suggestion. [3]
 | 5. | c | | *f* = 40.0 × 340 / (340 + 16) ✓<br>= 38.2 «kHz» ✓ | *Accept u = 16.2 m s⁻¹, which also gives 38.2 kHz.* | 2 |
 | 5. | d | | moving observer: *f* = 40.0 × (340 + 16) / 340 = 41.9 «kHz» ✓<br>this is less than 42.0 kHz / the two situations are described by different equations «because the motion is relative to the air» ✓<br>the suggestion is incorrect, although the difference is small «0.1 kHz» because the speed is much less than the speed of sound ✓ | *Third mark requires a conclusion supported by the values.*<br>*OWTTE* | 3 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `f = 40.0 kHz`, `f_obs = 42.0 kHz`, `v = 340 m/s`, `u_given = 16 m/s` | |
+| Parameters | `f = 40.0 kHz`, `f_obs = 42.0 kHz`, `v = 340 m/s`, `u_given = 16 m/s` | |
 | `u` | `v*(1 - f/f_obs)` | 16.19 m s⁻¹ |
-| `f_away` | `f*v/(v + u_given)` | 38.20 kHz (u = 16.19 ile 38.18 kHz) |
+| `f_away` | `f*v/(v + u_given)` | 38.20 kHz (38.18 kHz with u = 16.19) |
 | `f_moving_observer` | `f*(v + u_given)/v` | 41.88 kHz |
 | `f_moving_source` | `f*v/(v - u_given)` | 41.98 kHz |
-| `diff` | `f_moving_source - f_moving_observer` | 0.09 kHz (3 anlamlı basamakta 42.0 − 41.9 = 0.1 kHz) |
-| Denetim (yanlış formül) | `v*(f_obs/f - 1)` | 17.0 m s⁻¹ — "about 16" hedefini tutmaz; (b)'de puan almaz |
+| `diff` | `f_moving_source - f_moving_observer` | 0.09 kHz (at 3 significant figures 42.0 − 41.9 = 0.1 kHz) |
+| Check (wrong formula) | `v*(f_obs/f - 1)` | 17.0 m s⁻¹ — does not match the "about 16" target; scores no mark in (b) |
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi ("What is …?") + alt alta A–D | Soru 1–4 uygun (Soru 2: "What describes …?") |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1, 3, 4 uygun (artan); Soru 2 kısa sözel ifadeler, yüksekten düşüğe sıralı |
-| 1A: doğru cevap harfleri dengeli | C, B, D, A |
-| 1A: şekil olmadan çözülebilir | Soru 1–4 şekil gerektirmez |
-| 1A: yuvarlak, temiz sayılar | Doğru cevaplar temiz (663 nm, 680 Hz, 720 Hz); çeldiriciler 3 anlamlı basamağa yuvarlandı |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 2, 2, 3; toplam 9) |
-| Paper 2: "Show that" kalıbı ve en az bir AO3 parçası | Soru 5 (a) Explain, (b) Show that, (d) Discuss; (c) ve (d) verilen 16 m s⁻¹ değerini kullanır (kökte "Use a speed of 16 m s⁻¹") |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, OWTTE | Soru 5 uygun |
-| Paper 2: şekil | **Eksik:** dalga cephesi diyagramı yalnızca sözle tarif edildi |
-| Müfredat sınırı: kaynak ve gözlemci birlikte hareket etmez | Uygun; yankı (hem kaynak hem gözlemci rolü) içeren bağlam bilerek kullanılmadı |
-| Düzey etiketi | Soru 3, 4, 5 HL (ses için hareketli kaynak / gözlemci formülleri); Soru 1 ve 2 SL |
-| Değer–birim yazımı, anlamlı basamak | Uygun; Soru 5'te frekanslar 3 anlamlı basamak (kayma küçük olduğu için gerekli) |
+| 1A: context + a separate single question sentence ("What is …?") + A–D listed one below the other | Questions 1–4 conform (Question 2: "What describes …?") |
+| 1A: four options of the same type, same unit, in order of magnitude | Questions 1, 3, 4 conform (ascending); Question 2 has short verbal statements, ordered from high to low |
+| 1A: correct-answer letters balanced | C, B, D, A |
+| 1A: solvable without a figure | Questions 1–4 need no figure |
+| 1A: round, clean numbers | Correct answers are clean (663 nm, 680 Hz, 720 Hz); distractors rounded to 3 significant figures |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 2, 2, 3; total 9) |
+| Paper 2: "Show that" pattern and at least one AO3 part | Question 5 (a) Explain, (b) Show that, (d) Discuss; (c) and (d) use the given value of 16 m s⁻¹ ("Use a speed of 16 m s⁻¹" in the stem) |
+| Markscheme: four-column table, ✓, « », OR, OWTTE | Question 5 conforms |
+| Paper 2: figure | **Missing:** the wavefront diagram is described only in words |
+| Syllabus limit: source and observer do not move together | Conforms; a context involving an echo (both source and observer roles) was deliberately not used |
+| Level label | Questions 3, 4, 5 HL (moving-source / moving-observer formulae for sound); Questions 1 and 2 SL |
+| Value–unit notation, significant figures | Conforms; in Question 5 the frequencies are to 3 significant figures (necessary because the shift is small) |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, cevapları görmeyen bağımsız bir kör çözücü tarafından çözüldü; çözücü tüm cevap
-anahtarlarını ve markscheme sonuçlarını bağımsız olarak yeniden üretti (KRİTİK bulgu yok). Bulgular:
-[review/c5-review.md](review/c5-review.md). Bu, uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by an independent blind solver who did not see the answers; the solver independently reproduced all answer
+keys and markscheme results (no CRITICAL findings). Findings:
+[review/c5-review.md](review/c5-review.md). This does not replace expert review.
 
-Bulgulara karşılık yapılan değişiklikler (değişen her sayı `python3` ile, dosyanın son metni üzerinden yeniden denetlendi):
+Changes made in response to the findings (every changed number was rechecked with `python3` against the final text of the file):
 
-- **Soru 5 (b) (ORTA):** kaydedilen frekans 41.2 kHz → 42.0 kHz; hedef "about 10 m s⁻¹" → "about 16 m s⁻¹". Doğru (hareketli kaynak) formül 16.19 m s⁻¹, yanlış (hareketli gözlemci) formül 17.0 m s⁻¹ verir; hedef artık iki yolu ayırır (eskiden 9.90 ve 10.2, ikisi de "about 10").
-- **Soru 5 (c):** 38.9 kHz → 38.2 kHz; kökten önce "Use a speed of 16 m s⁻¹ for the drone" eklendi (DÜŞÜK bulgu 5: markscheme ile "same speed" ifadesi artık örtüşüyor).
-- **Soru 5 (d) (ORTA):** karşılaştırma 41.18 / 41.21 kHz (3 anlamlı basamakta ikisi de 41.2) → 41.9 / 42.0 kHz; fark verilerin duyarlığında görünür. Markscheme sonucu "not exactly correct" → "incorrect, although the difference is small".
-- **Soru 5 bağlamı:** kaynak yarasa → ultrason vericisi taşıyan küçük drone. 16 m s⁻¹ bir yarasa için tartışmalı, bir drone için makul (yaklaşık 58 km h⁻¹); fizik aynı. Köke "the air is still" eklendi.
-- **Soru 4 (ORTA):** "cyclist" → "motorcyclist"; sayılar ve seçenekler aynı (720, 727, 880, 889 Hz).
-- **Soru 3 ve 4 (DÜŞÜK):** hızlar 3 anlamlı basamakla yazıldı: 40 → 40.0 m s⁻¹, 34 → 34.0 m s⁻¹. Soru 3'ün C çeldiricisine ikinci yanılgı yolu (Δf/f ≈ v/c bağıntısının sese uygulanması) eklendi.
-- **Uygulanmayan:** Soru 4'te gözlemci hızının 68 m s⁻¹ yapılması (inceleme "zorunlu değil" diyor; mevcut seçenekler 3 anlamlı basamakta ayrık) ve Soru 1'in D çeldiricisi ("şüphe"; sayı tutarlı).
+- **Question 5 (b) (MEDIUM):** recorded frequency 41.2 kHz → 42.0 kHz; target "about 10 m s⁻¹" → "about 16 m s⁻¹". The correct (moving-source) formula gives 16.19 m s⁻¹, the wrong (moving-observer) formula gives 17.0 m s⁻¹; the target now distinguishes the two methods (previously 9.90 and 10.2, both "about 10").
+- **Question 5 (c):** 38.9 kHz → 38.2 kHz; the sentence "Use a speed of 16 m s⁻¹ for the drone" was added to the stem (LOW finding 5: the markscheme and the "same speed" wording now agree).
+- **Question 5 (d) (MEDIUM):** comparison 41.18 / 41.21 kHz (both 41.2 at 3 significant figures) → 41.9 / 42.0 kHz; the difference is visible at the precision of the data. Markscheme conclusion "not exactly correct" → "incorrect, although the difference is small".
+- **Question 5 context:** source bat → small drone carrying an ultrasound emitter. 16 m s⁻¹ is debatable for a bat and reasonable for a drone (about 58 km h⁻¹); the physics is the same. "the air is still" was added to the stem.
+- **Question 4 (MEDIUM):** "cyclist" → "motorcyclist"; numbers and options unchanged (720, 727, 880, 889 Hz).
+- **Questions 3 and 4 (LOW):** speeds were written to 3 significant figures: 40 → 40.0 m s⁻¹, 34 → 34.0 m s⁻¹. A second misconception route (applying the relation Δf/f ≈ v/c to sound) was added to distractor C of Question 3.
+- **Not applied:** changing the observer speed in Question 4 to 68 m s⁻¹ (the review says "not mandatory"; the existing options are distinct at 3 significant figures) and distractor D of Question 1 ("doubtful"; the number is consistent).

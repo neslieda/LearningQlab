@@ -102,7 +102,7 @@ Setler ve ölçüler: [AI_PIPELINE.md](AI_PIPELINE.md) §13.
 
 - Sabit örnek set: her blok tipi, uzun formül, geniş tablo, çok parçalı soru, şekilli soru, MCQ.
 - Ekran görüntüleri masaüstü ve 375 px genişlikte karşılaştırılır.
-- KaTeX sürüm yükseltmesi yalnızca bu test geçerse yapılır; `KATEX_VERSION`, `package.json` ve kilit dosyası birlikte değişir ve saklı her matematik düğümü yeniden doğrulanır.
+- KaTeX sürüm yükseltmesi yalnızca bu test geçerse yapılır; `KATEX_VERSION`, `apps/api/katex` paketi ve kilit dosyası, `packages/question-renderer` paketi ve kök kilit dosyası birlikte değişir ve saklı her matematik düğümü yeniden doğrulanır.
 - Native mobil (M7) aynı setle doğrulanır.
 
 ## 10. Ortamlar ve veri

@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/c5-doppler-effect-pilot-questions.md",
- "source_sha256": "a5fe609af557606a6a5a22f5568341375226deb597ad47cb627ff4264094be96",
+ "source_sha256": "033be48dc5c7cb041a930353b99cc97a0871397c10b7012526da05c9cd630aca",
  "questions": [
   {
    "source_ref": "pilot/c5-doppler-effect#1",
@@ -18,7 +18,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "C.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Işıkta Doppler: Δλ/λ ≈ v/c; tayf çizgisi kayması",
+    "outcome": "Doppler effect for light: Δλ/λ ≈ v/c; shift of a spectral line",
     "stem": {
      "type": "doc",
      "content": [
@@ -79,7 +79,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kaymanın yönü ters alınır (yaklaşan kaynak gibi): 650 − 13 = 637 nm"
+            "text": "Takes the direction of the shift the wrong way round (as for an approaching source): 650 − 13 = 637 nm"
            }
           ]
          }
@@ -114,7 +114,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kaynağın hareketinin yalnızca frekansı değiştirdiği, dalga boyunun aynı kaldığı düşünülür"
+            "text": "Assumes the motion of the source changes only the frequency and that the wavelength stays the same"
            }
           ]
          }
@@ -170,7 +170,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kayma iki katı alınır (ışığın \"gidiş–dönüş\" yaptığı düşüncesi): 650 + 2 × 13 = 676 nm"
+            "text": "Doubles the shift (the idea that the light makes a \"round trip\"): 650 + 2 × 13 = 676 nm"
            }
           ]
          }
@@ -188,7 +188,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Δλ / λ ≈ v / c = 6.0 × 10⁶ / 3.00 × 10⁸ = 0.020. Δλ = 0.020 × 650 = 13 nm. Kaynak uzaklaştığı için dalga boyu artar: 650 + 13 = 663 nm."
+          "text": "Δλ / λ ≈ v / c = 6.0 × 10⁶ / 3.00 × 10⁸ = 0.020. Δλ = 0.020 × 650 = 13 nm. Because the source is receding, the wavelength increases: 650 + 13 = 663 nm."
          }
         ]
        }
@@ -219,7 +219,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Ses için Doppler etkisinin nitel anlatımı (sabit hızla yaklaşan kaynak)",
+    "outcome": "Qualitative description of the Doppler effect for sound (source approaching at constant speed)",
     "stem": {
      "type": "doc",
      "content": [
@@ -304,7 +304,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Frekansın uzaklık azaldıkça arttığı sanılır (artan şey ses şiddetidir; frekans ile şiddet karıştırılır)"
+            "text": "Assumes the frequency increases as the distance decreases (what increases is the loudness; confuses frequency with intensity)"
            }
           ]
          }
@@ -379,7 +379,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Frekansın yalnızca kaynağa ait olduğu, hareketle değişmediği düşünülür"
+            "text": "Assumes the frequency belongs only to the source and does not change with motion"
            }
           ]
          }
@@ -426,7 +426,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kaymanın yönü ters alınır (uzaklaşan kaynak)"
+            "text": "Takes the direction of the shift the wrong way round (receding source)"
            }
           ]
          }
@@ -444,7 +444,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Kaynak gözlemciye doğru hareket ederken ardışık dalga cepheleri öndeki bölgede birbirine yaklaşır; gözlemcideki dalga boyu kısalır, ses hızı değişmez, frekans "
+          "text": "While the source moves towards the observer, successive wavefronts get closer together in the region ahead; the wavelength at the observer decreases, the speed of sound is unchanged, and the frequency is greater than "
          },
          {
           "marks": [],
@@ -456,7 +456,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "'den büyük olur. Kayma kaynağın hızına bağlıdır, uzaklığına değil; hız sabit ve doğrudan gözlemciye yönelik olduğundan duyulan frekans sabittir."
+          "text": ". The shift depends on the speed of the source, not its distance; because the speed is constant and directly towards the observer, the frequency heard is constant."
          }
         ]
        }
@@ -486,7 +486,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Ses: hareketli kaynak formülü",
+    "outcome": "Sound: moving-source formula",
     "stem": {
      "type": "doc",
      "content": [
@@ -547,7 +547,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hareketli gözlemci formülü ve ters yön (uzaklaşma): 600 × (340 − 40) / 340 = 529 Hz"
+            "text": "Moving-observer formula and the wrong direction (receding): 600 × (340 − 40) / 340 = 529 Hz"
            }
           ]
          }
@@ -582,7 +582,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Doğru formül, ters yön (uzaklaşan kaynak): 600 × 340 / (340 + 40) = 537 Hz"
+            "text": "Correct formula, wrong direction (receding source): 600 × 340 / (340 + 40) = 537 Hz"
            }
           ]
          }
@@ -617,7 +617,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hareketli gözlemci formülü kullanılır: 600 × (340 + 40) / 340 = 671 Hz. Işık için geçerli yaklaşık bağıntı (Δf/f ≈ v/c) sese uygulanırsa da aynı değer çıkar: 600 + 600 × 40 / 340 = 671 Hz"
+            "text": "Uses the moving-observer formula: 600 × (340 + 40) / 340 = 671 Hz. Applying the approximate relation valid for light (Δf/f ≈ v/c) to sound gives the same value: 600 + 600 × 40 / 340 = 671 Hz"
            }
           ]
          }
@@ -656,7 +656,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Hareketli kaynak, yaklaşma: f′ = f v / (v − u"
+          "text": "Moving source, approaching: f′ = f v / (v − u"
          },
          {
           "marks": [
@@ -700,7 +700,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "C.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Ses: hareketli gözlemci formülü",
+    "outcome": "Sound: moving-observer formula",
     "stem": {
      "type": "doc",
      "content": [
@@ -782,7 +782,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hareketli kaynak formülü kullanılır (uzaklaşma): 800 × 340 / (340 + 34) = 727 Hz"
+            "text": "Uses the moving-source formula (receding): 800 × 340 / (340 + 34) = 727 Hz"
            }
           ]
          }
@@ -817,7 +817,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Doğru formül, ters yön (yaklaşan gözlemci): 800 × (340 + 34) / 340 = 880 Hz"
+            "text": "Correct formula, wrong direction (approaching observer): 800 × (340 + 34) / 340 = 880 Hz"
            }
           ]
          }
@@ -852,7 +852,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Hareketli kaynak formülü ve ters yön: 800 × 340 / (340 − 34) = 889 Hz"
+            "text": "Moving-source formula and the wrong direction: 800 × 340 / (340 − 34) = 889 Hz"
            }
           ]
          }
@@ -870,7 +870,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Hareketli gözlemci, uzaklaşma: f′ = f (v − u"
+          "text": "Moving observer, receding: f′ = f (v − u"
          },
          {
           "marks": [
@@ -914,7 +914,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "C.5",
     "secondary_syllabus_nodes": [],
-    "outcome": "Dalga cepheleriyle açıklama; hareketli kaynak; hareketli gözlemci ile karşılaştırma",
+    "outcome": "Explanation using wavefronts; moving source; comparison with a moving observer",
     "stem": {
      "type": "doc",
      "content": [
@@ -941,7 +941,7 @@
       "id": "fig1",
       "kind": "ray_wavefront_diagram",
       "use": "read_only",
-      "description": "Solda drone (kaynak), sağda sabit dedektör; drone'dan dedektöre yönelen hız oku. Drone'un çevresinde, merkezleri sola doğru kaymış çemberler olarak dalga cepheleri: dedektör tarafında sık, arka tarafta seyrek. \"diagram not to scale\". Soru şekil olmadan çözülebilir.",
+      "description": "A drone (source) on the left, a stationary detector on the right; a velocity arrow pointing from the drone towards the detector. Around the drone, as wavefronts in the form of circles with their centres shifted to the left: closely spaced on the detector side, widely spaced at the back. \"diagram not to scale\". The question can be solved without the figure.",
       "asset_id": null,
       "alt_text": null
      }

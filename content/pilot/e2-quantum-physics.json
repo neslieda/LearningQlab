@@ -1,6 +1,6 @@
 {
  "source_file": "docs/pilot/e2-quantum-physics-pilot-questions.md",
- "source_sha256": "bc1c8bf6842a86d4f33a687adc0b496c1c754c724ddca8b2fc66336a48433e3d",
+ "source_sha256": "19e9ea5222b32f715f6407f7f54fecf3aedb13c550b69d5c969b9cc1022ef0c9",
  "questions": [
   {
    "source_ref": "pilot/e2-quantum-physics#1",
@@ -17,7 +17,7 @@
     "difficulty": "easy",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Fotoelektrik denklem; iş fonksiyonu; en büyük kinetik enerji",
+    "outcome": "Photoelectric equation; work function; maximum kinetic energy",
     "stem": {
      "type": "doc",
      "content": [
@@ -99,7 +99,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İş fonksiyonunun elektronun aldığı enerji olduğu düşünülür"
+            "text": "Thinks the work function is the energy the electron receives"
            }
           ]
          }
@@ -134,7 +134,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İş fonksiyonu çıkarılmaz; foton enerjisinin tamamı kinetik enerji sayılır: 4.0 eV"
+            "text": "Does not subtract the work function; takes the whole photon energy as kinetic energy: 4.0 eV"
            }
           ]
          }
@@ -169,7 +169,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "İş fonksiyonu çıkarılacağına eklenir: 4.0 + 2.9 = 6.9 eV"
+            "text": "Adds the work function instead of subtracting it: 4.0 + 2.9 = 6.9 eV"
            }
           ]
          }
@@ -187,7 +187,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Foton enerjisi = hc / λ = (6.63 × 10⁻³⁴ × 3.00 × 10⁸) / (310 × 10⁻⁹) = 6.42 × 10⁻¹⁹ J = 4.0 eV. E"
+          "text": "Photon energy = hc / λ = (6.63 × 10⁻³⁴ × 3.00 × 10⁸) / (310 × 10⁻⁹) = 6.42 × 10⁻¹⁹ J = 4.0 eV. E"
          },
          {
           "marks": [
@@ -231,7 +231,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "de Broglie dalga boyu; λ = h/p ile kinetik enerjinin birleştirilmesi",
+    "outcome": "de Broglie wavelength; combining λ = h/p with kinetic energy",
     "stem": {
      "type": "doc",
      "content": [
@@ -292,7 +292,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "λ ∝ 1/m alınır (hızların eşit olduğu varsayılır): 1/4"
+            "text": "Takes λ ∝ 1/m (assumes the speeds are equal): 1/4"
            }
           ]
          }
@@ -348,7 +348,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kinetik enerjisi eşit parçacıkların dalga boyunun da eşit olduğu düşünülür (foton için geçerli ilişki maddeye uygulanır)"
+            "text": "Thinks particles with equal kinetic energy have equal wavelengths (applies a relation valid for photons to matter)"
            }
           ]
          }
@@ -383,7 +383,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Oran ters kurulur: √(m"
+            "text": "Inverts the ratio: √(m"
            },
            {
             "marks": [
@@ -457,7 +457,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "). λ = h / p ∝ 1 / √m (aynı E"
+          "text": "). λ = h / p ∝ 1 / √m (for the same E"
          },
          {
           "marks": [
@@ -471,7 +471,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": " için). Oran = √(m"
+          "text": "). Oran = √(m"
          },
          {
           "marks": [
@@ -529,7 +529,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Compton saçılması; dalga boyu kayması",
+    "outcome": "Compton scattering; wavelength shift",
     "stem": {
      "type": "doc",
      "content": [
@@ -708,7 +708,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "cos 180° = +1 alınır; kayma sıfır çıkar"
+            "text": "Takes cos 180° = +1; the shift comes out as zero"
            }
           ]
          }
@@ -743,7 +743,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Dalga boyu kayması, saçılan fotonun dalga boyu sanılır: 4.86 pm"
+            "text": "Takes the wavelength shift to be the wavelength of the scattered photon: 4.86 pm"
            }
           ]
          }
@@ -778,7 +778,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "(1 − cos θ) çarpanı 1 alınır (90° için geçerli değer): 3.00 + 2.43 = 5.43 pm"
+            "text": "Takes the factor (1 − cos θ) as 1 (the value for 90°): 3.00 + 2.43 = 5.43 pm"
            }
           ]
          }
@@ -817,7 +817,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Δλ = 2.43 × (1 − cos 180°) = 2.43 × 2 = 4.86 pm. Saçılan fotonun dalga boyu = 3.00 + 4.86 = 7.86 pm."
+          "text": "Δλ = 2.43 × (1 − cos 180°) = 2.43 × 2 = 4.86 pm. The wavelength of the scattered photon = 3.00 + 4.86 = 7.86 pm."
          }
         ]
        }
@@ -847,7 +847,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Fotoelektrik olayın dalga modeliyle açıklanamayan gözlemi; eşik frekansı",
+    "outcome": "Photoelectric observation not explained by the wave model; threshold frequency",
     "stem": {
      "type": "doc",
      "content": [
@@ -922,7 +922,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Foton modelinin her öngörüsünün dalga modeliyle çeliştiği sanılır; şiddet arttıkça daha çok elektron çıkması dalga modeliyle de uyumludur"
+            "text": "Thinks every prediction of the photon model contradicts the wave model; more electrons being emitted as intensity increases is also consistent with the wave model"
            }
           ]
          }
@@ -957,7 +957,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Enerji aktarımının yalnızca parçacık modeline özgü olduğu düşünülür; dalgalar da enerji taşır"
+            "text": "Thinks energy transfer is specific to the particle model; waves also carry energy"
            }
           ]
          }
@@ -1013,7 +1013,7 @@
            {
             "marks": [],
             "type": "text",
-            "text": "Kinetik enerji aralığının foton kanıtı olduğu sanılır; elektronların metalde farklı derinlik ve bağlanma enerjilerinde olması her iki modelde de bir aralık verir"
+            "text": "Thinks a range of kinetic energies is evidence for photons; electrons being at different depths and binding energies in the metal gives a range in both models"
            }
           ]
          }
@@ -1031,7 +1031,7 @@
          {
           "marks": [],
           "type": "text",
-          "text": "Dalga modelinde enerji sürekli aktarılır; yeterince şiddetli (ya da yeterince uzun süreli) her ışık, frekansı ne olursa olsun elektron koparabilmelidir. Şiddetten bağımsız bir eşik frekansı ancak enerjisi hf olan fotonlarla açıklanır."
+          "text": "In the wave model energy is transferred continuously; light that is intense enough (or lasts long enough) should be able to release electrons whatever its frequency. A threshold frequency independent of intensity can only be explained by photons of energy hf."
          }
         ]
        }
@@ -1061,7 +1061,7 @@
     "difficulty": "medium",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Parçacık kırınımı; de Broglie dalga boyu; dalga–parçacık ikiliği",
+    "outcome": "Particle diffraction; de Broglie wavelength; wave–particle duality",
     "stem": {
      "type": "doc",
      "content": [
@@ -1088,7 +1088,7 @@
       "id": "fig1",
       "kind": "schematic_diagram",
       "use": "read_only",
-      "description": "Havası boşaltılmış cam tüp. Solda elektron tabancası (katot ve anot arasında 150 V), ortada ince grafit film, sağda floresan ekran. Ekranda merkezdeki parlak noktanın çevresinde eşmerkezli parlak halkalar. Diyagram ölçekli değildir.",
+      "description": "Evacuated glass tube. Electron gun on the left (150 V between cathode and anode), a thin graphite film in the middle, a fluorescent screen on the right. On the screen, concentric bright rings around the central bright spot. Diagram not to scale.",
       "asset_id": null,
       "alt_text": null
      }
@@ -1817,7 +1817,7 @@
     "difficulty": "hard",
     "primary_syllabus_node": "E.2",
     "secondary_syllabus_nodes": [],
-    "outcome": "Durdurma potansiyeli–frekans verisinden h ve iş fonksiyonu; belirsizlik; sistematik hata",
+    "outcome": "h and work function from stopping potential–frequency data; uncertainty; systematic error",
     "stem": {
      "type": "doc",
      "content": [
@@ -2167,7 +2167,7 @@
       "id": "fig1",
       "kind": "circuit_diagram",
       "use": "read_only",
-      "description": "Devre şeması. Fotosel (katot ve anot), ona seri bağlı duyarlı bir ampermetre, fotosele paralel bağlı bir voltmetre ve potansiyometre üzerinden bağlı bir doğru akım kaynağı; anot kaynağın eksi ucuna bağlıdır. LED, katodu aydınlatır.",
+      "description": "Circuit diagram. A photocell (cathode and anode), a sensitive ammeter connected in series with it, a voltmeter connected in parallel with the photocell, and a direct-current supply connected through a potentiometer; the anode is connected to the negative terminal of the supply. The LED illuminates the cathode.",
       "asset_id": null,
       "alt_text": null
      },
@@ -2175,7 +2175,7 @@
       "id": "fig2",
       "kind": "graph",
       "use": "read_values",
-      "description": "Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.",
+      "description": "Graph to be generated from data; details in the Figure note of the source file.",
       "asset_id": null,
       "alt_text": null
      }
@@ -3259,7 +3259,7 @@
        "id": "s1",
        "name": "pct",
        "expr": "dV/V1*100",
-       "unit": "",
+       "unit": "%",
        "stated_value": null
       },
       {

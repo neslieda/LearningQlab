@@ -205,7 +205,15 @@ uv run python -m qlab.api.dev init                     # geliştirme anahtarı (
 uv run python -m qlab.api.dev token content_admin      # 8 saatlik token; Authorization: Bearer <token>
 uv run uvicorn --factory qlab.api.app:app_from_env --host 127.0.0.1 --port 8000
 uv run python -m qlab.api.openapi                      # sözleşme değişince: apps/api/openapi.json
-(cd ../../packages/api-client && npm ci --ignore-scripts && npm run generate)   # ve ondan üretilen istemci
+(cd ../.. && npm run generate -w @qlab/api-client)     # ve ondan üretilen istemci
+
+# Web (dilim 6), depo kökünden; npm çalışma alanı: apps/web, packages/*
+npm ci --ignore-scripts
+npm run dev -w @qlab/web                               # http://localhost:3000 ; /api/* → QLAB_API_URL (varsayılan 127.0.0.1:8000)
+                                                       # /dev/sign-in: token yapıştır · /dev/gallery: gösterim örnekleri
+npm test -w @qlab/question-renderer                    # bileşen testleri
+npm run test:visual                                    # görsel regresyon, Docker'daki Playwright imajında (Linux)
+npm run test:visual:update                             # bilerek değişen görünümün temel görüntülerini yenile
 ```
 
 - Veritabanı testleri (`db` işaretli) gerçek PostgreSQL ister; sunucuya ulaşılamazsa atlanmaz, **başarısız olur**. Yalnızca saf

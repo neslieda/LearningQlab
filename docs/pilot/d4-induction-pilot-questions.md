@@ -1,49 +1,49 @@
-# Pilot soru seti: D.4 İndüksiyon
+# Pilot question set: D.4 Induction
 
-> **Durum: İNCELENMEMİŞ TASLAK.** Tarih: 2026-10-11. Fizik uzmanı onayı olmadan öğrenciye gösterilmez (CLAUDE.md kural 13).
-> Bu set [yazım standardına](AUTHORING_STANDARD.md) göre, [A.1 örneğinin](a1-kinematics-pilot-questions.md) yapısıyla yazıldı.
-> D.4 yalnızca HL düğümüdür; bu dosyadaki tüm sorular HL etiketlidir.
+> **Status: UNREVIEWED DRAFT.** Date: 2026-10-11. Not shown to students without physics expert approval (CLAUDE.md rule 13).
+> This set was written following the [authoring standard](AUTHORING_STANDARD.md), with the structure of the [A.1 example](a1-kinematics-pilot-questions.md).
+> D.4 is an HL-only node; all questions in this file are labelled HL.
 >
-> **Kaynak:** yalnızca müfredat düğümü D.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), biçim profili ve
-> genel fizik. Hiçbir sınav kâğıdı, ders kitabı sorusu ya da internet kaynağı girdi olarak kullanılmadı; senaryolar yazarın kurgusudur.
-> **Sayısal doğrulama:** tüm sayısal cevaplar ve tüm sayısal çeldiriciler `python3` (yalnızca standart kütüphane) ile ayrı bir hesapla
-> yeniden üretildi ve dosyadaki değerlerle eşleşti. Bu dosyada fiziksel sabit kullanılmadı.
-> **Bağımsız kontrol:** bağımsız kör çözücüden geçti; uzman incelemesinden geçmedi (bkz. dosya sonu).
-> **Doğrulanmayan:** (1) uzman incelemesi yapılmadı; (2) indüklenen akım ve kuvvet yönleri (Soru 2) Lenz
-> yasası, sağ el kavrama kuralı ve ayrıca F = IL × B vektörel çarpımıyla elle kontrol edildi, kodla değil; (3) Soru 4, tepe emk'nin
-> dönme frekansıyla doğru orantılı olduğu bilgisini ister — müfredat analizindeki "dönme frekansının etkisi" kazanımına dayanır;
-> ε₀ = NBAω ifadesinin veri kitapçığında olup olmadığı teyit edilmedi, bu yüzden soru yalnızca oran ister; (4) Soru 5'te 0.40 T'lik
-> düzgün alanın 0.20 m genişlikte bir bölgede elde edilebilirliği (güçlü kalıcı mıknatıs dizisi) gerçekçilik açısından teyit edilmedi;
-> (5) bilinen bir sınav sorusuna benzerlik açısından uzman gözüyle bakılmadı.
+> **Source:** only syllabus node D.4 ([dp-physics-2025-analysis.md](../syllabus/dp-physics-2025-analysis.md)), the format profile and
+> general physics. No exam paper, textbook question or internet source was used as input; the scenarios are the author's inventions.
+> **Numerical check:** all numerical answers and all numerical distractors were reproduced by a separate calculation in `python3` (standard library only)
+> and matched the values in the file. No physical constants were used in this file.
+> **Independent check:** passed an independent blind solver; has not passed expert review (see end of file).
+> **Not verified:** (1) no expert review was done; (2) the induced current and force directions (Question 2) were checked by hand with Lenz's
+> law, the right-hand grip rule and also the vector product F = IL × B, not by code; (3) Question 4 requires the knowledge that the peak emf is
+> directly proportional to the rotation frequency — it is based on the "effect of rotation frequency" outcome in the syllabus analysis;
+> whether the expression ε₀ = NBAω is in the data booklet was not confirmed, so the question asks only for a ratio; (4) in Question 5 it was not confirmed, for realism, that a 0.40 T
+> uniform field can be obtained over a region 0.20 m wide (an array of strong permanent magnets);
+> (5) no expert check was made for similarity to any known exam question.
 
-## Kapsam tablosu
+## Scope table
 
-| # | Bölüm | Düzey | Kazanım (D.4) | Hedef | Komut sözcüğü | Puan | Zorluk |
+| # | Section | Level | Outcome (D.4) | Objective | Command terms | Marks | Difficulty |
 |---|---|---|---|---|---|---|---|
-| 1 | Paper 1A | HL | Alana giren dikdörtgen bobinde emk (ε = BvL, N sarım) | AO2 | — | 1 | Orta |
-| 2 | Paper 1A | HL | Lenz yasası: indüklenen akımın ve kuvvetin yönü | AO2 | — | 1 | Orta–zor |
-| 3 | Paper 1A | HL | Dönen bobinde akı bağlantısı ile emk arasındaki ilişki | AO2 | — | 1 | Orta |
-| 4 | Paper 1A | HL | Dönme frekansının sinüzoidal emk'ye etkisi | AO2 | — | 1 | Orta |
-| 5 | Paper 2 | HL | Hareketli iletkende emk; indüklenen akım ve kuvvet; Lenz yasası ve enerji korunumu; Faraday yasası | AO2–AO3 | Calculate, Determine, Show that, Explain | 9 | Orta–zor |
+| 1 | Paper 1A | HL | Emf in a rectangular coil entering a field (ε = BvL, N turns) | AO2 | — | 1 | Medium |
+| 2 | Paper 1A | HL | Lenz's law: direction of the induced current and force | AO2 | — | 1 | Medium–hard |
+| 3 | Paper 1A | HL | Relationship between flux linkage and emf in a rotating coil | AO2 | — | 1 | Medium |
+| 4 | Paper 1A | HL | Effect of rotation frequency on a sinusoidal emf | AO2 | — | 1 | Medium |
+| 5 | Paper 2 | HL | Emf in a moving conductor; induced current and force; Lenz's law and conservation of energy; Faraday's law | AO2–AO3 | Calculate, Determine, Show that, Explain | 9 | Medium–hard |
 
-Bu set D.4'ün tamamını kapsamaz. Eksik kalanlar: manyetik akının tanımı ve açıya bağlı hesabı (Φ = BA cos θ), Faraday yasasıyla
-akı–zaman verisinden emk hesabı, öz indüksiyonun nitel anlatımı, sinüzoidal emk grafiğinin çizimi.
+This set does not cover all of D.4. Not covered: the definition of magnetic flux and its calculation with angle (Φ = BA cos θ), calculating emf from
+flux–time data with Faraday's law, a qualitative description of self-induction, sketching the sinusoidal emf graph.
 
-Kapsam sınırı kontrolü: nicel işlem yalnızca alana giren dikdörtgen bobin / çerçevenin alana dik hareket eden kenarı için (Soru 1, 5);
-dönen bobin soruları (Soru 3, 4) yalnızca nitel ilişki ve oran ister; öz indüksiyon, indüktans ve RL devresi yok; türev ya da integral
-yok.
+Scope limit check: quantitative work is only for the side of a rectangular coil / frame entering the field that moves at right angles to the field (Questions 1, 5);
+rotating coil questions (Questions 3, 4) ask only for a qualitative relationship and a ratio; no self-induction, inductance or RL circuit; no derivatives or
+integrals.
 
 ---
 
-## Soru 1 — Paper 1A (HL)
+## Question 1 — Paper 1A (HL)
 
 A rectangular coil has 20 turns and sides of length 0.10 m and 0.20 m. The coil moves at a constant speed of 0.50 m s⁻¹ into a region
 of uniform magnetic field of strength 0.30 T. The plane of the coil is at right angles to the field. The leading side of the coil has
 length 0.10 m and is at right angles to the velocity. The coil is partly inside the field.
 
-> **Şekil:** Sayfa düzleminde dikdörtgen bir bobin (kısa kenar 0.10 m düşey, uzun kenar 0.20 m yatay) sağa doğru *v* hızıyla
-> hareket ediyor. Sağ tarafta, sayfaya dik düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Bobinin
-> sağdaki 0.10 m'lik kenarı alanın içinde, soldaki kenarı dışında. Diagram not to scale.
+> **Figure:** A rectangular coil in the plane of the page (short side 0.10 m vertical, long side 0.20 m horizontal) moving to the right with velocity *v*.
+> On the right, a region of uniform magnetic field perpendicular to the page (⊗ symbols) begins at a vertical boundary line. The 0.10 m side of the coil
+> on the right is inside the field and the side on the left is outside it. Diagram not to scale.
 
 What is the emf induced in the coil?
 
@@ -52,27 +52,27 @@ B. 0.12 V
 C. 0.30 V
 D. 0.60 V
 
-**Cevap: C**
+**Answer: C**
 
-**Çözüm.** Yalnızca alan içindeki öndeki kenar akı çizgilerini keser. Her sarımda ε = BvL = 0.30 × 0.50 × 0.10 = 0.015 V; 20 sarım
-seri olduğundan ε = 20 × 0.015 = 0.30 V. (Eşdeğer: akı bağlantısının değişim hızı N B L v.)
+**Solution.** Only the leading side, which is inside the field, cuts the flux lines. For each turn ε = BvL = 0.30 × 0.50 × 0.10 = 0.015 V; the 20 turns
+are in series, so ε = 20 × 0.015 = 0.30 V. (Equivalent: the rate of change of flux linkage is N B L v.)
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Sarım sayısı unutulur: 0.30 × 0.50 × 0.10 = 0.015 V |
-| B | Emk yerine tam akı bağlantısı hesaplanır (NBA): 20 × 0.30 × 0.10 × 0.20 = 0.12 |
-| D | Hıza dik kenar yerine hıza paralel kenar kullanılır: 20 × 0.30 × 0.50 × 0.20 = 0.60 V |
+| A | Forgets the number of turns: 0.30 × 0.50 × 0.10 = 0.015 V |
+| B | Calculates the full flux linkage (NBA) instead of the emf: 20 × 0.30 × 0.10 × 0.20 = 0.12 |
+| D | Uses the side parallel to the velocity instead of the side perpendicular to it: 20 × 0.30 × 0.50 × 0.20 = 0.60 V |
 
 ---
 
-## Soru 2 — Paper 1A (HL)
+## Question 2 — Paper 1A (HL)
 
 A rectangular conducting loop lies in the plane of the page. Part of the loop is in a region of uniform magnetic field that is
 directed **into** the page. The loop is pulled to the right, out of the field region, at constant speed.
 
-> **Şekil:** Sayfa düzleminde dikdörtgen bir iletken çerçeve. Sol tarafta, sayfanın içine doğru düzgün manyetik alan bölgesi
-> (⊗ simgeleri) düşey bir sınır çizgisiyle bitiyor; sınırın sağında alan yok. Çerçevenin sol kenarı alanın içinde, sağ kenarı dışında.
-> Çerçeveye sağa doğru bir hız oku (*v*) çizilmiş. Akım yönleri sayfaya bakan gözlemciye göre tanımlanır. Diagram not to scale.
+> **Figure:** A rectangular conducting frame in the plane of the page. On the left, a region of uniform magnetic field into the page
+> (⊗ symbols) ends at a vertical boundary line; there is no field to the right of the boundary. The left side of the frame is inside the field and the right side is outside.
+> A velocity arrow (*v*) pointing right is drawn on the frame. Current directions are defined as seen by an observer looking at the page. Diagram not to scale.
 
 Which describes the direction of the induced current in the loop, as seen by an observer looking at the page, and the direction of
 the magnetic force on the loop?
@@ -82,23 +82,23 @@ B. The current is clockwise and the force is to the right.
 C. The current is anticlockwise and the force is to the left.
 D. The current is anticlockwise and the force is to the right.
 
-**Cevap: A**
+**Answer: A**
 
-**Çözüm.** Çerçeve alandan çıkarken sayfanın içine doğru olan akı azalır. Lenz yasası: indüklenen akım bu azalmaya karşı koyar, yani
-çerçevenin içinde sayfanın içine doğru alan oluşturur. Sağ el kavrama kuralı (parmaklar akım yönünde kıvrılır, başparmak halkanın
-içindeki alanı gösterir): sayfanın içine doğru alan için akım saat yönündedir.
-Kuvvet: saat yönündeki akım, alan içindeki sol kenarda sayfanın üstüne doğrudur (+y). F = IL × B = (+y) × (−z) = −x: sola doğru.
-Üst ve alt kenarların alan içindeki parçalarına etkiyen kuvvetler eşit ve zıttır. Kuvvet harekete karşıdır; enerji korunumuyla uyumlu.
+**Solution.** As the frame leaves the field, the flux into the page decreases. Lenz's law: the induced current opposes this decrease, that is, it
+produces a field into the page inside the frame. Right-hand grip rule (fingers curl in the direction of the current, the thumb points along the field inside
+the loop): for a field into the page the current is clockwise.
+Force: the clockwise current is towards the top of the page (+y) in the left side, which is in the field. F = IL × B = (+y) × (−z) = −x: to the left.
+The forces on the parts of the top and bottom sides that are in the field are equal and opposite. The force opposes the motion; consistent with conservation of energy.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| B | Akım yönü doğru; ancak kuvvetin hareketi desteklediği sanılır (enerji korunumuna aykırı) ya da el kuralı ters uygulanır |
-| C | İndüklenen alanın dış alana her zaman zıt olduğu sanılır (akının azaldığı gözden kaçar); kuvvet için "harekete karşı" doğru hatırlanır |
-| D | Hem indüklenen alan dış alana zıt sanılır, hem bu akıma kural uygulanarak kuvvet bulunur: anticlockwise akım sol kenarda aşağı, (−y) × (−z) = +x, sağa |
+| B | Current direction correct; but thinks the force assists the motion (contradicts conservation of energy) or applies the hand rule the wrong way round |
+| C | Thinks the induced field is always opposite to the external field (misses that the flux is decreasing); correctly remembers "opposes the motion" for the force |
+| D | Thinks the induced field is opposite to the external field, and then finds the force by applying the rule to this current: an anticlockwise current is downwards in the left side, (−y) × (−z) = +x, to the right |
 
 ---
 
-## Soru 3 — Paper 1A (HL)
+## Question 3 — Paper 1A (HL)
 
 A rectangular coil rotates at a constant rate in a uniform magnetic field. The axis of rotation lies in the plane of the coil and is
 at right angles to the field.
@@ -111,21 +111,21 @@ B. The flux linkage is zero and the emf is a maximum.
 C. The flux linkage is a maximum and the emf is zero.
 D. The flux linkage is a maximum and the emf is a maximum.
 
-**Cevap: B**
+**Answer: B**
 
-**Çözüm.** Bobin düzlemi alan çizgilerine paralelken bobinden hiç alan çizgisi geçmez: akı bağlantısı sıfırdır. Aynı anda bobinin
-kenarları alan çizgilerini dik keser; akı bağlantısı en hızlı bu anda değişir. Faraday yasasına göre emk, akı bağlantısının değişim
-hızıyla orantılıdır, dolayısıyla en büyük değerindedir.
+**Solution.** When the plane of the coil is parallel to the field lines, no field lines pass through the coil: the flux linkage is zero. At the same instant the sides
+of the coil cut the field lines at right angles; the flux linkage changes most rapidly at this instant. By Faraday's law the emf is proportional to the rate of
+change of flux linkage, so it is at its maximum value.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Emk'nin akı bağlantısının kendisiyle orantılı olduğu sanılır (değişim hızıyla değil) |
-| C | Bobin düzleminin alana paralel olması ile dik olması karıştırılır |
-| D | Hem konum karıştırılır hem emk akıyla orantılı sanılır |
+| A | Thinks the emf is proportional to the flux linkage itself (not to its rate of change) |
+| C | Confuses the coil plane being parallel to the field with it being perpendicular |
+| D | Confuses the position and also thinks the emf is proportional to the flux |
 
 ---
 
-## Soru 4 — Paper 1A (HL)
+## Question 4 — Paper 1A (HL)
 
 A coil rotates at a constant rate in a uniform magnetic field. The emf induced in the coil varies sinusoidally with a maximum value
 of 6.0 V and a period of 40 ms. The frequency of rotation of the coil is then doubled. No other change is made.
@@ -137,30 +137,30 @@ B. 6.0 V and 20 ms
 C. 12 V and 40 ms
 D. 12 V and 20 ms
 
-**Cevap: D**
+**Answer: D**
 
-**Çözüm.** Frekans iki katına çıkınca periyot yarıya iner: 20 ms. Akı bağlantısının en büyük değeri değişmez ama aynı değişim yarı
-sürede gerçekleşir; akı bağlantısının en büyük değişim hızı, dolayısıyla tepe emk iki katına çıkar: 12 V.
+**Solution.** When the frequency doubles, the period halves: 20 ms. The maximum value of the flux linkage does not change, but the same change takes place in half
+the time; the maximum rate of change of flux linkage, and therefore the peak emf, doubles: 12 V.
 
-| Seçenek | Dayandığı yanılgı |
+| Option | Misconception |
 |---|---|
-| A | Frekans ile periyot karıştırılır (periyot iki katına çıkar) ve emk'nin de buna göre yarıya indiği düşünülür |
-| B | Tepe emk'nin yalnızca B, alan ve sarım sayısına bağlı olduğu sanılır; periyot doğru |
-| C | Emk'nin arttığı bilinir ama emk'nin periyodunun dönme periyoduyla birlikte değiştiği görülmez |
+| A | Confuses frequency with period (the period doubles) and thinks the emf halves accordingly |
+| B | Thinks the peak emf depends only on B, the area and the number of turns; period correct |
+| C | Knows the emf increases but does not see that the period of the emf changes together with the rotation period |
 
 ---
 
-## Soru 5 — Paper 2 (HL, 9 puan)
+## Question 5 — Paper 2 (HL, 9 marks)
 
 A rectangular aluminium frame is fixed flat on top of a small cart. The frame is a single loop of resistance 0.050 Ω. The cart is
 pulled along a horizontal track at a constant speed of 1.5 m s⁻¹. The frame enters a region of uniform magnetic field of strength
 0.40 T that is directed vertically downwards. The leading side of the frame has length 0.20 m and is at right angles to the velocity.
 The region of field is longer than the frame.
 
-> **Şekil:** Yukarıdan görünüş. Dikdörtgen çerçeve (öndeki ve arkadaki kenarlar 0.20 m, harekete dik; yan kenarlar daha uzun,
-> harekete paralel) sağa doğru 1.5 m s⁻¹ hızla hareket ediyor. Sağda, sayfanın içine doğru (yukarıdan bakana göre aşağı doğru)
-> düzgün manyetik alan bölgesi (⊗ simgeleri) düşey bir sınır çizgisiyle başlıyor. Çerçevenin öndeki kenarı alanın içinde, arkadaki
-> kenarı dışında. Diagram not to scale.
+> **Figure:** View from above. A rectangular frame (the leading and trailing sides 0.20 m, at right angles to the motion; the side edges longer,
+> parallel to the motion) moves to the right at 1.5 m s⁻¹. On the right, a region of uniform magnetic field into the page (downwards for an observer looking from above)
+> (⊗ symbols) begins at a vertical boundary line. The leading side of the frame is inside the field and the trailing
+> side is outside it. Diagram not to scale.
 
 **(a)** Calculate the emf induced in the frame while it is entering the field. [2]
 
@@ -183,56 +183,56 @@ The frame is now completely inside the region of magnetic field and is still mov
 | 5. | c | | rate of work done by applied force = *Fv* = 0.192 × 1.5 = 0.288 «W» ✓<br>rate of energy dissipation = *I*²*R* = 2.4² × 0.050 = 0.288 «W» **OR** *εI* = 0.12 × 2.4 = 0.288 «W» ✓ | *Both values must be calculated.*<br>*Allow 0.285 W «0.28–0.29 W» for Fv if the rounded F = 0.19 N is used.*<br>*Allow Fv = BILv = εI for MP1 if one of the two powers is evaluated as 0.29 W.* | 2 |
 | 5. | d | | the magnetic flux «linkage» through the frame is constant / is not changing ✓<br>«by Faraday's law» the induced emf is zero, so there is no current ✓ | *OWTTE*<br>**OR** *equal emfs are induced in the leading and trailing sides ✓ they act in opposite senses around the loop so the net emf is zero ✓* | 2 |
 
-### Formül zinciri (çözüm modeli)
+### Formula chain (solution model)
 
-| Adım | İfade | Sonuç |
+| Step | Expression | Result |
 |---|---|---|
-| Parametreler | `B = 0.40 T`, `v = 1.5 m/s`, `L = 0.20 m`, `R = 0.050 ohm` | |
+| Parameters | `B = 0.40 T`, `v = 1.5 m/s`, `L = 0.20 m`, `R = 0.050 ohm` | |
 | `emf` | `B*v*L` | 0.12 V |
 | `I` | `emf/R` | 2.4 A |
 | `F` | `B*I*L` | 0.192 N ≈ 0.19 N |
 | `P_mech` | `F*v` | 0.288 W |
 | `P_elec` | `I**2*R` | 0.288 W |
 
-**Yön notu (soruda istenmiyor, tutarlılık için).** Çerçeve alana girerken sayfanın içine doğru akı artar; Lenz yasasına göre
-indüklenen akım çerçevenin içinde sayfadan dışarı doğru alan oluşturur: yukarıdan bakana göre saat yönünün tersine. Bu akım öndeki
-kenarda sayfanın üstüne doğrudur (+y); F = IL × B = (+y) × (−z) = −x: manyetik kuvvet sola, yani harekete karşıdır. Uygulanan kuvvet
-bu yüzden sağa doğrudur.
+**Direction note (not asked in the question, for consistency).** As the frame enters the field, the flux into the page increases; by Lenz's law the
+induced current produces a field out of the page inside the frame: anticlockwise for an observer looking from above. This current is towards the top of the page (+y) in the
+leading side; F = IL × B = (+y) × (−z) = −x: the magnetic force is to the left, that is, opposing the motion. The applied force
+is therefore to the right.
 
 ---
 
-## Biçim uyumu
+## Format conformance
 
-Sorular [biçim profiline](../formats/dp-physics-2025-format-profile.md) göre gözden geçirildi (2026-10-11).
+The questions were reviewed against the [format profile](../formats/dp-physics-2025-format-profile.md) (2026-10-11).
 
-| Kural | Durum |
+| Rule | Status |
 |---|---|
-| 1A: bağlam + ayrı tek soru cümlesi + alt alta A–D | Soru 1 "What is …?"; Soru 2–4 "Which …?" (profilde daha seyrek ama geçerli) |
-| 1A: dört seçenek aynı türde, aynı birimde, büyüklük sırasında | Soru 1 uygun (artan); Soru 2–3 aynı kalıpta dört cümle; Soru 4 aynı kalıpta dört değer çifti (emk'ye göre artan) |
-| 1A: tablo seçenekli biçim örnekte doğrulanamadı | Soru 2–4 bu yüzden iki sütunlu tablo yerine cümle / çift biçiminde yazıldı; **cümle biçimli seçenek profilde azınlıkta, bu dosyada 4 sorunun 3'ü** — uzman tablo biçimini onaylarsa dönüştürülmeli |
-| 1A: kritik sözcük koyu | Soru 2 ("into"), Soru 3 ("parallel") |
-| 1A: doğru cevap konumu dengeli | C, A, B, D |
-| 1A: seçenekler yuvarlamadan sonra birbirinden farklı | Kontrol edildi (python) |
-| Şekil | Soru 1, 2, 5: metinle tarif edildi; alan yönü ve hareket yönü sözle de verildi |
-| Paper 2: alt parça puanı en çok 3; kısa soru 4–9 puan | Soru 5 uygun (2, 3, 2, 2; toplam 9) |
-| Paper 2: "Show that" kalıbı | Soru 5(c): sayısal hedef verildi (0.29 W); iki nicelik ayrı ayrı hesaplanır |
-| Paper 2: en az bir AO3 parça | Soru 5(b) Determine, (c) Show that, (d) Explain |
-| Markscheme: dört sütunlu tablo, ✓, « », OR, ECF, OWTTE | Soru 5 uygun |
-| Değer–birim yazımı (m s⁻¹), 2 anlamlı basamak | Uygun |
-| Paper 1B | Bu dosyada yok; D teması için 1B sorusu [D.3 dosyasında](d3-motion-in-em-fields-pilot-questions.md) |
+| 1A: context + a separate single question sentence + A–D listed vertically | Question 1 "What is …?"; Questions 2–4 "Which …?" (rarer in the profile but valid) |
+| 1A: four options of the same kind, in the same unit, in order of magnitude | Question 1 conforms (ascending); Questions 2–3 four sentences in the same pattern; Question 4 four value pairs in the same pattern (ascending by emf) |
+| 1A: table-option format could not be verified in the example | Questions 2–4 were therefore written in sentence / pair form instead of a two-column table; **sentence-form options are a minority in the profile, 3 of the 4 questions in this file** — convert if the expert approves the table format |
+| 1A: critical word in bold | Question 2 ("into"), Question 3 ("parallel") |
+| 1A: balanced position of the correct answer | C, A, B, D |
+| 1A: options are distinct after rounding | Checked (python) |
+| Figure | Questions 1, 2, 5: described in text; the field direction and direction of motion are also given in words |
+| Paper 2: sub-part marks at most 3; short question 4–9 marks | Question 5 conforms (2, 3, 2, 2; total 9) |
+| Paper 2: "Show that" pattern | Question 5(c): numerical target given (0.29 W); the two quantities are calculated separately |
+| Paper 2: at least one AO3 part | Question 5(b) Determine, (c) Show that, (d) Explain |
+| Markscheme: four-column table, ✓, « », OR, ECF, OWTTE | Question 5 conforms |
+| Value–unit notation (m s⁻¹), 2 significant figures | Conforms |
+| Paper 1B | Not in this file; the 1B question for theme D is [in the D.3 file](d3-motion-in-em-fields-pilot-questions.md) |
 
-## Bağımsız kontrol
+## Independent check
 
-Tarih: 2026-10-11. Bu dosya, yazarından farklı bir kör çözücü tarafından cevaplar görülmeden çözüldü; tüm cevap anahtarları,
-çeldirici değerleri ve Soru 2 ile Soru 5'teki akım / kuvvet yönleri (iki bağımsız yolla) yeniden üretildi ve eşleşti. KRİTİK ya da
-ORTA bulgu yok. Ayrıntı: [review/d4-review.md](review/d4-review.md). Bu kontrol uzman incelemesinin yerine geçmez.
+Date: 2026-10-11. This file was solved by a blind solver other than its author, without seeing the answers; all answer keys,
+distractor values and the current / force directions in Questions 2 and 5 (by two independent routes) were reproduced and matched. No CRITICAL or
+MEDIUM findings. Details: [review/d4-review.md](review/d4-review.md). This check does not replace expert review.
 
-İncelemeye yanıt olarak yapılan değişiklikler:
+Changes made in response to the review:
 
-- **Soru 3 (kök):** dönme ekseninin bobin düzleminde olduğu eklendi ("The axis of rotation lies in the plane of the coil and is at
+- **Question 3 (stem):** it was added that the axis of rotation is in the plane of the coil ("The axis of rotation lies in the plane of the coil and is at
   right angles to the field").
-- **Soru 5(c) (soru):** "Show that" parçasına sayısal hedef verildi: iki gücün de yaklaşık 0.29 W olduğu gösterilir.
-- **Soru 5(c) (markscheme):** "0.19 × 1.5 = 0.29" (aritmetik olarak 0.285) → "0.192 × 1.5 = 0.288"; yuvarlanmış F = 0.19 N ile
-  0.285 W kabul notu eklendi. `python3`: 0.192 × 1.5 = 0.288; 2.4² × 0.050 = 0.288; 0.12 × 2.4 = 0.288.
-- **Değiştirilmeyen:** Soru 2–4'ün cümle / çift biçimli seçenekleri. İki sütunlu tablo biçimi biçim profilinde doğrulanmadığı için
-  uzman kararına bırakıldı (inceleyen de aynı görüşte).
+- **Question 5(c) (question):** a numerical target was given to the "Show that" part: both powers are shown to be about 0.29 W.
+- **Question 5(c) (markscheme):** "0.19 × 1.5 = 0.29" (arithmetically 0.285) → "0.192 × 1.5 = 0.288"; an acceptance note for 0.285 W with the rounded F = 0.19 N
+  was added. `python3`: 0.192 × 1.5 = 0.288; 2.4² × 0.050 = 0.288; 0.12 × 2.4 = 0.288.
+- **Not changed:** the sentence / pair-form options of Questions 2–4. Because the two-column table format was not verified in the format profile,
+  it was left to an expert decision (the reviewer agrees).

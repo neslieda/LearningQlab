@@ -29,19 +29,19 @@
 | Kaynak | Hedef |
 |---|---|
 | Dosya adının ilk parçası (`a1`, `c3`) | `primary_syllabus_node` (`A.1`, `C.3`); her parçanın `syllabus_node` değeri de budur |
-| `## Kapsam tablosu` satırı (`#` sütunu soru numarası) | Bölüm, düzey, kazanım, hedef, zorluk (aşağıda) |
-| `## Soru N — Paper 1A` | `question_class = mcq`, `exam_section = paper_1a`, `total_marks = 1` |
-| `## Soru N — Paper 1B (… puan)` | `data_based`, `paper_1b` |
-| `## Soru N — Paper 2 (… puan)` | `short_structured` (toplam 20 ise `long_structured`), `paper_2` |
+| `## Scope table` satırı (`#` sütunu soru numarası) | Bölüm, düzey, kazanım, hedef, zorluk (aşağıda) |
+| `## Question N — Paper 1A` | `question_class = mcq`, `exam_section = paper_1a`, `total_marks = 1` |
+| `## Question N — Paper 1B (… marks)` | `data_based`, `paper_1b` |
+| `## Question N — Paper 2 (… marks)` | `short_structured` (toplam 20 ise `long_structured`), `paper_2` |
 | Başlıktaki puan | Parça puanlarının toplamıyla aynı olmalı; değilse hata |
 | Düzey `SL` | `levels = ["sl", "hl"]`, içerik düzeyi `sl_core` |
 | Düzey `HL` (tabloda ya da başlıkta) | `levels = ["hl"]`, içerik düzeyi `ahl` (çoktan seçmelide `mcq.level_content`, yapılandırılmışta her parça) |
-| Kazanım sütunu | `outcome` (olduğu gibi, Türkçe) |
-| Zorluk: Kolay / Kolay–orta / Orta / Orta–zor / Zor | `easy` / `medium` / `medium` / `hard` / `hard` |
+| Kazanım sütunu | `outcome` (olduğu gibi, İngilizce) |
+| Zorluk: Easy / Easy–medium / Medium / Medium–hard / Hard | `easy` / `medium` / `medium` / `hard` / `hard` |
 | Hedef tek değerse (`AO2`) | Çoktan seçmelide `mcq.assessment_objective`; aralıksa (`AO1–AO3`) boş bırakılır |
 | `language` | `en`; `calculator` = `true` |
 
-Soru bloğu bir sonraki `## ` başlığında ya da `---` çizgisinde biter; `---` ile sonraki `## ` başlığı arasında boş olmayan bir satır varsa hata (soru içinde çizgi kullanılamaz). `## Biçim uyumu`, `## Bu denemeden çıkan gözlemler` ve dosya
+Soru bloğu bir sonraki `## ` başlığında ya da `---` çizgisinde biter; `---` ile sonraki `## ` başlığı arasında boş olmayan bir satır varsa hata (soru içinde çizgi kullanılamaz). `## Format conformance`, `## Observations from this trial` ve dosya
 başındaki durum notu aktarılmaz.
 
 ### 3.1 Çoktan seçmeli
@@ -49,11 +49,11 @@ başındaki durum notu aktarılmaz.
 | Kaynak | Hedef |
 |---|---|
 | İlk seçenekten (`A. `) önceki paragraflar | `stem` (her paragraf bir `paragraph`) |
-| `> **Şekil:** …` alıntı bloğu | Uyaran (§3.3) ve bulunduğu yerde `figure` düğümü |
+| `> **Figure:** …` alıntı bloğu | Uyaran (§3.3) ve bulunduğu yerde `figure` düğümü |
 | `A. ` … `D. ` satırları | `mcq.options[].cells` (tek hücre); `option_layout = single_value` |
-| `**Cevap: X**` | `mcq.correct_key` |
-| `**Çözüm.** …` (tabloya kadar olan paragraflar) | `mcq.explanation` ("Çözüm." etiketi atılır) |
-| `| Seçenek | Dayandığı yanılgı |` tablosu | İlgili seçeneğin `rationale` alanı |
+| `**Answer: X**` | `mcq.correct_key` |
+| `**Solution.** …` (tabloya kadar olan paragraflar) | `mcq.explanation` ("Solution." etiketi atılır) |
+| `| Option | Misconception |` tablosu | İlgili seçeneğin `rationale` alanı |
 
 Dört seçenek, bir cevap ve doğru olmayan üç seçeneğin her biri için bir yanılgı satırı zorunludur; eksikse hata.
 
@@ -78,31 +78,31 @@ Dört seçenek, bir cevap ve doğru olmayan üç seçeneğin her biri için bir 
 | Not `Allow ECF from (b)…` ile başlıyorsa | `kind = ecf`; parçanın `ecf_from` alanına anılan parçalar (yalnızca önceki ve var olan parçalar; `(c)(i)` → `c.i`) |
 | Not `Accept …` / `Do not accept …` / `Award [n] max …` | `accept` / `do_not_accept` / `cap` |
 | Diğer notlar | `general` |
-| `### Şekil notu` bölümü | Uyaran (§3.3), `kind = graph`, `use = read_values`; belgeye `figure` düğümü eklenmez. **Notun metni aktarılmaz** (yazarın çalışma notudur ve cevabı içerebilir); `description` sabit metindir: `Veriden üretilecek grafik; ayrıntı kaynak dosyadaki Şekil notunda.` |
-| `### Formül zinciri (çözüm modeli)` | `solution_model` (§3.4) |
+| `### Figure note` bölümü | Uyaran (§3.3), `kind = graph`, `use = read_values`; belgeye `figure` düğümü eklenmez. **Notun metni aktarılmaz** (yazarın çalışma notudur ve cevabı içerebilir); `description` sabit metindir: `Graph to be generated from data; details in the Figure note of the source file.` |
+| `### Formula chain (solution model)` | `solution_model` (§3.4) |
 | Markscheme'den sonraki serbest açıklama paragrafları ("Denetim …") | Aktarılmaz (raporda sayılır) |
 
 ### 3.3 Uyaranlar
 
-Her `> **Şekil:**` bloğu ve her `### Şekil notu` bir uyarandır: `id = fig1, fig2, …` (belgedeki sırayla), `asset_id` yok.
-`> **Şekil:**` bloğu için `description` = blok metni ("Şekil:" etiketi olmadan, satırlar birleştirilmiş, işaretleme sadeleştirilmiş
-düz metin), `use = read_only`. Şekil notu için §3.2'deki sabit açıklama. Açıklama personel içindir; öğrenciye gösterilmez.
+Her `> **Figure:**` bloğu ve her `### Figure note` bir uyarandır: `id = fig1, fig2, …` (belgedeki sırayla), `asset_id` yok.
+`> **Figure:**` bloğu için `description` = blok metni ("Figure:" etiketi olmadan, satırlar birleştirilmiş, işaretleme sadeleştirilmiş
+düz metin), `use = read_only`. Figure note için §3.2'deki sabit açıklama. Açıklama personel içindir; öğrenciye gösterilmez.
 
-`kind` (yalnızca `> **Şekil:**` blokları için; Şekil notu her zaman `graph`), açıklamada **en önce geçen** anahtar sözcükten. Eşleşme
-büyük/küçük harfe duyarsızdır ve **sözcük başında** aranır (`ışın`, "dışında" sözcüğünün içinde eşleşmez):
-`devre`, `direnç`, `batarya`, `voltmetre`, `ampermetre` → `circuit_diagram`; `grafik`, `eksen`, `P–V` → `graph`; `alan çizgi` →
-`field_diagram`; `ışın`, `dalga cephe` → `ray_wavefront_diagram`; `enerji düzey` → `energy_level_diagram`; `uzay-zaman` →
-`spacetime_diagram`; `tablo` → `data_table`; hiçbiri → `schematic_diagram`. Uyaranı olan soru yayınlanamaz (D-49).
+`kind` (yalnızca `> **Figure:**` blokları için; Figure note her zaman `graph`), açıklamada **en önce geçen** anahtar sözcükten. Eşleşme
+büyük/küçük harfe duyarsızdır ve **tam sözcük olarak**, isteğe bağlı çoğul `s`/`es` ekiyle aranır (`ray`, "array" içinde, `graph` "graphite" içinde eşleşmez; büyük/küçük harf için düz `casefold` kullanılır):
+`circuit`, `resistor`, `battery`, `cell`, `voltmeter`, `ammeter` → `circuit_diagram`; `graph`, `axis`, `axes`, `P–V` → `graph`;
+`field line` → `field_diagram`; `ray`, `wavefront` → `ray_wavefront_diagram`; `energy level` → `energy_level_diagram`;
+`spacetime`, `space-time` → `spacetime_diagram`; `table` → `data_table`; hiçbiri → `schematic_diagram`. Uyaranı olan soru yayınlanamaz (D-49).
 
 ### 3.4 Çözüm modeli
 
 Formül zinciri tablosu şemaya yalnızca **tamamı** kurallara uyuyorsa aktarılır; uymuyorsa o sorunun `solution_model` alanı boş
 bırakılır ve neden rapora yazılır (soru yine aktarılır).
 
-- `Parametreler` satırı: ters tırnak içindeki her `ad = değer birim` bir parametredir. `sabit` / `sabitler` sözcüğünden sonra gelenler
+- `Parameters` satırı: ters tırnak içindeki her `ad = değer birim` bir parametredir. `constant` / `constants` sözcüğünden sonra gelenler
   de parametre olarak aktarılır (sabit tablosuna bağ kurulmaz; rapora yazılır). Birim yoksa boştur.
 - Diğer satırlar adımdır: ilk sütundaki ters tırnaklı ad `name`, ikinci sütundaki ters tırnaklı ifade `expr`, `id = s1, s2, …`.
-  `Sonuç` sütunu sayı + birimden ibaretse birim `unit` olur (üst simge karakterleri ASCII'ye çevrilir: `m s⁻¹` → `m s^-1`).
+  `Result` sütunu sayı + birimden ibaretse birim `unit` olur (üst simge karakterleri ASCII'ye çevrilir: `m s⁻¹` → `m s^-1`).
 - Uymama örnekleri: ters tırnaksız parametre, adı tanımlayıcı olmayan satır, yinelenen ad, sayı biçimine uymayan değer, birim
   biçimine uymayan birim, ifade sütunu boş ya da birden çok ifade içeren satır.
 - Cevap bağı (`answers`), `stated_value` ve `solution_step` kurulmaz.
@@ -165,7 +165,7 @@ yöntemiyle düz metne indirger.
   `math_inline` LaTeX'i §4.3'ün tersiyle (komut → Yunan harfi; `_`, `^`, `{`, `}` ve komut ayıran boşluk atılır); `hard_break` boşlukla;
   tablo hücreleri sırayla.
 - **Kaynak tarafı**: aynı bölgeler; `*`, `**`, `<sub>`, `</sub>`, `<sup>`, `</sup>`, `«`, `»`, `✓`, tablo çizgileri, `[n]` puanları,
-  parça etiketleri (`**(a)**`, `(ii)`), seçenek harfleri (`A. `), `**Cevap: X**`, `**Çözüm.**`, `> **Şekil:**` etiketleri,
+  parça etiketleri (`**(a)**`, `(ii)`), seçenek harfleri (`A. `), `**Answer: X**`, `**Solution.**`, `> **Figure:**` etiketleri,
   `**ALTERNATIVE n**` satırları ve markscheme'in `Question` / `Total` sütunları atılır; `<br>` boşluk olur. Not hücrelerindeki `✓` atılmaz (§8); yalnızca madde satırlarının sonundaki `✓` atılır.
 - İki tarafta da tüm boşluklar atıldıktan sonra karşılaştırılır. Fark varsa test, ilk farkın çevresini gösterir.
 
@@ -205,10 +205,10 @@ dönüştürücünün davranışıdır; çeviri raporundaki "Kural ekleri" ve "Y
 
 | Konu | Okuma |
 |---|---|
-| Başlık biçimi `Paper 2 (HL, 9 puan)` | Geçerli; düzey başlıktan ve tablodan okunur, başlık HL deyip tablo SL diyorsa hata |
+| Başlık biçimi `Paper 2 (HL, 9 marks)` | Geçerli; düzey başlıktan ve tablodan okunur, başlık HL deyip tablo SL diyorsa hata |
 | Markscheme `Total` hücresinde `2 max` | Sayı parça puanına eşit olmalı; "max" ek bilgi taşımaz (kapalı parça madde sayısından anlaşılır) |
 | `Answers` hücresinde `✓` ile bitmeyen ve `ALTERNATIVE` olmayan satır | Hata. (`b3-gas-laws` soru 6 (g)'deki tek başına `**OR**` satırı kaynakta `ALTERNATIVE 1 / 2` olarak yeniden etiketlendi) |
-| Çoktan seçmelide yanılgı tablosundan sonraki serbest paragraf ("Not: …") | Aktarılmaz; raporda sayılır (yapılandırılmış sorulardaki serbest açıklamalar gibi) |
+| Çoktan seçmelide yanılgı tablosundan sonraki serbest paragraf ("Note: …") | Aktarılmaz; raporda sayılır (yapılandırılmış sorulardaki serbest açıklamalar gibi) |
 | Komut sözcüğünden sonra noktalama (`Explain,`) | Noktalama atılır, sözcük sözlükte aranır |
 | `Allow ECF …` ile başlayan her not (`Allow ECF for the volume from (a).`) | `kind = ecf`; `ecf_from` nottaki `(x)` / `(x)(y)` göndermelerinden. Alt parçası olan bir harfe `(c)` diye gönderme: hata (kaynakta yok) |
 | `Award [n] max …`, `Award [n max] …` | `cap`. `Do not award …` ve diğer `Award …` notları `general` |

@@ -43,7 +43,13 @@ from qlab.content.models import (
     QuestionVersionCheck,
     QuestionVersionSyllabus,
 )
-from qlab.content.schema import Level, QuestionClass, QuestionDocument
+from qlab.content.schema import (
+    Level,
+    QuestionClass,
+    QuestionDocument,
+    non_english_message,
+    non_english_paths,
+)
 from qlab.rights import service as rights
 from qlab.syllabus import service as syllabus
 
@@ -397,6 +403,9 @@ def _write_content(
         raise InvalidDocument((f"document is larger than {MAX_DOCUMENT_BYTES} bytes",))
     if "\\u0000" in encoded:
         raise InvalidDocument(("document contains a NUL character",))
+    foreign = non_english_paths(document)
+    if foreign:
+        raise InvalidDocument((non_english_message(foreign),))
     vocabulary = syllabus.get_vocabulary(session, question.syllabus_version_id)
     errors = _vocabulary_errors(document, vocabulary)
     if errors:
@@ -592,7 +601,8 @@ def create_question(
     - Unknown `syllabus_version_id` raises LookupError.
     - The document's exam section, command terms and syllabus nodes (leaf nodes only) must
       belong to the syllabus version, else InvalidDocument listing every problem. A document
-      over 512 kB or containing a NUL character is also InvalidDocument.
+      over 512 kB or containing a NUL character is also InvalidDocument, and so is one with a
+      Turkish-only letter (`ğ Ğ ı İ ş Ş`) in any string: content is written in English.
     - Every math node must use only allowed LaTeX commands and render in the pinned KaTeX
       (`qlab.content.math`), else InvalidDocument naming each node. If the renderer cannot be
       run, `qlab.content.math.RendererUnavailable` is raised and nothing is saved.

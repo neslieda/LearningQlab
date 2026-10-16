@@ -22,6 +22,7 @@ from qlab.content.pilot.markdown import (
     load_vocabulary,
 )
 from qlab.content.pilot.report import render_report
+from qlab.content.schema import non_english_message, non_english_paths
 
 REPORT_NAME = "CONVERSION_REPORT.md"
 
@@ -85,6 +86,11 @@ def _convert_all(root: Path) -> tuple[dict[str, str], list[str]]:
             problems.append(str(error))
             continue
         for question in pilot.questions:
+            foreign = non_english_paths(question.document)
+            if foreign:
+                problems.append(
+                    f"{pilot.source_file}, {question.source_ref}: {non_english_message(foreign)}"
+                )
             for problem in qmath.check(question.document):
                 problems.append(f"{pilot.source_file}, {question.source_ref}: {problem}")
         outputs[f"{stem}.json"] = pilot.to_json()

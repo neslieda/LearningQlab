@@ -6,6 +6,8 @@
 -- Role names are psql variables: -v app_role=qlab_app -v backup_role=qlab_backup (these are the defaults).
 -- psql only (uses \set, \if, \gexec).
 --
+-- The attributes (LOGIN, NOSUPERUSER, ...) are set when the role is created. Re-running only resets the password: a
+-- managed service's owner role is not a superuser and may not restate SUPERUSER (Neon, checked 2026-10-16).
 -- Passwords come from psql variables; they are never written in this file. Re-running is safe:
 -- existing roles keep their password unless you pass new values (then they are reset).
 -- Neon: roles made in SQL are plain roles (not neon_superuser) and get only basic public-schema rights, which is what we want;
@@ -24,12 +26,12 @@
 
 SELECT format('CREATE ROLE %I LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD %L', :'app_role', :'app_password')
 WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'app_role') \gexec
-SELECT format('ALTER ROLE %I WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD %L', :'app_role', :'app_password')
+SELECT format('ALTER ROLE %I WITH PASSWORD %L', :'app_role', :'app_password')
 WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'app_role') \gexec
 
 SELECT format('CREATE ROLE %I LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD %L', :'backup_role', :'backup_password')
 WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'backup_role') \gexec
-SELECT format('ALTER ROLE %I WITH LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE PASSWORD %L', :'backup_role', :'backup_password')
+SELECT format('ALTER ROLE %I WITH PASSWORD %L', :'backup_role', :'backup_password')
 WHERE EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'backup_role') \gexec
 
 -- Connection and schema access.

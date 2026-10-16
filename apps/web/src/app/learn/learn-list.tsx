@@ -16,7 +16,7 @@ import {
   isValidSection,
   type LearnFilters,
 } from "@/lib/learn";
-import { useAnsweredIds } from "@/lib/responses";
+import { QUESTIONS_KEY } from "@/lib/responses";
 import { ScrollBox } from "../admin/status-badge";
 import { SessionGate } from "../admin/staff-gate";
 import { AnswerProblem } from "./answer-problem";
@@ -32,7 +32,6 @@ function Inner() {
   const pathname = usePathname();
   const params = useSearchParams();
   const filters = filtersFromParams(params);
-  const answered = useAnsweredIds(true);
 
   // null: the field follows the URL; a string: the user is typing.
   const [typed, setTyped] = useState<string | null>(null);
@@ -51,7 +50,7 @@ function Inner() {
   }
 
   const query = useInfiniteQuery({
-    queryKey: ["learn", "questions", filters],
+    queryKey: [...QUESTIONS_KEY, filters],
     initialPageParam: null as string | null,
     queryFn: async ({ pageParam }): Promise<LearnerQuestionPage> =>
       unwrap(
@@ -144,7 +143,7 @@ function Inner() {
             <caption className="sr-only">Practice questions</caption>
             <thead>
               <tr className="border-b border-[var(--page-border)]">
-                <th scope="col" className="p-2">Question</th>
+                <th scope="col" className="p-2">Topic</th>
                 <th scope="col" className="p-2">Class</th>
                 <th scope="col" className="p-2">Section</th>
                 <th scope="col" className="p-2">Level</th>
@@ -153,11 +152,11 @@ function Inner() {
               </tr>
             </thead>
             <tbody>
-              {items.map((q, index) => (
+              {items.map((q) => (
                 <tr key={q.id} className="border-b border-[var(--page-border)] align-top">
                   <th scope="row" className="p-2 font-normal">
                     <Link href={`/learn/${q.id}`} className="underline">
-                      {`Question ${index + 1}`}
+                      {`${q.topic.code} ${q.topic.title}`}
                     </Link>
                   </th>
                   <td className="p-2">{classLabel(q.question_class)}</td>
@@ -165,7 +164,7 @@ function Inner() {
                   <td className="p-2">{q.levels.map((l) => l.toUpperCase()).join(", ")}</td>
                   <td className="p-2">{q.total_marks}</td>
                   <td className="p-2">
-                    {answered.has(q.id) ? (
+                    {q.answered ? (
                       <span className="inline-block whitespace-nowrap rounded border border-green-700 px-1.5 py-0.5">Answered</span>
                     ) : null}
                   </td>

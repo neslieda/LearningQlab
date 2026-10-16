@@ -52,6 +52,7 @@ const response = (over: Partial<S["ResponseOut"]> = {}): S["ResponseOut"] => ({
 });
 const summary = (q: S["LearnerQuestion"]): S["LearnerQuestionSummary"] => ({
   id: q.id, version_id: q.version_id, exam_section: q.exam_section, levels: q.levels, question_class: q.question_class, total_marks: q.total_marks,
+  topic: q.topic, answered: q.id === MCQ.id,
 });
 
 test.describe("practice list", () => {
@@ -61,7 +62,6 @@ test.describe("practice list", () => {
         if (r.query.get("cursor") === "c2") return { json: { items: [summary(STRUCT)], next_cursor: null } };
         return { json: { items: [summary(MCQ)], next_cursor: "c2" } };
       }
-      if (r.path === "/me/responses") return { json: { items: [response()], next_cursor: null } };
       return undefined;
     });
     await signIn(page);
@@ -69,7 +69,9 @@ test.describe("practice list", () => {
     await expect(page.getByRole("heading", { name: "Practice" })).toBeVisible();
     await expect(page.getByText("Answered", { exact: true })).toHaveCount(1);
     await page.getByRole("button", { name: "Load more" }).click();
-    await expect(page.getByRole("link", { name: "Question 2" })).toBeVisible();
+    await expect(page.locator(`a[href="/learn/${STRUCT.id}"]`)).toHaveText(`${STRUCT.topic.code} ${STRUCT.topic.title}`);
+    await expect(page.getByText("Answered", { exact: true })).toHaveCount(1);
+    expect(log.some((r) => r.path === "/me/responses")).toBe(false);
     await page.getByLabel("Level").selectOption("hl");
     await expect(page).toHaveURL(/level=hl/);
     await expect.poll(() => log.some((r) => r.path === "/questions" && r.query.get("level") === "hl")).toBe(true);
@@ -164,6 +166,7 @@ test.describe("solve: multiple choice", () => {
   });
 
   for (const [code, status, text] of [
+    ["answer_limit_reached", 429, "You have reached the limit of 5000 saved answers. Delete your answers to continue."],
     ["answer_does_not_fit", 422, "This answer does not fit the question"],
     ["too_many_answers", 429, "You have reached the limit of 200 answers for this question"],
   ] as const) {
@@ -179,8 +182,41 @@ test.describe("solve: multiple choice", () => {
       await page.getByRole("radio", { name: "Option A" }).check();
       await page.getByRole("button", { name: "Submit answer" }).click();
       await expect(alerts(page)).toContainText(text);
+      if (code === "answer_limit_reached") await expect(alerts(page).getByRole("link", { name: "Go to your account" })).toHaveAttribute("href", "/account");
     });
   }
+
+  test("shows the topic as context", async ({ page }) => {
+    await mockApi(page, (r) => (r.path === `/questions/${MCQ.id}` ? { json: MCQ } : r.path === "/me/responses" ? { json: { items: [], next_cursor: null } } : undefined));
+    await signIn(page);
+    await page.goto(`/learn/${MCQ.id}`);
+    await expect(page.getByTestId("topic")).toContainText(`${MCQ.topic.code} ${MCQ.topic.title}`);
+  });
+
+  test("figure-options layout with rationales: no horizontal scroll, rationale inside its option", async ({ page }) => {
+    const figFx = fixtures.find((f) => f.id === "mcq-figure-options");
+    if (figFx?.kind !== "learner_question") throw new Error("fixture missing");
+    const FIG = figFx.data;
+    await mockApi(page, (r) => {
+      if (r.path === `/questions/${FIG.id}`) return { json: FIG };
+      if (r.path.endsWith("/answers")) return { status: 201, json: result(false) };
+      if (r.path === "/me/responses") return { json: { items: [], next_cursor: null } };
+      return undefined;
+    });
+    await signIn(page);
+    await page.goto(`/learn/${FIG.id}`);
+    await page.getByRole("radio", { name: "Option B" }).check();
+    await page.getByRole("button", { name: "Submit answer" }).click();
+    const why = page.getByRole("group", { name: "Why option B is wrong" });
+    await expect(why).toContainText("WHY-B");
+    const inside = await why.evaluate((el) => {
+      const li = el.closest("li")!.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return r.left >= li.left - 1 && r.right <= li.right + 1 && r.bottom <= li.bottom + 1;
+    });
+    expect(inside).toBe(true);
+    await noHScroll(page);
+  });
 
   test("a 401 on submit shows the sign-in link", async ({ page }) => {
     await mockApi(page, (r) => {
@@ -297,5 +333,8 @@ test.describe("history and account", () => {
     await page.goto("/privacy");
     await expect(page.getByRole("heading", { name: "Privacy", level: 1 })).toBeVisible();
     await expect(page.getByRole("link", { name: "account page" })).toBeVisible();
+    await expect(page.getByText(/platform owner and the database host can technically access the database/)).toBeVisible();
+    await expect(page.getByText(/kept for 14 days on GitHub \(United States\)/)).toBeVisible();
+    await expect(page.getByText(/we record your account ID and how many answers were deleted/)).toBeVisible();
   });
 });

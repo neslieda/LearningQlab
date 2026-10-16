@@ -13,7 +13,7 @@ type Json = Record<string, unknown>;
 const doc = (t: string): Json => ({ type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text: t }] }] });
 
 const mcqQuestion = (): Json => ({
-  id: QID_MCQ, version_id: VID, question_class: "mcq", exam_section: "section_a", levels: ["sl", "hl"], total_marks: 1,
+  id: QID_MCQ, topic: { code: "T.1", title: "Invented topic" }, answered: false, version_id: VID, question_class: "mcq", exam_section: "section_a", levels: ["sl", "hl"], total_marks: 1,
   stem: doc("An invented stem about a trolley on a ramp."), stimuli: [], parts: [],
   mcq: {
     option_layout: "single_value", column_headers: [], statements: [],
@@ -21,7 +21,7 @@ const mcqQuestion = (): Json => ({
   },
 });
 const structQuestion = (): Json => ({
-  id: QID_STR, version_id: VID_STR, question_class: "short_structured", exam_section: "section_b", levels: ["hl"], total_marks: 3,
+  id: QID_STR, topic: { code: "T.1", title: "Invented topic" }, answered: false, version_id: VID_STR, question_class: "short_structured", exam_section: "section_b", levels: ["hl"], total_marks: 3,
   stem: doc("An invented scenario about a cart."), stimuli: [], mcq: null,
   parts: [
     { id: "p_a", label: "a", lead_in: null, body: doc("State the invented quantity."), marks: 1, command_term: "State", stimulus_refs: [] },
@@ -30,6 +30,7 @@ const structQuestion = (): Json => ({
 });
 const summary = (id: string, vid: string, cls = "mcq", section = "section_a"): Json => ({
   id, version_id: vid, question_class: cls, exam_section: section, levels: ["sl"], total_marks: 1,
+  topic: { code: "T.1", title: "Invented topic" }, answered: id === QID_MCQ,
 });
 const stored = (over: Json = {}): Json => ({
   id: "rsp_0" + "1".repeat(25), question_id: QID_MCQ, version_id: VID, kind: "mcq", part_id: null,

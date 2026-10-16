@@ -11,7 +11,7 @@ from typing import Any
 from sqlalchemy import delete, func, select, text
 from sqlalchemy.orm import Session
 
-from qlab.attempts.models import MAX_ANSWERS_PER_QUESTION, Response
+from qlab.attempts.models import MAX_ANSWERS_PER_ACCOUNT, MAX_ANSWERS_PER_QUESTION, Response
 from qlab.content.models import QuestionVersion
 
 
@@ -66,10 +66,12 @@ def add_response(
     )
     if question_id is None:
         raise LookupError("unknown question version")
-    session.execute(
-        text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"),
-        {"key": f"response:{account_id}:{question_id}"},
-    )
+    # Locks are always taken in this order (account, then question), so two submissions of
+    # one account cannot wait on each other in a cycle.
+    for key in (f"response-account:{account_id}", f"response:{account_id}:{question_id}"):
+        session.execute(
+            text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"), {"key": key}
+        )
     stored = session.scalar(
         select(func.count())
         .select_from(Response)
@@ -78,6 +80,11 @@ def add_response(
     )
     if (stored or 0) >= MAX_ANSWERS_PER_QUESTION:
         raise TooManyAnswers(str(question_id))
+    total = session.scalar(
+        select(func.count()).select_from(Response).where(Response.account_id == account_id)
+    )
+    if (total or 0) >= MAX_ANSWERS_PER_ACCOUNT:
+        raise AccountAnswerLimit(str(account_id))
     row = Response(
         account_id=account_id,
         question_version_id=question_version_id,
@@ -122,3 +129,20 @@ def delete_responses(session: Session, *, account_id: uuid.UUID) -> int:
         delete(Response).where(Response.account_id == account_id).returning(Response.id)
     )
     return len(result.all())
+
+
+def answered_questions(
+    session: Session, *, account_id: uuid.UUID, question_ids: frozenset[uuid.UUID]
+) -> frozenset[uuid.UUID]:
+    """Those of `question_ids` the account has at least one stored answer to, on any version.
+    One query, whatever the number of questions."""
+    if not question_ids:
+        return frozenset()
+    return frozenset(
+        session.scalars(
+            select(QuestionVersion.question_id)
+            .join(Response, Response.question_version_id == QuestionVersion.id)
+            .where(Response.account_id == account_id, QuestionVersion.question_id.in_(question_ids))
+            .distinct()
+        )
+    )

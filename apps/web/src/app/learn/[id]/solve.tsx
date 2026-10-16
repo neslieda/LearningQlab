@@ -13,7 +13,7 @@ import {
 import { formatTime, unwrap } from "@/lib/admin";
 import { useApi } from "@/lib/api";
 import { excerpt, partLabel, partLabeller, toAnswerRows } from "@/lib/learn";
-import { RESPONSES_KEY } from "@/lib/responses";
+import { QUESTIONS_KEY, RESPONSES_KEY } from "@/lib/responses";
 import { SessionGate } from "../../admin/staff-gate";
 import { AnswerProblem } from "../answer-problem";
 import { PrivacyNotice } from "../privacy-notice";
@@ -30,7 +30,10 @@ function useSubmit(questionId: string) {
   return useMutation({
     mutationFn: async (body: AnswerRequest) =>
       unwrap(await api.POST("/v1/questions/{question_id}/answers", { params: { path: { question_id: questionId } }, body })),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: RESPONSES_KEY }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: RESPONSES_KEY });
+      void queryClient.invalidateQueries({ queryKey: QUESTIONS_KEY });
+    },
   });
 }
 
@@ -54,6 +57,9 @@ function Inner({ id }: { id: string }) {
       {query.isError ? <AnswerProblem error={query.error} onReload={() => void query.refetch()} /> : null}
       {query.data ? (
         <>
+          <p data-testid="topic">
+            <span className="font-medium">Topic:</span> {query.data.topic.code} {query.data.topic.title}
+          </p>
           <Question question={query.data} />
           <PreviousAnswers question={query.data} />
           <PrivacyNotice />

@@ -26,6 +26,7 @@ from qlab.api.schemas import (
     SyllabusNodeOut,
     SyllabusOut,
 )
+from qlab.attempts import service as attempts
 from qlab.content import service as content
 from qlab.content.schema import Level, QuestionClass
 from qlab.syllabus import service as syllabus
@@ -132,9 +133,20 @@ def list_questions(
     )
     with deps.reading(request) as session:
         found = content.list_published(session, filter=selection, after=after, limit=limit + 1)
-    page = found[:limit]
+        page = found[:limit]
+        topics = content.primary_topics(session, frozenset(v.id for v in page))
+        answered = attempts.answered_questions(
+            session,
+            account_id=caller.account_id,
+            question_ids=frozenset(v.question_id for v in page),
+        )
     return LearnerQuestionPage(
-        items=tuple(learner_view.to_learner_summary(v) for v in page),
+        items=tuple(
+            learner_view.to_learner_summary(
+                v, topic=topics[v.id], answered=v.question_id in answered
+            )
+            for v in page
+        ),
         next_cursor=ids.encode(ids.QUESTION, page[-1].question_id) if len(found) > limit else None,
     )
 
@@ -149,7 +161,13 @@ def get_question(request: Request, caller: Caller, question_id: str) -> LearnerQ
     404 when the question does not exist, has no published version, or may not be displayed."""
     with deps.reading(request) as session:
         view = content.get_published_version(session, decode_question_id(question_id))
-    return learner_view.to_learner_question(view)
+        topic = content.primary_topics(session, frozenset({view.id}))[view.id]
+        answered = attempts.answered_questions(
+            session, account_id=caller.account_id, question_ids=frozenset({view.question_id})
+        )
+    return learner_view.to_learner_question(
+        view, topic=topic, answered=view.question_id in answered
+    )
 
 
 @router.post(

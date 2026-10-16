@@ -1036,7 +1036,7 @@ def test_before_a_answer_no_response_contains_the_answer(
     assert_clean(listing.text, everything, WRITTEN_FORBIDDEN | {"correct_key"})
 
 
-def test_a_answer_does_not_change_what_the_learner_sees_afterwards(
+def test_answering_changes_only_the_answered_flag_of_the_question_view(
     api: ApiHarness, world: dict[str, Published]
 ) -> None:
     item = world["structured"]
@@ -1045,6 +1045,8 @@ def test_a_answer_does_not_change_what_the_learner_sees_afterwards(
 
     answer(api, item.id, written_answer("p-a"))
 
-    assert api.client.get(f"/v1/questions/{item.id}", headers=headers).json() == before
+    after = api.client.get(f"/v1/questions/{item.id}", headers=headers).json()
+    assert (before["answered"], after["answered"]) == (False, True)
+    assert {**after, "answered": False} == before
     # and the question view still holds no mark scheme after a check
     assert not ({"mark_points", "notes", "correct_key"} & keys_in(before))

@@ -12,11 +12,16 @@ export function AnswerProblem({ error, onReload }: { error: unknown; onReload?: 
   return (
     <div role="alert" className="space-y-2 rounded border border-red-700 p-3">
       <p>{m.message}</p>
+      {m.followUp === "account" ? (
+        <Link href="/account" className="underline">
+          Go to your account
+        </Link>
+      ) : null}
       {m.followUp === "sign-in" ? (
         <Link href={signInHref()} className="underline">
           Sign in
         </Link>
-      ) : onReload ? (
+      ) : m.followUp === "account" ? null : onReload ? (
         <button type="button" onClick={onReload} className="rounded border border-[var(--page-border)] px-3 py-1.5">
           Try again
         </button>

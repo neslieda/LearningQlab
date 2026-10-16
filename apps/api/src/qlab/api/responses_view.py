@@ -160,12 +160,13 @@ def list_page(
 
 def delete_all(session: Session, *, caller: Principal) -> DeletedOut:
     deleted = attempts.delete_responses(session, account_id=caller.account_id)
-    audit.record(
-        session,
-        actor=caller.actor,
-        action="learner.responses_deleted",
-        entity_type="account",
-        entity_id=caller.actor,
-        data={"deleted": deleted},
-    )
+    if deleted:  # nothing was erased: nothing to record
+        audit.record(
+            session,
+            actor=caller.actor,
+            action="learner.responses_deleted",
+            entity_type="account",
+            entity_id=caller.actor,
+            data={"deleted": deleted},
+        )
     return DeletedOut(deleted=deleted)

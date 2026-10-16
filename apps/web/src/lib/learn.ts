@@ -1,23 +1,45 @@
 import type { LearnerQuestion, ResponseOut } from "@qlab/api-client";
-import { problemMessage, type ProblemLike, type ProblemMessage } from "./decisions";
+import { problemMessage, type FollowUp, type ProblemLike, type ProblemMessage } from "./decisions";
 
 export const ANSWER_LIMIT = 200;
 export const DELETE_WARNING = "This deletes every answer you have saved. It cannot be undone.";
 
+export const ACCOUNT_ANSWER_LIMIT = 5000;
+
 export const PRIVACY_NOTICE = {
   stored: "We store your account ID, the question, your answer and the time you sent it.",
   notStored: "We do not store your name, e-mail address or device data with your answers.",
-  visibility: "Only you can see your answers for now.",
+  visibility: "In the app, only you can see your answers.",
   deletion: "You can delete all of them at any time from your account page.",
 } as const;
 
+/** The longer statements on /privacy (wording to be reviewed by the owner). */
+export const PRIVACY_DETAILS = {
+  access:
+    "In the app only you see your answers. The platform owner and the database host can technically access the database, which holds your answers and your account ID.",
+  backups:
+    "Nightly encrypted backups of the database are kept for 14 days on GitHub (United States). An answer you delete can stay in those backups for up to 14 days.",
+  deletionRecord:
+    "When you delete your answers, we record your account ID and how many answers were deleted. We do not record the answers.",
+  ai: "Your answers are not sent to any AI service.",
+} as const;
+
+export type AnswerFollowUp = FollowUp | "account";
+export type AnswerMessage = Omit<ProblemMessage, "followUp"> & { followUp: AnswerFollowUp };
+
 /** The text for a failed answer request (docs/slices/M1G-8-OGRENCI.md section 4); other codes follow slice 7a. */
-export function answerProblemMessage(problem: ProblemLike): ProblemMessage {
+export function answerProblemMessage(problem: ProblemLike): AnswerMessage {
   switch (problem.status === 401 ? "unauthenticated" : (problem.code ?? "")) {
     case "answer_does_not_fit":
       return { message: "This answer does not fit the question", reasons: [], followUp: null };
     case "too_many_answers":
       return { message: `You have reached the limit of ${ANSWER_LIMIT} answers for this question`, reasons: [], followUp: null };
+    case "answer_limit_reached":
+      return {
+        message: `You have reached the limit of ${ACCOUNT_ANSWER_LIMIT} saved answers. Delete your answers to continue.`,
+        reasons: [],
+        followUp: "account",
+      };
     default:
       return problemMessage(problem);
   }
@@ -120,11 +142,6 @@ export function toAnswerRows(items: readonly ResponseOut[], labelOf?: (response:
 export function partLabeller(question: Pick<LearnerQuestion, "parts">): (r: ResponseOut) => string | undefined {
   const byId = new Map(question.parts.map((p) => [p.id, p.label]));
   return (r) => (r.part_id ? byId.get(r.part_id) : undefined);
-}
-
-/** Question ids that have at least one answer. */
-export function answeredIds(items: readonly ResponseOut[]): Set<string> {
-  return new Set(items.map((r) => r.question_id));
 }
 
 export function excerpt(text: string, max = 160): string {

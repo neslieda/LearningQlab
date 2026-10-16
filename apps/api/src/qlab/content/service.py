@@ -53,6 +53,7 @@ from qlab.content.schema import (
 from qlab.content.schema.language import dotted
 from qlab.rights import service as rights
 from qlab.syllabus import service as syllabus
+from qlab.syllabus.models import SyllabusNode
 
 MAX_REASON_LENGTH = 500
 MAX_DOCUMENT_BYTES = 512 * 1024
@@ -1368,6 +1369,24 @@ def list_published(
         _summary(version)
         for _, version in _listing(session, filter, after, limit, published_only=True)
     ]
+
+
+def primary_topics(
+    session: Session, version_ids: frozenset[uuid.UUID]
+) -> dict[uuid.UUID, tuple[str, str]]:
+    """Code and title of the primary syllabus node of each version, in one query. For labels
+    in lists; it checks no rights, so callers pass versions they already may show."""
+    if not version_ids:
+        return {}
+    rows = session.execute(
+        select(QuestionVersionSyllabus.question_version_id, SyllabusNode.code, SyllabusNode.title)
+        .join(SyllabusNode, SyllabusNode.id == QuestionVersionSyllabus.syllabus_node_id)
+        .where(
+            QuestionVersionSyllabus.question_version_id.in_(version_ids),
+            QuestionVersionSyllabus.is_primary,
+        )
+    )
+    return {version_id: (code, title) for version_id, code, title in rows}
 
 
 def get_history(session: Session, version_id: uuid.UUID) -> list[audit.AuditEntry]:

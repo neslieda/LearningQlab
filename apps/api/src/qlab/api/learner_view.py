@@ -16,12 +16,19 @@ from qlab.api.schemas import (
     LearnerQuestion,
     LearnerQuestionSummary,
     LearnerStimulus,
+    TopicOut,
 )
 from qlab.content import service as content
 from qlab.content.schema import Mcq, Part
 
 
-def to_learner_summary(summary: content.VersionSummary) -> LearnerQuestionSummary:
+def _topic(topic: tuple[str, str]) -> TopicOut:
+    return TopicOut(code=topic[0], title=topic[1])
+
+
+def to_learner_summary(
+    summary: content.VersionSummary, *, topic: tuple[str, str], answered: bool
+) -> LearnerQuestionSummary:
     return LearnerQuestionSummary(
         id=ids.encode(ids.QUESTION, summary.question_id),
         version_id=ids.encode(ids.QUESTION_VERSION, summary.id),
@@ -29,6 +36,8 @@ def to_learner_summary(summary: content.VersionSummary) -> LearnerQuestionSummar
         exam_section=summary.exam_section,
         levels=summary.levels,
         total_marks=summary.total_marks,
+        topic=_topic(topic),
+        answered=answered,
     )
 
 
@@ -53,7 +62,9 @@ def _part(part: Part) -> LearnerPart:
     )
 
 
-def to_learner_question(view: content.QuestionVersionView) -> LearnerQuestion:
+def to_learner_question(
+    view: content.QuestionVersionView, *, topic: tuple[str, str], answered: bool
+) -> LearnerQuestion:
     document = view.document
     return LearnerQuestion(
         id=ids.encode(ids.QUESTION, view.question_id),
@@ -62,6 +73,8 @@ def to_learner_question(view: content.QuestionVersionView) -> LearnerQuestion:
         exam_section=document.exam_section,
         levels=document.levels,
         total_marks=document.total_marks,
+        topic=_topic(topic),
+        answered=answered,
         stem=document.stem,
         stimuli=tuple(LearnerStimulus(id=s.id, kind=s.kind) for s in document.stimuli),
         mcq=_mcq(document.mcq) if document.mcq is not None else None,

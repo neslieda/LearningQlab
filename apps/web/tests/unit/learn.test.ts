@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import type { ResponseOut } from "@qlab/api-client";
 import {
   answerProblemMessage,
-  answeredIds,
   countLabel,
   excerpt,
   filtersFromParams,
@@ -25,6 +24,11 @@ describe("answerProblemMessage", () => {
     expect(answerProblemMessage({ status: 429, code: "too_many_answers" }).message).toBe(
       "You have reached the limit of 200 answers for this question",
     );
+  });
+  it("maps the account limit and offers the account page", () => {
+    const m = answerProblemMessage({ status: 429, code: "answer_limit_reached" });
+    expect(m.message).toBe("You have reached the limit of 5000 saved answers. Delete your answers to continue.");
+    expect(m.followUp).toBe("account");
   });
   it("sends a 401 to sign-in", () => {
     expect(answerProblemMessage({ status: 401 }).followUp).toBe("sign-in");
@@ -61,9 +65,6 @@ describe("answer view model", () => {
     const label = partLabeller({ parts: [{ id: "p1", label: "b.i" }] as never });
     expect(label(written())).toBe("b.i");
     expect(label(mcq())).toBeUndefined();
-  });
-  it("collects answered question ids", () => {
-    expect([...answeredIds([mcq(), written({ question_id: "q2" })])].sort()).toEqual(["q1", "q2"]);
   });
   it("labels counts", () => {
     expect(countLabel(3, false)).toBe("3");

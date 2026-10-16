@@ -557,3 +557,242 @@ def test_an_answer_is_listed_at_once_and_a_failed_one_is_not(
     items = listing(api).json()["items"]
     assert items[-1]["id"] == ok["response_id"]
     assert len(items) == 2
+
+
+# --- topic and answered on the learner view (slice 8 review) -------------------------------------
+
+
+def question_list(api: ApiHarness, *roles: Role) -> dict[str, Json]:
+    response = api.client.get(
+        "/v1/questions", params={"limit": 50}, headers=api.headers(*roles or (Role.STUDENT,))
+    )
+    assert response.status_code == 200, response.text
+    return {item["id"]: item for item in response.json()["items"]}
+
+
+def read_question(api: ApiHarness, question_id: str, *roles: Role) -> Json:
+    response = api.client.get(
+        f"/v1/questions/{question_id}", headers=api.headers(*roles or (Role.STUDENT,))
+    )
+    assert response.status_code == 200, response.text
+    return response.json()  # type: ignore[no-any-return]
+
+
+def syllabus_titles(api: ApiHarness) -> dict[str, str]:
+    response = api.client.get(
+        "/v1/programs/ib_dp/subjects/physics/syllabus", headers=api.headers(Role.STUDENT)
+    )
+    assert response.status_code == 200, response.text
+    return {node["code"]: node["title"] for node in response.json()["nodes"]}
+
+
+def test_the_topic_is_the_primary_syllabus_node_in_the_list_and_in_the_view(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    titles = syllabus_titles(api)
+    listed = question_list(api)
+    assert set(listed) >= {item.id for item in world.values()}
+    for item in world.values():
+        code = item.document.primary_syllabus_node
+        expected = {"code": code, "title": titles[code]}
+        assert listed[item.id]["topic"] == expected
+        assert read_question(api, item.id)["topic"] == expected
+
+
+def test_answered_is_per_account_and_covers_every_version(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    item, untouched = world["mcq"], world["other_mcq"]
+    assert all(not q["answered"] for q in question_list(api).values())
+    assert not read_question(api, item.id)["answered"]
+
+    answer(api, item.id, mcq_answer("A"))
+
+    for role, flag in ((Role.STUDENT, True), (Role.TEACHER, False), (Role.PLATFORM_ADMIN, False)):
+        listed = question_list(api, role)
+        assert listed[item.id]["answered"] is flag, role
+        assert read_question(api, item.id, role)["answered"] is flag, role
+        assert listed[untouched.id]["answered"] is False
+    # A corrected version is a new row of the same question: the flag follows the question.
+    revision = svc.start_revision(api.session, actor=STAFF, question_id=item.view.question_id)
+    svc.submit(api.session, actor=STAFF, version_id=revision.id)
+    approve(api.session, revision.id, actor=STAFF)
+    publish(api.session, revision.id, actor=STAFF)
+    assert question_list(api)[item.id]["version_id"] == vid(revision)
+    assert question_list(api)[item.id]["answered"] is True
+    assert read_question(api, item.id)["answered"] is True
+    # Deleting the answers clears it.
+    erase(api)
+    assert question_list(api)[item.id]["answered"] is False
+
+
+def test_the_list_costs_the_same_number_of_queries_for_one_row_or_many(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    from sqlalchemy import event
+
+    for item in world.values():
+        answer(api, item.id, mcq_answer("A") if item.document.mcq else written_answer("p-a"))
+    connection = api.session.connection()
+    counted: list[str] = []
+
+    def count(conn: Any, cursor: Any, statement: str, *rest: Any) -> None:
+        counted.append(statement)
+
+    event.listen(connection, "before_cursor_execute", count)
+    try:
+        counted.clear()
+        api.client.get("/v1/questions", params={"limit": 1}, headers=api.headers(Role.STUDENT))
+        one = len(counted)
+        counted.clear()
+        api.client.get("/v1/questions", params={"limit": 50}, headers=api.headers(Role.STUDENT))
+        many = len(counted)
+    finally:
+        event.remove(connection, "before_cursor_execute", count)
+    assert one == many
+
+
+# --- the account cap ------------------------------------------------------------------------------
+
+
+def bulk_fill(api: ApiHarness, version_id: uuid.UUID, account_id: uuid.UUID, count: int) -> None:
+    api.session.connection().execute(
+        text(
+            "INSERT INTO response (id, account_id, question_version_id, kind, payload, correct) "
+            "SELECT gen_random_uuid(), :a, :v, 'mcq', '{\"selected_key\": \"A\"}'::jsonb, false "
+            "FROM generate_series(1, :n)"
+        ),
+        {"a": account_id, "v": version_id, "n": count},
+    )
+
+
+def test_the_account_cap_is_five_thousand(
+    api: ApiHarness, world: dict[str, Published], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from qlab.attempts.models import MAX_ANSWERS_PER_ACCOUNT
+
+    assert MAX_ANSWERS_PER_ACCOUNT == 5000
+    # The per-question cap would stop a single question first; lift it for this test only.
+    monkeypatch.setattr(attempts, "MAX_ANSWERS_PER_QUESTION", 10**9)
+    item = world["mcq"]
+    student = api.account(Role.STUDENT)
+    bulk_fill(api, item.view.id, student, MAX_ANSWERS_PER_ACCOUNT - 1)
+
+    assert answer(api, world["other_mcq"].id, mcq_answer("A")).status_code == 201  # the 5000th
+    for target, body in (
+        (item.id, mcq_answer("A")),
+        (world["other_mcq"].id, mcq_answer("A")),
+        (world["written"].id, written_answer("p-a")),
+    ):
+        assert_problem(answer(api, target, body), 429, "answer_limit_reached")
+    assert len(rows(api)) == MAX_ANSWERS_PER_ACCOUNT
+    # Another account is not affected; deleting frees the room.
+    assert answer(api, item.id, mcq_answer("A"), Role.TEACHER).status_code == 201
+    assert erase(api).json() == {"deleted": MAX_ANSWERS_PER_ACCOUNT}
+    assert answer(api, item.id, mcq_answer("A")).status_code == 201
+
+
+def test_a_refused_answer_is_not_counted_against_the_account(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    for _ in range(5):
+        assert answer(api, world["mcq"].id, written_answer("p-a")).status_code == 422
+    assert rows(api) == []
+
+
+# --- control characters ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "char", ["\x00", "\x01", "\x07", "\x08", "\x0b", "\x0c", "\x1b", "\x1f", "\x7f"]
+)
+def test_a_control_character_in_a_written_answer_is_422_and_nothing_is_stored(
+    api: ApiHarness, world: dict[str, Published], char: str
+) -> None:
+    marker = "zzctrlneedle"
+    response = answer(api, world["written"].id, written_answer("p-a", f"{marker}{char}tail"))
+    assert_problem(response, 422, "validation_failed")
+    assert marker not in response.text
+    assert rows(api) == []
+    # raw JSON escape of NUL, as a client that does not use our library would send it
+    raw = api.client.post(
+        f"/v1/questions/{world['written'].id}/answers",
+        content=b'{"kind": "written", "part_id": "p-a", "text": "a\\u0000b"}',
+        headers={**api.headers(Role.STUDENT), "Content-Type": "application/json"},
+    )
+    assert_problem(raw, 422, "validation_failed")
+    assert rows(api) == []
+
+
+def test_tab_newline_and_carriage_return_are_accepted_and_stored_as_sent(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    text_ = "line one\n\tindented\r\nline three"
+    assert answer(api, world["written"].id, written_answer("p-a", text_)).status_code == 201
+    (row,) = rows(api)
+    assert row.payload == {"text": text_}
+
+
+# --- database errors never log the answer ---------------------------------------------------------
+
+
+def test_a_database_error_logs_its_type_and_never_the_answer(
+    api: ApiHarness,
+    world: dict[str, Published],
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    needle = "zzdberrorneedle"
+
+    def failing(session: Session, **kwargs: Any) -> Any:
+        # A row the table refuses; PostgreSQL's message quotes the row, answer included.
+        session.execute(
+            text(
+                "INSERT INTO response (id, account_id, question_version_id, kind, payload, "
+                "correct) VALUES (gen_random_uuid(), :a, :v, 'nonsense', CAST(:p AS jsonb), false)"
+            ),
+            {
+                "a": kwargs["account_id"],
+                "v": kwargs["question_version_id"],
+                "p": f'{{"text": "{needle}"}}',
+            },
+        )
+
+    monkeypatch.setattr(attempts, "add_response", failing)
+    caplog.set_level("DEBUG")
+
+    response = answer(api, world["written"].id, written_answer("p-a", f"{needle} and more"))
+
+    assert response.status_code == 500
+    assert response.json()["code"] == "internal_error"
+    assert needle not in response.text
+    assert needle not in caplog.text
+    assert "database error" in caplog.text
+    assert "CheckViolation" in caplog.text
+    assert rows(api) == []
+
+
+# --- delete, nothing to delete; indexes -------------------------------------------------------
+
+
+def test_deleting_nothing_writes_no_audit_entry(
+    api: ApiHarness, world: dict[str, Published]
+) -> None:
+    assert erase(api).json() == {"deleted": 0}
+    assert audit_rows(api, "learner.responses_deleted") == []
+    answer(api, world["mcq"].id, mcq_answer("A"))
+    assert erase(api).json() == {"deleted": 1}
+    assert erase(api).json() == {"deleted": 0}
+    assert len(audit_rows(api, "learner.responses_deleted")) == 1
+
+
+def test_the_indexes_serve_the_list_and_the_counters(api: ApiHarness) -> None:
+    found = {
+        row[0]: row[1]
+        for row in api.session.connection().execute(
+            text("SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'response'")
+        )
+    }
+    assert "ix_response_account_created" not in found
+    assert "(account_id, id DESC)" in found["ix_response_account_id"]
+    assert "(account_id, question_version_id)" in found["ix_response_account_version"]

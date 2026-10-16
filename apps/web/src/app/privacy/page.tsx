@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PRIVACY_NOTICE } from "@/lib/learn";
+import { PRIVACY_DETAILS, PRIVACY_NOTICE } from "@/lib/learn";
 
 export const metadata: Metadata = { title: "Privacy - Qlab" };
 
@@ -17,12 +17,13 @@ export default function Page() {
       <section aria-labelledby="p-not" className="space-y-1">
         <h2 id="p-not" className="text-lg font-medium">What is not stored</h2>
         <p>{PRIVACY_NOTICE.notStored} We do not measure how long you take.</p>
-        <p>Your answers are not sent to any AI service.</p>
+        <p>{PRIVACY_DETAILS.ai}</p>
       </section>
       <section aria-labelledby="p-who" className="space-y-1">
         <h2 id="p-who" className="text-lg font-medium">Who can see your answers</h2>
-        <p>{PRIVACY_NOTICE.visibility} Teachers and staff cannot see your answers in the app.</p>
-        <p>Backups of the database are kept for 14 days and then removed.</p>
+        <p>{PRIVACY_DETAILS.access}</p>
+        <p>Teachers and staff cannot see your answers in the app.</p>
+        <p>{PRIVACY_DETAILS.backups}</p>
       </section>
       <section aria-labelledby="p-delete" className="space-y-1">
         <h2 id="p-delete" className="text-lg font-medium">How to delete your answers</h2>
@@ -33,6 +34,7 @@ export default function Page() {
           </Link>{" "}
           and choose &ldquo;Delete all my answers&rdquo;. Deleting your account also deletes your answers.
         </p>
+        <p>{PRIVACY_DETAILS.deletionRecord}</p>
       </section>
     </div>
   );

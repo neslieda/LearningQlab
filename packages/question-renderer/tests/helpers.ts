@@ -83,6 +83,8 @@ export const learnerPart = (
 
 export const learnerQuestion = (extra: Partial<LearnerQuestion> = {}): LearnerQuestion => ({
   id: "q1",
+  topic: { code: "T.1", title: "Invented topic" },
+  answered: false,
   version_id: "v1",
   exam_section: "paper_2",
   levels: ["sl", "hl"],

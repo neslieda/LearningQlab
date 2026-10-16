@@ -205,11 +205,11 @@ test.describe("sign-in", () => {
     const issuer = await mockIssuer(page, true);
     const log = await mockApi(page, ["teacher"]);
     await page.goto("/sign-in");
-    // A click before hydration does nothing; retry until the handler is attached and the redirect starts.
-    await expect(async () => {
-      await page.getByRole("button", { name: "Sign in", exact: true }).click({ timeout: 1000 });
-      await expect(page).toHaveURL(/\/$/, { timeout: 1500 });
-    }).toPass({ timeout: 15_000 });
+    // The buttons are rendered by the client after hydration, so a visible, enabled button has its handler attached.
+    const signIn = page.getByRole("button", { name: "Sign in", exact: true });
+    await expect(signIn).toBeEnabled({ timeout: 30_000 });
+    await signIn.click();
+    await expect(page).toHaveURL(/\/$/, { timeout: 30_000 });
     await expect(page.getByRole("navigation", { name: "Account" }).getByText("Signed in: teacher")).toBeVisible();
     await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
     expect(issuer.tokenBodies).toHaveLength(1);

@@ -13,10 +13,9 @@ const subscribeNever = () => () => {};
 export function SignInView() {
   const params = useSearchParams();
   const returnTo = safeReturnPath(params.get("next"));
-  const { hasSession, isLoading: sessionLoading } = useHasSession();
+  const { hasSession } = useHasSession();
   // The session lives in the browser; render the same placeholder on the server and on the first client pass.
   const hydrated = useSyncExternalStore(subscribeNever, () => true, () => false);
-  const isLoading = !hydrated || sessionLoading;
 
   if (config.local) {
     return (
@@ -43,8 +42,9 @@ export function SignInView() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Sign in</h1>
-      {isLoading ? <p>Checking session...</p> : null}
-      {isLoading ? null : hasSession ? (
+      {/* The buttons wait only for hydration, not for the session check: that check loads the sign-in library lazily and
+          can be slow on a cold start. A session found later replaces them with the "signed in" line. */}
+      {!hydrated ? <p>Checking session...</p> : hasSession ? (
         <p>
           You are signed in.{" "}
           <Link href={returnTo} className="underline">

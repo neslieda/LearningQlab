@@ -51,6 +51,9 @@ Hepsi `EVERYONE` (giriş yapmış, rolü olan her hesap); yalnızca kendi verisi
 - Cevap boyutu `MAX_ANSWER_LENGTH`; gövde sınırı 64 KiB (var olan).
 - Her gönderim yeni bir satırdır (öğrenci aynı soruyu tekrar çözebilir); bir hesabın bir soruya en çok 200 cevabı olur, fazlası 429
   `too_many_answers` (kötüye kullanım ve depolama sınırı).
+- 200 sınırı bir sorunun **tüm sürümlerindeki** cevapları sayar (yeni sürüm sınırı sıfırlamaz). Reddedilen (422) cevap saklanmaz ve
+  sayılmaz. Listeleme sırası UUIDv7 kimliğidir (zaman sırasıyla aynı yöndedir); `cursor` bu kimliktir, çözülemeyen cursor 422
+  `invalid_cursor`.
 - Açıklama (`explanation`) ve gerekçeler (`rationales`) yalnızca cevap gönderildikten sonra, bu yanıtta gelir (dilim 5'in "cevaptan
   önce hiçbir şey" kuralı sürer). Kazanım cümlesi, şekil tarifi ve çözüm modeli **hâlâ** öğrenciye gitmez.
 - Tablo `response` (migration 0007): `id` (UUIDv7), `account_id` (FK, ON DELETE CASCADE), `question_version_id` (FK), `part_id` (null:

@@ -8,9 +8,8 @@ stays out of the learner view until someone adds it here on purpose.
 
 from __future__ import annotations
 
-from qlab.api import errors, ids
+from qlab.api import ids
 from qlab.api.schemas import (
-    LanguageWarning,
     LearnerMcq,
     LearnerOption,
     LearnerPart,
@@ -20,14 +19,6 @@ from qlab.api.schemas import (
 )
 from qlab.content import service as content
 from qlab.content.schema import Mcq, Part
-
-_NOT_ENGLISH = LanguageWarning(
-    code="answer_not_english", message="Please write your answer in English."
-)
-
-
-def _does_not_fit() -> errors.ApiError:
-    return errors.ApiError(422, "answer_does_not_fit", "The answer does not fit this question")
 
 
 def to_learner_summary(summary: content.VersionSummary) -> LearnerQuestionSummary:

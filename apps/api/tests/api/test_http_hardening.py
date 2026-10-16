@@ -45,7 +45,7 @@ JSON_TYPE = {"Content-Type": "application/json"}
 # Every endpoint that can take a body, with a caller who is allowed to call it, and its limit.
 # (method, path, role, limit)
 BODY_ENDPOINTS: list[tuple[str, str, Role, int]] = [
-    ("POST", f"/v1/questions/{QID}/check", Role.STUDENT, CHECK_LIMIT),
+    ("POST", f"/v1/questions/{QID}/answers", Role.STUDENT, CHECK_LIMIT),
     ("PUT", f"{QV}/{VID}", Role.REVIEWER, OTHER_LIMIT),
     ("POST", f"{QV}/{VID}/submit", Role.REVIEWER, OTHER_LIMIT),
     ("POST", f"{QV}/{VID}/approve", Role.REVIEWER, OTHER_LIMIT),
@@ -142,7 +142,7 @@ def test_a_body_of_exactly_the_limit_gets_normal_validation(
     # An invalid body of exactly the limit: validation, not size.
     for method, path, role, limit in (
         ("PUT", f"{QV}/{VID}", Role.REVIEWER, OTHER_LIMIT),
-        ("POST", f"/v1/questions/{mcq.id}/check", Role.STUDENT, CHECK_LIMIT),
+        ("POST", f"/v1/questions/{mcq.id}/answers", Role.STUDENT, CHECK_LIMIT),
     ):
         response = send(api, method, path, role, content=padded(limit))
         problem(response, 422, "validation_failed")
@@ -151,11 +151,11 @@ def test_a_body_of_exactly_the_limit_gets_normal_validation(
 def test_a_valid_check_of_exactly_the_limit_is_answered(api: ApiHarness, mcq: Published) -> None:
     body = padded(CHECK_LIMIT, {"kind": "mcq", "selected_key": "A"})
     assert len(body) == CHECK_LIMIT
-    response = send(api, "POST", f"/v1/questions/{mcq.id}/check", Role.STUDENT, content=body)
-    assert response.status_code == 200, response.text
+    response = send(api, "POST", f"/v1/questions/{mcq.id}/answers", Role.STUDENT, content=body)
+    assert response.status_code == 201, response.text
     assert response.json()["kind"] == "mcq"
     over = padded(CHECK_LIMIT + 1, {"kind": "mcq", "selected_key": "A"})
-    response = send(api, "POST", f"/v1/questions/{mcq.id}/check", Role.STUDENT, content=over)
+    response = send(api, "POST", f"/v1/questions/{mcq.id}/answers", Role.STUDENT, content=over)
     problem(response, 413, "payload_too_large")
 
 
@@ -165,7 +165,7 @@ def test_the_limit_of_the_check_endpoint_is_not_the_limit_of_the_others(
     between = padded(CHECK_LIMIT + 1)  # too large for a check, fine for an edit
     edit = send(api, "PUT", f"{QV}/{VID}", Role.REVIEWER, content=between)
     problem(edit, 422, "validation_failed")
-    check = send(api, "POST", f"/v1/questions/{QID}/check", Role.STUDENT, content=between)
+    check = send(api, "POST", f"/v1/questions/{QID}/answers", Role.STUDENT, content=between)
     problem(check, 413, "payload_too_large")
 
 
@@ -246,7 +246,7 @@ def test_authorization_comes_before_the_size_decision(
 
 def test_a_bad_token_with_an_oversized_body_is_401(api: ApiHarness) -> None:
     response = api.client.post(
-        f"/v1/questions/{QID}/check",
+        f"/v1/questions/{QID}/answers",
         content=padded(CHECK_LIMIT + 1),
         headers={"Authorization": "Bearer garbage", **JSON_TYPE},
     )
@@ -271,7 +271,7 @@ SLASHED: list[tuple[str, str]] = [
     ("GET", "/v1/admin/questions/"),
     ("GET", "/v1/programs/ib_dp/subjects/physics/syllabus/"),
     ("GET", f"/v1/questions/{QID}/"),
-    ("POST", f"/v1/questions/{QID}/check/"),
+    ("POST", f"/v1/questions/{QID}/answers/"),
     ("GET", f"/v1/admin/questions/{QID}/"),
     ("POST", f"/v1/admin/questions/{QID}/revisions/"),
     ("GET", f"{QV}/{VID}/"),
@@ -325,8 +325,8 @@ def test_every_kind_of_response_carries_no_store(api: ApiHarness, env: Env, mcq:
         "200 me": api.client.get("/v1/me", headers=student),
         "200 list": api.client.get("/v1/questions", headers=student),
         "200 read": api.client.get(f"/v1/questions/{mcq.id}", headers=student),
-        "200 check": api.client.post(
-            f"/v1/questions/{mcq.id}/check",
+        "201 answer": api.client.post(
+            f"/v1/questions/{mcq.id}/answers",
             headers=student,
             json={"kind": "mcq", "selected_key": "A"},
         ),
@@ -344,7 +344,7 @@ def test_every_kind_of_response_carries_no_store(api: ApiHarness, env: Env, mcq:
         "404 hidden": api.client.get(f"/v1/questions/{QID}", headers=student),
         "404 trailing slash": api.client.get("/v1/me/", headers=student),
         "404 method": api.client.delete("/v1/me", headers=student),
-        "422 body": api.client.post(f"/v1/questions/{mcq.id}/check", headers=student, json={}),
+        "422 body": api.client.post(f"/v1/questions/{mcq.id}/answers", headers=student, json={}),
         "422 query": api.client.get("/v1/questions", params={"limit": "0"}, headers=student),
         "422 code": api.client.get(
             "/v1/questions", params={"exam_section": "a b"}, headers=student
@@ -353,12 +353,16 @@ def test_every_kind_of_response_carries_no_store(api: ApiHarness, env: Env, mcq:
             f"{QV}/{dvid}/publish", headers=admin, json={"expected_content_sha256": sha}
         ),
         "413": send(
-            api, "POST", f"/v1/questions/{QID}/check", Role.STUDENT, content=padded(CHECK_LIMIT + 1)
+            api,
+            "POST",
+            f"/v1/questions/{QID}/answers",
+            Role.STUDENT,
+            content=padded(CHECK_LIMIT + 1),
         ),
-        "411": send(api, "POST", f"/v1/questions/{QID}/check", Role.STUDENT, content=chunks()),
+        "411": send(api, "POST", f"/v1/questions/{QID}/answers", Role.STUDENT, content=chunks()),
     }
     expected = {
-        "200 health": 200, "200 me": 200, "200 list": 200, "200 read": 200, "200 check": 200,
+        "200 health": 200, "200 me": 200, "200 list": 200, "200 read": 200, "201 answer": 201,
         "200 admin list": 200, "200 submit": 200, "201 revision": 201, "401 no token": 401,
         "401 bad token": 401, "404 unknown path": 404, "404 no role": 404, "404 not allowed": 404,
         "404 hidden": 404, "404 trailing slash": 404, "404 method": 404, "422 body": 422,
@@ -512,7 +516,7 @@ NEEDLE = "zzreflectedneedle"
 def test_an_unknown_kind_is_not_repeated(api: ApiHarness, mcq: Published) -> None:
     for kind in ("<script>x</script>", NEEDLE, "essay"):
         response = api.client.post(
-            f"/v1/questions/{mcq.id}/check",
+            f"/v1/questions/{mcq.id}/answers",
             headers=api.headers(Role.STUDENT),
             json={"kind": kind, "text": NEEDLE + "-answer"},
         )
@@ -525,7 +529,7 @@ def test_an_unknown_kind_is_not_repeated(api: ApiHarness, mcq: Published) -> Non
 
 def test_an_unknown_kind_is_not_repeated_in_any_encoding(api: ApiHarness, mcq: Published) -> None:
     response = api.client.post(
-        f"/v1/questions/{mcq.id}/check",
+        f"/v1/questions/{mcq.id}/answers",
         headers=api.headers(Role.STUDENT),
         json={"kind": "<script>x</script>"},
     )
@@ -545,7 +549,7 @@ def test_an_invented_key_name_is_not_repeated_and_the_location_is_the_parents(
     api: ApiHarness, mcq: Published, body: Json
 ) -> None:
     response = api.client.post(
-        f"/v1/questions/{mcq.id}/check", headers=api.headers(Role.STUDENT), json=body
+        f"/v1/questions/{mcq.id}/answers", headers=api.headers(Role.STUDENT), json=body
     )
     problem(response, 422, "validation_failed")
     assert NEEDLE not in response.text
@@ -561,10 +565,10 @@ def test_the_location_of_an_unknown_key_is_that_of_the_object_that_holds_it(
     api: ApiHarness, mcq: Published
 ) -> None:
     clean = api.client.post(
-        f"/v1/questions/{mcq.id}/check", headers=api.headers(Role.STUDENT), json={"kind": "mcq"}
+        f"/v1/questions/{mcq.id}/answers", headers=api.headers(Role.STUDENT), json={"kind": "mcq"}
     )
     unknown = api.client.post(
-        f"/v1/questions/{mcq.id}/check",
+        f"/v1/questions/{mcq.id}/answers",
         headers=api.headers(Role.STUDENT),
         json={"kind": "mcq", "selected_key": "A", "zzinvented": 1},
     )
@@ -580,7 +584,7 @@ def test_the_location_of_an_unknown_key_is_that_of_the_object_that_holds_it(
 
 def test_the_answer_text_is_never_in_a_validation_error(api: ApiHarness, env: Env) -> None:
     item = publish_document(api.session, env, PUBLISHABLE["structured"](), tag="zzrefx")
-    url = f"/v1/questions/{item.id}/check"
+    url = f"/v1/questions/{item.id}/answers"
     headers = api.headers(Role.STUDENT)
     bodies = [
         {"kind": "written", "part_id": "p-a", "text": NEEDLE + "x" * 6000},  # too long
@@ -599,7 +603,7 @@ def test_the_answer_text_is_never_in_a_validation_error(api: ApiHarness, env: En
 
 def test_an_unparsable_body_is_not_repeated(api: ApiHarness, mcq: Published) -> None:
     response = api.client.post(
-        f"/v1/questions/{mcq.id}/check",
+        f"/v1/questions/{mcq.id}/answers",
         content=('{"kind": "' + NEEDLE).encode(),
         headers={**api.headers(Role.STUDENT), **JSON_TYPE},
     )

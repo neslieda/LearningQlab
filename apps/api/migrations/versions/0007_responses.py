@@ -50,7 +50,7 @@ def upgrade() -> None:
             name=op.f("ck_response_shape"),
         ),
         sa.CheckConstraint(
-            "part_id IS NULL OR (part_id <> '' AND length(part_id) <= 64)",
+            "part_id IS NULL OR (part_id <> '' AND length(part_id) <= 200)",
             name=op.f("ck_response_part_id"),
         ),
         sa.CheckConstraint(

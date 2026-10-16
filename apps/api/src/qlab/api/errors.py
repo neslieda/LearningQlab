@@ -16,6 +16,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from qlab.attempts import service as attempts
+from qlab.attempts.models import MAX_ANSWERS_PER_QUESTION
 from qlab.content import math
 from qlab.content import service as content
 from qlab.organizations import service as organizations
@@ -110,6 +112,13 @@ def from_service_error(error: Exception) -> ApiError | None:
         )
     if isinstance(error, organizations.InviteRoleForbidden):
         return ApiError(403, "invite_role_forbidden", "You cannot invite someone to this role")
+    if isinstance(error, attempts.TooManyAnswers):
+        return ApiError(
+            429,
+            "too_many_answers",
+            "Too many answers to this question",
+            detail=f"At most {MAX_ANSWERS_PER_QUESTION} answers to one question are stored.",
+        )
     if isinstance(error, content.InvalidDocument):
         return ApiError(
             422,
@@ -215,6 +224,7 @@ def install(app: FastAPI) -> None:
         organizations.InviteNotFound,
         organizations.InviteRoleForbidden,
         organizations.InviteTooManyUses,
+        attempts.TooManyAnswers,
     ):
         app.add_exception_handler(service_error, _service)
 

@@ -33,7 +33,7 @@ class Response(Base):
             name="shape",
         ),
         CheckConstraint(
-            "part_id IS NULL OR (part_id <> '' AND length(part_id) <= 64)", name="part_id"
+            "part_id IS NULL OR (part_id <> '' AND length(part_id) <= 200)", name="part_id"
         ),
         CheckConstraint(f"pg_column_size(payload) <= {MAX_PAYLOAD_BYTES}", name="payload_size"),
         Index("ix_response_account_created", "account_id", "created_at", "id"),

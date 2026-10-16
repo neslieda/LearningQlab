@@ -84,7 +84,7 @@ def test_every_operation_except_healthz_requires_a_bearer_token(committed: dict[
 def test_the_paths_and_methods_are_exactly_the_policy_table(committed: dict[str, Any]) -> None:
     documented = {(method, path) for method, path, _ in operations(committed)}
     assert documented == set(ENDPOINT_POLICY)
-    assert len(documented) == 25
+    assert len(documented) == 27
 
 
 def test_operation_ids_are_present_and_unique(committed: dict[str, Any]) -> None:
@@ -167,12 +167,12 @@ def test_the_learner_read_endpoints_return_only_learner_types(
     assert "AdminVersion" not in names
 
 
-def test_admin_schemas_are_not_reachable_from_the_check_endpoint_request_or_response(
+def test_admin_schemas_are_not_reachable_from_the_answers_endpoint_request_or_response(
     committed: dict[str, Any],
 ) -> None:
-    operation = committed["paths"]["/v1/questions/{question_id}/check"]["post"]
+    operation = committed["paths"]["/v1/questions/{question_id}/answers"]["post"]
     names = reachable(committed, operation["requestBody"]) | reachable(
-        committed, operation["responses"]["200"]
+        committed, operation["responses"]["201"]
     )
     assert not {n for n in names if n.startswith("Admin")}
     assert "QuestionDocument" not in names

@@ -1292,4 +1292,4 @@ def test_a_part_id_of_seventy_characters_is_read_by_a_learner(api: ApiHarness, e
 def test_the_learner_part_type_takes_an_id_of_any_text() -> None:
     fields = api_schemas.LearnerPart.model_fields
     assert fields["id"].annotation is str
-    assert api_schemas.WrittenCheckResult.model_fields["part_id"].annotation is str
+    assert api_schemas.WrittenResult.model_fields["part_id"].annotation is str

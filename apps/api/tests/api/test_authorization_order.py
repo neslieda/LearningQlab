@@ -226,7 +226,7 @@ def test_a_bad_query_reaches_validation_for_allowed_callers(api: ApiHarness) -> 
 
 
 def test_check_endpoint_bad_body_is_401_or_404_for_unauthorized(api: ApiHarness) -> None:
-    path = f"/v1/questions/{QID}/check"
+    path = f"/v1/questions/{QID}/answers"
     for body in BAD_BODIES:
         assert send(api, "POST", path, {}, body).status_code == 401
         assert send(api, "POST", path, api.headers(), body).status_code == 404

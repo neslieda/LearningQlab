@@ -227,16 +227,16 @@ def test_a_question_goes_from_draft_to_a_corrected_published_version(
     assert seen.status_code == 200
     assert seen.json()["version_id"] == vid(v1)
 
-    # check an answer on the published version (nothing is written, nobody is audited)
+    # answer on the published version (stored, D-66; nobody is audited)
     audit_before = len(audit_for(session, v1))
     key = document(samples.mcq_document()).mcq
     assert key is not None
     checked = api.client.post(
-        f"/v1/questions/{qid(question)}/check",
+        f"/v1/questions/{qid(question)}/answers",
         headers=api.headers(Role.STUDENT),
         json={"kind": "mcq", "selected_key": key.correct_key},
     )
-    assert checked.status_code == 200
+    assert checked.status_code == 201
     assert checked.json()["kind"] == "mcq"
     assert checked.json()["version_id"] == vid(v1)
     assert checked.json()["correct"] is True

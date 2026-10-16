@@ -42,7 +42,7 @@ TABLE: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
     (3, "GET", "/v1/programs/{program}/subjects/{subject}/syllabus", EVERYONE),
     (4, "GET", "/v1/questions", EVERYONE),
     (5, "GET", "/v1/questions/{question_id}", EVERYONE),
-    (6, "POST", "/v1/questions/{question_id}/check", EVERYONE),
+    (6, "POST", "/v1/questions/{question_id}/answers", EVERYONE),
     (7, "GET", "/v1/admin/questions", STAFF),
     (8, "GET", "/v1/admin/questions/{question_id}", STAFF),
     (9, "GET", QV, STAFF),
@@ -59,7 +59,14 @@ TABLE: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
     (20, "POST", "/v1/admin/questions", STAFF),
     (21, "GET", "/v1/programs", EVERYONE),
 ]
-NON_PUBLIC = [row for row in TABLE if row[3] is not None]
+# Slice 8 (docs/slices/M1G-8-OGRENCI.md section 3): the caller's own stored answers.
+RESPONSE_ROWS: Final[list[tuple[int, str, str, frozenset[Role] | None]]] = [
+    (26, "GET", "/v1/me/responses", EVERYONE),
+    (27, "DELETE", "/v1/me/responses", EVERYONE),
+]
+TABLE_ALL: Final = [*TABLE, *RESPONSE_ROWS]
+ROWS: Final = {row[0]: row for row in TABLE_ALL}
+NON_PUBLIC = [row for row in TABLE_ALL if row[3] is not None]
 
 # Slice 9 (docs/slices/M1G-9-ACILIS.md 3.3). Rows 22 to 25 differ from the rest: redeeming needs
 # a valid token and nothing else (SIGNED_IN), and the invite endpoints are for teachers and
@@ -101,7 +108,7 @@ def test_the_specification_table_has_twenty_one_distinct_endpoints() -> None:
 
 
 def test_the_policy_has_exactly_the_endpoints_of_the_specification() -> None:
-    assert set(policy.ENDPOINT_POLICY) == {(m, t) for _, m, t, _ in [*TABLE, *INVITE_ROWS]}
+    assert set(policy.ENDPOINT_POLICY) == {(m, t) for _, m, t, _ in [*TABLE_ALL, *INVITE_ROWS]}
 
 
 def test_the_invite_rows() -> None:
@@ -111,7 +118,7 @@ def test_the_invite_rows() -> None:
         assert policy.ENDPOINT_POLICY[(method, template)] == roles
 
 
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 @pytest.mark.parametrize("role", list(Role))
 def test_policy_cell(
     number: int, method: str, template: str, roles: frozenset[Role] | None, role: Role
@@ -124,7 +131,7 @@ def test_policy_cell(
     assert (role in access) == allowed(roles, role), f"#{number} {method} {template} {role}"
 
 
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 def test_policy_row_is_exactly_the_specified_set(
     number: int, method: str, template: str, roles: frozenset[Role] | None
 ) -> None:
@@ -174,14 +181,14 @@ def test_the_running_application_serves_exactly_the_table(api: ApiHarness) -> No
         assert isinstance(route, policy.PolicyRoute)
         for method in route.methods or ():
             served.add((method, route.path_format))
-    assert served == {(m, t) for _, m, t, _ in [*TABLE, *INVITE_ROWS]}
+    assert served == {(m, t) for _, m, t, _ in [*TABLE_ALL, *INVITE_ROWS]}
 
 
 # --- over HTTP, cell by cell -------------------------------------------------------------------
 
 
 @pytest.mark.db
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 @pytest.mark.parametrize("role", list(Role))
 def test_cell(
     api: ApiHarness,
@@ -207,7 +214,7 @@ def test_cell(
 
 
 @pytest.mark.db
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 def test_cell_account_without_a_role(
     api: ApiHarness, number: int, method: str, template: str, roles: frozenset[Role] | None
 ) -> None:
@@ -222,7 +229,7 @@ def test_cell_account_without_a_role(
 
 
 @pytest.mark.db
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 def test_cell_no_token(
     api: ApiHarness, number: int, method: str, template: str, roles: frozenset[Role] | None
 ) -> None:
@@ -293,7 +300,9 @@ def test_methods_outside_the_table_are_404_like_an_unknown_path(
 ) -> None:
     """A method the table does not list is an unknown endpoint: 404, byte-identical to an
     unknown path, for every caller (also without a token; step 1 of the order)."""
-    for _, _, template, _ in TABLE:
+    for _, _, template, _ in TABLE_ALL:
+        if (method, template) in policy.ENDPOINT_POLICY:
+            continue  # DELETE /v1/me/responses is an endpoint
         headers = api.headers(role) if role is not None else {}
         response = api.client.request(method, concrete(template), headers=headers)
         unknown = api.client.request(method, "/v1/no-such-endpoint", headers=headers)
@@ -314,7 +323,7 @@ POSITIVE: Final[dict[int, tuple[str, int]]] = {
     3: ("published", 200),
     4: ("published", 200),
     5: ("published", 200),
-    6: ("published", 200),
+    6: ("published", 201),
     7: ("published", 200),
     8: ("published", 200),
     9: ("draft", 200),
@@ -330,6 +339,8 @@ POSITIVE: Final[dict[int, tuple[str, int]]] = {
     19: ("withdrawn", 200),
     20: ("draft", 201),
     21: ("published", 200),
+    26: ("published", 200),
+    27: ("published", 200),
 }
 
 
@@ -338,7 +349,7 @@ def real_request(
 ) -> tuple[str, str, dict[str, Any] | None]:
     """Method, path and JSON body of endpoint `number`, aimed at real data in the state that
     fits its operation."""
-    _, method, template, _ = TABLE[number - 1]
+    _, method, template, _ = ROWS[number]
     status, _ = POSITIVE[number]
     view = bring_to(session, connection, env, status, document(samples.plain_mcq_document()))
     path = template.format(
@@ -380,7 +391,7 @@ def real_request(
 
 @pytest.mark.db
 @pytest.mark.node
-@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE)
+@pytest.mark.parametrize(("number", "method", "template", "roles"), TABLE_ALL)
 @pytest.mark.parametrize("role", [*Role, None], ids=[*(r.value for r in Role), "no-role"])
 def test_cell_with_real_data(
     api: ApiHarness,
@@ -418,7 +429,7 @@ def test_a_denied_role_changes_nothing_on_real_data(
     """The 404 for a role the table does not allow is more than an answer: the operation did
     not run, so the version is in the same state afterwards."""
     env = make_env(session)
-    _, method, _, roles = TABLE[number - 1]
+    _, method, _, roles = ROWS[number]
     assert roles is not None
     status_before, _ = POSITIVE[number]
     verb, path, body = real_request(api, session, connection, env, number)

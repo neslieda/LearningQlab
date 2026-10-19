@@ -329,6 +329,8 @@ def test_learner_stimulus_and_option_carry_only_the_documented_fields() -> None:
         "exam_section",
         "levels",
         "total_marks",
+        "topic",
+        "answered",
     }
 
 
@@ -443,6 +445,8 @@ def assert_projection(body: Json, item: Published) -> None:
         "exam_section",
         "levels",
         "total_marks",
+        "topic",
+        "answered",
         "stem",
         "stimuli",
         "mcq",
@@ -941,6 +945,8 @@ def test_list_items_have_exactly_the_summary_fields_and_the_documents_values(
             "exam_section",
             "levels",
             "total_marks",
+            "topic",
+            "answered",
         }
         source = by_id[item.id]
         assert item.version_id == vid(source.view)
@@ -1292,4 +1298,4 @@ def test_a_part_id_of_seventy_characters_is_read_by_a_learner(api: ApiHarness, e
 def test_the_learner_part_type_takes_an_id_of_any_text() -> None:
     fields = api_schemas.LearnerPart.model_fields
     assert fields["id"].annotation is str
-    assert api_schemas.WrittenCheckResult.model_fields["part_id"].annotation is str
+    assert api_schemas.WrittenResult.model_fields["part_id"].annotation is str

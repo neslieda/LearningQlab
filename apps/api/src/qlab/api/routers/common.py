@@ -76,6 +76,9 @@ class Routes:
     def put[F: Callable[..., Any]](self, path: str, **options: Any) -> Callable[[F], F]:
         return self._add("PUT", path, options)
 
+    def delete[F: Callable[..., Any]](self, path: str, **options: Any) -> Callable[[F], F]:
+        return self._add("DELETE", path, options)
+
     def register(self, app: FastAPI) -> None:
         for method, path, endpoint, options in self._endpoints:
             responses = {**self._responses, **options.get("responses", {})}

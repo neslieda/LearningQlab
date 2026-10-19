@@ -38,8 +38,16 @@ export default function HomePage() {
         )}
       </section>
       <section aria-labelledby="learner-heading" className="rounded border border-[var(--page-border)] p-4">
-        <h2 id="learner-heading" className="text-lg font-medium">Learner preview</h2>
-        <p className="text-[var(--page-muted)]">Question lists and answering will appear here (slice 8).</p>
+        <h2 id="learner-heading" className="text-lg font-medium">Practice</h2>
+        {me ? (
+          <p>
+            <Link href="/learn" className="underline">
+              Solve questions
+            </Link>
+          </p>
+        ) : (
+          <p className="text-[var(--page-muted)]">Sign in to practise questions and keep your answers.</p>
+        )}
       </section>
     </div>
   );

@@ -44,10 +44,13 @@ export type LearnerQuestionPage = Schemas["LearnerQuestionPage"];
 export type LearnerQuestionSummary = Schemas["LearnerQuestionSummary"];
 export type McqAnswer = Schemas["McqAnswer"];
 export type WrittenAnswer = Schemas["WrittenAnswer"];
-export type McqCheckResult = Schemas["McqCheckResult"];
-export type WrittenCheckResult = Schemas["WrittenCheckResult"];
-export type CheckRequest = McqAnswer | WrittenAnswer;
-export type CheckResult = McqCheckResult | WrittenCheckResult;
+export type McqResult = Schemas["McqResult"];
+export type McqRationale = Schemas["McqRationale"];
+export type WrittenResult = Schemas["WrittenResult"];
+export type AnswerRequest = McqAnswer | WrittenAnswer;
+export type AnswerResult = McqResult | WrittenResult;
+export type ResponseOut = Schemas["ResponseOut"];
+export type ResponsePage = Schemas["ResponsePage"];
 
 export type AdminQuestion = Schemas["AdminQuestion"];
 export type AdminQuestionPage = Schemas["AdminQuestionPage"];

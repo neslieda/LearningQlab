@@ -62,7 +62,7 @@ export const doc = (...content: Doc["content"]): Doc => ({ type: "doc", content 
 /** A document holding one paragraph of plain text. */
 export const d = (s: string): Doc => doc(para(text(s)));
 
-import type { LearnerQuestion, McqCheckResult, QuestionDocument } from "@qlab/api-client";
+import type { LearnerQuestion, McqResult, QuestionDocument } from "@qlab/api-client";
 import type { LearnerPart } from "../src";
 
 export const learnerPart = (
@@ -83,6 +83,8 @@ export const learnerPart = (
 
 export const learnerQuestion = (extra: Partial<LearnerQuestion> = {}): LearnerQuestion => ({
   id: "q1",
+  topic: { code: "T.1", title: "Invented topic" },
+  answered: false,
   version_id: "v1",
   exam_section: "paper_2",
   levels: ["sl", "hl"],
@@ -128,11 +130,14 @@ export const mcqQuestion = (
   });
 };
 
-export const mcqResult = (correct_key: "A" | "B" | "C" | "D", correct = true): McqCheckResult => ({
+export const mcqResult = (correct_key: "A" | "B" | "C" | "D", correct = true): McqResult => ({
   kind: "mcq",
   correct,
   correct_key,
   version_id: "v1",
+  response_id: "r1",
+  explanation: null,
+  rationales: [],
 });
 
-export type { Doc, LearnerQuestion, McqCheckResult, QuestionDocument };
+export type { Doc, LearnerQuestion, McqResult, QuestionDocument };

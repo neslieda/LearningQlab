@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { QuestionDocument } from "@qlab/api-client";
-import { McqResultView, QuestionDocumentView } from "../src";
+import { LearnerQuestionView, McqResultView, QuestionDocumentView, fixtures } from "../src";
 import { KEYS, d, doc, figure, mcqQuestion, mcqResult, para, text } from "./helpers";
 
 describe("McqResultView (3.2)", () => {
@@ -169,5 +169,46 @@ describe("QuestionDocumentView, MCQ (3.1, staff view)", () => {
     const t = container.textContent!;
     const pos = ["RATIONALE-A", "RATIONALE-B", "RATIONALE-D"].map((n) => t.indexOf(n));
     expect(pos.every((p, i) => p >= 0 && (i === 0 || p > pos[i - 1]!))).toBe(true);
+  });
+});
+
+describe("learner answer presentation (slice 8)", () => {
+  const rationales = [
+    { key: "A" as const, content: d("WHY-A") },
+    { key: "B" as const, content: d("WHY-B") },
+    { key: "D" as const, content: d("WHY-D") },
+  ];
+
+  it.each(["single_value", "two_column_table"] as const)("McqResultView shows explanation and per-option rationales (%s)", (layout) => {
+    const result = { ...mcqResult("C", false), explanation: d("EXPLAIN"), rationales };
+    render(<McqResultView result={result} question={mcqQuestion(layout)} />);
+    expect(screen.getByRole("region", { name: "Explanation" }).textContent).toContain("EXPLAIN");
+    for (const k of ["A", "B", "D"]) {
+      expect(screen.getByRole("group", { name: `Why option ${k} is wrong` }).textContent).toContain(`WHY-${k}`);
+    }
+    expect(screen.queryByRole("group", { name: "Why option C is wrong" })).toBeNull();
+  });
+
+  it("figure-options layout: each rationale sits inside its own option and the correct one has none", () => {
+    const fig = fixtures.find((f) => f.id === "mcq-figure-options");
+    if (fig?.kind !== "learner_question") throw new Error("fixture missing");
+    const { container } = render(
+      <LearnerQuestionView
+        question={fig.data}
+        mcqAnswer={{ value: "B", onChange: () => {}, disabled: true, correctKey: "C", rationales }}
+      />,
+    );
+    const items = Array.from(container.querySelectorAll("ol.qr-options > li"));
+    expect(items).toHaveLength(4);
+    expect(container.querySelector(".qr-mcq-figure-options")).not.toBeNull();
+    ["A", "B", "C", "D"].forEach((k, i) => {
+      const has = items[i]!.querySelector(".qr-wrong-why");
+      expect(Boolean(has)).toBe(k !== "C");
+    });
+  });
+
+  it("renders no explanation block when there is none", () => {
+    render(<McqResultView result={mcqResult("A")} question={mcqQuestion("single_value")} />);
+    expect(screen.queryByRole("region", { name: "Explanation" })).toBeNull();
   });
 });

@@ -19,7 +19,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.responses import Response
 
 from qlab.api import errors, policy
-from qlab.api.routers import admin, invites, learner, system
+from qlab.api.routers import admin, invites, learner, responses, system
 from qlab.api.settings import (
     Environment,
     Settings,
@@ -83,7 +83,7 @@ def create_app(
         separate_input_output_schemas=False,
     )
     app.router.route_class = policy.PolicyRoute
-    for module in (system, learner, admin, invites):
+    for module in (system, learner, admin, invites, responses):
         module.router.register(app)
     errors.install(app)
 

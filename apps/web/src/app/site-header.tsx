@@ -27,6 +27,11 @@ export function SiteHeader() {
           Qlab
         </Link>
         <nav aria-label="Account" className="flex flex-wrap items-center gap-4 text-sm">
+          {me ? (
+            <Link href="/learn" className="underline">
+              Practice
+            </Link>
+          ) : null}
           {me && isStaff(me.roles) ? (
             <Link href="/admin/questions" className="underline">
               Questions

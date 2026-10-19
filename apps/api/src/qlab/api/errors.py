@@ -14,8 +14,11 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
+from sqlalchemy.exc import DBAPIError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from qlab.attempts import service as attempts
+from qlab.attempts.models import MAX_ANSWERS_PER_ACCOUNT, MAX_ANSWERS_PER_QUESTION
 from qlab.content import math
 from qlab.content import service as content
 from qlab.organizations import service as organizations
@@ -110,6 +113,21 @@ def from_service_error(error: Exception) -> ApiError | None:
         )
     if isinstance(error, organizations.InviteRoleForbidden):
         return ApiError(403, "invite_role_forbidden", "You cannot invite someone to this role")
+    if isinstance(error, attempts.TooManyAnswers):
+        return ApiError(
+            429,
+            "too_many_answers",
+            "Too many answers to this question",
+            detail=f"At most {MAX_ANSWERS_PER_QUESTION} answers to one question are stored.",
+        )
+    if isinstance(error, attempts.AccountAnswerLimit):
+        return ApiError(
+            429,
+            "answer_limit_reached",
+            "Too many stored answers",
+            detail=f"At most {MAX_ANSWERS_PER_ACCOUNT} answers are stored per account; "
+            "delete your answers to continue.",
+        )
     if isinstance(error, content.InvalidDocument):
         return ApiError(
             422,
@@ -215,10 +233,17 @@ def install(app: FastAPI) -> None:
         organizations.InviteNotFound,
         organizations.InviteRoleForbidden,
         organizations.InviteTooManyUses,
+        attempts.TooManyAnswers,
+        attempts.AccountAnswerLimit,
     ):
         app.add_exception_handler(service_error, _service)
 
     @app.exception_handler(Exception)
     async def _unexpected(request: Request, error: Exception) -> JSONResponse:
-        _log.exception("unhandled error", exc_info=error)
+        # Database errors can quote the data that caused them (a learner's answer, D-66): log
+        # their type only. Everything else keeps its traceback.
+        if isinstance(error, DBAPIError):
+            _log.error("unhandled database error: %s", type(getattr(error, "orig", error)).__name__)
+        else:
+            _log.exception("unhandled error", exc_info=error)
         return _response(ApiError(500, "internal_error", "Internal error"))

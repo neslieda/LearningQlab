@@ -374,6 +374,31 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/responses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List My Responses
+         * @description The caller's stored answers, newest first. `question_id` narrows them to one question.
+         */
+        get: operations["listMyResponses"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete My Responses
+         * @description Delete every answer the caller has stored (docs/SECURITY.md 5.4). Cannot be undone. The
+         *     audit log records the count and the account, never the answers.
+         */
+        delete: operations["deleteMyResponses"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/programs": {
         parameters: {
             query?: never;
@@ -458,7 +483,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/questions/{question_id}/check": {
+    "/v1/questions/{question_id}/answers": {
         parameters: {
             query?: never;
             header?: never;
@@ -468,17 +493,18 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Check Answer
-         * @description Send an answer and see the correct one. The answer is not stored and not marked.
+         * Submit Answer
+         * @description Send an answer. It is stored for the caller (D-66) and the correct answer comes back.
          *
-         *     - `mcq`: whether the selected option is correct, and the correct option.
+         *     - `mcq`: whether the selected option is correct, the correct option, the explanation and
+         *       the reason each wrong option is wrong.
          *     - `written`: the mark points and notes of that part, and a language warning when the
-         *       answer does not look English.
+         *       answer does not look English. The answer is not marked.
          *
          *     An `mcq` answer to a structured question, a `written` answer to a multiple-choice
          *     question or an unknown `part_id`: 422 `answer_does_not_fit`.
          */
-        post: operations["checkAnswer"];
+        post: operations["submitAnswer"];
         delete?: never;
         options?: never;
         head?: never;
@@ -747,6 +773,11 @@ export interface components {
             /** Expected Content Sha256 */
             expected_content_sha256: string;
         };
+        /** DeletedOut */
+        DeletedOut: {
+            /** Deleted */
+            deleted: number;
+        };
         /**
          * Difficulty
          * @enum {string}
@@ -974,6 +1005,11 @@ export interface components {
          * @description The published version of a question as a learner sees it before answering.
          */
         LearnerQuestion: {
+            /**
+             * Answered
+             * @description The caller has at least one stored answer to it (D-66).
+             */
+            answered: boolean;
             /** Exam Section */
             exam_section: string;
             /** Id */
@@ -987,6 +1023,7 @@ export interface components {
             stem: components["schemas"]["Doc"];
             /** Stimuli */
             stimuli: components["schemas"]["LearnerStimulus"][];
+            topic: components["schemas"]["TopicOut"];
             /** Total Marks */
             total_marks: number;
             /** Version Id */
@@ -1001,6 +1038,11 @@ export interface components {
         };
         /** LearnerQuestionSummary */
         LearnerQuestionSummary: {
+            /**
+             * Answered
+             * @description The caller has at least one stored answer to it (D-66).
+             */
+            answered: boolean;
             /** Exam Section */
             exam_section: string;
             /** Id */
@@ -1008,6 +1050,7 @@ export interface components {
             /** Levels */
             levels: components["schemas"]["Level"][];
             question_class: components["schemas"]["QuestionClass"];
+            topic: components["schemas"]["TopicOut"];
             /** Total Marks */
             total_marks: number;
             /** Version Id */
@@ -1161,23 +1204,6 @@ export interface components {
              */
             selected_key: "A" | "B" | "C" | "D";
         };
-        /** McqCheckResult */
-        McqCheckResult: {
-            /** Correct */
-            correct: boolean;
-            /**
-             * Correct Key
-             * @enum {string}
-             */
-            correct_key: "A" | "B" | "C" | "D";
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            kind: "mcq";
-            /** Version Id */
-            version_id: string;
-        };
         /** McqOption */
         McqOption: {
             /** Cells */
@@ -1188,6 +1214,47 @@ export interface components {
              */
             key: "A" | "B" | "C" | "D";
             rationale?: components["schemas"]["Doc"] | null;
+        };
+        /**
+         * McqRationale
+         * @description Why a wrong option is wrong. Sent only after an answer was submitted.
+         */
+        McqRationale: {
+            content: components["schemas"]["Doc"];
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "A" | "B" | "C" | "D";
+        };
+        /**
+         * McqResult
+         * @description What a learner sees after submitting a multiple-choice answer (D-66).
+         */
+        McqResult: {
+            /** Correct */
+            correct: boolean;
+            /**
+             * Correct Key
+             * @enum {string}
+             */
+            correct_key: "A" | "B" | "C" | "D";
+            /** @description The worked solution, if the question has one. */
+            explanation: components["schemas"]["Doc"] | null;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "mcq";
+            /**
+             * Rationales
+             * @description One per wrong option.
+             */
+            rationales: components["schemas"]["McqRationale"][];
+            /** Response Id */
+            response_id: string;
+            /** Version Id */
+            version_id: string;
         };
         /**
          * Me
@@ -1477,6 +1544,49 @@ export interface components {
             reason: string;
         };
         /**
+         * ResponseOut
+         * @description One stored answer of the caller. `selected_key` for multiple choice, `text` for written.
+         */
+        ResponseOut: {
+            /**
+             * Correct
+             * @description Multiple choice only; written answers are not marked.
+             */
+            correct: boolean | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "mcq" | "written";
+            /** Part Id */
+            part_id: string | null;
+            /** Question Id */
+            question_id: string;
+            /** Selected Key */
+            selected_key: ("A" | "B" | "C" | "D") | null;
+            /** Text */
+            text: string | null;
+            /** Version Id */
+            version_id: string;
+        };
+        /** ResponsePage */
+        ResponsePage: {
+            /**
+             * Items
+             * @description Newest first.
+             */
+            items: components["schemas"]["ResponseOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /**
          * Role
          * @description docs/DOMAIN_MODEL.md section 3.
          * @enum {string}
@@ -1681,6 +1791,16 @@ export interface components {
             type: "text";
         };
         /**
+         * TopicOut
+         * @description The question's primary syllabus node: what it is about.
+         */
+        TopicOut: {
+            /** Code */
+            code: string;
+            /** Title */
+            title: string;
+        };
+        /**
          * UpdateDraftRequest
          * @description Replace the content the caller started editing from (`stale_content` if it changed).
          */
@@ -1722,10 +1842,10 @@ export interface components {
             text: string;
         };
         /**
-         * WrittenCheckResult
-         * @description The mark scheme of one part. The answer is not marked (AI marking is M4).
+         * WrittenResult
+         * @description The mark scheme of one part. The answer is stored but not marked (AI marking is M4).
          */
-        WrittenCheckResult: {
+        WrittenResult: {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
@@ -1742,6 +1862,8 @@ export interface components {
             notes: components["schemas"]["NoteOut"][];
             /** Part Id */
             part_id: string;
+            /** Response Id */
+            response_id: string;
             /** Version Id */
             version_id: string;
         };
@@ -2856,6 +2978,105 @@ export interface operations {
             };
         };
     };
+    listMyResponses: {
+        parameters: {
+            query?: {
+                question_id?: string | null;
+                /** @description `next_cursor` of the last page. */
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResponsePage"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    deleteMyResponses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedOut"];
+                };
+            };
+            /** @description No acceptable token (`unauthenticated`). */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description No such resource, or the caller may not know of it (`not_found`). */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description The request is not valid (`validation_failed`). */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     listPrograms: {
         parameters: {
             query?: never;
@@ -3061,7 +3282,7 @@ export interface operations {
             };
         };
     };
-    checkAnswer: {
+    submitAnswer: {
         parameters: {
             query?: never;
             header?: never;
@@ -3077,12 +3298,12 @@ export interface operations {
         };
         responses: {
             /** @description Successful Response */
-            200: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["McqCheckResult"] | components["schemas"]["WrittenCheckResult"];
+                    "application/json": components["schemas"]["McqResult"] | components["schemas"]["WrittenResult"];
                 };
             };
             /** @description No acceptable token (`unauthenticated`). */
@@ -3103,13 +3324,22 @@ export interface operations {
                     "application/problem+json": components["schemas"]["Problem"];
                 };
             };
-            /** @description The request is not valid (`validation_failed`). */
+            /** @description The answer does not fit the question (`answer_does_not_fit`). */
             422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["Problem"];
+                    "application/json": components["schemas"]["Problem"];
+                };
+            };
+            /** @description 200 answers to this question are stored already (`too_many_answers`), or 5000 answers in all (`answer_limit_reached`). */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Problem"];
                 };
             };
         };

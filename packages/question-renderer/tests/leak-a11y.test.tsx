@@ -90,3 +90,19 @@ describe("accessibility smoke check (3.1, 6)", () => {
     }
   });
 });
+
+describe("selectable options (slice 8)", () => {
+  it("renders a radiogroup named Answer options with one radio per option, and reports changes", async () => {
+    const { fireEvent } = await import("@testing-library/react");
+    const q = (learnerFixtures[0] as unknown as { data: LearnerQuestion }).data;
+    let chosen: string | null = null;
+    const { container } = render(
+      <LearnerQuestionView question={q} mcqAnswer={{ value: null, onChange: (k) => (chosen = k) }} />,
+    );
+    const group = screen.getByRole("radiogroup", { name: "Answer options" });
+    expect(group.querySelectorAll('input[type="radio"]')).toHaveLength(4);
+    expect(container.querySelectorAll('[aria-label="Answer options"]')).toHaveLength(1);
+    fireEvent.click(screen.getByRole("radio", { name: "Option C" }));
+    expect(chosen).toBe("C");
+  });
+});

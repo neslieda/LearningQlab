@@ -81,7 +81,9 @@ ENDPOINT_POLICY: Final[Mapping[tuple[str, str], Access]] = MappingProxyType(
         ("GET", "/v1/programs/{program}/subjects/{subject}/syllabus"): EVERYONE,
         ("GET", "/v1/questions"): EVERYONE,
         ("GET", "/v1/questions/{question_id}"): EVERYONE,
-        ("POST", "/v1/questions/{question_id}/check"): EVERYONE,
+        ("POST", "/v1/questions/{question_id}/answers"): EVERYONE,
+        ("GET", "/v1/me/responses"): EVERYONE,
+        ("DELETE", "/v1/me/responses"): EVERYONE,
         ("GET", "/v1/admin/questions"): STAFF,
         ("POST", "/v1/admin/questions"): STAFF,
         ("GET", "/v1/admin/questions/{question_id}"): STAFF,
@@ -185,7 +187,7 @@ async def authorize(request: Request, access: Access | None) -> Principal | Sign
 MAX_BODY_BYTES: Final = 1024 * 1024
 # Tighter limits for endpoints whose body is small by nature.
 BODY_LIMITS: Final[Mapping[tuple[str, str], int]] = MappingProxyType(
-    {("POST", "/v1/questions/{question_id}/check"): 64 * 1024}
+    {("POST", "/v1/questions/{question_id}/answers"): 64 * 1024}
 )
 
 

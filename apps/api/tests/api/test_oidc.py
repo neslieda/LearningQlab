@@ -146,6 +146,12 @@ def test_audience_may_be_a_string(verifier: OidcTokenVerifier) -> None:
     assert verifier.verify(make(claims(aud=AUDIENCE))).subject == "user-1"
 
 
+def test_the_client_may_be_named_by_client_id(verifier: OidcTokenVerifier) -> None:
+    # Zitadel's JWT access tokens carry `client_id` (RFC 9068) and no `azp`.
+    assert verifier.verify(make(claims(azp=None, client_id=CLIENT))).subject == "user-1"
+    assert verifier.verify(make(claims(client_id=CLIENT))).subject == "user-1"
+
+
 @pytest.mark.parametrize(
     "changes",
     [
@@ -156,6 +162,10 @@ def test_audience_may_be_a_string(verifier: OidcTokenVerifier) -> None:
         {"aud": None},
         {"azp": "another-client"},
         {"azp": None},
+        {"azp": None, "client_id": "another-client"},
+        {"azp": "another-client", "client_id": CLIENT},
+        {"azp": CLIENT, "client_id": "another-client"},
+        {"azp": None, "client_id": 7},
         {"exp": 1},
         {"iat": 4_000_000_000, "exp": 4_000_000_300},
         {"sub": None},

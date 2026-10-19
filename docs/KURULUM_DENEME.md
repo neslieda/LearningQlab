@@ -111,8 +111,8 @@ olduğunu söyleyen `urn:zitadel:iam:user:resourceowner:id` alanı bulunmalı. B
 
    (Önce token'ı kopyalayın; `pbpaste` panodaki metni verir. Komut base64 dolgusunu kendisi tamamlar.) Çıktıda şunu arayın:
    `"urn:zitadel:iam:user:resourceowner:id": "<Staff organizasyon kimliği>"`. Aynı kimliğin 2. adımda not ettiğiniz Staff
-   organizasyon kimliğiyle **aynı** olduğunu kontrol edin. Ayrıca `"aud"` içinde proje kimliği, `"azp"` yerinde Client ID
-   görünmelidir.
+   organizasyon kimliğiyle **aynı** olduğunu kontrol edin. Ayrıca `"aud"` içinde proje kimliği, `"client_id"` (ya da
+   `"azp"`) yerinde Client ID görünmelidir. (2026-10-19 denemesi: Zitadel'in erişim token'ında `azp` yok, `client_id` var.)
 3. **Alan yoksa:** `/sign-in` sayfasının istediği kapsamlar (`scope`) arasında
    `urn:zitadel:iam:user:resourceowner` yer almalıdır (web uygulamasında zaten tanımlı olmalı). Zitadel'de uygulamanın
    Token ayarlarının JWT olduğunu (adım 2.4) yeniden kontrol edin. Yine yoksa durun, bu bilgiyi (token'ı değil, hangi alanların

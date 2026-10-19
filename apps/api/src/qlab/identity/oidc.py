@@ -6,7 +6,8 @@ The verification keys come from the provider's JWKS, found through
 verification after the keys are an hour old fetches them again (a failure keeps the old
 keys). Allowed algorithms:
 RS256, ES256, EdDSA. Never `none`, never an HMAC algorithm. Checked: signature, `iss` (exact),
-`aud` (contains the configured audience; it may be a list), `azp` (the client id), `exp`, `iat`,
+`aud` (contains the configured audience; it may be a list), the client id (in `azp`, in
+`client_id`, or in both; each one present must match), `exp`, `iat`,
 a lifetime of at most 24 hours, and the same `sub` / `iss` rules as for development tokens.
 
 No network access happens at import time. The network is reached through a `Fetch` function
@@ -212,6 +213,9 @@ class OidcTokenVerifier(TokenVerifier):
             raise InvalidToken(type(caught).__name__) from None
         if payload["exp"] <= time.time():
             raise InvalidToken("ExpiredSignatureError")
-        if payload.get("azp") != self.client_id:
+        # The client is named by `azp`, by `client_id` (RFC 9068; Zitadel's access tokens carry
+        # only this one), or by both. Every one present must be ours, and at least one must be.
+        named = [payload[claim] for claim in ("azp", "client_id") if claim in payload]
+        if not named or any(value != self.client_id for value in named):
             raise InvalidToken("wrong authorised party")
         return self._claims(payload)

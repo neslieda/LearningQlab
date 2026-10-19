@@ -8,7 +8,7 @@ application from starting; nothing falls back to a permissive default.
 | `QLAB_DEV_KEY_FILE` | Local only: the development signing key (default `~/.qlab/dev-signing-key.pem`). Refused outside `local`. |
 | `QLAB_OIDC_ISSUER` | Outside `local`: the identity provider's issuer, exactly as in its discovery document. |
 | `QLAB_OIDC_AUDIENCE` | Outside `local`: the audience tokens must contain (Zitadel: the project id). |
-| `QLAB_OIDC_CLIENT_ID` | Outside `local`: the client id tokens must name in `azp`. |
+| `QLAB_OIDC_CLIENT_ID` | Outside `local`: the client id tokens must name in `azp` or `client_id`. |
 | `QLAB_OIDC_STAFF_ORG_ID` | Outside `local`: the identity provider organisation of staff sign-ins (two-step verification); staff roles count only for it. |
 | `QLAB_DATABASE_URL` | See `qlab.database`. |
 """  # noqa: E501

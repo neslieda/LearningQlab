@@ -32,10 +32,11 @@ Kritik alan: evet (yetki, migration, CI, kimlik). Sahibinin onayı gerekir.
 ### 3.1 Token doğrulama
 
 - Ayarlar (yerel dışında zorunlu): `QLAB_OIDC_ISSUER` (keşif belgesindeki `issuer`, bire bir), `QLAB_OIDC_AUDIENCE` (proje kimliği),
-  `QLAB_OIDC_CLIENT_ID` (`azp` ile karşılaştırılır), `QLAB_OIDC_STAFF_ORG_ID`.
+  `QLAB_OIDC_CLIENT_ID` (`azp` ve/veya `client_id` ile karşılaştırılır), `QLAB_OIDC_STAFF_ORG_ID`.
 - Anahtarlar `<issuer>/.well-known/openid-configuration` → `jwks_uri`'den alınır, bellekte saklanır; bilinmeyen `kid` görülünce en çok
   dakikada bir yeniden çekilir. İzinli algoritmalar: RS256, ES256, EdDSA (`none` ve HS* asla). Doğrulanan: imza, `iss`, `aud` içinde
-  proje kimliği, `azp` = istemci kimliği, `exp`, `iat`, ömür ≤ 24 saat, `sub` biçimi (dilim 5 kuralları).
+  proje kimliği, istemci kimliği (`azp` ve/veya `client_id`, RFC 9068; bulunan her biri eşit olmalı; Zitadel erişim
+  token'ında yalnızca `client_id` var, 2026-10-19), `exp`, `iat`, ömür ≤ 24 saat, `sub` biçimi (dilim 5 kuralları).
 - Yerel geliştirme anahtarı ve vereni yerel dışında reddedilir (değişmez).
 
 ### 3.2 İki adımlı doğrulama (SECURITY §2)

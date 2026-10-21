@@ -102,7 +102,7 @@ Yeni erişim türü **`SIGNED_IN`**: geçerli token yeter, hesap henüz olmayabi
 - `infra/docker/web.Dockerfile`: Next.js standalone çıktısı.
 - `render.yaml`: Frankfurt, ücretsiz iki web servisi; gizli değerler `sync: false` (sahibi panelden girer).
 - Gecelik yedek: GitHub Actions zamanlanmış iş, salt okunur rolle `pg_dump`, şifreli yapıt, 14 gün saklama (CI kritik alan).
-- `QLAB_FORBID_SELF_APPROVAL` yerel dışında zorunlu açık (D-59); deneme ortamında da açık kalır (§7.3).
+- `QLAB_FORBID_SELF_APPROVAL` production'da zorunlu açık (D-59); deneme ortamında tek incelemeci olduğu sürece kapalı (D-67, 2026-10-21; 2026-10-16 kararının yerine).
 
 ## 6. Kabul testleri
 

@@ -16,8 +16,8 @@ services:
     envVars:
       - key: QLAB_ENV
         value: staging
-      - key: QLAB_FORBID_SELF_APPROVAL
-        value: "true"
+      - key: QLAB_FORBID_SELF_APPROVAL # false while there is a single reviewer (D-67); production requires true
+        value: "false"
       - key: QLAB_DATABASE_URL # Neon, role qlab_app (infra/sql/app-role.sql)
         sync: false
       - key: QLAB_MIGRATION_DATABASE_URL # Neon, owner role; used by Alembic at start-up only

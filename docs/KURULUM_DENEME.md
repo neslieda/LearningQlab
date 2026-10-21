@@ -143,9 +143,9 @@ Resmi belgeler: <https://render.com/docs/blueprint-spec> , <https://render.com/d
    `QLAB_API_URL` için api'nin adresini henüz bilmiyorsanız: Blueprint'i önce herhangi bir geçici değerle (`https://example.com`)
    oluşturun, qlab-api açılınca adresini panelde servisin adının altında görürsünüz; sonra qlab-web → **Environment**'ta düzeltip
    **Manual Deploy** yapın. (Bu değer web derlenirken kullanıldığı için değişince yeniden derleme gerekir.)
-   `QLAB_ENV=staging` ve `QLAB_FORBID_SELF_APPROVAL=true` dosyada hazırdır; dokunmayın. Not: `true` olduğu sürece bir soruyu
-   son düzenleyen kişi onaylayamaz; onay için ikinci bir personel hesabı gerekir (D-59). Sahibin kararı (2026-10-16): kural deneme
-   ortamında da açık, çünkü ekipte birden çok kişi (eğitmenler ve yazılımcılar) soru düzenleyip birbirinin işini onaylar.
+   `QLAB_ENV=staging` ve `QLAB_FORBID_SELF_APPROVAL=false` dosyada hazırdır; dokunmayın. `false` iken bir soruyu son düzenleyen
+   kişi de onaylayabilir; denetim kaydı bunu işaretler (D-67, 2026-10-21: şu an tek eğitmen var). Yayın yine yalnızca
+   `content_admin` / `platform_admin`'dedir. İkinci bir incelemeci gelince `true` yapın; `production`'da `true` zorunludur.
 4. **Apply / Deploy**'a basın. İlk derleme 5-10 dakika sürer. Her servisin sayfasında **Logs** sekmesi vardır; qlab-api
    günlüğünde "Running upgrade ... 0006" benzeri satırlar (veritabanı hazırlanıyor) ve ardından "Uvicorn running" görmelisiniz.
 5. Adresleri bulun: her servisin sayfasının sol üstünde `https://....onrender.com` adresi yazar. Önce `https://<api-adresi>/healthz`
@@ -282,7 +282,7 @@ sırasında pakete gömülür: bunlardan biri değişirse **Manual Deploy** ile 
 ```
 # --- qlab-api (Render) ---
 QLAB_ENV=staging                       # render.yaml'da hazır
-QLAB_FORBID_SELF_APPROVAL=true         # render.yaml'da hazır; staging/production'da true olmak zorunda
+QLAB_FORBID_SELF_APPROVAL=false        # render.yaml'da hazır; staging'de false olabilir (D-67), production'da true zorunlu
 QLAB_DATABASE_URL=                     # MUTLAKA qlab_app adresi: postgresql+psycopg://qlab_app:...@HOST/DB?sslmode=require
                                        # (sahip rolü ya da public'te CREATE yetkisi olan rol ise API açılışı reddeder)
 QLAB_MIGRATION_DATABASE_URL=           # postgresql+psycopg://<sahip>:...@HOST/DB?sslmode=require (yalnız açılışta migration)

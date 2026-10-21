@@ -118,12 +118,17 @@ def test_the_flag_is_honoured_locally(flag: str, expected: bool) -> None:
     assert settings.forbid_self_approval is expected
 
 
-@pytest.mark.parametrize("env", NON_LOCAL)
-def test_outside_local_the_flag_must_be_true(env: Environment) -> None:
-    ok = Settings.from_env(non_local(env))
+def test_in_production_the_flag_must_be_true() -> None:
+    ok = Settings.from_env(non_local(Environment.PRODUCTION))
     assert ok.forbid_self_approval is True
     with pytest.raises(StartupError, match="QLAB_FORBID_SELF_APPROVAL"):
-        Settings.from_env(non_local(env, QLAB_FORBID_SELF_APPROVAL="false"))
+        Settings.from_env(non_local(Environment.PRODUCTION, QLAB_FORBID_SELF_APPROVAL="false"))
+
+
+def test_staging_may_turn_the_rule_off() -> None:
+    """A single reviewer approves their own edits in the trial environment (D-67)."""
+    settings = Settings.from_env(non_local(Environment.STAGING, QLAB_FORBID_SELF_APPROVAL="false"))
+    assert settings.forbid_self_approval is False
 
 
 @pytest.mark.parametrize(
@@ -190,7 +195,10 @@ def test_outside_local_a_missing_oidc_setting_is_refused(
 @pytest.mark.parametrize("env", NON_LOCAL)
 def test_validate_refuses_unsafe_combinations_built_by_hand(env: Environment) -> None:
     Settings(env, True).validate()
-    with pytest.raises(StartupError):
+    if env is Environment.PRODUCTION:
+        with pytest.raises(StartupError):
+            Settings(env, False).validate()
+    else:
         Settings(env, False).validate()
     with pytest.raises(StartupError):
         Settings(env, True, dev_key_file=Path("/nonexistent/key.pem")).validate()
@@ -257,12 +265,17 @@ def test_no_verifier_is_refused_outside_local(env: Environment) -> None:
 
 
 @pytest.mark.parametrize("env", NON_LOCAL)
-def test_outside_local_a_real_verifier_starts_only_with_separation_of_duties(
-    env: Environment,
-) -> None:
+def test_outside_local_a_real_verifier_starts_with_separation_of_duties(env: Environment) -> None:
     assert isinstance(build(Settings(env, True), verifier=verifier()), FastAPI)
+
+
+def test_production_does_not_start_without_separation_of_duties() -> None:
     with pytest.raises(StartupError):
-        build(Settings(env, False), verifier=verifier())
+        build(Settings(Environment.PRODUCTION, False), verifier=verifier())
+
+
+def test_staging_starts_without_separation_of_duties() -> None:
+    assert isinstance(build(Settings(Environment.STAGING, False), verifier=verifier()), FastAPI)
 
 
 @pytest.mark.parametrize("env", NON_LOCAL)

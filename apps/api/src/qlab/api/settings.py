@@ -4,7 +4,7 @@ application from starting; nothing falls back to a permissive default.
 | Variable | Meaning |
 |---|---|
 | `QLAB_ENV` | `local`, `staging` or `production`. Required. |
-| `QLAB_FORBID_SELF_APPROVAL` | `true` / `false`: the last editor of a version cannot approve it (D-59). Defaults to `false` locally; must be `true` anywhere else. |
+| `QLAB_FORBID_SELF_APPROVAL` | `true` / `false`: the last editor of a version cannot approve it (D-59, D-67). Defaults to `false` locally and `true` elsewhere; may be `false` in `staging`, must be `true` in `production`. |
 | `QLAB_DEV_KEY_FILE` | Local only: the development signing key (default `~/.qlab/dev-signing-key.pem`). Refused outside `local`. |
 | `QLAB_OIDC_ISSUER` | Outside `local`: the identity provider's issuer, exactly as in its discovery document. |
 | `QLAB_OIDC_AUDIENCE` | Outside `local`: the audience tokens must contain (Zitadel: the project id). |
@@ -125,11 +125,10 @@ class Settings:
             raise StartupError(
                 "the development signing key is refused outside the local environment"
             )
-        if not self.forbid_self_approval:
-            # Opening the rule is a condition of going on the web (D-59, M1-G slice 9).
+        if not self.forbid_self_approval and self.environment is Environment.PRODUCTION:
+            # Staging may run with a single reviewer (D-67); production may not (D-59).
             raise StartupError(
-                "separation of duties must be on outside the local environment: "
-                f"{FORBID_SELF_APPROVAL_ENV}=true"
+                f"separation of duties must be on in production: {FORBID_SELF_APPROVAL_ENV}=true"
             )
 
 

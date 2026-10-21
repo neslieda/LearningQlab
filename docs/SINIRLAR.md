@@ -1,6 +1,7 @@
 # Sınırlar
 
-> **Durum: TASLAK.** Tarih: 2026-10-13. Kapsam: M1-G dilim 4'ün sonu (şema, veritabanı, content servisi, KaTeX kontrolü, pilot soruların içe aktarılması).
+> **Durum: TASLAK.** Tarih: 2026-10-21. Kapsam: M1-G sonu (dilim 0–9: şema, veritabanı, KaTeX kontrolü, pilot sorular, API ve yetki,
+> web arayüzü, inceleme ve düzenleme, öğrenci ekranı, deneme ortamında web'e açılış).
 > Okur: eğitmenler ve incelemeciler. Bu belge sistemin **bugün** ne yapamadığını ve neye izin vermediğini düz bir dille anlatır.
 > Her dilim birleştiğinde güncellenir. Eğitmenlerden beklenenler ayrı belgededir: [EGITMEN_BILGI_NOTU.md](EGITMEN_BILGI_NOTU.md).
 > Teknik ayrıntı için köşeli parantez içindeki belgelere bakılır; bu belgeyle çelişirlerse onlar geçerlidir.
@@ -9,16 +10,16 @@
 
 | Ne | Durum |
 |---|---|
-| Web arayüzü (soru görüntüleme, inceleme, düzenleme) | Yok. Dilim 6–8'de gelir |
-| Giriş, hesaplar ve roller | Yalnızca yerelde, geliştirme hesaplarıyla (her rol için bir hesap). Kimin neyi yapabileceği API'de denetleniyor (dilim 5); gerçek giriş ekranı ve kayıt yok, web'e açılışla (dilim 9) gelir |
+| Web arayüzü | Var (dilim 6–8): soru görüntüleme, inceleme, yerinde düzenleme, yeni soru, öğrenci ekranı |
+| Giriş, hesaplar ve roller | Zitadel ile giriş (dilim 9, D-62). Hesap yalnızca davetle açılır (D-63); açık kayıt yok. Personel iki adımlı doğrulamalı Staff girişini kullanır. E-posta gönderimi (SMTP) henüz kurulmadı |
 | Öğrenci görünümü | Dilim 8: öğrenci yayınlanmış soruları listeler ve çözer; cevabı **saklanır** (D-66), doğru cevap, açıklama ve yanlış seçeneklerin gerekçeleri cevaptan sonra görünür. Puanlama yok (M4); öğretmen öğrenci cevabını göremez (M2) |
-| Öğrenci cevabının saklanması ve puanlanması | Yok. Cevap sunucuya gider, doğru cevap ya da markscheme döner; cevap saklanmaz, puanlanmaz |
+| Öğrenci cevabının puanlanması | Yok (M4). Cevap saklanır (D-66), puanlanmaz; yazılı cevapta öğrenci kendini markscheme ile karşılaştırır |
 | Çözüm açıklamalarının öğrenciye gösterimi | Dilim 8'de açıldı: cevap gönderildikten sonra açıklama ve çeldirici gerekçeleri görünür; kazanım, şekil tarifi ve çözüm modeli öğrenciye gitmez |
-| Soruların sisteme yüklenmiş hali | 130 pilot soru şemaya çevrildi ve **taslak** olarak içe aktarılabiliyor (§7.1); görüntüleyecek arayüz henüz yok |
+| Soruların sisteme yüklenmiş hali | 130 pilot soru deneme ortamına **taslak** olarak yüklendi (§7, §7.1); inceleme eğitmende |
 | Şekil, grafik ve diyagram | Üretilemiyor ve yüklenemiyor |
 | Sayısal cevapların kodla doğrulanması | Yok (formül yorumlayıcısı M3'te) |
 | Deneme sınavı, otomatik puanlama, AI geri bildirimi, analitik, ödeme | Yok |
-| İnternetten erişim | Yok. Sistem yalnızca geliştirme bilgisayarında çalışıyor |
+| İnternetten erişim | Yalnızca davetle girilen **deneme ortamı** (Render + Neon ücretsiz kademe, Frankfurt; D-61). Ücretsiz kademede sistem uyur, ilk açılış yaklaşık bir dakika sürer. Açık (girişsiz) sayfa yok (M6) |
 
 ## 2. Yayınlanamayan sorular
 
@@ -35,8 +36,8 @@
   markscheme yapısı, verilen değer ile çözüm modelindeki parametrenin birebir aynı yazılması, matematiğin ekranda çizilebilmesi.
 - Çözüm modeli (formül zinciri) veri olarak saklanır ama **hesaplanmaz**. Sayısal cevabın doğruluğu şimdilik yalnızca eğitmen
   incelemesine dayanır.
-- Bir soruyu yazan, onaylayan ve yayınlayan şu an aynı kişi olabilir; tek onay yeterlidir (D-53, geçici). Web'e açılmadan önce
-  yeniden değerlendirilecek.
+- Bir soruyu yazan, onaylayan ve yayınlayan deneme ortamında aynı kişi olabilir; tek onay yeterlidir (D-53, D-67). Gerçek ortamda
+  (production) son düzenleyen onaylayamaz.
 
 ## 4. Soru yapısının sınırları
 
@@ -63,10 +64,9 @@
 - **Kullanılamayanlar:** renk, bağlantı, görsel, makro tanımı, yorum satırı (`%`), kimya gösterimi (`\ce`), denklem numarası (`\tag`),
   çerçeve (`\boxed`), satır arası boşluk ayarı (`\\[2em]`).
 - Boyut: formül başına en çok 2 000 karakter; çok geniş matris ya da çok uzun tek formül (ör. yüzden fazla kesir) reddedilir.
-- Hatalı ya da izinsiz matematik içeren soru **hiç kaydedilmez**; hata hangi formülde olduğunu söyler ama sorunun neresinde olduğunu
-  henüz söylemez.
-- Birimli büyüklükler (ör. 20 m/s) matematik olarak değil ayrı bir "büyüklük" öğesi olarak yazılır; ekranda nasıl dizileceği gösterim
-  bileşeniyle (dilim 6) belirlenecek.
+- Hatalı ya da izinsiz matematik içeren soru **hiç kaydedilmez**; hata sorunun hangi alanında olduğunu da söyler (dilim 7c).
+- Birimli büyüklükler (ör. 20 m/s) matematik olarak değil ayrı bir "büyüklük" öğesi olarak yazılır; birim ekranda yazıldığı gibi gösterilir;
+  program yazım kuralına çevrilmez (birim ayrıştırıcısı M3'te, [slices/M1G-6-GOSTERIM.md](slices/M1G-6-GOSTERIM.md) §7).
 
 ## 6. Düzenleme ve sürümlerin sınırları
 

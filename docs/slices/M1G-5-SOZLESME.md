@@ -74,6 +74,9 @@ okunur; belge `model_dump` edilip alan silinerek kurulmaz. Giren ve girmeyen ala
 
 `POST /v1/questions/{id}/check` (yayınlanmış sürüm üzerinde, salt okunur transaction):
 
+> Dilim 8'de bu uç nokta `POST /v1/questions/{id}/answers` oldu ve cevap saklanır (D-66); güncel hali
+> [M1G-8-OGRENCI.md](M1G-8-OGRENCI.md).
+
 - `mcq` cevabı + çoktan seçmeli soru → `McqCheckResult(correct = selected_key == correct_key, correct_key)`.
 - `written` cevabı + yapılandırılmış soru + var olan `part_id` → o parçanın `marks`, `marks_capped`, `mark_points[]`
   (`id`, `content`, `kind`, `alternative_group`, `route`, `accept_range`), `notes[]` (`kind`, `content`, `mark_point_id`) ve dil uyarısı.

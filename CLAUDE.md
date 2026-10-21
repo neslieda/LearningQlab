@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-> Mimari belgeler 2026-10-11 tarihinde onaylandı. Aktif aşama: **M0** (`docs/ROADMAP.md`).
+> Mimari belgeler 2026-10-11 tarihinde onaylandı. Aktif aşama: **M1-G kapanışı** (dilim 0–9 birleşti; `docs/ROADMAP.md`).
 
 ## Proje
 

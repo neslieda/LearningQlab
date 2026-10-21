@@ -34,13 +34,14 @@
 |---|---|---|---|---|---|---|
 | Yayınlanmış `generated` soru | entitlement | entitlement | entitlement | ✔ | ✔ | ✔ |
 | `source_original` soru | yalnız rights'lı kurum üyesi | yalnız rights'lı kurum üyesi | yalnız rights'lı kurum üyesi | ✔ | ✔ | ✔ |
-| Kendi cevapları ve puanları | ✔ | — | — | — | — | — |
+| Kendi cevapları ve puanları (yalnızca çağıranın kendi kaydı; D-66) | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
 | Kurum öğrencilerinin sonuçları | — | kendi kurumu | kendi kurumu | — | — | — |
 | İtiraz edilen cevap | sahibi | — | — | ✔ | — | ✔ |
 | İnceleme kuyruğu, karar | — | — | — | ✔ | ✔ | ✔ |
 | Taslak düzenleme, incelemeye gönderme, revizyon açma (D-59) | — | — | — | ✔ | ✔ | ✔ |
 | Kaynak yükleme, pipeline | — | — | — | — | ✔ | ✔ |
 | Yayın / geri çekme | — | — | — | — | ✔ | ✔ |
+| Davet üretme, listeleme, iptal (öğretmen yalnızca `student` daveti; D-63, `organizations/service.py`) | — | ✔ | — | — | — | ✔ |
 | Rights, kill switch, roller, kural tabloları | — | — | — | — | — | ✔ |
 
 **Zorlama:** bu tablo bir test verisidir. Her uç nokta × her rol için otomatik test çalışır; tabloya girmemiş uç nokta CI'ı geçemez.
@@ -51,6 +52,8 @@ doğrulanmadan önce verilir. Token'ı olmayan ya da geçersiz olan çağıran *
 aynı **404** alır. Roller token'da değil veritabanındadır ve her istekte okunur. Kimliği doğrulanmış çağıran için gövde boyutu
 sınırlıdır (cevap denetimi 64 KiB, diğerleri 1 MiB). Yerelde token'lar bu makinede üretilen bir anahtarla imzalanır; uygulama yerel
 ortam dışında bu anahtarı ve bu vereni reddeder. Ayrıntı: [slices/M1G-5-SOZLESME.md](slices/M1G-5-SOZLESME.md).
+M1-G sonunda sunulan 27 uç noktanın satır satır tablosu: [slices/M1G-5-YETKILER.md](slices/M1G-5-YETKILER.md) §1.
+Davetin kullanılması (`POST /v1/invites/redeem`) geçerli token ister ama hesap ve rol istemez; hesap bu çağrıyla açılır (D-63).
 
 ## 4. Haklar ve lisans ⚖️
 

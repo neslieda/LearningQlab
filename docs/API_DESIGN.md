@@ -61,6 +61,12 @@ flowchart LR
 
 ## 3. Kaynak grupları
 
+Aşağıdaki tablolar hedef tasarımdır. M1-G sonunda gerçekten sunulan uç noktalar ve rolleri
+[slices/M1G-5-YETKILER.md](slices/M1G-5-YETKILER.md) §1'dedir; kaynağı `apps/api/src/qlab/api/policy.py` ve depodaki OpenAPI
+belgesidir. M1-G'de denemeler (`/v1/attempts`) yoktur; tek soruya cevap `POST /v1/questions/{id}/answers` ile gönderilir, çağıranın
+kendi cevapları `GET` ve `DELETE /v1/me/responses` ile okunur ve silinir (D-66). M2'de deneme akışı geldiğinde iki yol birlikte ele
+alınır.
+
 ### 3.1 Öğrenci
 
 | Yöntem | Yol | Açıklama |
@@ -104,7 +110,7 @@ sunucu zorlar.
 | POST | `/v1/admin/review/items/{id}/decisions` | Onay / düzeltme / yeniden üret / ret |
 | PUT | `/v1/admin/question-versions/{id}` | Taslak sürümü düzenle (yalnızca `draft`, `needs_fix`) |
 | POST | `/v1/admin/question-versions/{id}/publish` | Yayınla; kritik kontrol varsa `409` |
-| POST | `/v1/admin/questions/{id}/withdraw` | Geri çek |
+| POST | `/v1/admin/question-versions/{id}/withdraw` | Yayınlanmış sürümü geri çek |
 | POST | `/v1/admin/questions/withdraw-by-lineage` | Bir kaynak belgeden türeyen tüm soruları geri çek |
 | GET | `/v1/admin/appeals` | İtiraz kuyruğu |
 

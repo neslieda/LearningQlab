@@ -50,6 +50,11 @@ const config: NextConfig = {
   distDir: process.env.QLAB_DIST_DIR ?? ".next",
   env: { NEXT_PUBLIC_QLAB_ENV: qlabEnv },
   transpilePackages: ["@qlab/api-client", "@qlab/question-renderer", "@qlab/question-editor"],
+  experimental: {
+    // The `/api` proxy gives up after 30 seconds by default. A free Render API that has spun down takes about
+    // 45 seconds to wake (measured 2026-10-19), so the first request after a quiet spell came back as 502.
+    proxyTimeout: 90_000,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
